@@ -1,0 +1,89 @@
+
+warrior_m.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+00
+  rotate: false
+  xy: 1, 191
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+01
+  rotate: false
+  xy: 1, 153
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+02
+  rotate: false
+  xy: 31, 191
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+03
+  rotate: false
+  xy: 1, 115
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+04
+  rotate: false
+  xy: 31, 153
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+05
+  rotate: false
+  xy: 1, 77
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+06
+  rotate: false
+  xy: 31, 115
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+07
+  rotate: false
+  xy: 1, 39
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+08
+  rotate: false
+  xy: 31, 77
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+09
+  rotate: false
+  xy: 1, 1
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+10
+  rotate: false
+  xy: 31, 39
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
+11
+  rotate: false
+  xy: 31, 1
+  size: 28, 36
+  orig: 28, 36
+  offset: 0, 0
+  index: -1
