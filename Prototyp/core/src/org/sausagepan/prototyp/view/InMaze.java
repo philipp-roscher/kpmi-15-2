@@ -10,15 +10,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class InMaze implements Screen {
 	
 	/* ........................................................ ATTRIBUTES .. */
 	final KPMIPrototype game;
 	private OrthographicCamera camera;
+	private Viewport viewport;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private Vector3 touchPos;
@@ -32,13 +36,16 @@ public class InMaze implements Screen {
 	public InMaze(final KPMIPrototype game) {
 		this.game = game;
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		viewport = new FitViewport(800, 480, camera);
+		viewport.apply();
+		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2,0);
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 		touchPos = new Vector3();
 		this.hero = new Character("hero", "m", "warrior_m.pack");
 		this.background = new Texture("textures/backgrounds/big_dungeon_room.png");
+		this.background.setFilter(TextureFilter.Linear, TextureFilter.Nearest);
 		this.bgMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg"));
 		this.bgMusic.setLooping(true);
 		this.bgMusic.play();
@@ -48,8 +55,7 @@ public class InMaze implements Screen {
 	/* .................................................... LibGDX METHODS .. */
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+		this.batch = new SpriteBatch();
 	}
 
 	@Override
@@ -75,8 +81,8 @@ public class InMaze implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		viewport.update(width,height);
+		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 	}
 
 	@Override
@@ -99,8 +105,10 @@ public class InMaze implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		this.background.dispose();
+		this.batch.dispose();
+		this.bgMusic.dispose();
+		this.font.dispose();
 	}
 	
 	

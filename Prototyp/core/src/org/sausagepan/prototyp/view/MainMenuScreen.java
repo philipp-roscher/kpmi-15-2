@@ -7,12 +7,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenuScreen implements Screen {
 	
 	/* ........................................................ ATTRIBUTES .. */
 	final KPMIPrototype game;
 	public OrthographicCamera camera;
+	public Viewport viewport;
 	private Texture bgImg;
 	
 	
@@ -20,7 +23,10 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(final KPMIPrototype game) {
 		this.game  = game;
 		camera     = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		viewport        = new FitViewport(480, 800, camera);
+		viewport.apply();
+		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2,0);
+		
 		this.bgImg = new Texture("textures/backgrounds/main_menu_bg.png");
 	}
 
@@ -54,8 +60,8 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		viewport.update(width,height);
+		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 	}
 
 	@Override
