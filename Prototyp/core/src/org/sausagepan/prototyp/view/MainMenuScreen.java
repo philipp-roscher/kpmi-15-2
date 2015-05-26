@@ -23,7 +23,7 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(final KPMIPrototype game) {
 		this.game  = game;
 		camera     = new OrthographicCamera();
-		viewport        = new FitViewport(480, 800, camera);
+		viewport        = new FitViewport(800, 480, camera);
 		viewport.apply();
 		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2,0);
 		
