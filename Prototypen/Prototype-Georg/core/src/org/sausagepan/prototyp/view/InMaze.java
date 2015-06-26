@@ -86,13 +86,15 @@ public class InMaze implements Screen {
 		// Draw sprites to batch
 		batch.begin();
 			batch.draw(background, 0, 0);
-			charMan.drawCharacter(batch, elapsedTime);
+		for(Character c : charMan.getCharacters())
+			c.drawCharacter(batch, elapsedTime);
 		batch.end();
 
 		// Shapes
-		charMan.drawCharacterStatus(shpRend);
+		for(Character c : charMan.getCharacters())
+			c.drawCharacterStatus(shpRend);
 
-		
+		battle.updateBullets(charMan.getCharacters().get(0), charMan.characters);
 	}
 
 	@Override
@@ -139,8 +141,14 @@ public class InMaze implements Screen {
 
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			System.out.println("Attack!");
-			battle.update(charMan.getCharacters().get(0),charMan.getCharacters());
+            charMan.getCharacters().get(0).attack();
+			battle.updateAttack(charMan.getCharacters().get(0), charMan.getCharacters());
 		}
+
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            System.out.println("Shoot!");
+            charMan.getCharacters().get(0).shoot();
+        }
 	}
 
 }

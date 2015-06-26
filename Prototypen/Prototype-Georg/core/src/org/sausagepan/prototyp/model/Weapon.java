@@ -73,7 +73,7 @@ public class Weapon {
         return angle;
     }
 
-    public void setDirection(Vector3 direction) {
+    public void setDirection(Vector2 direction) {
         this.direction.x = direction.x;
         this.direction.y = direction.y;
     }
