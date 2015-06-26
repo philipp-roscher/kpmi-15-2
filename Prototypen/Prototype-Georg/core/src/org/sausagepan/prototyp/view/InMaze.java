@@ -1,6 +1,10 @@
 package org.sausagepan.prototyp.view;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.managers.BattleSystem;
+import org.sausagepan.prototyp.managers.CharacterManager;
 import org.sausagepan.prototyp.model.Character;
 
 import com.badlogic.gdx.Gdx;
@@ -24,31 +28,38 @@ public class InMaze implements Screen {
 	private OrthographicCamera camera;
 	private Viewport viewport;
 	private SpriteBatch batch;
+	private ShapeRenderer shpRend;
 	private BitmapFont font;
+
+	private CharacterManager charMan;
+	private BattleSystem battle;
+
+
 	private Vector3 touchPos;
-	private Character hero;
 	private Texture background;
 	private Music bgMusic;
 	private float elapsedTime = 0;
 	
 	
 	/* ...................................................... CONSTRUCTORS .. */
-	public InMaze(final KPMIPrototype game) {
+	public InMaze(final KPMIPrototype game, BattleSystem battleSystem, CharacterManager characterManager) {
 		this.game = game;
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(800, 480, camera);
 		viewport.apply();
-		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2,0);
+		camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 		batch = new SpriteBatch();
+		shpRend = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 		touchPos = new Vector3();
-		this.hero = new Character("hero", "m", "warrior_m.pack");
 		this.background = new Texture("textures/backgrounds/big_dungeon_room.png");
 		this.background.setFilter(TextureFilter.Linear, TextureFilter.Nearest);
 		this.bgMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg"));
 		this.bgMusic.setLooping(true);
 		this.bgMusic.play();
+		this.battle = battleSystem;
+		this.charMan = characterManager;
 	}
 
 	
@@ -62,20 +73,25 @@ public class InMaze implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.setProjectionMatrix(camera.combined);
+		batch.  setProjectionMatrix(camera.combined);
+		shpRend.setProjectionMatrix(camera.combined);
 		
 		// Animation time calculation
 		elapsedTime += Gdx.graphics.getDeltaTime();
 		
 		// Move character
-		hero.update();
+		charMan.getCharacters().get(0).update();
 		handleInput();
 		
 		// Draw sprites to batch
 		batch.begin();
 			batch.draw(background, 0, 0);
-			batch.draw(hero.getAnimation().getKeyFrame(elapsedTime, true), hero.getPosition().x, hero.getPosition().y); 
+			charMan.drawCharacter(batch, elapsedTime);
 		batch.end();
+
+		// Shapes
+		charMan.drawCharacterStatus(shpRend);
+
 		
 	}
 
@@ -118,8 +134,13 @@ public class InMaze implements Screen {
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touchPos);
-			hero.handleTouchInput(touchPos);
+			charMan.getCharacters().get(0).handleTouchInput(touchPos);
+		}
+
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			System.out.println("Attack!");
+			battle.update(charMan.getCharacters().get(0),charMan.getCharacters());
 		}
 	}
-	
+
 }
