@@ -1,0 +1,38 @@
+\contentsline {chapter}{\numberline {1}Einf\IeC {\"u}hrung}{4}
+\contentsline {section}{\numberline {1.1}Aufgabe}{4}
+\contentsline {chapter}{\numberline {2}Spielentwurf}{5}
+\contentsline {section}{\numberline {2.1}Story}{5}
+\contentsline {section}{\numberline {2.2}Setting}{5}
+\contentsline {section}{\numberline {2.3}Rollenverteilung und Charaktere}{5}
+\contentsline {subsection}{\numberline {2.3.1}Der Drache}{5}
+\contentsline {subsection}{\numberline {2.3.2}Fernkampf}{5}
+\contentsline {subsubsection}{Schamane}{5}
+\contentsline {subsubsection}{Bogensch\IeC {\"u}tze}{5}
+\contentsline {subsection}{\numberline {2.3.3}Mittelfernkampf}{6}
+\contentsline {subsubsection}{Ninja}{6}
+\contentsline {subsubsection}{Hexe}{6}
+\contentsline {subsection}{\numberline {2.3.4}Nahkampf}{6}
+\contentsline {subsubsection}{Schwertk\IeC {\"a}mpfer}{6}
+\contentsline {subsubsection}{K\IeC {\"a}mpfer}{6}
+\contentsline {section}{\numberline {2.4}Ziel}{6}
+\contentsline {chapter}{\numberline {3}Design}{7}
+\contentsline {section}{\numberline {3.1}Welt}{7}
+\contentsline {section}{\numberline {3.2}Spielfiguren}{8}
+\contentsline {chapter}{\numberline {4}Technologie und Steuerung}{10}
+\contentsline {chapter}{\numberline {5}Planung}{11}
+\contentsline {section}{\numberline {5.1}Aufgabenverteilung}{11}
+\contentsline {subsection}{\numberline {5.1.1}Prototyp}{11}
+\contentsline {subsubsection}{Charakterbewegung}{11}
+\contentsline {subsubsection}{Welt}{11}
+\contentsline {subsubsection}{Spielcharaktere (Game Master, Klassen)}{11}
+\contentsline {subsection}{\numberline {5.1.2}Gestaltung}{11}
+\contentsline {subsection}{\numberline {5.1.3}Programmierung}{11}
+\contentsline {subsubsection}{Levelgenerierung + Karte}{11}
+\contentsline {subsubsection}{Bewegung}{12}
+\contentsline {subsubsection}{Kampf}{12}
+\contentsline {subsection}{\numberline {5.1.4}Netzwerkkommunikation (Schnittstelle)}{12}
+\contentsline {subsection}{\numberline {5.1.5}Charakterlogik}{12}
+\contentsline {subsection}{\numberline {5.1.6}Gegenst\IeC {\"a}nde}{12}
+\contentsline {subsection}{\numberline {5.1.7}Men\IeC {\"u}}{12}
+\contentsline {subsection}{\numberline {5.1.8}Ton}{12}
+\contentsline {section}{\numberline {5.2}Arbeitsplan}{12}
