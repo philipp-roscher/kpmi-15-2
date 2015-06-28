@@ -53,14 +53,14 @@ Weitere Vorgaben beschränken sich lediglich auf das Framework libGDX, sowie die
 Im Labyrinth gibt es einen Schatz, der durch einen Drachen beschützt wird. Jedes Kind auf Erden weiß das und träumt davon eines Tages loszuziehen, um den Schatz zu erbeuten. Die Mutigsten reisen von allen Teilen der Welt an, um in das Labyrinth zu treten und Ruhm und Ehre zu erlangen. Dafür müssen sie gegen andere Widersacher antreten und am Ende den Drachen besiegen.\\
 \section{Setting}
 Es nehmen 5 Spieler teil. Dafür werden zwei Gruppen und ein Game Master durch Zufall entschieden.\\
-Der Game Master ist der Drache und muss den Schatz vor den anderen zwei Gruppen beschützen. Dafür hat er verschiedene Fähigkeiten: Er kann die ganze Karte sehen und an den Punkt wo er sich befindet, Schalter betätigen, um Wände zu schieben oder durch geheime Wege zu gehen, die nur er sehen kann.\\
+Der Game Master ist der Drache und muss den Schatz vor den anderen zwei Gruppen beschützen. Dafür hat er verschiedene Fähigkeiten: Er kann die ganze Karte sehen und an den Punkt wo er sich befindet, Schalter betätigen, um Wände zu schieben oder durch geheime Wege zu gehen, die nur er sehen kann. Da er viel strategischer handelt als die anderen Spieler und weniger Lebenspunkte hat, legt er mehr Wert auf seine Verteidigung. Er kann auch Gruppen von Monster hervorrufen und sie zu den anderen Gegner schicken und sie später einsammeln. Aber er kann auch seine Gegner mittels Fallen für kurze Zeit verwirren und sie außer Gefecht setzen.\\
 Die zwei Teams bestehen aus jeweils zwei Spielern, einem Kämpfer und einem Heiler. Nachdem diese Aufteilung durch Zufall entschieden wurde, können die Teilnehmer ihre Spielfigur auswählen. Dabei konzentriert sich der Kämpfer eher auf den Angriff und der Heiler auf die Gesundheit seines Teams.\\
 Nach der Auswahl fängt das Spiel im Labyrinth an. \\
 Dieses wird zufällig generiert und ist somit bei jedem neuen Spielstart anders. Dort befinden sich die Gruppen an verschiedenen Stellen und laufen durch alle Wege, um den Schatz zu bekommen oder gegeneinander zu kämpfen.\\
 \section{Rollenverteilung und Charaktere}
 Bei den Spielfiguren gibt es eine große Auswahl, denn sie sind nicht nur in Heiler und Kämpfer unterteilt. Sie spezialisieren sich auch durch ihre Kampfposition: Nah-, Mittel- oder Fernkampf.\\
 \subsection{Der Drache} 
-Der Beschützer des Schatzes und der Herr des Labyrinths. Als Einzelgänger ist er um einiges stärker als ein einzelner Teammitglied. Seine Verteidigung ist entsprechend auch höher als bei den normalen Spieler.\\
+Der Beschützer des Schatzes und der Herr des Labyrinths. Als Einzelgänger ist er um einiges stärker als ein einzelner Teammitglied. Seine Verteidigung ist entsprechend auch höher als bei den normalen Spieler. \\
 \subsection{Fernkampf}
 \subsubsection{Schamane}
 Ein Magier mit der Fähigkeit, sich von seinem Körper zu trennen und als Geist durch Wände zu gehen. Er kann sich nur bis zu einer gewissen Distanz von seinem Körper entfernen. Dieser kann auch weiterhin angegriffen werden und sollte von seinem Teammitglied verteidigt werden.\\
@@ -154,7 +154,7 @@ Einen sehr wichtigen Bestandteil des Spiels stellt das Networking da. Um eine gu
 Neben den bereits erwähnten individuellen Angriffen und Fähigkeiten werden natürlich noch andere Funktionen für die Spieler benötigt, wie z.B. ein Respawn nach Verlust aller Lebenspunkte. Weiterhin müssen die speziellen Fähigkeiten des Game Masters implementiert werden.
 
 \subsection{Gegenstände}
-Gegenstände sollen Spieler oder Teams in gewissen Aspekten verstärken. Dafür ist eine Implementierung der jeweiligen Funktionalitäten notwendig.
+Gegenstände sollen Spieler oder Teams in gewissen Aspekten verstärken. Dafür ist eine Implementierung der jeweiligen Funktionalitäten notwendig. Um die Items mitnehmen zu können, werden die Spieler Maps haben, wo der Schlüssel das gefundene Objekt und der Wert die Anzahl davon ist.
 
 \subsection{Menü}
 Eine simple Hauptmenüführung soll auch Spielern ohne technische Kenntnisse ermöglichen, ohne weiteres einem Spiel beitreten zu können. Es sollte nicht zu überladen und vom grafischen Stil an das Game Art angelehnt sein. Im Spiel sollte das User Interface einen möglichst geringen Anteil des Spielfensters einnehmen, um die Sicht auf das Spiel nicht zu versperren, jedoch trotzdem noch einfach bedienbar bleiben. 
@@ -171,6 +171,9 @@ Die Kamera soll vorerst zentral auf dem Spieler fixiert sein. Eventuell ändern 
 Wir wollen mit Box2D als Collider/ zur Collision Detection arbeiten.\\
 Beim spawnen von Gegenständen (z.B. Pfeile beim Bogenschießen) soll mit Pools gearbeitet werden, damit Objecte recyclt werden können.\\
 Klickt der Spieler auf die Karte, läuft der Charakter dorthin. Klickt man auf einen Gegner, wird ein Angriff ausgeführt. Ist man dabei außer Reichweite läuft der Charakter automatisch näher heran und greift daraufhin an. Sollte der Gegner sich ebenfalls bewegt haben und so nicht nah genug sein wird kein Angriff ausgeführt und der Spieler muss weiter auf den Gegner klicken.\\
+Jedes Team hat einen Rückzugsraum. Dieser ist der Ort, wo sie ihr Spiel angefangen haben. Sollte ein Mitglied besiegt werden, wird er wiederbelebt und an dem Punkt geschickt. Dort hat er für eine begrenzte Zeit Schutz. Dieser Ort ist auch nur für das eigene Team erreichbar.\\
+Im Labyrinth kann man an verschiedenen Stellen Schatztruhen finden. Diese werden von Anfang als Teil der Karte generiert. Sie sind an den gleichen Stellen, dennoch haben sie bei jedem neuen Spiel einen anderen Schatz. Man hat von diesen eine Große Auswahl, jedoch werden nur 70 Prozent der vorgefertigten Sprites verwendet.\\
+
 
 	\begin{center}
 		\includegraphics[scale=0.5]{Class-Diagram.jpg}\\
