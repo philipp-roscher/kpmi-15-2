@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.28)  27 JUN 2015 13:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.28)  28 JUN 2015 12:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -682,24 +682,40 @@ Package pdftex.def Info: Shaman.png used on input line 112.
  5.
 [11
 
-] [12] (./Gruppe2_Concept.aux) ) 
+] [12]
+ 6.
+<Class-Diagram.jpg, id=59, 846.16125pt x 605.26125pt>
+File: Class-Diagram.jpg Graphic file (type jpg)
+ <use Class-Diagram.jpg>
+Package pdftex.def Info: Class-Diagram.jpg used on input line 176.
+(pdftex.def)             Requested size: 423.07959pt x 302.62987pt.
+
+<scetch_01.jpg, id=60, 846.16125pt x 605.26125pt>
+File: scetch_01.jpg Graphic file (type jpg)
+ <use scetch_01.jpg>
+Package pdftex.def Info: scetch_01.jpg used on input line 178.
+(pdftex.def)             Requested size: 423.07959pt x 302.62987pt.
+ [13
+
+ <./Class-Diagram.jpg>] [14 <./scetch_01.jpg>] (./Gruppe2_Concept.aux) ) 
 Here is how much of TeX's memory you used:
- 4969 strings out of 493109
- 64423 string characters out of 6138586
+ 4979 strings out of 493109
+ 64611 string characters out of 6138586
  157055 words of memory out of 5000000
- 8344 multiletter control sequences out of 15000+600000
+ 8352 multiletter control sequences out of 15000+600000
  7463 words of font info for 29 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,6n,35p,825b,348s stack positions out of 5000i,500n,10000p,200000b,80000s
-<c:/texlive/2014/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmbx10.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmbx12.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.
-pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/te
-xlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on Gruppe2_Concept.pdf (12 pages, 129662 bytes).
+ 38i,6n,35p,825b,367s stack positions out of 5000i,500n,10000p,200000b,80000s
+<c:/tex
+live/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2014
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2014/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2014/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2014/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr17.pfb>
+Output written on Gruppe2_Concept.pdf (14 pages, 583806 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
- 44 compressed objects within 1 object stream
+ 86 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 51 words of extra memory for PDF output out of 10000 (max. 10000000)
 

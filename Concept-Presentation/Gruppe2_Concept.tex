@@ -165,6 +165,19 @@ Eine Aufgabe für den späteren Projektverlauf ist die Unterlegung des Spiels mi
 \section{Arbeitsplan}
 Ein Arbeitsplan wurde zum jetzigen Zeitpunkt noch nicht erarbeitet.
 
+\chapter{Ergänzungen}
+In Folge der ersten Konzeptpräsentation haben wir weitere Planung vorgenommen und folgende Punkte festgelegt:\\
+Die Kamera soll vorerst zentral auf dem Spieler fixiert sein. Eventuell ändern wir das im Verlauf der Entwicklung ab, so dass die Kamera mitscrollt wenn man \enquote{gegen den Rand} läuft, mit mehr Sicht in die Richtung, in die man läuft.\\
+Wir wollen mit Box2D als Collider/ zur Collision Detection arbeiten.\\
+Beim spawnen von Gegenständen (z.B. Pfeile beim Bogenschießen) soll mit Pools gearbeitet werden, damit Objecte recyclt werden können.\\
+Klickt der Spieler auf die Karte, läuft der Charakter dorthin. Klickt man auf einen Gegner, wird ein Angriff ausgeführt. Ist man dabei außer Reichweite läuft der Charakter automatisch näher heran und greift daraufhin an. Sollte der Gegner sich ebenfalls bewegt haben und so nicht nah genug sein wird kein Angriff ausgeführt und der Spieler muss weiter auf den Gegner klicken.\\
 
+	\begin{center}
+		\includegraphics[scale=0.5]{Class-Diagram.jpg}\\
+		Ein grobes Klassendiagramm, dass wir zusammengestellt haben.
+		\includegraphics[scale=0.5]{scetch_01.jpg}
+		Notizen zum Kampfsystem und Steuerung für den Game Master.
+	\end{center}
+	
 \end{flushleft}
 \end{document}
