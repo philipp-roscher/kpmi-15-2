@@ -11,8 +11,8 @@ import org.sausagepan.prototyp.Network.GameStateRequest;
 import org.sausagepan.prototyp.Network.GameStateResponse;
 import org.sausagepan.prototyp.Network.PositionUpdate;
 import org.sausagepan.prototyp.Network.IDAssignment;
+import org.sausagepan.prototyp.model.Position;
 
-import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -22,12 +22,12 @@ public class GameServer {
 	public static HashMap<InetSocketAddress,Integer> clientIds;
 	public static int maxId = 1;
 	public static final int timeoutMs = 5000;
-	public static HashMap<Integer,Vector3> positions;
+	public static HashMap<Integer,Position> positions;
 	public static HashMap<Integer,Long> lastAccess;
 	
 	public static void main(String[] args) {
 		clientIds = new HashMap<InetSocketAddress, Integer>();
-		positions = new HashMap<Integer,Vector3>();
+		positions = new HashMap<Integer,Position>();
 		lastAccess = new HashMap<Integer,Long>();		
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -42,7 +42,7 @@ public class GameServer {
 		    server.addListener(new Listener() {
 		        public void received (Connection connection, Object object) {
 		        	if (object instanceof PositionUpdate) {
-			        	   // System.out.println("PositionUpdate eingegangen");
+			        	   //System.out.println("PositionUpdate eingegangen");
 		        		
 			        	   PositionUpdate request = (PositionUpdate)object;
 			        	   positions.put(request.playerId, request.position);
@@ -53,7 +53,7 @@ public class GameServer {
 			           }
 			           
 			           if (object instanceof GameStateRequest) {
-			        	   // System.out.println("GameStateRequest eingegangen");
+			        	   //System.out.println("GameStateRequest eingegangen");
 
 			        	   GameStateResponse response = new GameStateResponse();
 			        	   response.positions = positions;
@@ -107,4 +107,5 @@ public class GameServer {
 	public void stop() {
 		server.stop();
 	}
+	
 }

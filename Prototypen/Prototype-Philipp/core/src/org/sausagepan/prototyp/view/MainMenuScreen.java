@@ -96,7 +96,7 @@ public class MainMenuScreen implements Screen {
 			
 		}
 		
-		if(game.connected == true) {
+		if(game.connected == true && game.clientId != 0) {
 			game.setScreen(new InMaze(game));
 			dispose();
 		}

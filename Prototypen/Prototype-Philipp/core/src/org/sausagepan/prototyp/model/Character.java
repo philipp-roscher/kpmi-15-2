@@ -18,6 +18,7 @@ public class Character {
 	private Vector3 direction;
 	private ArrayMap<String,Animation> anims;
 	private Animation currentAnim;
+	private float ax, ay;
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public Character(String name, String sex, String spriteSheet) {
@@ -110,8 +111,8 @@ public class Character {
 	 * @param ay	ver difference between position and touch
 	 */
 	public void setAnimation(float ax, float ay) {
-		if(ax < 0.1 && ax > -0.1 && ay < 0.1 && ay > -0.1) currentAnim = anims.get("idle");
-		
+		this.ax = ax;
+		this.ay = ay;
 		if (ax*ax > ay*ay) {
 			// x component dominates
 			if(ax < 0) currentAnim = anims.get("left");// character moves left
@@ -121,6 +122,8 @@ public class Character {
 			if(ay > 0) currentAnim = anims.get("up");// character goes up
 			else       currentAnim = anims.get("down"); // character goes down
 		}
+		
+		if(ax < 0.1 && ax > -0.1 && ay < 0.1 && ay > -0.1) currentAnim = anims.get("idle");
 	}
 	
 	public void update() {
@@ -141,16 +144,21 @@ public class Character {
 		return spriteSheet;
 	}
 
-
 	public Vector3 getPosition() {
 		return position;
+	}
+	
+	public Vector3 getDirection() {
+		return direction;
 	}
 	
 	public Animation getAnimation() {
 		return currentAnim;
 	}
 	
-	
+	public ArrayMap<String, Animation> getAnims() {
+		return anims;
+	}
 	
 	
 }
