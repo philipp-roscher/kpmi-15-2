@@ -2,12 +2,14 @@ package org.sausagepan.prototyp.view;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Network.GameStateRequest;
 import org.sausagepan.prototyp.Network.GameStateResponse;
 import org.sausagepan.prototyp.Network.PositionUpdate;
 import org.sausagepan.prototyp.model.Character;
+import org.sausagepan.prototyp.model.Position;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -20,8 +22,8 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
@@ -40,8 +42,7 @@ public class InMaze implements Screen {
 	private Texture background;
 	private Music bgMusic;
 	private float elapsedTime = 0;
-	private Map<Integer, Vector3> otherPositions;
-	private Animation idleAnim;
+	private ConcurrentHashMap<Integer, Position> otherPositions;
 	
 	
 	/* ...................................................... CONSTRUCTORS .. */
@@ -61,26 +62,22 @@ public class InMaze implements Screen {
 		this.bgMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg"));
 		this.bgMusic.setLooping(true);
 		this.bgMusic.play();
-		otherPositions = new HashMap<Integer, Vector3>();
+		otherPositions = new ConcurrentHashMap<Integer, Position>();
 		game.client.sendTCP(new GameStateRequest());
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
-				System.out.println("Paket empfangen");
-				System.out.println(object.getClass());
+				//System.out.println("Paket empfangen");
+				//System.out.println(object.getClass());
 				if (object instanceof GameStateResponse) {
-					System.out.println("GameStateResponse-Paket empfangen");
+					//System.out.println("GameStateResponse-Paket empfangen");
 					
-					GameStateResponse result = (GameStateResponse)object;
-					System.out.println(result.positions.size());
+					GameStateResponse result = (GameStateResponse)object;					
+					otherPositions = new ConcurrentHashMap<Integer,Position>(result.positions);
+					//System.out.println("enthält " + otherPositions.size() +" Positionen");
 					
-					//System.out.println(otherPositions.size()+" Positionen");
-					otherPositions = result.positions;
 					otherPositions.remove(game.clientId);
 				}
 			}});
-		TextureAtlas atlas = new TextureAtlas(
-				Gdx.files.internal("textures/spritesheets/warrior_m.pack"));
-		idleAnim = new Animation(0.1f, atlas.findRegion(Integer.toString(7)));
 	}
 
 	
@@ -105,17 +102,19 @@ public class InMaze implements Screen {
 		
 		PositionUpdate posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
-		posUpdate.position = hero.getPosition();
+		posUpdate.position = new Position(hero.getPosition(), hero.getDirection());
+		System.out.println("Position: "+ hero.getPosition());
+		System.out.println("Direction: "+ hero.getDirection());
 		
-		game.client.sendUDP(posUpdate);
+		game.client.sendTCP(posUpdate);
 		
 		// Draw sprites to batch
 		batch.begin();
 			batch.draw(background, 0, 0);
 			// Draw other characters
 			if(!otherPositions.isEmpty()) {
-				for(Vector3 pos : otherPositions.values()) {
-					batch.draw(idleAnim.getKeyFrame(elapsedTime, true), pos.x, pos.y);
+				for(Position pos : otherPositions.values()) {
+					batch.draw( getAnimation(pos.getDirection()).getKeyFrame(elapsedTime, true), pos.getPosition().x, pos.getPosition().y);
 				}
 			}
 			// Draw own character
@@ -166,6 +165,27 @@ public class InMaze implements Screen {
 			camera.unproject(touchPos);
 			hero.handleTouchInput(touchPos);
 		}
+	}
+	
+	public Animation getAnimation(Vector3 direction) {
+		float ax = direction.x;
+		float ay = direction.y;
+		ArrayMap<String,Animation> anims = hero.getAnims();
+		Animation currentAnim;
+		
+			if (ax*ax > ay*ay) {
+				// x component dominates
+				if(ax < 0) currentAnim = anims.get("left");// character moves left
+				else       currentAnim = anims.get("right"); // character moves right
+			} else {
+				// y component dominates
+				if(ay > 0) currentAnim = anims.get("up");// character goes up
+				else       currentAnim = anims.get("down"); // character goes down
+			}
+			
+			if(ax < 0.1 && ax > -0.1 && ay < 0.1 && ay > -0.1) currentAnim = anims.get("idle");
+			
+		return currentAnim;
 	}
 	
 }

@@ -2,6 +2,7 @@ package org.sausagepan.prototyp;
 
 import java.util.HashMap;
 
+import org.sausagepan.prototyp.model.Position;
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
@@ -17,13 +18,14 @@ public class Network {
 		kryo.register(GameStateRequest.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(IDAssignment.class);
+        kryo.register(Position.class);
 		kryo.register(Vector3.class);
         kryo.register(HashMap.class);
 	}
 	
 	public static class PositionUpdate {
 		public int playerId;
-		public Vector3 position;
+		public Position position;
 		public PositionUpdate() { }
 	}
 	
@@ -32,7 +34,7 @@ public class Network {
 	}
 	
 	public static class GameStateResponse {
-		public HashMap<Integer, Vector3> positions;
+		public HashMap<Integer, Position> positions;
 		public GameStateResponse() { }
 	}
 	
