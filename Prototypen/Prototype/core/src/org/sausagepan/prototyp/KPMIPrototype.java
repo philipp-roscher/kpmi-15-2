@@ -1,5 +1,9 @@
 package org.sausagepan.prototyp;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;
@@ -11,6 +15,7 @@ public class KPMIPrototype extends Game {
 	/* ........................................................ ATTRIBUTES .. */
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public MediaManager mediaManager;
 	
 	
 	/* .................................................... LibGDX METHODS .. */
@@ -18,7 +23,8 @@ public class KPMIPrototype extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		font  = new BitmapFont();
-		
+		mediaManager = new MediaManager();
+
 		// switch to main menu screen
 		this.setScreen(new MainMenuScreen(this));
 	}
@@ -33,5 +39,7 @@ public class KPMIPrototype extends Game {
 		// Getting rid ob objects, as garbage collector won't do it
 		batch.dispose();
 		font.dispose();
+		mediaManager.dispose();
 	}
+
 }

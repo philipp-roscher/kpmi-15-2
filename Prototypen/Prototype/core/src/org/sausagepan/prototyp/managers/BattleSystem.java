@@ -2,7 +2,7 @@ package org.sausagepan.prototyp.managers;
 
 import com.badlogic.gdx.utils.Array;
 import org.sausagepan.prototyp.model.*;
-import org.sausagepan.prototyp.model.Character;
+import org.sausagepan.prototyp.model.Player;
 
 /**
  * Created by Georg on 26.06.2015.
@@ -18,8 +18,8 @@ public class BattleSystem {
 
     /* ................................................................................................... METHODS .. */
 
-    public void updateAttack(Character attacker, Array<Character> characters) {
-        for(Character c : characters) {
+    public void updateAttack(Player attacker, Array<Player> characters) {
+        for(Player c : characters) {
             if(!attacker.equals(c)) {
                 if (attacker.getWeapon().getCollider().overlaps(c.getCollider()))
                     c.getStatus().doPhysicalHarm(
@@ -30,8 +30,8 @@ public class BattleSystem {
         }
     }
 
-    public void updateBullets(Character attacker, Array<Character> characters) {
-        for(Character c : characters) {
+    public void updateBullets(Player attacker, Array<Player> characters) {
+        for(Player c : characters) {
             if(!attacker.equals(c))
                 for(Bullet b : attacker.getBullets())
                     if(b.overlaps(c.getCollider())) c.getStatus().

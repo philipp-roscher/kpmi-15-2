@@ -2,10 +2,7 @@ package org.sausagepan.prototyp.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -19,7 +16,7 @@ import java.util.Iterator;
 
 import static org.sausagepan.prototyp.enums.Direction.*;
 
-public class Character {
+public class Player {
 
 	/* ........................................................ ATTRIBUTES .. */
 	private String name;
@@ -28,11 +25,12 @@ public class Character {
 
 	// GEOMETRY
 	private Vector3 position;
+    private Vector3 oldPosition;
 	private Vector3 direction;
 	private Vector2 normDir;
 	private Rectangle collider = new Rectangle(0,0,28,16);
     private Array<Bullet> bullets;
-	private Rectangle oldPosition = new Rectangle(0,0,28,16);
+
 
 	// MEDIA
 	private Array<TextureRegion> spriteSheet;
@@ -40,6 +38,7 @@ public class Character {
 	private Animation currentAnim;
 	private ArrayMap<Direction,TextureRegion> idleImgs;
 	private TextureRegion currentIdleImg;
+	private Sprite sprite;
 
 	// PARTS
 	private Status status;
@@ -53,7 +52,7 @@ public class Character {
 
 	/* ...................................................... CONSTRUCTORS .. */
 
-	public Character(String name, String sex, String spriteSheet, Status status, Weapon weapon) {
+	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon) {
 
 		this.name = name;
 
@@ -65,7 +64,10 @@ public class Character {
 		this.weapon = weapon;
 
 		// GEOMETRY
-		position  = new Vector3(400,390,0);
+		position  = new Vector3(400,300,0);
+        oldPosition = new Vector3(0,0,0);
+        oldPosition.x = position.x;
+        oldPosition.y = position.y;
 		direction = new Vector3();
 		normDir   = new Vector2();
         bullets   = new Array<Bullet>();
@@ -82,46 +84,49 @@ public class Character {
 			//left
 		anims.put(WEST,
 				new Animation(0.1f,
-						atlas.findRegion(Integer.toString(9)),
-						atlas.findRegion(Integer.toString(10)),
-						atlas.findRegion(Integer.toString(11))));
+						atlas.findRegion("09"),
+						atlas.findRegion("10"),
+						atlas.findRegion("11")));
 			//right
 		anims.put(EAST,
 				new Animation(0.1f,
-						atlas.findRegion(Integer.toString(3)),
-						atlas.findRegion(Integer.toString(4)),
-						atlas.findRegion(Integer.toString(5))));
+						atlas.findRegion("03"),
+						atlas.findRegion("04"),
+						atlas.findRegion("05")));
 			//up
 		anims.put(NORTH,
 				new Animation(0.1f,
-						atlas.findRegion(Integer.toString(0)),
-						atlas.findRegion(Integer.toString(1)),
-						atlas.findRegion(Integer.toString(2))));
+						atlas.findRegion("00"),
+						atlas.findRegion("01"),
+						atlas.findRegion("02")));
 			//down
 		anims.put(SOUTH,
 				new Animation(0.1f,
-						atlas.findRegion(Integer.toString(6)),
-						atlas.findRegion(Integer.toString(7)),
-						atlas.findRegion(Integer.toString(8))));
+						atlas.findRegion("06"),
+						atlas.findRegion("07"),
+						atlas.findRegion("08")));
 		
 		// Set standard animation
 		currentAnim = anims.get(SOUTH);
 
 		// IMAGES
 		this.idleImgs = new ArrayMap<Direction,TextureRegion>();
-		this.idleImgs.put(SOUTH, atlas.findRegion("7"));
-		this.idleImgs.put(NORTH, atlas.findRegion("0"));
-		this.idleImgs.put(EAST,  atlas.findRegion("3"));
-		this.idleImgs.put(WEST,  atlas.findRegion("9"));
+		this.idleImgs.put(SOUTH, atlas.findRegion("07"));
+		this.idleImgs.put(NORTH, atlas.findRegion("00"));
+		this.idleImgs.put(EAST,  atlas.findRegion("03"));
+		this.idleImgs.put(WEST,  atlas.findRegion("09"));
 		this.currentIdleImg = this.idleImgs.get(SOUTH);
 
-		this.collider.x = oldPosition.x = position.x;
-		this.collider.y = oldPosition.y = position.y;
+		this.sprite = new Sprite(this.currentIdleImg);
+
+		this.collider = convertFromPositionToCollider(position, collider);
+
+		this.sprite.setPosition(position.x, position.y);
 	}
 	
 	
 	/* ........................................................... METHODS .. */
-	public void handleTouchInput(Vector3 touchPos, Array<Rectangle> colliders) {
+	public void handleTouchInput(Vector3 touchPos, Array<Rectangle> colliders, float elapsedTime) {
 
 		// save old position for resetting movement if character would go through a collider
 		oldPosition.x = position.x;
@@ -154,7 +159,7 @@ public class Character {
 
 
 		position.x += direction.x*50*Gdx.graphics.getDeltaTime();
-        collider.x = position.x;
+        collider.x = position.x-16;
 
 		for(Rectangle r : colliders) {
             if (r.overlaps(collider)) {
@@ -164,7 +169,7 @@ public class Character {
         }
 
 		position.y += direction.y*50*Gdx.graphics.getDeltaTime();
-        collider.y = position.y;
+        collider.y = position.y-8;
 
         for(Rectangle r : colliders) {
             if (r.overlaps(collider)) {
@@ -176,11 +181,15 @@ public class Character {
 		setAnimation(ax, ay);
 
 		weapon.setDirection(normDir);
-		weapon.getCollider().x = position.x + 14 + weapon.getDirection().x * 5 - 10;
-		weapon.getCollider().y = position.y + 16 + weapon.getDirection().y * 5 - 10;
+		weapon.getCollider().x = position.x + weapon.getDirection().x * 5 - 10;
+		weapon.getCollider().y = position.y + weapon.getDirection().y * 5 - 10;
 
-		collider.x = position.x;
-		collider.y = position.y;
+		collider = convertFromPositionToCollider(position, collider);
+
+		if(moving) sprite.setRegion(currentAnim.getKeyFrame(elapsedTime, true));
+		else       sprite.setRegion(currentIdleImg);
+
+		sprite.setPosition(collider.x, collider.y);
 	}
 
 	public void attack() {
@@ -230,13 +239,6 @@ public class Character {
         }
 	}
 
-
-	public void drawCharacter(SpriteBatch batch, float elapsedTime) {
-
-		if(moving) batch.draw( currentAnim.getKeyFrame(elapsedTime, true), position.x, position.y);
-		else       batch.draw( currentIdleImg, position.x, position.y);
-
-	}
 
 	public void drawCharacterStatus(ShapeRenderer shp) {
 
@@ -304,16 +306,6 @@ public class Character {
 			}
 			shp.end();
 
-			// COLLIDER ............................................
-			shp.begin(ShapeRenderer.ShapeType.Line);
-			shp.setColor(Color.RED);
-			shp.rect(
-					collider.x,
-					collider.y,
-					collider.getWidth(),
-					collider.getHeight()
-			);
-			shp.end();
 
 			// MP .................................................
 			shp.begin(ShapeRenderer.ShapeType.Filled);
@@ -322,6 +314,25 @@ public class Character {
 			shp.end();
 
 	}
+
+    public void debug(ShapeRenderer shp) {
+        // COLLIDER ............................................
+        shp.begin(ShapeRenderer.ShapeType.Line);
+        shp.setColor(Color.RED);
+        shp.rect(
+                collider.x,
+                collider.y,
+                collider.getWidth(),
+                collider.getHeight()
+        );
+        shp.end();
+    }
+
+    public Rectangle convertFromPositionToCollider(Vector3 pos, Rectangle coll) {
+        coll.x = pos.x - 16;
+        coll.y = pos.y - 8;
+        return coll;
+    }
 
 	
 	/* ................................................. GETTERS & SETTERS .. */
@@ -361,4 +372,8 @@ public class Character {
     public Array<Bullet> getBullets() {
         return bullets;
     }
+
+	public Sprite getSprite() {
+		return sprite;
+	}
 }

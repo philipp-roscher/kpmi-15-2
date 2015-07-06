@@ -45,7 +45,7 @@ public class Status {
     }
 
     /**
-     * Sets up a characters status with the given values for
+     * Sets up a players status with the given values for
      * @param maxHP        health points
      * @param level     level
      * @param def       physical defence
@@ -71,7 +71,7 @@ public class Status {
     /* ................................................................................................... METHODS .. */
 
     /**
-     * Reduces characters HP according to the received attack and the characters physical defence
+     * Reduces players HP according to the received attack and the players physical defence
      * @param attPhys
      */
     public void doPhysicalHarm(int attPhys) {
@@ -83,7 +83,7 @@ public class Status {
     }
 
     /**
-     * Reduces characters HP according to the received attack and the characters magical defence
+     * Reduces players HP according to the received attack and the players magical defence
      * @param attMag
      */
     public void doMagicalHarm(int attMag) {

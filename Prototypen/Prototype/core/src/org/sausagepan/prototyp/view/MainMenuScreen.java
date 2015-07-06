@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import com.badlogic.gdx.physics.box2d.Box2D;
 import org.sausagepan.prototyp.KPMIPrototype;
 
 import com.badlogic.gdx.Gdx;
@@ -13,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.sausagepan.prototyp.enums.DAMAGETYPE;
 import org.sausagepan.prototyp.enums.WEAPONTYPE;
 import org.sausagepan.prototyp.managers.BattleSystem;
-import org.sausagepan.prototyp.managers.CharacterManager;
+import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.model.*;
 
 public class MainMenuScreen implements Screen {
@@ -33,7 +32,7 @@ public class MainMenuScreen implements Screen {
 		viewport.apply();
 		camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 		
-		this.bgImg = new Texture("textures/backgrounds/main_menu_bg.png");
+		this.bgImg = game.mediaManager.getMainMenuBackgroundImg();
 
 		// Initialize Box2D
 //		Box2D.init();
@@ -44,18 +43,18 @@ public class MainMenuScreen implements Screen {
 
 	public void setUpGame() {
 		BattleSystem bs = new BattleSystem();
-		CharacterManager cm = new CharacterManager();
+		PlayerManager cm = new PlayerManager();
 
-		// Character 1
+		// Player 1
 		cm.addCharacter(
-				new org.sausagepan.prototyp.model.Character("hero1", "m", "warrior_m.pack",
+				new Player("hero1", "m", "knight_m.pack",
 						new Status(),
 						new Weapon("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180))
 		);
 
-		// Character 2
+		// Player 2
 		cm.addCharacter(
-				new org.sausagepan.prototyp.model.Character("hero2", "m", "warrior_m.pack",
+				new Player("hero2", "m", "knight_m.pack",
 						new Status(),
 						new Weapon("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180))
 		);
@@ -121,7 +120,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		bgImg.dispose();
+		// TODO Auto-generated method stub
 	}
 
 }

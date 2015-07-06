@@ -1,22 +1,22 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.gdx.utils.Array;
-import org.sausagepan.prototyp.model.Character;
+import org.sausagepan.prototyp.model.Player;
 
 /**
  * Created by Georg on 26.06.2015.
  */
-public class CharacterManager {
+public class PlayerManager {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
-    public Array<Character> characters;
+    public Array<Player> players;
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
 
-    public CharacterManager() {
-        this.characters = new Array<Character>();
+    public PlayerManager() {
+        this.players = new Array<Player>();
     }
 
 
@@ -26,17 +26,17 @@ public class CharacterManager {
 
 
     /**
-     * adds a character to the system
-     * @param character
+     * adds a player to the system
+     * @param player
      */
-    public void addCharacter(Character character) {
-        this.characters.add(character);
+    public void addCharacter(Player player) {
+        this.players.add(player);
     }
 
 
     /* .......................................................................................... GETTERS & SETTERS . */
 
-    public Array<Character> getCharacters() {
-        return characters;
+    public Array<Player> getPlayers() {
+        return players;
     }
 }
