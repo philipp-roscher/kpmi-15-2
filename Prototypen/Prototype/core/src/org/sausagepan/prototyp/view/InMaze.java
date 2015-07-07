@@ -102,7 +102,7 @@ public class InMaze implements Screen {
 	@Override
 	public void render(float delta) {
         // Clear canvas
-		Gdx.gl.glClearColor(.5f, .5f, .5f, 1);
+		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -129,12 +129,15 @@ public class InMaze implements Screen {
 
         // debug(shpRend);
         // for(Player p : playerMan.getPlayers()) p.debug(shpRend);
+
+		camera.position.set(playerMan.getPlayers().get(0).getPosition());
+		camera.update();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width,height);
-		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+//		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 	}
 
 	@Override
