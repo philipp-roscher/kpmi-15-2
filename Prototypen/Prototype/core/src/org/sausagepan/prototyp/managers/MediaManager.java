@@ -1,8 +1,10 @@
 package org.sausagepan.prototyp.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import javax.xml.soap.Text;
 
@@ -28,7 +30,7 @@ public class MediaManager {
         // load music
         assets.load(this.mazeBackgroundMusicFile, Music.class);
         assets.load(this.mainMenuBackgroundImgFile, Texture.class);
-
+        assets.load("textures/spritesheets/knight_m.pack", TextureAtlas.class);
 
 
         assets.finishLoading();
@@ -52,4 +54,7 @@ public class MediaManager {
         return assets.get(this.mainMenuBackgroundImgFile, Texture.class);
     }
 
+    public TextureAtlas getTextureAtlas(String name) {
+    	return assets.get(name);
+    }
 }

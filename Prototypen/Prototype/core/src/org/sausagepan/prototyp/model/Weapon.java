@@ -44,6 +44,10 @@ public class Weapon {
         this.angle = angle;
         this.collider = new Rectangle(0,0,range,range);
     }
+    
+    public Weapon() {
+    	this("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180);    	
+    }
 
     /* ................................................................................................... METHODS .. */
 
