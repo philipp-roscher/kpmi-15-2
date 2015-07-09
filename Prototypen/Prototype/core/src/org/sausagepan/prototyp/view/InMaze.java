@@ -55,12 +55,14 @@ public class InMaze implements Screen {
 	private Vector3 touchPos;
 	private Music bgMusic;
 	private float elapsedTime = 0;
+	private float disconnectTime = 0;
+	private float timeOut = 5;
+	private Player selfPlayer;
 	
 	//Tiled Map for map creation and collision detection
 	private TiledMap                              tiledMap;
 	private OrthogonalTiledMapRendererWithSprites tiledMapRenderer;
-	private Array<Rectangle>                      colliderWalls;
-	
+	private Array<Rectangle>                      colliderWalls;	
 	
 	/* ...................................................... CONSTRUCTORS .. */
 
@@ -91,7 +93,10 @@ public class InMaze implements Screen {
         // set up managers
 		this.battleSys = battleSystem;
 		this.playerMan = playerManager;
-
+		
+		// register own player
+		this.selfPlayer = playerMan.players.get(game.clientId);
+		
 		// Build tiled map
 		tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");
 		tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap);
@@ -134,8 +139,15 @@ public class InMaze implements Screen {
 						if(e.getKey() != game.clientId)
 							playerMan.updatePosition(e.getKey(), e.getValue(), elapsedTime);
 					}
-				}
-			}});
+				}	
+			}
+
+			public void disconnected (Connection connection) {
+                game.connected = false;
+                Gdx.app.log("KPMIPrototype", "disconnected from server.");
+//                Gdx.app.exit();
+            }
+		});
 	}
 
 	
@@ -147,6 +159,17 @@ public class InMaze implements Screen {
 
 	@Override
 	public void render(float delta) {
+		if(!game.connected) {
+			if( disconnectTime == 0 )
+				disconnectTime = elapsedTime;
+			else
+				if(elapsedTime - disconnectTime > timeOut) {
+					disconnectTime = 0;
+		            game.setScreen(new MainMenuScreen(game));
+				}
+			
+		}
+		
         // Clear canvas
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -166,18 +189,19 @@ public class InMaze implements Screen {
 		// Move character
         for(Player p : playerMan.getPlayers())
         	p.update();
+//		playerMan.players.get(game.clientId).update();
 		handleInput();
 
 		// Shapes
 		for(Player c : playerMan.getPlayers())
 			c.drawCharacterStatus(shpRend);
 
-		battleSys.updateBullets(playerMan.getPlayers().get(0), playerMan.getPlayers());
+		battleSys.updateBullets(selfPlayer, playerMan.getPlayers());
 
         // debug(shpRend);
         // for(Player p : playerMan.getPlayers()) p.debug(shpRend);
 
-		camera.position.set(playerMan.getPlayers().get(0).getPosition());
+		camera.position.set(selfPlayer.getPosition());
 		camera.update();
 	}
 
@@ -218,11 +242,11 @@ public class InMaze implements Screen {
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(touchPos);
-			playerMan.getPlayers().get(0).handleTouchInput(touchPos, colliderWalls, elapsedTime);
+			selfPlayer.handleTouchInput(touchPos, colliderWalls, elapsedTime);
 			
 			PositionUpdate posUpdate = new PositionUpdate();
 			posUpdate.playerId = game.clientId;
-			posUpdate.position = new Position(playerMan.getPlayers().get(0).getPosition(), playerMan.getPlayers().get(0).getDirection(), playerMan.getPlayers().get(0).isMoving());
+			posUpdate.position = new Position(selfPlayer.getPosition(), selfPlayer.getDirection(), selfPlayer.isMoving());
 //			System.out.println("Position: "+ playerMan.getPlayers().get(0).getPosition());
 //			System.out.println("Direction: "+ playerMan.getPlayers().get(0).getDirection());
 			game.client.sendUDP(posUpdate);

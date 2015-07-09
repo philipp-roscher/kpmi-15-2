@@ -1,16 +1,11 @@
 package org.sausagepan.prototyp;
 
-import com.badlogic.gdx.assets.AssetDescriptor;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
@@ -46,11 +41,6 @@ public class KPMIPrototype extends Game {
 					clientId = result.id;
 				}
 			}
-			
-			public void disconnected (Connection connection) {
-                connected = false;
-                Gdx.app.log("KPMIPrototype", "disconnected from server.");
-            }
 		});
 
 		// switch to main menu screen

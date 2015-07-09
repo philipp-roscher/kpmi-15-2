@@ -1,7 +1,6 @@
 package org.sausagepan.prototyp.input;
 
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 
 /**
  * Created by Georg on 06.07.2015.

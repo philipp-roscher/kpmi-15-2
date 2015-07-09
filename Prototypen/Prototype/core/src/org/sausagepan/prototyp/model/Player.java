@@ -36,7 +36,6 @@ public class Player {
 
 
 	// MEDIA
-    private MediaManager mediaManager;
 	private Array<TextureRegion> spriteSheet;
 	private ArrayMap<Direction,Animation> anims;
 	private Animation currentAnim;
@@ -58,7 +57,6 @@ public class Player {
 
 	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon, MediaManager mediaManager) {
 
-		this.mediaManager = mediaManager;
 		this.name = name;
 
 		if(!sex.equals("m") && !sex.equals("f")) throw new IllegalArgumentException();

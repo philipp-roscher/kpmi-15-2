@@ -2,7 +2,6 @@ package org.sausagepan.prototyp.model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import org.sausagepan.prototyp.enums.DAMAGETYPE;
 import org.sausagepan.prototyp.enums.WEAPONTYPE;
 

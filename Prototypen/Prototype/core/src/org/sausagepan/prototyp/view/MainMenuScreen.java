@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import java.net.InetAddress;
 import java.util.Map.Entry;
 
 import org.sausagepan.prototyp.KPMIPrototype;

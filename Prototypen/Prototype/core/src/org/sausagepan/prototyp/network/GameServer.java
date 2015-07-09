@@ -1,7 +1,6 @@
 package org.sausagepan.prototyp.network;
 
 import java.net.InetSocketAddress;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -46,7 +45,7 @@ public class GameServer {
 		cm = new HashMap<Integer,HeroInformation>();
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
+		// executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
 		executor.scheduleAtFixedRate(updateGameState, 0, 1000000L/updateRate, TimeUnit.MICROSECONDS);
 
 		try {
@@ -128,7 +127,7 @@ public class GameServer {
 	static Runnable updateGameState = new Runnable() {
 		public void run() {
 			if(clientIds.size() > 0) {
-				// System.out.println(new Date() + " - "+ ++i +" - GameState an Clients geschickt ");
+				// System.out.println(new java.util.Date() + " - "+ ++i +" - GameState an Clients geschickt ");
 				GameStateResponse response = new GameStateResponse();
 				response.positions = positions;
 				server.sendToAllUDP(response);

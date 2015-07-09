@@ -16,7 +16,6 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
 
     /* ................................................................................................ ATTRIBUTES .. */
 
-    private Sprite sprite;
     private Array<Sprite> sprites;
     private int drawSpritesAfterLayer = 3;
 
