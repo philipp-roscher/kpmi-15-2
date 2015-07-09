@@ -166,6 +166,7 @@ public class InMaze implements Screen {
 				if(elapsedTime - disconnectTime > timeOut) {
 					disconnectTime = 0;
 		            game.setScreen(new MainMenuScreen(game));
+		            dispose();
 				}
 			
 		}
@@ -233,6 +234,7 @@ public class InMaze implements Screen {
 	public void dispose() {
 		this.batch.dispose();
 		this.font.dispose();
+		this.bgMusic.dispose();
 	}
 	
 	
@@ -254,13 +256,13 @@ public class InMaze implements Screen {
 
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			System.out.println("Attack!");
-            playerMan.getPlayers().get(0).attack();
-			battleSys.updateAttack(playerMan.getPlayers().get(0), playerMan.getPlayers());
+            selfPlayer.attack();
+			battleSys.updateAttack(selfPlayer, playerMan.getPlayers());
 		}
 
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             System.out.println("Shoot!");
-            playerMan.getPlayers().get(0).shoot();
+            selfPlayer.shoot();
         }
 	}
 
