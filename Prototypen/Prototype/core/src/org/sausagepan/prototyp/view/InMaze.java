@@ -279,7 +279,6 @@ public class InMaze implements Screen {
 
     /**
      * Debugging method which draws tiled map colliders as rectangles to the screen
-     * @param shpRend   {@link ShapeRenderer} tp draw to
      */
 	public void handleInput() {
 		if (Gdx.input.isTouched()) {
