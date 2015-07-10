@@ -29,6 +29,7 @@ public class Player {
 	private Vector3 direction;
 	private Vector2 normDir;
 	private Rectangle collider = new Rectangle(0,0,28,16);
+	private Rectangle damageCollider = new Rectangle(0,0,24,34);
     private Array<Bullet> bullets;
 
 
@@ -64,13 +65,13 @@ public class Player {
 		this.weapon = weapon;
 
 		// GEOMETRY
-		position  = new Vector3(400,300,0);
-        oldPosition = new Vector3(0,0,0);
+		position      = new Vector3(400,300,0);
+        oldPosition   = new Vector3(0,0,0);
         oldPosition.x = position.x;
         oldPosition.y = position.y;
-		direction = new Vector3();
-		normDir   = new Vector2();
-        bullets   = new Array<Bullet>();
+		direction     = new Vector3();
+		normDir       = new Vector2();
+        bullets       = new Array<Bullet>();
 
 		// MEDIA
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("textures/spritesheets/" + spriteSheet));
@@ -120,77 +121,13 @@ public class Player {
 		this.sprite = new Sprite(this.currentIdleImg);
 
 		this.collider = convertFromPositionToCollider(position, collider);
+        this.damageCollider.setPosition(collider.x + 2, collider.y + 1);
 
-		this.sprite.setPosition(position.x, position.y);
+		this.sprite.setPosition(collider.x, collider.y);
 	}
 	
 	
 	/* ........................................................... METHODS .. */
-	public void handleTouchInput(Vector3 touchPos, Array<Rectangle> colliders, float elapsedTime) {
-
-		// save old position for resetting movement if character would go through a collider
-		oldPosition.x = position.x;
-		oldPosition.y = position.y;
-
-		float ax,ay;	// Acceleration
-		ax = (position.x - touchPos.x) * (-1) * 0.03f;
-		ay = (position.y - touchPos.y) * (-1) * 0.03f;
-
-        direction.x = ax;
-        direction.y = ay;
-
-		normDir.x = (ax/Vector3.len(ax, ay, 0)*5);
-		normDir.y = (ay/Vector3.len(ax, ay, 0)*5);
-
-		if(direction.len() > 5) {
-			direction.x = normDir.x;
-			direction.y = normDir.y;
-		}
-
-        if(direction.len() > 0.2)
-            moving = true;
-        else
-            direction.x = direction.y = 0;
-
-        if(direction.len() > 0.2 && direction.len() < 1.0) {
-            direction.x = normDir.x/3;
-            direction.y = normDir.y/3;
-        }
-
-
-		position.x += direction.x*50*Gdx.graphics.getDeltaTime();
-        collider.x = position.x-16;
-
-		for(Rectangle r : colliders) {
-            if (r.overlaps(collider)) {
-                collider.x = oldPosition.x;
-                position.x = oldPosition.x;
-            }
-        }
-
-		position.y += direction.y*50*Gdx.graphics.getDeltaTime();
-        collider.y = position.y-8;
-
-        for(Rectangle r : colliders) {
-            if (r.overlaps(collider)) {
-                collider.y = oldPosition.y;
-                position.y = oldPosition.y;
-            }
-        }
-
-		setAnimation(ax, ay);
-
-		weapon.setDirection(normDir);
-		weapon.getCollider().x = position.x + weapon.getDirection().x * 5 - 10;
-		weapon.getCollider().y = position.y + weapon.getDirection().y * 5 - 10;
-
-		collider = convertFromPositionToCollider(position, collider);
-
-		if(moving) sprite.setRegion(currentAnim.getKeyFrame(elapsedTime, true));
-		else       sprite.setRegion(currentIdleImg);
-
-		sprite.setPosition(collider.x, collider.y);
-	}
 
 	public void attack() {
         if(TimeUtils.timeSinceMillis(lastAttack) < 100) return;
@@ -200,8 +137,7 @@ public class Player {
 
     public void shoot() {
         if(TimeUtils.timeSinceMillis(lastAttack) < 100) return;
-        bullets.add(new Bullet(position.x + GlobalSettings.charSpriteWidth/2,
-                position.y + GlobalSettings.charSpriteHeight/2, 2, 2, normDir));
+        bullets.add(new Bullet(position.x, position.y+8, 2, 2, normDir));
         lastAttack = TimeUtils.millis();
     }
 	
@@ -227,9 +163,8 @@ public class Player {
 		currentIdleImg = idleImgs.get(spriteDir);
 	}
 
-	public void update() {
-		moving = false;
-		attacking = false;
+	public void update(Array<Rectangle> colliders, Vector3 touchPos, float elapsedTime) {
+
         Iterator<Bullet> i = bullets.iterator();
         while (i.hasNext()) {
             Bullet b = i.next();
@@ -237,24 +172,82 @@ public class Player {
             b.y += Gdx.graphics.getDeltaTime() * 80 * b.direction.y;
             if(b.x > 800 || b.x < 0 || b.y > 480 || b.y < 0) i.remove();
         }
+
+        if(moving) {
+            // save old position for resetting movement if character would go through a collider
+            oldPosition.x = position.x;
+            oldPosition.y = position.y;
+
+            float ax, ay;    // Acceleration
+            ax = (position.x - touchPos.x) * (-1) * 0.03f;
+            ay = (position.y - touchPos.y) * (-1) * 0.03f;
+
+            direction.x = ax;
+            direction.y = ay;
+
+            normDir.x = (ax / Vector3.len(ax, ay, 0) * 5);
+            normDir.y = (ay / Vector3.len(ax, ay, 0) * 5);
+
+            if (direction.len() > 5) {
+                direction.x = normDir.x;
+                direction.y = normDir.y;
+            }
+
+            if (direction.len() > 0.2)
+                moving = true;
+            else
+                direction.x = direction.y = 0;
+
+            if (direction.len() > 0.2 && direction.len() < 1.0) {
+                direction.x = normDir.x / 3;
+                direction.y = normDir.y / 3;
+            }
+
+
+            position.x += direction.x * 50 * Gdx.graphics.getDeltaTime();
+            collider.x = position.x - 16;
+
+            for (Rectangle r : colliders) {
+                if (r.overlaps(collider)) {
+                    collider.x = oldPosition.x;
+                    position.x = oldPosition.x;
+                }
+            }
+
+            position.y += direction.y * 50 * Gdx.graphics.getDeltaTime();
+            collider.y = position.y - 8;
+
+            for (Rectangle r : colliders) {
+                if (r.overlaps(collider)) {
+                    collider.y = oldPosition.y;
+                    position.y = oldPosition.y;
+                }
+            }
+
+            setAnimation(ax, ay);
+
+            weapon.setDirection(normDir);
+            weapon.getCollider().x = position.x + weapon.getDirection().x * 5 - 10;
+            weapon.getCollider().y = position.y + weapon.getDirection().y * 5 - 10;
+
+            collider = convertFromPositionToCollider(position, collider);
+            damageCollider.setPosition(collider.x + 2, collider.y + 1);
+
+            if (moving) sprite.setRegion(currentAnim.getKeyFrame(elapsedTime, true));
+            else sprite.setRegion(currentIdleImg);
+
+            sprite.setPosition(collider.x, collider.y);
+        }
 	}
 
 
 	public void drawCharacterStatus(ShapeRenderer shp) {
 
 			// HP .................................................
-			shp.begin(ShapeRenderer.ShapeType.Line);
-			shp.setColor(Color.WHITE);
-			shp.rect(
-                    this.position.x + 2,
-                    this.position.y + 40,
-                    24, 5
-            );
-			shp.end();
 
 			shp.begin(ShapeRenderer.ShapeType.Filled);
 			shp.setColor(Color.GREEN);
-			shp.rect(this.position.x + 3, this.position.y + 41,
+			shp.rect(this.collider.x + 3, this.collider.y + 41,
                     22 * (this.status.getHP() / Float.valueOf(this.status.getMaxHP())), 4);
 			shp.end();
 
@@ -310,7 +303,7 @@ public class Player {
 			// MP .................................................
 			shp.begin(ShapeRenderer.ShapeType.Filled);
 			shp.setColor(Color.BLUE);
-			shp.rect( position.x + 3, position.y + 38, 22, 2);
+			shp.rect( collider.x + 3, collider.y + 38, 22, 2);
 			shp.end();
 
 	}
@@ -325,12 +318,19 @@ public class Player {
                 collider.getWidth(),
                 collider.getHeight()
         );
+        shp.setColor(Color.GREEN);
+        shp.rect(
+                damageCollider.x,
+                damageCollider.y,
+                damageCollider.getWidth(),
+                damageCollider.getHeight()
+        );
         shp.end();
     }
 
     public Rectangle convertFromPositionToCollider(Vector3 pos, Rectangle coll) {
-        coll.x = pos.x - 16;
-        coll.y = pos.y - 8;
+        coll.x = pos.x - coll.width/2;
+        coll.y = pos.y - coll.height/2;
         return coll;
     }
 
@@ -376,4 +376,12 @@ public class Player {
 	public Sprite getSprite() {
 		return sprite;
 	}
+
+    public Rectangle getDamageCollider() {
+        return damageCollider;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
 }

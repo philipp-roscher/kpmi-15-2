@@ -21,7 +21,7 @@ public class BattleSystem {
     public void updateAttack(Player attacker, Array<Player> characters) {
         for(Player c : characters) {
             if(!attacker.equals(c)) {
-                if (attacker.getWeapon().getCollider().overlaps(c.getCollider()))
+                if (attacker.getWeapon().getCollider().overlaps(c.getDamageCollider()))
                     c.getStatus().doPhysicalHarm(
                             attacker.getWeapon().getDamage()
                                     + attacker.getStatus().getAttPhys());
@@ -34,7 +34,7 @@ public class BattleSystem {
         for(Player c : characters) {
             if(!attacker.equals(c))
                 for(Bullet b : attacker.getBullets())
-                    if(b.overlaps(c.getCollider())) c.getStatus().
+                    if(b.overlaps(c.getDamageCollider())) c.getStatus().
                             doPhysicalHarm(attacker.getWeapon().getDamage()
                             + attacker.getStatus().getAttPhys());
         }
