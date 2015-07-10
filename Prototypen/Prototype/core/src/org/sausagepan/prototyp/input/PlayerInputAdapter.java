@@ -3,12 +3,7 @@ package org.sausagepan.prototyp.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.view.InMaze;
 

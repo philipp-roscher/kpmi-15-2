@@ -10,7 +10,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.TimeUtils;
+
 import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.network.Position;
 
 import java.util.Iterator;
 
@@ -53,7 +56,7 @@ public class Player {
 
 	/* ...................................................... CONSTRUCTORS .. */
 
-	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon) {
+	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon, MediaManager mediaManager) {
 
 		this.name = name;
 
@@ -74,7 +77,7 @@ public class Player {
         bullets       = new Array<Bullet>();
 
 		// MEDIA
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("textures/spritesheets/" + spriteSheet));
+		TextureAtlas atlas = mediaManager.getTextureAtlas("textures/spritesheets/" + spriteSheet);
 		this.spriteSheet   = new Array<TextureRegion>();
 		for(Integer i=0; i<12; i++)
 			this.spriteSheet.add(atlas.findRegion(i.toString()));
@@ -353,6 +356,14 @@ public class Player {
 		return position;
 	}
 	
+	public Vector3 getDirection() {
+		return direction;
+	}
+	
+	public boolean isMoving() {
+		return moving;
+	}
+	
 	public Animation getAnimation() {
 		return currentAnim;
 	}
@@ -384,4 +395,24 @@ public class Player {
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
+
+	public void updatePosition(Position position, float elapsedTime) {
+		this.position = position.position;
+		this.direction = position.direction;
+		this.moving = position.isMoving;
+		
+		setAnimation(direction.x, direction.y);
+
+		weapon.setDirection(normDir);
+		weapon.getCollider().x = this.position.x + weapon.getDirection().x * 5 - 10;
+		weapon.getCollider().y = this.position.y + weapon.getDirection().y * 5 - 10;
+
+		collider = convertFromPositionToCollider(this.position, collider);
+
+		if(moving) sprite.setRegion(currentAnim.getKeyFrame(elapsedTime, true));
+		else       sprite.setRegion(currentIdleImg);
+
+		sprite.setPosition(collider.x, collider.y);
+	}
+
 }
