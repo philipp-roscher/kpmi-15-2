@@ -2,6 +2,9 @@ package org.sausagepan.prototyp.view;
 
 import java.util.Map.Entry;
 
+import box2dLight.RayHandler;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network;
@@ -35,11 +38,15 @@ public class MainMenuScreen implements Screen {
 	private Texture bgImg;
 	private int connectionStatus;
 	private PlayerManager cm;
+	private final World world;
+    private final RayHandler rayHandler;
 	String serverIp;	
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(final KPMIPrototype game) {
 		this.game  = game;
+		this.world = new World(new Vector2(0,0), true);
+        this.rayHandler = new RayHandler(world);
 		camera     = new OrthographicCamera();
 		viewport        = new FitViewport(800, 480, camera);
 		viewport.apply();
@@ -56,7 +63,15 @@ public class MainMenuScreen implements Screen {
 					for(Entry<Integer, HeroInformation> e : response.heroes.entrySet()) {
 						HeroInformation hero = e.getValue();
 						cm.addCharacter(e.getKey(),
-								new Player(hero.name, hero.sex, hero.spriteSheet, hero.status, hero.weapon, game.mediaManager));
+								new Player(
+                                        hero.name,
+                                        hero.sex,
+                                        hero.spriteSheet,
+                                        hero.status,
+                                        hero.weapon,
+                                        game.mediaManager,
+                                        world,
+                                        rayHandler));
 					}
 
 					game.connected = true;
@@ -64,8 +79,7 @@ public class MainMenuScreen implements Screen {
 			}
 			
 		});
-		// Initialize Box2D
-//		Box2D.init();
+
 	}
 
 
@@ -80,7 +94,7 @@ public class MainMenuScreen implements Screen {
 				new Player("hero" + game.clientId, "m", "knight_m.pack",
 						new Status(),
 						new Weapon("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180),
-						game.mediaManager)
+						game.mediaManager, world, rayHandler)
 		);
 
 		game.client.sendTCP(
@@ -100,7 +114,7 @@ public class MainMenuScreen implements Screen {
 //		);
 
 		// Switch to game screen
-		game.setScreen(new InMaze(game, bs, cm));
+		game.setScreen(new InMaze(game, bs, cm, world, rayHandler));
 	}
 
 

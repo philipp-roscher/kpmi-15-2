@@ -39,7 +39,7 @@ public class PlayerManager {
 
     /**
      * removes a player from the system
-     * @param id
+     * @param playerId
      */
 	public void removeCharacter(int playerId) {
 		this.players.remove(playerId);

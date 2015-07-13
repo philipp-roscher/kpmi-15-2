@@ -32,21 +32,23 @@ public class PlayerInputAdapter extends InputAdapter{
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchPos.set(screenX, screenY, 0);
         maze.camera.unproject(touchPos);
-        player.setMoving(true);
+        player.move(touchPos);
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        player.setMoving(false);
+        player.stop();
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        touchPos.x = screenX;
+        touchPos.y = screenY;
         maze.camera.unproject(touchPos);
-        return true;
+        player.move(touchPos);
+        return false;
     }
 
     @Override
@@ -55,12 +57,12 @@ public class PlayerInputAdapter extends InputAdapter{
         switch (keycode) {
             case Input.Keys.A: {
                 player.attack();
-                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
+//                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
                 break;
             }
             case Input.Keys.S: {
                 player.attack();
-                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
+//                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
                 break;
             }
         }
@@ -76,3 +78,4 @@ public class PlayerInputAdapter extends InputAdapter{
 /* ......................................................................................... GETTERS & SETTERS .. */
 
 }
+

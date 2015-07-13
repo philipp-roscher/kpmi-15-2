@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.model;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -7,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -26,29 +29,33 @@ public class Player {
 	private String sex;
 	private Direction spriteDir = SOUTH;
 
-	// GEOMETRY
-	private Vector3 position;
-    private Vector3 oldPosition;
-	private Vector3 direction;
-	private Vector2 normDir;
-	private Rectangle collider = new Rectangle(0,0,28,16);
-	private Rectangle damageCollider = new Rectangle(0,0,24,34);
-    private Array<Bullet> bullets;
+	// Geometry
+	private Direction dir;          // looking direction of character (N,S,W,E)
+	private Vector3   touchPos;     // screen touch position
+	private Vector2   direction;    // vector from character to touch position
+	private Vector2   normDir;      // normalized direction vector with length 1
+	private float     ax, ay;       // direction vectors components
+	private Array<Bullet> bullets;
+    public Position position;
 
+	// Media
+	private ArrayMap<String,Animation> playerAnims;     // characters animations (N,S,W,E)
+	private Animation                  recentAnim;      // alive animation
+	private TextureRegion              recentIdleImg;   // alive idle image
+	private Sprite                     sprite;          // characters sprite
 
-	// MEDIA
-	private Array<TextureRegion> spriteSheet;
-	private ArrayMap<Direction,Animation> anims;
-	private Animation currentAnim;
-	private ArrayMap<Direction,TextureRegion> idleImgs;
-	private TextureRegion currentIdleImg;
-	private Sprite sprite;
+	// Physics
+	private boolean moving;         // whether character is moving or not
+	private Body dynBody;        // dynamic box2d body for physics
+	private Fixture fixture;        // characters fixture for shape, collision, material a.s.o., child of body
+
+	// Light
+	private PointLight spriteLight; // sprites light source
 
 	// PARTS
 	private Status status;
 	private Weapon weapon;
 
-	private boolean moving    = false;
 	private boolean attacking = false;
 
     private long lastAttack = 0;
@@ -56,7 +63,8 @@ public class Player {
 
 	/* ...................................................... CONSTRUCTORS .. */
 
-	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon, MediaManager mediaManager) {
+	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon, MediaManager mediaManager,
+				  World world, RayHandler rayHandler) {
 
 		this.name = name;
 
@@ -67,66 +75,52 @@ public class Player {
 		this.status = status;
 		this.weapon = weapon;
 
-		// GEOMETRY
-		position      = new Vector3(400,300,0);
-        oldPosition   = new Vector3(0,0,0);
-        oldPosition.x = position.x;
-        oldPosition.y = position.y;
-		direction     = new Vector3();
-		normDir       = new Vector2();
-        bullets       = new Array<Bullet>();
+		// Geometry
+		this.dir       = Direction.SOUTH;
+		this.touchPos  = new Vector3(0,0,0);
+		this.direction = new Vector2(0,0);
+		this.normDir   = new Vector2(0,0);
+		this.bullets   = new Array<Bullet>();
+        this.position  = new Position(new Vector3(0,0,0), this.dir, this.moving);
 
-		// MEDIA
+		// Physics
+		this.moving = false;
+
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.DynamicBody;    // set up body definition for player
+		bodyDef.position.set(1.1f, 1.1f);               // set players bodys position
+		dynBody = world.createBody(bodyDef);            // add body to the world
+		CircleShape circle = new CircleShape();         // give body a shape
+		circle.setRadius(.4f);                          // set the shapes radius
+		FixtureDef fixDef = new FixtureDef();           // create players fixture
+		fixDef.shape       = circle;                    // give shape to fixture
+		fixDef.density     = 0.5f;                      // objects density
+		fixDef.friction    = 0.4f;                      // objects friction on other objects
+		fixDef.restitution = 0.0f;                      // bouncing
+		fixture = dynBody.createFixture(fixDef);        // add fixture to body
+		circle.dispose();                               // dispose shapes
+
+		// Light
+		spriteLight = new PointLight(rayHandler, 256, new Color(1,1,1,1), 8, 0, 0);
+
+		// Media
 		TextureAtlas atlas = mediaManager.getTextureAtlas("textures/spritesheets/" + spriteSheet);
-		this.spriteSheet   = new Array<TextureRegion>();
-		for(Integer i=0; i<12; i++)
-			this.spriteSheet.add(atlas.findRegion(i.toString()));
 
-		// ANIMATIONS
-		anims = new ArrayMap<Direction,Animation>();
-		// Walk Animations
-			//left
-		anims.put(WEST,
-				new Animation(0.1f,
-						atlas.findRegion("09"),
-						atlas.findRegion("10"),
-						atlas.findRegion("11")));
-			//right
-		anims.put(EAST,
-				new Animation(0.1f,
-						atlas.findRegion("03"),
-						atlas.findRegion("04"),
-						atlas.findRegion("05")));
-			//up
-		anims.put(NORTH,
-				new Animation(0.1f,
-						atlas.findRegion("00"),
-						atlas.findRegion("01"),
-						atlas.findRegion("02")));
-			//down
-		anims.put(SOUTH,
-				new Animation(0.1f,
-						atlas.findRegion("06"),
-						atlas.findRegion("07"),
-						atlas.findRegion("08")));
-		
-		// Set standard animation
-		currentAnim = anims.get(SOUTH);
+		// load animation textures
+		playerAnims = new ArrayMap<String,Animation>();
+		playerAnims.put("n", new Animation(.2f, atlas.findRegions("n")));
+		playerAnims.put("e", new Animation(.2f, atlas.findRegions("e")));
+		playerAnims.put("s", new Animation(.2f, atlas.findRegions("s")));
+		playerAnims.put("w", new Animation(.2f, atlas.findRegions("w")));
 
-		// IMAGES
-		this.idleImgs = new ArrayMap<Direction,TextureRegion>();
-		this.idleImgs.put(SOUTH, atlas.findRegion("07"));
-		this.idleImgs.put(NORTH, atlas.findRegion("00"));
-		this.idleImgs.put(EAST,  atlas.findRegion("03"));
-		this.idleImgs.put(WEST,  atlas.findRegion("09"));
-		this.currentIdleImg = this.idleImgs.get(SOUTH);
+		recentAnim    = playerAnims.get("s");
+		recentIdleImg = playerAnims.get("s").getKeyFrames()[0];
+		this.sprite = new Sprite(recentIdleImg);
+		this.sprite.setSize(.8f, 1);
+		this.sprite.setPosition(
+				dynBody.getPosition().x - fixture.getShape().getRadius(),
+				dynBody.getPosition().y - fixture.getShape().getRadius());
 
-		this.sprite = new Sprite(this.currentIdleImg);
-
-		this.collider = convertFromPositionToCollider(position, collider);
-        this.damageCollider.setPosition(collider.x + 2, collider.y + 1);
-
-		this.sprite.setPosition(collider.x, collider.y);
 	}
 	
 	
@@ -140,33 +134,89 @@ public class Player {
 
     public void shoot() {
         if(TimeUtils.timeSinceMillis(lastAttack) < 100) return;
-        bullets.add(new Bullet(position.x, position.y+8, 2, 2, normDir));
+        bullets.add(new Bullet(dynBody.getPosition().x, dynBody.getPosition().y, 2, 2, normDir));
         lastAttack = TimeUtils.millis();
     }
-	
-	/**
-	 * Set the animation to idle or walking: left, right, up, down
-	 * @param ax	hor difference between position and touch
-	 * @param ay	ver difference between position and touch
-	 */
-	public void setAnimation(float ax, float ay) {
-		
-		if (ax*ax > ay*ay) {
-			// x component dominates
-			if(ax < 0) spriteDir = WEST;
-			else       spriteDir = EAST;
-		} else {
-			// y component dominates
-			if(ay > 0) spriteDir = NORTH; // character goes up
-			else       spriteDir = SOUTH; // character goes down
-		}
 
-		// Set animation and idle img
-		currentAnim    = anims.get(spriteDir);// character moves left
-		currentIdleImg = idleImgs.get(spriteDir);
+	public void update(float elapsedTime) {
+		if(moving)
+			this.sprite.setRegion(recentAnim.getKeyFrame(elapsedTime, true));
+		else
+			this.sprite.setRegion(recentIdleImg);
+
+		this.sprite.setPosition(
+				dynBody.getPosition().x - fixture.getShape().getRadius(),
+				dynBody.getPosition().y - fixture.getShape().getRadius()
+		);
+
+		spriteLight.setPosition(dynBody.getPosition().x, dynBody.getPosition().y);
+        updateNetworkPosition();
+
 	}
 
-	public void update(Array<Rectangle> colliders, Vector3 touchPos, float elapsedTime) {
+    /* ......................................................................................... GETTERS & SETTERS .. */
+
+
+	public void move(Vector3 touchPos) {
+		if(Math.abs(touchPos.x - dynBody.getPosition().x) > Math.abs(touchPos.y - dynBody.getPosition().y)) {
+			if (touchPos.x > dynBody.getPosition().x)
+				dir = Direction.EAST;
+			else
+				dir = Direction.WEST;
+		} else {
+			if(touchPos.y > dynBody.getPosition().y)
+				dir = Direction.NORTH;
+			else
+				dir = Direction.SOUTH;
+		}
+
+
+
+		ax = (-1)*(dynBody.getPosition().x-touchPos.x);
+		ay = (-1)*(dynBody.getPosition().y-touchPos.y);
+
+		direction.x = ax;
+		direction.y = ay;
+
+		normDir.x = (ax / Vector3.len(ax, ay, 0) * 5);
+		normDir.y = (ay / Vector3.len(ax, ay, 0) * 5);
+
+		if (direction.len() > 4) {
+			direction.x = normDir.x;
+			direction.y = normDir.y;
+		}
+
+		if(direction.len() < 1) {
+			direction.x = 0;
+			direction.y = 0;
+			moving = false;
+		} else {
+			moving = true;
+		}
+
+		dynBody.setLinearVelocity(direction);
+		updateSprite(this.dir);
+	}
+
+	public void stop() {
+		this.dynBody.setLinearVelocity(0.0f,0.0f);
+		this.moving = false;
+	}
+
+	private void updateSprite(Direction direction) {
+		switch(direction) {
+			case NORTH: recentAnim = playerAnims.get("n"); break;
+			case SOUTH: recentAnim = playerAnims.get("s"); break;
+			case WEST: recentAnim = playerAnims.get("w"); break;
+			case EAST: recentAnim = playerAnims.get("e"); break;
+		}
+		recentIdleImg = recentAnim.getKeyFrames()[0];
+	}
+
+
+    /* ......................................................................................... SETTERS & GETTERS .. */
+
+	public void updateBullets(Array<Rectangle> colliders, Vector3 touchPos, float elapsedTime) {
 
         Iterator<Bullet> i = bullets.iterator();
         while (i.hasNext()) {
@@ -174,72 +224,6 @@ public class Player {
             b.x += Gdx.graphics.getDeltaTime() * 80 * b.direction.x;
             b.y += Gdx.graphics.getDeltaTime() * 80 * b.direction.y;
             if(b.x > 800 || b.x < 0 || b.y > 480 || b.y < 0) i.remove();
-        }
-
-        if(moving) {
-            // save old position for resetting movement if character would go through a collider
-            oldPosition.x = position.x;
-            oldPosition.y = position.y;
-
-            float ax, ay;    // Acceleration
-            ax = (position.x - touchPos.x) * (-1) * 0.03f;
-            ay = (position.y - touchPos.y) * (-1) * 0.03f;
-
-            direction.x = ax;
-            direction.y = ay;
-
-            normDir.x = (ax / Vector3.len(ax, ay, 0) * 5);
-            normDir.y = (ay / Vector3.len(ax, ay, 0) * 5);
-
-            if (direction.len() > 5) {
-                direction.x = normDir.x;
-                direction.y = normDir.y;
-            }
-
-            if (direction.len() > 0.2)
-                moving = true;
-            else
-                direction.x = direction.y = 0;
-
-            if (direction.len() > 0.2 && direction.len() < 1.0) {
-                direction.x = normDir.x / 3;
-                direction.y = normDir.y / 3;
-            }
-
-
-            position.x += direction.x * 50 * Gdx.graphics.getDeltaTime();
-            collider.x = position.x - 16;
-
-            for (Rectangle r : colliders) {
-                if (r.overlaps(collider)) {
-                    collider.x = oldPosition.x;
-                    position.x = oldPosition.x;
-                }
-            }
-
-            position.y += direction.y * 50 * Gdx.graphics.getDeltaTime();
-            collider.y = position.y - 8;
-
-            for (Rectangle r : colliders) {
-                if (r.overlaps(collider)) {
-                    collider.y = oldPosition.y;
-                    position.y = oldPosition.y;
-                }
-            }
-
-            setAnimation(ax, ay);
-
-            weapon.setDirection(normDir);
-            weapon.getCollider().x = position.x + weapon.getDirection().x * 5 - 10;
-            weapon.getCollider().y = position.y + weapon.getDirection().y * 5 - 10;
-
-            collider = convertFromPositionToCollider(position, collider);
-            damageCollider.setPosition(collider.x + 2, collider.y + 1);
-
-            if (moving) sprite.setRegion(currentAnim.getKeyFrame(elapsedTime, true));
-            else sprite.setRegion(currentIdleImg);
-
-            sprite.setPosition(collider.x, collider.y);
         }
 	}
 
@@ -250,7 +234,7 @@ public class Player {
 
 			shp.begin(ShapeRenderer.ShapeType.Filled);
 			shp.setColor(Color.GREEN);
-			shp.rect(this.collider.x + 3, this.collider.y + 41,
+			shp.rect(this.dynBody.getPosition().x + 3, this.dynBody.getPosition().y + 41,
                     22 * (this.status.getHP() / Float.valueOf(this.status.getMaxHP())), 4);
 			shp.end();
 
@@ -276,26 +260,26 @@ public class Player {
 				switch (spriteDir) {
 					case EAST:
 						shp.rect(
-								position.x + GlobalSettings.charSpriteWidth,
-								position.y + GlobalSettings.charSpriteHeight/2,
+								dynBody.getPosition().x + GlobalSettings.charSpriteWidth,
+								dynBody.getPosition().y + GlobalSettings.charSpriteHeight/2,
 								14,
 								4); break;
 					case WEST:
 						shp.rect(
-								position.x - 14,
-								position.y + GlobalSettings.charSpriteHeight/2,
+								dynBody.getPosition().x - 14,
+								dynBody.getPosition().y + GlobalSettings.charSpriteHeight/2,
 								14,
 								4); break;
 					case NORTH:
 						shp.rect(
-								position.x + GlobalSettings.charSpriteWidth/2 - 2,
-								position.y + GlobalSettings.charSpriteHeight,
+								dynBody.getPosition().x + GlobalSettings.charSpriteWidth/2 - 2,
+								dynBody.getPosition().y + GlobalSettings.charSpriteHeight,
 								4,
 								14); break;
 					case SOUTH:
 						shp.rect(
-								position.x + GlobalSettings.charSpriteWidth/2 - 2,
-								position.y - 14,
+								dynBody.getPosition().x + GlobalSettings.charSpriteWidth/2 - 2,
+								dynBody.getPosition().y - 14,
 								4,
 								14); break;
 				}
@@ -306,30 +290,10 @@ public class Player {
 			// MP .................................................
 			shp.begin(ShapeRenderer.ShapeType.Filled);
 			shp.setColor(Color.BLUE);
-			shp.rect( collider.x + 3, collider.y + 38, 22, 2);
+			shp.rect( dynBody.getPosition().x + 3, dynBody.getPosition().y + 38, 22, 2);
 			shp.end();
 
 	}
-
-    public void debug(ShapeRenderer shp) {
-        // COLLIDER ............................................
-        shp.begin(ShapeRenderer.ShapeType.Line);
-        shp.setColor(Color.RED);
-        shp.rect(
-                collider.x,
-                collider.y,
-                collider.getWidth(),
-                collider.getHeight()
-        );
-        shp.setColor(Color.GREEN);
-        shp.rect(
-                damageCollider.x,
-                damageCollider.y,
-                damageCollider.getWidth(),
-                damageCollider.getHeight()
-        );
-        shp.end();
-    }
 
     public Rectangle convertFromPositionToCollider(Vector3 pos, Rectangle coll) {
         coll.x = pos.x - coll.width/2;
@@ -347,25 +311,17 @@ public class Player {
 		return sex;
 	}
 
-	public Array<TextureRegion> getSpriteSheet() {
-		return spriteSheet;
-	}
 
-
-	public Vector3 getPosition() {
-		return position;
+	public Vector2 getPosition() {
+		return this.dynBody.getPosition();
 	}
 	
-	public Vector3 getDirection() {
+	public Vector2 getDirection() {
 		return direction;
 	}
 	
 	public boolean isMoving() {
 		return moving;
-	}
-	
-	public Animation getAnimation() {
-		return currentAnim;
 	}
 
 	public Status getStatus() {
@@ -376,9 +332,6 @@ public class Player {
 		return weapon;
 	}
 
-	public Rectangle getCollider() {
-		return  collider;
-	}
 
     public Array<Bullet> getBullets() {
         return bullets;
@@ -388,31 +341,23 @@ public class Player {
 		return sprite;
 	}
 
-    public Rectangle getDamageCollider() {
-        return damageCollider;
-    }
+//    public Rectangle getDamageCollider() {
+//        return damageCollider;
+//    }
 
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
 
-	public void updatePosition(Position position, float elapsedTime) {
-		this.position = position.position;
-		this.direction = position.direction;
-		this.moving = position.isMoving;
-		
-		setAnimation(direction.x, direction.y);
-
-		weapon.setDirection(normDir);
-		weapon.getCollider().x = this.position.x + weapon.getDirection().x * 5 - 10;
-		weapon.getCollider().y = this.position.y + weapon.getDirection().y * 5 - 10;
-
-		collider = convertFromPositionToCollider(this.position, collider);
-
-		if(moving) sprite.setRegion(currentAnim.getKeyFrame(elapsedTime, true));
-		else       sprite.setRegion(currentIdleImg);
-
-		sprite.setPosition(collider.x, collider.y);
+	public void updateNetworkPosition() {
+		this.position.position.x = dynBody.getPosition().x;
+        this.position.position.y = dynBody.getPosition().y;
+        this.position.direction  = dir;
+        this.position.isMoving   = moving;
 	}
+
+    public void updatePosition(Position position, Direction dir, boolean moving) {
+        // TODO
+    }
 
 }

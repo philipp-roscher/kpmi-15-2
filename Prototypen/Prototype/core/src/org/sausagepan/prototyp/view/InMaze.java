@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.view;
 
 import java.util.Map.Entry;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 
 import org.sausagepan.prototyp.KPMIPrototype;
@@ -45,16 +48,16 @@ public class InMaze implements Screen {
 	/* ................................................................................................ ATTRIBUTES .. */
 	final   KPMIPrototype game;
 
-    // Camera, Viewport and Renderers
+    // Renderers and Cameras
+    private Box2DDebugRenderer debugRenderer;   // a debugging renderer
     public  OrthographicCamera camera;
-	private Viewport           viewport;
+    private Viewport           viewport;
 	private SpriteBatch        batch;
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
 
 	// Geometry
 	private Vector3          touchPos;      // touch position
-	public  Array<Rectangle> colliderWalls; // rectangles for collision detection with map
 
     // Managers
 	public  PlayerManager playerMan;        // manages players
@@ -70,6 +73,12 @@ public class InMaze implements Screen {
 	//Tiled Map for map creation and collision detection
 	private TiledMap                              tiledMap;         // contains the layers of the tiled map
 	private OrthogonalTiledMapRendererWithSprites tiledMapRenderer; // renders the tiled map, players and items
+
+    // Physics
+    private final World world;    // create a box2d world which calculates all physics
+
+    // Light
+    RayHandler rayHandler;  // handles rays of light
 	
 	/* .............................................................................................. CONSTRUCTORS .. */
 
@@ -79,20 +88,33 @@ public class InMaze implements Screen {
      * @param battleSystem
      * @param playerManager
      */
-	public InMaze(final KPMIPrototype game, BattleSystem battleSystem, PlayerManager playerManager) {
+	public InMaze(final KPMIPrototype game, BattleSystem battleSystem, PlayerManager playerManager, final World world,
+                  final RayHandler rayHandler) {
+        Box2D.init();   // initialize Box2D
+
 		this.game = game;
 
         // set up the camera and viewport
 		camera   = new OrthographicCamera();
-		viewport = new FitViewport(800, 480, camera);
+		viewport = new FitViewport(800/32, 480/32, camera);
 		viewport.apply();
-		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+		camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 
         // create batches and renderers
 		batch   = new SpriteBatch();
 		shpRend = new ShapeRenderer();
 		font    = new BitmapFont();
 		font.setColor(Color.WHITE);
+
+        // Set up World and Box2D-Renderer .............................................................................
+        this.world         = world;    // create new world with no gravity in x and y
+        this.debugRenderer = new Box2DDebugRenderer();              // set up Box2D-Debugger for drawing body shapes
+
+        // Light .......................................................................................................
+        RayHandler.useDiffuseLight(true);
+        this.rayHandler = rayHandler;
+        this.rayHandler.setAmbientLight(.3f, .3f, .3f, 0.5f);
+        this.rayHandler.setBlurNum(3);
 
         // create some geometry containers
 		touchPos = new Vector3();
@@ -109,22 +131,12 @@ public class InMaze implements Screen {
 		
 		// register own player
 		this.selfPlayer = playerMan.players.get(game.clientId);
-		
-		// Build tiled map
-		tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
-		tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap);
+
+        // Tiled Map ...................................................................................................
+		setUpTiledMap();
 
 		for(Player p : playerMan.getPlayers())
 			tiledMapRenderer.addSprite(p.getSprite());
-
-		// Get collider tiles as squares
-		this.colliderWalls = new Array<Rectangle>();
-		for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects())
-
-		colliderWalls.add(((RectangleMapObject) mo).getRectangle());            // get colliders from tiled map
-
-        Gdx.input.setInputProcessor(new PlayerInputAdapter(playerMan.getPlayers().get(0), this));
-
 		
 		// Set Up Client for Communication
 		game.client.addListener(new Listener() {
@@ -136,7 +148,9 @@ public class InMaze implements Screen {
 				if (object instanceof NewHeroResponse) {
 					NewHeroResponse request = (NewHeroResponse) object;
 	        		HeroInformation hero = request.hero;
-					playerMan.addCharacter(request.playerId, new Player(hero.name, hero.sex, hero.spriteSheet, hero.status, hero.weapon, game.mediaManager));
+					playerMan.addCharacter(
+                            request.playerId,
+                            new Player(hero.name, hero.sex, hero.spriteSheet, hero.status, hero.weapon, game.mediaManager, world, rayHandler));
 					tiledMapRenderer.addSprite(playerMan.players.get(request.playerId).getSprite());
 					System.out.println("tiledmaprenderer neues objekt hinzugefügt");
 				}
@@ -171,7 +185,9 @@ public class InMaze implements Screen {
 	/* ............................................................................................ LibGDX METHODS .. */
 	@Override
 	public void show() {
+
 		this.batch = new SpriteBatch();
+        Gdx.input.setInputProcessor(new PlayerInputAdapter(selfPlayer, this));
 	}
 
 	@Override
@@ -187,11 +203,11 @@ public class InMaze implements Screen {
 				}
 			
 		}
-		
-        // Clear canvas
-		Gdx.gl.glClearColor(0,0,0,1);   // set background color to black
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Clear screen
+        Gdx.gl.glClearColor(.2f, .2f, .2f, 1);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // project to camera
 		batch.  setProjectionMatrix(camera.combined);
@@ -200,28 +216,32 @@ public class InMaze implements Screen {
 		// Animation time calculation
 		elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
 
+        selfPlayer.update(elapsedTime);
+
 		// render tiled map
 		tiledMapRenderer.setView(camera);
 		tiledMapRenderer.render();
 
 		// Move character
-        for(Player p : playerMan.getPlayers()) p.update(colliderWalls, touchPos, elapsedTime);
+        for(Player p : playerMan.getPlayers()) p.update(elapsedTime);
 //		handleInput();
 
+        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
+
+        world.step(1 / 45f, 6, 2);    // time step at which world is updated
+        camera.update();
+
+        // Light
+        rayHandler.setCombinedMatrix(camera.combined);
+        rayHandler.updateAndRender();
 
 		// render status
 		for(Player c : playerMan.getPlayers())
 			c.drawCharacterStatus(shpRend);
 
         // render bullets
-		battleSys.updateBullets(selfPlayer, playerMan.getPlayers());
+//		battleSys.updateBullets(selfPlayer, playerMan.getPlayers());
 
-
-        // debug(shpRend);
-		for(Player p : playerMan.getPlayers()) p.debug(shpRend);
-
-		camera.position.set(selfPlayer.getPosition());
-		camera.update();
 	}
 
 	@Override
@@ -277,41 +297,57 @@ public class InMaze implements Screen {
 //        }
 //	}
 
+//    /**
+//     * Debugging method which draws tiled map colliders as rectangles to the screen
+//     */
+//	public void handleInput() {
+//		if (Gdx.input.isTouched()) {
+//			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+//			camera.unproject(touchPos);
+////			selfPlayer.handleTouchInput(touchPos, colliderWalls, elapsedTime);
+//
+//			PositionUpdate posUpdate = new PositionUpdate();
+//			posUpdate.playerId = game.clientId;
+//			posUpdate.position = new Position(selfPlayer.getPosition(), selfPlayer.getDirection(), selfPlayer.isMoving());
+////			System.out.println("Position: "+ playerMan.getPlayers().get(0).getPosition());
+////			System.out.println("Direction: "+ playerMan.getPlayers().get(0).getDirection());
+//			game.client.sendUDP(posUpdate);
+//		}
+//
+//		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+//			System.out.println("Attack!");
+//            selfPlayer.attack();
+//			battleSys.updateAttack(selfPlayer, playerMan.getPlayers());
+//		}
+//
+//        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+//            System.out.println("Shoot!");
+//            selfPlayer.shoot();
+//        }
+//	}
+
+
     /**
-     * Debugging method which draws tiled map colliders as rectangles to the screen
+     * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithSprites} for the game
      */
-	public void handleInput() {
-		if (Gdx.input.isTouched()) {
-			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			camera.unproject(touchPos);
-//			selfPlayer.handleTouchInput(touchPos, colliderWalls, elapsedTime);
-			
-			PositionUpdate posUpdate = new PositionUpdate();
-			posUpdate.playerId = game.clientId;
-			posUpdate.position = new Position(selfPlayer.getPosition(), selfPlayer.getDirection(), selfPlayer.isMoving());
-//			System.out.println("Position: "+ playerMan.getPlayers().get(0).getPosition());
-//			System.out.println("Direction: "+ playerMan.getPlayers().get(0).getDirection());
-			game.client.sendUDP(posUpdate);
-		}
+    public void setUpTiledMap() {
+        tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
+        tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap,32);   // set up map renderer and scale
 
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			System.out.println("Attack!");
-            selfPlayer.attack();
-			battleSys.updateAttack(selfPlayer, playerMan.getPlayers());
-		}
+        // create static bodys from colliders
+        Rectangle r;
+        for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
+            r = ((RectangleMapObject) mo).getRectangle();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            System.out.println("Shoot!");
-            selfPlayer.shoot();
+            BodyDef groundBodyDef =new BodyDef();
+            groundBodyDef.type = BodyDef.BodyType.StaticBody;
+            groundBodyDef.position.set(new Vector2(r.x/32f+r.width/64f, r.y/32f + r.height/64f));
+            Body groundBody = world.createBody(groundBodyDef);
+            PolygonShape groundBox = new PolygonShape();
+            groundBox.setAsBox(r.width/64f, r.height/64f);
+            groundBody.createFixture(groundBox, 0.0f);
+            groundBox.dispose();
         }
-	}
-
-    public void debug(ShapeRenderer shpRend) {
-        shpRend.begin(ShapeRenderer.ShapeType.Line);
-        shpRend.setColor(Color.RED);
-        for(Rectangle r : colliderWalls)
-            shpRend.rect(r.x, r.y, r.width, r.height);
-        shpRend.end();
     }
 
 }

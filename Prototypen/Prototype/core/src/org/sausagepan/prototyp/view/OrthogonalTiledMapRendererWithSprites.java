@@ -22,8 +22,8 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
 
     /* .............................................................................................. CONSTRUCTORS .. */
 
-    public OrthogonalTiledMapRendererWithSprites(TiledMap map) {
-        super(map);
+    public OrthogonalTiledMapRendererWithSprites(TiledMap map, float pixelsPerMeter) {
+        super(map, 1/pixelsPerMeter);
         sprites = new Array<Sprite>();
     }
 
