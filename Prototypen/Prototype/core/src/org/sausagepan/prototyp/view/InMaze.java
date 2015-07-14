@@ -69,6 +69,7 @@ public class InMaze implements Screen {
 	private float disconnectTime = 0;
 	private float timeOut = 5;
 	private Player selfPlayer;
+	private PositionUpdate posUpdate;
 	
 	//Tiled Map for map creation and collision detection
 	private TiledMap                              tiledMap;         // contains the layers of the tiled map
@@ -139,6 +140,8 @@ public class InMaze implements Screen {
 			tiledMapRenderer.addSprite(p.getSprite());
 		
 		// Set Up Client for Communication
+		posUpdate = new PositionUpdate();
+		posUpdate.playerId = game.clientId;
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
 				
@@ -152,7 +155,6 @@ public class InMaze implements Screen {
                             request.playerId,
                             new Player(hero.name, hero.sex, hero.spriteSheet, hero.status, hero.weapon, game.mediaManager, world, rayHandler));
 					tiledMapRenderer.addSprite(playerMan.players.get(request.playerId).getSprite());
-					System.out.println("tiledmaprenderer neues objekt hinzugefügt");
 				}
 				
 				if (object instanceof DeleteHeroResponse) {
@@ -217,6 +219,9 @@ public class InMaze implements Screen {
 		elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
 
         selfPlayer.update(elapsedTime);
+        selfPlayer.updateNetworkPosition();
+        posUpdate.position = selfPlayer.position;
+        game.client.sendUDP(posUpdate);
 
 		// render tiled map
 		tiledMapRenderer.setView(camera);

@@ -169,7 +169,7 @@ public class MainMenuScreen implements Screen {
 					// TODO Auto-generated method stub
 				}
 				
-			}, "Bitte Server-IP eingeben", "192.168.0.105", "");
+			}, "Bitte Server-IP eingeben", "127.0.0.1", "");
 		}
 
 		if(game.connected == true && game.clientId != 0) {

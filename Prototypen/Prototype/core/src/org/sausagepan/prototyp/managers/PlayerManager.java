@@ -52,8 +52,10 @@ public class PlayerManager {
      */
 
 	public void updatePosition(int id, Position position, float elapsedTime) {
-		if(players.get(id) != null)
-			this.players.get(id).updatePosition(position, elapsedTime);
+		if(players.get(id) != null) {
+			this.players.get(id).updatePosition(position.position, position.direction, position.isMoving);
+			this.players.get(id).update(elapsedTime);
+		}
 	}
 
 

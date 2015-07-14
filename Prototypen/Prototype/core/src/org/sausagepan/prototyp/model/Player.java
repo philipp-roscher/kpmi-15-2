@@ -356,8 +356,10 @@ public class Player {
         this.position.isMoving   = moving;
 	}
 
-    public void updatePosition(Position position, Direction dir, boolean moving) {
-        // TODO
+    public void updatePosition(Vector3 position, Direction dir, boolean moving) {
+        this.dynBody.setTransform(position.x, position.y, 0.0f);
+        this.dir = dir;
+        this.updateSprite(dir);
     }
 
 }

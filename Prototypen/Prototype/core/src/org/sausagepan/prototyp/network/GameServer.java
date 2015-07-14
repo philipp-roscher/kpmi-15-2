@@ -45,7 +45,7 @@ public class GameServer {
 		cm = new HashMap<Integer,HeroInformation>();
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		// executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
+		//executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
 		executor.scheduleAtFixedRate(updateGameState, 0, 1000000L/updateRate, TimeUnit.MICROSECONDS);
 
 		try {
