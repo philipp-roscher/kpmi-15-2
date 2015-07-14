@@ -4,7 +4,6 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,11 +18,11 @@ import com.badlogic.gdx.utils.TimeUtils;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.model.components.PlayerPhysicsComponent;
+import org.sausagepan.prototyp.model.components.PlayerStatusComponent;
 import org.sausagepan.prototyp.network.Position;
 
 import java.util.Iterator;
-
-import static org.sausagepan.prototyp.enums.Direction.*;
 
 public class Player {
 
@@ -34,8 +33,10 @@ public class Player {
 	private String sex;
 
     // Components
-    private Status status;
+    private Status status_;
     private Weapon weapon;
+    private PlayerPhysicsComponent physics;
+    private PlayerStatusComponent  status;
 
     // Character Status
     private boolean attacking = false;  // whether the character is attacking at the moment
@@ -75,13 +76,13 @@ public class Player {
      * @param name          characters name
      * @param sex           characters sex
      * @param spriteSheet   sprite sheet to use for drawing character
-     * @param status        characters status
+     * @param status_        characters status_
      * @param weapon        characters initial weapon
      * @param mediaManager  {@link MediaManager} for obtaining textures
      * @param world         {@link World} for creation of characters {@link Body}
      * @param rayHandler    for creation of characters {@link PointLight}
      */
-	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon, MediaManager mediaManager,
+	public Player(String name, String sex, String spriteSheet, Status status_, Weapon weapon, MediaManager mediaManager,
 				  World world, RayHandler rayHandler) {
 
 		this.name = name;
@@ -90,7 +91,7 @@ public class Player {
 		this.sex = sex;
 
 		// CHARACTERS PROPERTIES
-		this.status = status;
+		this.status_ = status_;
 		this.weapon = weapon;
 
 		// Geometry
@@ -206,14 +207,16 @@ public class Player {
         // update bullets
         updateBullets();
 
+        dynBody.setLinearVelocity(direction);
+
 	}
 
     /**
      * Stop characters movement
      */
     public void stop() {
-        this.dynBody.setLinearVelocity(0.0f, 0.0f); // set velocities to zero
         this.moving = false;                        // for sprite
+        this.direction.set(0,0);                    // set velocities to zero
     }
 
     /**
@@ -270,7 +273,7 @@ public class Player {
 		} else moving = true;
 
         // add calculated velocity to the dynamic body
-		dynBody.setLinearVelocity(direction);
+//		dynBody.setLinearVelocity(direction);
 
         // update sprite image
 		updateSprite(this.dir);
@@ -320,7 +323,7 @@ public class Player {
         shp.rect(
                 this.dynBody.getPosition().x - .35f,
                 this.dynBody.getPosition().y + .75f,
-                .75f * (this.status.getHP() / Float.valueOf(this.status.getMaxHP())),
+                .75f * (this.status_.getHP() / Float.valueOf(this.status_.getMaxHP())),
                 .15f);
         shp.end();
 
@@ -426,8 +429,8 @@ public class Player {
 		return moving;
 	}
 
-	public Status getStatus() {
-		return status;
+	public Status getStatus_() {
+		return status_;
 	}
 
 	public Weapon getWeapon() {

@@ -1,9 +1,11 @@
 package org.sausagepan.prototyp.model;
 
+import org.sausagepan.prototyp.model.components.PlayerComponent;
+
 /**
  * Created by Georg on 26.06.2015.
  */
-public class Status extends PlayerComponent{
+public class Status extends PlayerComponent {
 
     /* ................................................................................................ ATTRIBUTES .. */
 

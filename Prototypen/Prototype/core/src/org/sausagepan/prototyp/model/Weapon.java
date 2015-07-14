@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.DAMAGETYPE;
 import org.sausagepan.prototyp.enums.WEAPONTYPE;
+import org.sausagepan.prototyp.model.components.PlayerComponent;
 
 /**
  * Created by Georg on 26.06.2015.

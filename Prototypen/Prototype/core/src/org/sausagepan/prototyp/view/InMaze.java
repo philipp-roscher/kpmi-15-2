@@ -230,6 +230,8 @@ public class InMaze implements Screen {
 
 
         // project to camera
+		camera.position.set(selfPlayer.getPosition().x, selfPlayer.getPosition().y, 0);
+        camera.update();
 		batch.  setProjectionMatrix(camera.combined);
 		shpRend.setProjectionMatrix(camera.combined);
 		
@@ -268,7 +270,6 @@ public class InMaze implements Screen {
 
 
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
-        camera.update();
 	}
 
 	@Override
@@ -366,10 +367,10 @@ public class InMaze implements Screen {
         for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
             r = ((RectangleMapObject) mo).getRectangle();
 
-            BodyDef groundBodyDef =new BodyDef();
-            groundBodyDef.type = BodyDef.BodyType.StaticBody;
+            BodyDef groundBodyDef  = new BodyDef();
+            groundBodyDef.type     = BodyDef.BodyType.StaticBody;
             groundBodyDef.position.set(new Vector2(r.x/32f+r.width/64f, r.y/32f + r.height/64f));
-            Body groundBody = world.createBody(groundBodyDef);
+            Body groundBody        = world.createBody(groundBodyDef);
             PolygonShape groundBox = new PolygonShape();
             groundBox.setAsBox(r.width/64f, r.height/64f);
             groundBody.createFixture(groundBox, 0.0f);
