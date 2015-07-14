@@ -12,6 +12,7 @@ import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateRequest;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
+import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
@@ -25,7 +26,7 @@ import com.esotericsoftware.kryonet.Server;
 
 public class GameServer {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gelöscht wird
-	public static final int timeoutMs = 30000;
+	public static final int timeoutMs = 10000;
 	// Anzahl der GameStateUpdates pro Sekunde
 	public static final int updateRate = 32;
 	
@@ -45,7 +46,7 @@ public class GameServer {
 		cm = new HashMap<Integer,HeroInformation>();
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		//executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
+		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
 		executor.scheduleAtFixedRate(updateGameState, 0, 1000000L/updateRate, TimeUnit.MICROSECONDS);
 
 		try {
@@ -56,6 +57,11 @@ public class GameServer {
 			
 		    server.addListener(new Listener() {
 		        public void received (Connection connection, Object object) {
+		        	if (object instanceof KeepAliveRequest) {
+		        		// System.out.println("KeepAliveRequest von "+((KeepAliveRequest)object).playerId);
+		        		updateLastAccess(((KeepAliveRequest)object).playerId);      		
+		        	}
+		        				        	
 		        	if (object instanceof NewHeroRequest) {
 		        		NewHeroRequest request = (NewHeroRequest) object;
 		        		HeroInformation hero = request.hero;

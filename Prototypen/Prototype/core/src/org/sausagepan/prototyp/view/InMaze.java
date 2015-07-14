@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.view;
 import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -20,6 +21,7 @@ import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
+import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.HeroInformation;
@@ -65,12 +67,14 @@ public class InMaze implements Screen {
 	// Media
 	private Music bgMusic;
 	private float elapsedTime    = 0;
+	private int elapsedTimeSec = 0;
 	private float disconnectTime = 0;
 	private float timeOut        = 5;
 
     // Containers
 	private Player selfPlayer;
 	private PositionUpdate posUpdate;
+	private KeepAliveRequest keepAliveRequest;
 	
 	//Tiled Map for map creation and collision detection
 	private TiledMap                              tiledMap;         // contains the layers of the tiled map
@@ -149,6 +153,9 @@ public class InMaze implements Screen {
 		// Set Up Client for Communication .............................................................................
 		posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
+
+		this.keepAliveRequest = new KeepAliveRequest(game.clientId);
+
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
 				
@@ -177,7 +184,12 @@ public class InMaze implements Screen {
 				if (object instanceof DeleteHeroResponse) {
 					int playerId = ((DeleteHeroResponse) object).playerId;
 					System.out.println(playerId + " was inactive for too long and thus removed from the session.");
-					//playerMan.removeCharacter(playerId);
+					
+					if( playerId == game.clientId )
+						game.connected = false;
+						
+						tiledMapRenderer.removeSprite(playerMan.players.get(playerId).getSprite());
+						playerMan.removeCharacter(playerId);
 				}
 				
 				if (object instanceof GameStateResponse) {
@@ -237,6 +249,10 @@ public class InMaze implements Screen {
 		
 		// Animation time calculation
 		elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
+		if(elapsedTimeSec != (int) elapsedTime) {
+			sendKeepAliveRequest();
+		}
+		elapsedTimeSec = (int) elapsedTime;
 
         // Update Player
         selfPlayer.update(elapsedTime);
@@ -271,6 +287,7 @@ public class InMaze implements Screen {
 
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
 	}
+
 
 	@Override
 	public void resize(int width, int height) {
@@ -377,5 +394,9 @@ public class InMaze implements Screen {
             groundBox.dispose();
         }
     }
+
+	public void sendKeepAliveRequest() {
+		game.client.sendTCP(InMaze.this.keepAliveRequest);		
+	}
 
 }

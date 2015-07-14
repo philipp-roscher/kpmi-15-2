@@ -55,6 +55,11 @@ public class OrthogonalTiledMapRendererWithSprites extends OrthogonalTiledMapRen
         endRender();
     }
 
+
+	public void removeSprite(Sprite sprite) {
+		sprites.removeValue(sprite, false);
+	}
+
     
     /* ......................................................................................... GETTERS & SETTERS .. */
 

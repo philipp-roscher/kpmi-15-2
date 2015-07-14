@@ -23,6 +23,7 @@ public class Network {
 		Kryo kryo = endPoint.getKryo();
 //		kryo.setRegistrationRequired(false);
 		
+		kryo.register(KeepAliveRequest.class);
 		kryo.register(NewHeroRequest.class);
 		kryo.register(NewHeroResponse.class);
 		kryo.register(DeleteHeroResponse.class);
@@ -46,6 +47,14 @@ public class Network {
         kryo.register(HashMap.class);
 	}
 
+	public static class KeepAliveRequest {
+		public int playerId;
+		
+		public KeepAliveRequest() { }
+		public KeepAliveRequest(int playerId) {
+			this.playerId = playerId;
+		}
+	}
 	public static class NewHeroRequest {
 		public int playerId;
 		public HeroInformation hero;
