@@ -61,7 +61,7 @@ public class PlayerInputAdapter extends InputAdapter{
                 break;
             }
             case Input.Keys.S: {
-                player.attack();
+                player.shoot();
 //                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
                 break;
             }
@@ -72,6 +72,14 @@ public class PlayerInputAdapter extends InputAdapter{
 
     @Override
     public boolean keyUp(int keycode) {
+
+        switch (keycode) {
+            case Input.Keys.A: {
+                player.stopAttacking();
+                break;
+            }
+        }
+
         return true;
     }
 

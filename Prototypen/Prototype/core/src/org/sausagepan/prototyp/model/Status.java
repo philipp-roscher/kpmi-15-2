@@ -3,7 +3,7 @@ package org.sausagepan.prototyp.model;
 /**
  * Created by Georg on 26.06.2015.
  */
-public class Status {
+public class Status extends PlayerComponent{
 
     /* ................................................................................................ ATTRIBUTES .. */
 
@@ -69,6 +69,11 @@ public class Status {
 
 
     /* ................................................................................................... METHODS .. */
+
+    @Override
+    public void update(float elapsedTime) {
+        // TODO
+    }
 
     /**
      * Reduces players HP according to the received attack and the players physical defence

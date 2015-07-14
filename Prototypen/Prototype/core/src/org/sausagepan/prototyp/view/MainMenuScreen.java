@@ -93,7 +93,7 @@ public class MainMenuScreen implements Screen {
 				game.clientId,
 				new Player("hero" + game.clientId, "m", "knight_m.pack",
 						new Status(),
-						new Weapon("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180),
+						new Weapon(),
 						game.mediaManager, world, rayHandler)
 		);
 
@@ -102,7 +102,7 @@ public class MainMenuScreen implements Screen {
 				game.clientId,
 				new HeroInformation("hero" + game.clientId, "m", "knight_m.pack",
 						new Status(),
-						new Weapon("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180)
+						new Weapon()
 				)
 			)
 		);

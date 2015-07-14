@@ -2,13 +2,14 @@ package org.sausagepan.prototyp.model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.DAMAGETYPE;
 import org.sausagepan.prototyp.enums.WEAPONTYPE;
 
 /**
  * Created by Georg on 26.06.2015.
  */
-public class Weapon {
+public class Weapon extends PlayerComponent {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
@@ -17,8 +18,8 @@ public class Weapon {
     private int        damage;
     private WEAPONTYPE type;
     private DAMAGETYPE damageType;
-    private int        range;
-    private int        angle;
+    private float      range;
+    private float      angle;
     private Vector2    direction = new Vector2(0,0);
     private Rectangle  collider;
 
@@ -34,7 +35,7 @@ public class Weapon {
      * @param range         weapons range in which others can get hit
      * @param angle         the weapons angle in the aiming direction
      */
-    public Weapon(String name, int damage, WEAPONTYPE type, DAMAGETYPE damageType, int range, int angle) {
+    public Weapon(String name, int damage, WEAPONTYPE type, DAMAGETYPE damageType, float range, float angle) {
         this.name = name;
         this.damage = damage;
         this.type = type;
@@ -45,10 +46,21 @@ public class Weapon {
     }
     
     public Weapon() {
-    	this("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180);    	
+    	this(
+                "standard_sword",
+                3,
+                WEAPONTYPE.SWORD,
+                DAMAGETYPE.PHYSICAL,
+                UnitConverter.pixelsToMeters(20),
+                180);
     }
 
     /* ................................................................................................... METHODS .. */
+
+    @Override
+    public void update(float elapsedTime) {
+        // TODO
+    }
 
     /* .......................................................................................... GETTERS & SETTERS . */
 
@@ -68,11 +80,11 @@ public class Weapon {
         return damageType;
     }
 
-    public int getRange() {
+    public float getRange() {
         return range;
     }
 
-    public int getAngle() {
+    public float getAngle() {
         return angle;
     }
 

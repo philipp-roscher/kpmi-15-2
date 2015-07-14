@@ -4,6 +4,7 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,8 +13,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.network.Position;
@@ -24,19 +27,29 @@ import static org.sausagepan.prototyp.enums.Direction.*;
 
 public class Player {
 
-	/* ........................................................ ATTRIBUTES .. */
+	/* ................................................................................................ ATTRIBUTES .. */
+
+	// Character Properties
 	private String name;
 	private String sex;
-	private Direction spriteDir = SOUTH;
+
+    // Components
+    private Status status;
+    private Weapon weapon;
+
+    // Character Status
+    private boolean attacking = false;  // whether the character is attacking at the moment
 
 	// Geometry
-	private Direction dir;          // looking direction of character (N,S,W,E)
-	private Vector3   touchPos;     // screen touch position
-	private Vector2   direction;    // vector from character to touch position
-	private Vector2   normDir;      // normalized direction vector with length 1
-	private float     ax, ay;       // direction vectors components
-	private Array<Bullet> bullets;
-    public Position position;
+	private Direction dir;                  // looking direction of character (N,S,W,E)
+	private Vector2   direction;            // vector from character to touch position
+	private Vector2   normDir;              // normalized direction vector with length 1
+	private float     ax, ay;               // direction vectors components
+	private Pool<Bullet>  bulletPool;       // pool of available bullets
+    private Array<Bullet> activeBullets;    // bullets flying through the air right now
+    private Rectangle     attackCollider;   // represents the characters body in battles
+
+    public  Position position;              // position container for network transmission
 
 	// Media
 	private ArrayMap<String,Animation> playerAnims;     // characters animations (N,S,W,E)
@@ -46,23 +59,28 @@ public class Player {
 
 	// Physics
 	private boolean moving;         // whether character is moving or not
-	private Body dynBody;        // dynamic box2d body for physics
+	private Body    dynBody;        // dynamic box2d body for physics
 	private Fixture fixture;        // characters fixture for shape, collision, material a.s.o., child of body
 
 	// Light
 	private PointLight spriteLight; // sprites light source
-
-	// PARTS
-	private Status status;
-	private Weapon weapon;
-
-	private boolean attacking = false;
 
     private long lastAttack = 0;
 
 
 	/* ...................................................... CONSTRUCTORS .. */
 
+    /**
+     * Standard Constructor
+     * @param name          characters name
+     * @param sex           characters sex
+     * @param spriteSheet   sprite sheet to use for drawing character
+     * @param status        characters status
+     * @param weapon        characters initial weapon
+     * @param mediaManager  {@link MediaManager} for obtaining textures
+     * @param world         {@link World} for creation of characters {@link Body}
+     * @param rayHandler    for creation of characters {@link PointLight}
+     */
 	public Player(String name, String sex, String spriteSheet, Status status, Weapon weapon, MediaManager mediaManager,
 				  World world, RayHandler rayHandler) {
 
@@ -77,10 +95,10 @@ public class Player {
 
 		// Geometry
 		this.dir       = Direction.SOUTH;
-		this.touchPos  = new Vector3(0,0,0);
 		this.direction = new Vector2(0,0);
 		this.normDir   = new Vector2(0,0);
-		this.bullets   = new Array<Bullet>();
+
+		this.activeBullets = new Array<Bullet>();
         this.position  = new Position(new Vector3(0,0,0), this.dir, this.moving);
 
 		// Physics
@@ -100,6 +118,8 @@ public class Player {
 		fixture = dynBody.createFixture(fixDef);        // add fixture to body
 		circle.dispose();                               // dispose shapes
 
+        this.attackCollider = new Rectangle(dynBody.getPosition().x-.35f,dynBody.getPosition().y-.5f,.7f,1);
+
 		// Light
 		spriteLight = new PointLight(rayHandler, 256, new Color(1,1,1,1), 8, 0, 0);
 
@@ -118,9 +138,17 @@ public class Player {
 		this.sprite = new Sprite(recentIdleImg);
 		this.sprite.setSize(.8f, 1);
 		this.sprite.setPosition(
-				dynBody.getPosition().x - fixture.getShape().getRadius(),
-				dynBody.getPosition().y - fixture.getShape().getRadius());
+                dynBody.getPosition().x - fixture.getShape().getRadius(),
+                dynBody.getPosition().y - fixture.getShape().getRadius());
 
+
+        // Pools
+        this.bulletPool = new Pool<Bullet>() {
+            @Override
+            protected Bullet newObject() {
+                return new Bullet(dynBody.getPosition().x, dynBody.getPosition().y, .1f, .1f, normDir);
+            }
+        };
 	}
 	
 	
@@ -132,168 +160,244 @@ public class Player {
         lastAttack = TimeUtils.millis();
 	}
 
-    public void shoot() {
-        if(TimeUtils.timeSinceMillis(lastAttack) < 100) return;
-        bullets.add(new Bullet(dynBody.getPosition().x, dynBody.getPosition().y, 2, 2, normDir));
-        lastAttack = TimeUtils.millis();
+    public void stopAttacking() {
+        this.attacking = false;
     }
 
-	public void update(float elapsedTime) {
-		if(moving)
-			this.sprite.setRegion(recentAnim.getKeyFrame(elapsedTime, true));
-		else
-			this.sprite.setRegion(recentIdleImg);
+    /**
+     * Spawns new bullets
+     */
+    public void shoot() {
+        if(TimeUtils.timeSinceMillis(lastAttack) < 100) return; // maximum 10 bullets per second
+        Bullet newBullet = bulletPool.obtain();                 // obtain new bullet from pool
+        newBullet.init(                                         // initialize obtained bullet
+                dynBody.getPosition().x,
+                dynBody.getPosition().y,
+                normDir);
+        activeBullets.add(newBullet);                           // add initialized bullet to active bullets
+        lastAttack = TimeUtils.millis();                        // remember spawn time
+    }
 
+    /**
+     * Updates characters properties once a render loop
+     * @param elapsedTime
+     */
+	public void update(float elapsedTime) {
+
+        // set sprite image
+		if(moving) this.sprite.setRegion(recentAnim.getKeyFrame(elapsedTime, true));
+		else       this.sprite.setRegion(recentIdleImg);
+
+        // set sprite position
 		this.sprite.setPosition(
 				dynBody.getPosition().x - fixture.getShape().getRadius(),
 				dynBody.getPosition().y - fixture.getShape().getRadius()
 		);
 
+        this.attackCollider.x = sprite.getX();
+        this.attackCollider.y = sprite.getY();
+
+        // move characters light
 		spriteLight.setPosition(dynBody.getPosition().x, dynBody.getPosition().y);
+
+        // update network position container
         updateNetworkPosition();
+
+        // update bullets
+        updateBullets();
 
 	}
 
-    /* ......................................................................................... GETTERS & SETTERS .. */
+    /**
+     * Stop characters movement
+     */
+    public void stop() {
+        this.dynBody.setLinearVelocity(0.0f, 0.0f); // set velocities to zero
+        this.moving = false;                        // for sprite
+    }
 
+    /**
+     * Update sprite to the image according to the recent movement
+     * @param direction
+     */
+    private void updateSprite(Direction direction) {
+        switch(direction) {
+            case NORTH: recentAnim = playerAnims.get("n"); break;
+            case SOUTH: recentAnim = playerAnims.get("s"); break;
+            case WEST:  recentAnim = playerAnims.get("w"); break;
+            case EAST:  recentAnim = playerAnims.get("e"); break;
+        }
+        recentIdleImg = recentAnim.getKeyFrames()[0];
+    }
 
+    /**
+     * Change characters velocities in x and y direction according to the touch position
+     * @param touchPos
+     */
 	public void move(Vector3 touchPos) {
+
+        // calculate characters main moving direction for sprite choosing
 		if(Math.abs(touchPos.x - dynBody.getPosition().x) > Math.abs(touchPos.y - dynBody.getPosition().y)) {
-			if (touchPos.x > dynBody.getPosition().x)
-				dir = Direction.EAST;
-			else
-				dir = Direction.WEST;
+			if (touchPos.x > dynBody.getPosition().x) dir = Direction.EAST;
+			else                                      dir = Direction.WEST;
 		} else {
-			if(touchPos.y > dynBody.getPosition().y)
-				dir = Direction.NORTH;
-			else
-				dir = Direction.SOUTH;
+			if(touchPos.y > dynBody.getPosition().y)  dir = Direction.NORTH;
+			else                                      dir = Direction.SOUTH;
 		}
 
-
-
+        // split up velocity vector in x and y component
 		ax = (-1)*(dynBody.getPosition().x-touchPos.x);
 		ay = (-1)*(dynBody.getPosition().y-touchPos.y);
 
 		direction.x = ax;
 		direction.y = ay;
 
+        // normalize velocity vector
 		normDir.x = (ax / Vector3.len(ax, ay, 0) * 5);
 		normDir.y = (ay / Vector3.len(ax, ay, 0) * 5);
 
+        // limit maximum velocity
 		if (direction.len() > 4) {
 			direction.x = normDir.x;
 			direction.y = normDir.y;
 		}
 
+        // set velocity to zero, if below the given value
 		if(direction.len() < 1) {
 			direction.x = 0;
 			direction.y = 0;
 			moving = false;
-		} else {
-			moving = true;
-		}
+		} else moving = true;
 
+        // add calculated velocity to the dynamic body
 		dynBody.setLinearVelocity(direction);
+
+        // update sprite image
 		updateSprite(this.dir);
 	}
 
-	public void stop() {
-		this.dynBody.setLinearVelocity(0.0f,0.0f);
-		this.moving = false;
-	}
+    /**
+     * Updates bullets positions and returns them to the pool, if they reach the screens edge
+     */
+    public void updateBullets() {
 
-	private void updateSprite(Direction direction) {
-		switch(direction) {
-			case NORTH: recentAnim = playerAnims.get("n"); break;
-			case SOUTH: recentAnim = playerAnims.get("s"); break;
-			case WEST: recentAnim = playerAnims.get("w"); break;
-			case EAST: recentAnim = playerAnims.get("e"); break;
-		}
-		recentIdleImg = recentAnim.getKeyFrames()[0];
-	}
-
-
-    /* ......................................................................................... SETTERS & GETTERS .. */
-
-	public void updateBullets(Array<Rectangle> colliders, Vector3 touchPos, float elapsedTime) {
-
-        Iterator<Bullet> i = bullets.iterator();
+        Iterator<Bullet> i = activeBullets.iterator();
         while (i.hasNext()) {
             Bullet b = i.next();
-            b.x += Gdx.graphics.getDeltaTime() * 80 * b.direction.x;
-            b.y += Gdx.graphics.getDeltaTime() * 80 * b.direction.y;
-            if(b.x > 800 || b.x < 0 || b.y > 480 || b.y < 0) i.remove();
+            b.x += Gdx.graphics.getDeltaTime() * 2 * b.direction.x;
+            b.y += Gdx.graphics.getDeltaTime() * 2 * b.direction.y;
+
+            if(b.x > UnitConverter.pixelsToMeters(800) ||
+               b.x < 0 || b.y > UnitConverter.pixelsToMeters(480) ||
+               b.y < 0) {
+
+                b.reset();
+                i.remove();
+            }
         }
-	}
+    }
+
+    public void updateNetworkPosition() {
+        this.position.position.x = dynBody.getPosition().x;
+        this.position.position.y = dynBody.getPosition().y;
+        this.position.direction  = dir;
+        this.position.isMoving   = moving;
+    }
+
+    public void updatePosition(Vector3 position, Direction dir, boolean moving) {
+        this.dynBody.setTransform(position.x, position.y, 0.0f);
+        this.dir = dir;
+        this.updateSprite(dir);
+    }
 
 
-	public void drawCharacterStatus(ShapeRenderer shp) {
+    public void drawCharacterStatus(ShapeRenderer shp) {
 
-			// HP .................................................
+        // HP ..........................................................................................................
 
-			shp.begin(ShapeRenderer.ShapeType.Filled);
-			shp.setColor(Color.GREEN);
-			shp.rect(this.dynBody.getPosition().x + 3, this.dynBody.getPosition().y + 41,
-                    22 * (this.status.getHP() / Float.valueOf(this.status.getMaxHP())), 4);
-			shp.end();
+        shp.begin(ShapeRenderer.ShapeType.Filled);
+        shp.setColor(Color.GREEN);
+        shp.rect(
+                this.dynBody.getPosition().x - .35f,
+                this.dynBody.getPosition().y + .75f,
+                .75f * (this.status.getHP() / Float.valueOf(this.status.getMaxHP())),
+                .15f);
+        shp.end();
 
-			// WEAPON ............................................
-			shp.begin(ShapeRenderer.ShapeType.Line);
-			shp.setColor(Color.DARK_GRAY);
-			shp.rect(
-                    weapon.getCollider().x,
-                    weapon.getCollider().y,
-                    weapon.getCollider().getWidth(),
-                    weapon.getCollider().getHeight()
-            );
+        // MP ..........................................................................................................
+        shp.begin(ShapeRenderer.ShapeType.Filled);
+        shp.setColor(Color.BLUE);
+        shp.rect(
+                this.dynBody.getPosition().x - .35f,
+                this.dynBody.getPosition().y + .65f,
+                .75f,
+                .1f);
+        shp.end();
 
-            // BULLETS ..........................................
-            for(Bullet b : bullets)
-                shp.rect(b.x, b.y, b.width, b.height);
+        // WEAPON ......................................................................................................
+        shp.begin(ShapeRenderer.ShapeType.Line);
+        shp.setColor(Color.DARK_GRAY);
+        shp.rect(
+                weapon.getCollider().x,
+                weapon.getCollider().y,
+                weapon.getCollider().getWidth(),
+                weapon.getCollider().getHeight()
+        );
+
+        // BULLETS .....................................................................................................
+        for(Bullet b : activeBullets)
+            shp.rect(b.x, b.y, b.width, b.height);
 
         shp.end();
 
+        // draw weapon
         shp.begin(ShapeRenderer.ShapeType.Filled);
-			if(attacking) {
-                System.out.println("Is attacking!");
-				switch (spriteDir) {
-					case EAST:
-						shp.rect(
-								dynBody.getPosition().x + GlobalSettings.charSpriteWidth,
-								dynBody.getPosition().y + GlobalSettings.charSpriteHeight/2,
-								14,
-								4); break;
-					case WEST:
-						shp.rect(
-								dynBody.getPosition().x - 14,
-								dynBody.getPosition().y + GlobalSettings.charSpriteHeight/2,
-								14,
-								4); break;
-					case NORTH:
-						shp.rect(
-								dynBody.getPosition().x + GlobalSettings.charSpriteWidth/2 - 2,
-								dynBody.getPosition().y + GlobalSettings.charSpriteHeight,
-								4,
-								14); break;
-					case SOUTH:
-						shp.rect(
-								dynBody.getPosition().x + GlobalSettings.charSpriteWidth/2 - 2,
-								dynBody.getPosition().y - 14,
-								4,
-								14); break;
-				}
-			}
-			shp.end();
+        if(attacking) {
+            System.out.println("Is attacking!");
+            switch (dir) {
+                case EAST:
+                    shp.rect(
+                            dynBody.getPosition().x + .5f,
+                            dynBody.getPosition().y,
+                            .5f,
+                            .2f); break;
+                case WEST:
+                    shp.rect(
+                            dynBody.getPosition().x - 1,
+                            dynBody.getPosition().y,
+                            .5f,
+                            .2f); break;
+                case NORTH:
+                    shp.rect(
+                            dynBody.getPosition().x,
+                            dynBody.getPosition().y + .6f,
+                            .2f,
+                            .5f); break;
+                case SOUTH:
+                    shp.rect(
+                            dynBody.getPosition().x,
+                            dynBody.getPosition().y - 1.2f,
+                            .2f,
+                            .5f); break;
+            }
+        }
+        shp.end();
 
+    }
 
-			// MP .................................................
-			shp.begin(ShapeRenderer.ShapeType.Filled);
-			shp.setColor(Color.BLUE);
-			shp.rect( dynBody.getPosition().x + 3, dynBody.getPosition().y + 38, 22, 2);
-			shp.end();
+    /**
+     * Draws a red rectangle where the characters collider for attacks is placed
+     * @param shp   {@link ShapeRenderer} to draw to
+     */
+    public void debugRenderer(ShapeRenderer shp) {
+        shp.begin(ShapeRenderer.ShapeType.Line);
+        shp.setColor(1,0,0,1);
+        shp.rect(attackCollider.x,attackCollider.y,attackCollider.width,attackCollider.height);
+        shp.end();
+    }
 
-	}
+    /* ......................................................................................... SETTERS & GETTERS .. */
+
 
     public Rectangle convertFromPositionToCollider(Vector3 pos, Rectangle coll) {
         coll.x = pos.x - coll.width/2;
@@ -301,8 +405,6 @@ public class Player {
         return coll;
     }
 
-	
-	/* ................................................. GETTERS & SETTERS .. */
 	public String getName() {
 		return name;
 	}
@@ -334,7 +436,7 @@ public class Player {
 
 
     public Array<Bullet> getBullets() {
-        return bullets;
+        return activeBullets;
     }
 
 	public Sprite getSprite() {
@@ -345,21 +447,7 @@ public class Player {
 //        return damageCollider;
 //    }
 
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
 
-	public void updateNetworkPosition() {
-		this.position.position.x = dynBody.getPosition().x;
-        this.position.position.y = dynBody.getPosition().y;
-        this.position.direction  = dir;
-        this.position.isMoving   = moving;
-	}
 
-    public void updatePosition(Vector3 position, Direction dir, boolean moving) {
-        this.dynBody.setTransform(position.x, position.y, 0.0f);
-        this.dir = dir;
-        this.updateSprite(dir);
-    }
 
 }

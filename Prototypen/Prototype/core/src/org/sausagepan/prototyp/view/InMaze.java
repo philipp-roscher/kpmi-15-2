@@ -3,7 +3,6 @@ package org.sausagepan.prototyp.view;
 import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -12,9 +11,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 
 import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.input.PlayerInputAdapter;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
@@ -65,9 +64,11 @@ public class InMaze implements Screen {
 
 	// Media
 	private Music bgMusic;
-	private float elapsedTime = 0;
+	private float elapsedTime    = 0;
 	private float disconnectTime = 0;
-	private float timeOut = 5;
+	private float timeOut        = 5;
+
+    // Containers
 	private Player selfPlayer;
 	private PositionUpdate posUpdate;
 	
@@ -89,17 +90,21 @@ public class InMaze implements Screen {
      * @param battleSystem
      * @param playerManager
      */
-	public InMaze(final KPMIPrototype game, BattleSystem battleSystem, PlayerManager playerManager, final World world,
+	public InMaze(final KPMIPrototype game,
+                  BattleSystem battleSystem,
+                  PlayerManager playerManager,
+                  final World world,
                   final RayHandler rayHandler) {
+
         Box2D.init();   // initialize Box2D
 
 		this.game = game;
 
         // set up the camera and viewport
 		camera   = new OrthographicCamera();
-		viewport = new FitViewport(800/32, 480/32, camera);
+		viewport = new FitViewport(UnitConverter.pixelsToMeters(800), UnitConverter.pixelsToMeters(480), camera);
 		viewport.apply();
-		camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0); // center camera
 
         // create batches and renderers
 		batch   = new SpriteBatch();
@@ -107,9 +112,11 @@ public class InMaze implements Screen {
 		font    = new BitmapFont();
 		font.setColor(Color.WHITE);
 
+
         // Set up World and Box2D-Renderer .............................................................................
-        this.world         = world;    // create new world with no gravity in x and y
-        this.debugRenderer = new Box2DDebugRenderer();              // set up Box2D-Debugger for drawing body shapes
+        this.world         = world;                     // create new world with no gravity in x and y
+        this.debugRenderer = new Box2DDebugRenderer();  // set up Box2D-Debugger for drawing body shapes
+
 
         // Light .......................................................................................................
         RayHandler.useDiffuseLight(true);
@@ -135,11 +142,11 @@ public class InMaze implements Screen {
 
         // Tiled Map ...................................................................................................
 		setUpTiledMap();
-
 		for(Player p : playerMan.getPlayers())
 			tiledMapRenderer.addSprite(p.getSprite());
-		
-		// Set Up Client for Communication
+
+
+		// Set Up Client for Communication .............................................................................
 		posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
 		game.client.addListener(new Listener() {
@@ -152,15 +159,24 @@ public class InMaze implements Screen {
 					NewHeroResponse request = (NewHeroResponse) object;
 	        		HeroInformation hero = request.hero;
 					playerMan.addCharacter(
-                            request.playerId,
-                            new Player(hero.name, hero.sex, hero.spriteSheet, hero.status, hero.weapon, game.mediaManager, world, rayHandler));
+							request.playerId,
+
+							new Player(
+                                    hero.name,
+                                    hero.sex,
+                                    hero.spriteSheet,
+                                    hero.status,
+                                    hero.weapon,
+                                    game.mediaManager,
+                                    world,
+                                    rayHandler));
+
 					tiledMapRenderer.addSprite(playerMan.players.get(request.playerId).getSprite());
 				}
 				
 				if (object instanceof DeleteHeroResponse) {
 					int playerId = ((DeleteHeroResponse) object).playerId;
 					System.out.println(playerId + " was inactive for too long and thus removed from the session.");
-					//tiledMapRenderer.
 					//playerMan.removeCharacter(playerId);
 				}
 				
@@ -187,29 +203,31 @@ public class InMaze implements Screen {
 	/* ............................................................................................ LibGDX METHODS .. */
 	@Override
 	public void show() {
-
 		this.batch = new SpriteBatch();
         Gdx.input.setInputProcessor(new PlayerInputAdapter(selfPlayer, this));
 	}
 
 	@Override
 	public void render(float delta) {
+
+        // Check Server Connection ............................................................................. NETWORK
 		if(!game.connected) {
-			if( disconnectTime == 0 )
-				disconnectTime = elapsedTime;
+			if( disconnectTime == 0 ) disconnectTime = elapsedTime;
 			else
 				if(elapsedTime - disconnectTime > timeOut) {
 					disconnectTime = 0;
 		            game.setScreen(new MainMenuScreen(game));
 		            dispose();
 				}
-			
 		}
+        // ..................................................................................................... NETWORK
+
 
         // Clear screen
         Gdx.gl.glClearColor(.2f, .2f, .2f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         // project to camera
 		batch.  setProjectionMatrix(camera.combined);
@@ -218,35 +236,39 @@ public class InMaze implements Screen {
 		// Animation time calculation
 		elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
 
+        // Update Player
         selfPlayer.update(elapsedTime);
         selfPlayer.updateNetworkPosition();
         posUpdate.position = selfPlayer.position;
         game.client.sendUDP(posUpdate);
 
-		// render tiled map
-		tiledMapRenderer.setView(camera);
-		tiledMapRenderer.render();
-
 		// Move character
         for(Player p : playerMan.getPlayers()) p.update(elapsedTime);
 //		handleInput();
 
-        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
 
-        world.step(1 / 45f, 6, 2);    // time step at which world is updated
-        camera.update();
+        // ................................................................................................... RENDERING
+        // Tiled Map
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
+
+        // Box2D Debugging
+        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
 
         // Light
         rayHandler.setCombinedMatrix(camera.combined);
         rayHandler.updateAndRender();
 
-		// render status
-		for(Player c : playerMan.getPlayers())
+		// Status
+		for(Player c : playerMan.getPlayers()) {
 			c.drawCharacterStatus(shpRend);
+			c.debugRenderer(shpRend);
+		}
+        // ................................................................................................... RENDERING
 
-        // render bullets
-//		battleSys.updateBullets(selfPlayer, playerMan.getPlayers());
 
+        world.step(1 / 45f, 6, 2);    // time step at which world is updated
+        camera.update();
 	}
 
 	@Override
