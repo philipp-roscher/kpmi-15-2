@@ -36,6 +36,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
@@ -75,6 +76,7 @@ public class InMaze implements Screen {
 	private Player selfPlayer;
 	private PositionUpdate posUpdate;
 	private KeepAliveRequest keepAliveRequest;
+	private Array<Object> networkMessages;
 	
 	//Tiled Map for map creation and collision detection
 	private TiledMap                              tiledMap;         // contains the layers of the tiled map
@@ -153,55 +155,25 @@ public class InMaze implements Screen {
 		// Set Up Client for Communication .............................................................................
 		posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
+		networkMessages = new Array<Object>();
 
 		this.keepAliveRequest = new KeepAliveRequest(game.clientId);
 
 		game.client.addListener(new Listener() {
-			public void received (Connection connection, Object object) {
-				
-				//System.out.println("Paket empfangen");
-				//System.out.println(object.getClass());
-				
+			public void received (Connection connection, Object object) {				
 				if (object instanceof NewHeroResponse) {
-					NewHeroResponse request = (NewHeroResponse) object;
-	        		HeroInformation hero = request.hero;
-					playerMan.addCharacter(
-							request.playerId,
-
-							new Player(
-                                    hero.name,
-                                    hero.sex,
-                                    hero.spriteSheet,
-                                    hero.status,
-                                    hero.weapon,
-                                    false,
-                                    game.mediaManager,
-                                    world,
-                                    rayHandler));
-
-					tiledMapRenderer.addSprite(playerMan.players.get(request.playerId).getSprite());
+					// System.out.println("NewHeroResponse empfangen");
+					networkMessages.add(object);
 				}
 				
 				if (object instanceof DeleteHeroResponse) {
-					int playerId = ((DeleteHeroResponse) object).playerId;
-					System.out.println(playerId + " was inactive for too long and thus removed from the session.");
-					
-					if( playerId == game.clientId )
-						game.connected = false;
-						
-						world.destroyBody(playerMan.players.get(playerId).getBody());
-						tiledMapRenderer.removeSprite(playerMan.players.get(playerId).getSprite());
-						playerMan.removeCharacter(playerId);
+					// System.out.println("DeleteHeroResponse empfangen");
+					networkMessages.add(object);
 				}
 				
 				if (object instanceof GameStateResponse) {
 					// System.out.println("GameStateResponse empfangen");
-					GameStateResponse result = (GameStateResponse) object;
-					
-					for(Entry<Integer, Position> e : result.positions.entrySet()) {
-						if(e.getKey() != game.clientId)
-							playerMan.updatePosition(e.getKey(), e.getValue(), elapsedTime);
-					}
+					networkMessages.add(object);
 				}	
 			}
 
@@ -236,13 +208,14 @@ public class InMaze implements Screen {
 		}
         // ..................................................................................................... NETWORK
 
-
         // Clear screen
         Gdx.gl.glClearColor(.2f, .2f, .2f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
+        // process Updates
+        processNetworkMessages();
+        
         // project to camera
 		camera.position.set(selfPlayer.getPosition().x, selfPlayer.getPosition().y, 0);
         camera.update();
@@ -401,4 +374,49 @@ public class InMaze implements Screen {
 		game.client.sendTCP(InMaze.this.keepAliveRequest);		
 	}
 
+	public void processNetworkMessages() {
+		for(Object object : networkMessages) {
+			if (object instanceof NewHeroResponse) {
+				NewHeroResponse request = (NewHeroResponse) object;
+        		HeroInformation hero = request.hero;
+				playerMan.addCharacter(
+						request.playerId,
+
+						new Player(
+                                hero.name,
+                                hero.sex,
+                                hero.spriteSheet,
+                                hero.status,
+                                hero.weapon,
+                                false,
+                                game.mediaManager,
+                                world,
+                                rayHandler));
+
+				tiledMapRenderer.addSprite(playerMan.players.get(request.playerId).getSprite());
+			}
+			
+			if (object instanceof DeleteHeroResponse) {
+				int playerId = ((DeleteHeroResponse) object).playerId;
+				System.out.println(playerId + " was inactive for too long and thus removed from the session.");
+				
+				if( playerId == game.clientId )
+					game.connected = false;
+					
+					world.destroyBody(playerMan.players.get(playerId).getBody());
+					tiledMapRenderer.removeSprite(playerMan.players.get(playerId).getSprite());
+					playerMan.removeCharacter(playerId);
+			}
+			
+			if (object instanceof GameStateResponse) {
+				GameStateResponse result = (GameStateResponse) object;
+				
+				for(Entry<Integer, Position> e : result.positions.entrySet()) {
+					if(e.getKey() != game.clientId)
+						playerMan.updatePosition(e.getKey(), e.getValue(), elapsedTime);
+				}
+			}	
+		}
+		networkMessages.clear();
+	}
 }
