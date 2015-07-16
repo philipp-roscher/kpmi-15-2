@@ -174,6 +174,7 @@ public class InMaze implements Screen {
                                     hero.spriteSheet,
                                     hero.status,
                                     hero.weapon,
+                                    false,
                                     game.mediaManager,
                                     world,
                                     rayHandler));
@@ -188,6 +189,7 @@ public class InMaze implements Screen {
 					if( playerId == game.clientId )
 						game.connected = false;
 						
+						world.destroyBody(playerMan.players.get(playerId).getBody());
 						tiledMapRenderer.removeSprite(playerMan.players.get(playerId).getSprite());
 						playerMan.removeCharacter(playerId);
 				}

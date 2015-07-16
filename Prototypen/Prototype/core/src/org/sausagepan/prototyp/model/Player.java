@@ -82,8 +82,8 @@ public class Player {
      * @param world         {@link World} for creation of characters {@link Body}
      * @param rayHandler    for creation of characters {@link PointLight}
      */
-	public Player(String name, String sex, String spriteSheet, Status status_, Weapon weapon, MediaManager mediaManager,
-				  World world, RayHandler rayHandler) {
+	public Player(String name, String sex, String spriteSheet, Status status_, Weapon weapon, boolean self,
+				  MediaManager mediaManager, World world, RayHandler rayHandler) {
 
 		this.name = name;
 
@@ -106,7 +106,9 @@ public class Player {
 		this.moving = false;
 
 		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyDef.BodyType.DynamicBody;    // set up body definition for player
+		bodyDef.type = (self) ?
+			BodyDef.BodyType.DynamicBody :
+			BodyDef.BodyType.KinematicBody;    			// set up body definition for player
 		bodyDef.position.set(1.1f, 1.1f);               // set players bodys position
 		dynBody = world.createBody(bodyDef);            // add body to the world
 		CircleShape circle = new CircleShape();         // give body a shape
@@ -437,7 +439,10 @@ public class Player {
 		return weapon;
 	}
 
-
+	public Body getBody() {
+		return dynBody;
+	}
+	
     public Array<Bullet> getBullets() {
         return activeBullets;
     }

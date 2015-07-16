@@ -69,6 +69,7 @@ public class MainMenuScreen implements Screen {
                                         hero.spriteSheet,
                                         hero.status,
                                         hero.weapon,
+                                        e.getKey().equals(game.clientId),
                                         game.mediaManager,
                                         world,
                                         rayHandler));
@@ -94,6 +95,7 @@ public class MainMenuScreen implements Screen {
 				new Player("hero" + game.clientId, "m", "knight_m.pack",
 						new Status(),
 						new Weapon(),
+						true,
 						game.mediaManager, world, rayHandler)
 		);
 
