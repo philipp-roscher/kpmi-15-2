@@ -4,22 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.model.ServerPlayer;
 import org.sausagepan.prototyp.network.Position;
 
 /**
  * Created by Georg on 26.06.2015.
  */
-public class PlayerManager {
+public class ServerPlayerManager {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
-    public HashMap<Integer,Player> players;
+    public HashMap<Integer,ServerPlayer> players;
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
 
-    public PlayerManager() {
-        this.players = new HashMap<Integer,Player>();
+    public ServerPlayerManager() {
+        this.players = new HashMap<Integer,ServerPlayer>();
     }
 
 
@@ -33,7 +34,7 @@ public class PlayerManager {
      * @param id
      * @param player
      */
-    public void addCharacter(int id, Player player) {
+    public void addCharacter(int id, ServerPlayer player) {
         this.players.put(id, player);
     }
 
@@ -49,21 +50,19 @@ public class PlayerManager {
      * modifies position of currently existing player
      * @param id
      * @param position
-     * @param elapsedTime
      */
 
-	public void updatePosition(int id, Position position, float elapsedTime) {
+	public void updatePosition(int id, Position position) {
 		if(players.get(id) != null) {
 			this.players.get(id).updatePosition(position.position, position.direction, position.isMoving);
-			this.players.get(id).update(elapsedTime);
 		}
 	}
 
 
     /* .......................................................................................... GETTERS & SETTERS . */
 
-    public ArrayList<Player> getPlayers() {
-        return new ArrayList<Player>(players.values());
+    public ArrayList<ServerPlayer> getPlayers() {
+        return new ArrayList<ServerPlayer>(players.values());
     }
 
 

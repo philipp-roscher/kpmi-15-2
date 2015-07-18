@@ -139,4 +139,8 @@ public class Status extends PlayerComponent {
     public int getMP() {
         return MP;
     }
+    
+    public void setHP(int HP) {
+    	this.HP = HP;
+    }
 }

@@ -28,6 +28,9 @@ public class Network {
 		kryo.register(NewHeroResponse.class);
 		kryo.register(DeleteHeroResponse.class);
 		kryo.register(PositionUpdate.class);
+		kryo.register(AttackRequest.class);
+		kryo.register(AttackResponse.class);
+		kryo.register(HPUpdate.class);
 		kryo.register(GameStateRequest.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(FullGameStateRequest.class);
@@ -84,13 +87,46 @@ public class Network {
 			this.playerId = playerId;
 		}
 	}
+	
 	public static class PositionUpdate {
 		public int playerId;
 		public Position position;
 		
 		public PositionUpdate() { }
+	}	
+	
+	public static class AttackRequest {
+		public int playerId;
+		public boolean stop;
+
+		public AttackRequest() { }
+		public AttackRequest(int playerId, boolean stop) {
+			this.playerId = playerId;
+			this.stop = stop;
+		}
 	}
 	
+	public static class AttackResponse {
+		public int playerId;
+		public boolean stop;
+
+		public AttackResponse() { }
+		public AttackResponse(int playerId, boolean stop) {
+			this.playerId = playerId;
+			this.stop = stop;
+		}
+	}
+	
+	public static class HPUpdate {
+		public int playerId;
+		public int HP;
+
+		public HPUpdate() { }
+		public HPUpdate(int playerId, int HP) {
+			this.playerId = playerId;
+			this.HP = HP;
+		}		
+	}
 	
 	public static class GameStateRequest {
 		public GameStateRequest() { }

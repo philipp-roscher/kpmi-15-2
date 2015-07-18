@@ -19,11 +19,14 @@ import org.sausagepan.prototyp.input.PlayerInputAdapter;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
+import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
+import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Position;
 
@@ -161,20 +164,15 @@ public class InMaze implements Screen {
 
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {				
-				if (object instanceof NewHeroResponse) {
-					// System.out.println("NewHeroResponse empfangen");
+				if ((object instanceof NewHeroResponse) ||
+					(object instanceof DeleteHeroResponse) ||
+					(object instanceof DeleteHeroResponse) ||
+					(object instanceof GameStateResponse) ||
+					(object instanceof AttackResponse) ||
+					(object instanceof HPUpdate)) {
+					// System.out.println( object.getClass() +" empfangen");
 					networkMessages.add(object);
 				}
-				
-				if (object instanceof DeleteHeroResponse) {
-					// System.out.println("DeleteHeroResponse empfangen");
-					networkMessages.add(object);
-				}
-				
-				if (object instanceof GameStateResponse) {
-					// System.out.println("GameStateResponse empfangen");
-					networkMessages.add(object);
-				}	
 			}
 
 			public void disconnected (Connection connection) {
@@ -385,6 +383,7 @@ public class InMaze implements Screen {
 						new Player(
                                 hero.name,
                                 hero.sex,
+        						request.playerId,
                                 hero.spriteSheet,
                                 hero.status,
                                 hero.weapon,
@@ -416,7 +415,31 @@ public class InMaze implements Screen {
 						playerMan.updatePosition(e.getKey(), e.getValue(), elapsedTime);
 				}
 			}	
+			
+			if (object instanceof AttackResponse) {
+				AttackResponse result = (AttackResponse) object;
+				if(result.stop == false)
+					playerMan.players.get(result.playerId).attack();
+				else 
+					playerMan.players.get(result.playerId).stopAttacking();
+			}	
+			
+			if (object instanceof HPUpdate) {
+				HPUpdate result = (HPUpdate) object;
+				
+				playerMan.players.get(result.playerId).getStatus_().setHP(result.HP);
+			}	
 		}
 		networkMessages.clear();
+	}
+
+
+	public void attack() {
+		game.client.sendUDP(new AttackRequest(game.clientId, false));
+	}
+
+
+	public void stopAttacking() {
+		game.client.sendUDP(new AttackRequest(game.clientId, true));		
 	}
 }

@@ -58,6 +58,7 @@ public class PlayerInputAdapter extends InputAdapter{
             case Input.Keys.A: {
                 player.attack();
 //                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
+                maze.attack();
                 break;
             }
             case Input.Keys.S: {
@@ -76,6 +77,7 @@ public class PlayerInputAdapter extends InputAdapter{
         switch (keycode) {
             case Input.Keys.A: {
                 player.stopAttacking();
+                maze.stopAttacking();
                 break;
             }
         }

@@ -66,6 +66,7 @@ public class MainMenuScreen implements Screen {
 								new Player(
                                         hero.name,
                                         hero.sex,
+                                        e.getKey(),
                                         hero.spriteSheet,
                                         hero.status,
                                         hero.weapon,
@@ -92,7 +93,10 @@ public class MainMenuScreen implements Screen {
 		// Player 1
 		cm.addCharacter(
 				game.clientId,
-				new Player("hero" + game.clientId, "m", "knight_m.pack",
+				new Player("hero" + game.clientId,
+						"m",
+						game.clientId,
+						"knight_m.pack",
 						new Status(),
 						new Weapon(),
 						true,

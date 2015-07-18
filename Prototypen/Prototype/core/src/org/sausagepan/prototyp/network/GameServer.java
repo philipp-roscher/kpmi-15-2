@@ -7,7 +7,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.sausagepan.prototyp.managers.BattleSystem;
+import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.managers.PlayerManager;
+import org.sausagepan.prototyp.managers.ServerBattleSystem;
+import org.sausagepan.prototyp.managers.ServerPlayerManager;
+import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.model.ServerPlayer;
+import org.sausagepan.prototyp.network.Network.AttackRequest;
+import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateRequest;
@@ -17,9 +24,14 @@ import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
+import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Position;
 
+import box2dLight.RayHandler;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -37,13 +49,19 @@ public class GameServer {
 	public static HashMap<Integer,Long> lastAccess;
 	public static HashMap<Integer,HeroInformation> cm;
 	
-	public static BattleSystem bs = new BattleSystem();
+	private static ServerPlayerManager playerMan = new ServerPlayerManager();
+	private ServerBattleSystem bs;
 	
-	public static void main(String[] args) {
+	public static void main (String[] args) {
+		GameServer gs = new GameServer();
+	}
+	
+	public GameServer() {
 		clientIds = new HashMap<InetSocketAddress, Integer>();
 		positions = new HashMap<Integer,Position>();
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,HeroInformation>();
+		bs = new ServerBattleSystem(this);
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
@@ -68,6 +86,14 @@ public class GameServer {
 		        		System.out.println("New Hero (ID "+ request.playerId +"): "+ request.hero.name);
 		        		
 		        		cm.put(request.playerId, hero);
+		        		playerMan.addCharacter(request.playerId, new ServerPlayer(
+                                hero.name,
+                                hero.sex,
+                                request.playerId,
+                                hero.spriteSheet,
+                                hero.status,
+                                hero.weapon,
+                                false));
 		        		NewHeroResponse response = new NewHeroResponse(request.playerId, request.hero);
 		        		server.sendToAllUDP(response);
 		        		updateLastAccess(request.playerId);
@@ -78,6 +104,7 @@ public class GameServer {
 					
 					   PositionUpdate request = (PositionUpdate)object;
 					   positions.put(request.playerId, request.position);
+					   playerMan.updatePosition(request.playerId, request.position);
 
 					   updateLastAccess(request.playerId);
 		        	}
@@ -96,6 +123,13 @@ public class GameServer {
 		        	   FullGameStateResponse response = new FullGameStateResponse(cm);
 		        	   connection.sendTCP(response);
 			       }
+		           
+		           if (object instanceof AttackRequest) {
+					   AttackRequest request = (AttackRequest)object;
+					   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
+					   if(request.stop == false)
+						   bs.attack(playerMan.players.get(request.playerId), playerMan.getPlayers());
+		           }
 		        }
 		        
 		        public void connected( Connection connection ) {
@@ -156,6 +190,19 @@ public class GameServer {
 	        }
 	    }
 	};
+	
+	public void inflictDamage(int playerId, int damage) {
+		ServerPlayer player = playerMan.players.get(playerId);
+		player.getStatus_().doPhysicalHarm(damage);
+		
+		if (player.getStatus_().getHP() == 0) {
+			// Player dies
+		}
+		
+		System.out.println(damage + " Schaden an Spieler Nr. "+playerId+", hat jetzt noch "+ player.getStatus_().getHP() +" HP.");
+		
+		server.sendToAllTCP(new HPUpdate(playerId, player.getStatus_().getHP()));
+	}
 	
 	public void stop() {
 		server.stop();

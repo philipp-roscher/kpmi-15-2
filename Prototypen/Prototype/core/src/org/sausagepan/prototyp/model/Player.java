@@ -31,6 +31,7 @@ public class Player {
 	// Character Properties
 	private String name;
 	private String sex;
+	private int id;
 
     // Components
     private Status status_;
@@ -82,13 +83,14 @@ public class Player {
      * @param world         {@link World} for creation of characters {@link Body}
      * @param rayHandler    for creation of characters {@link PointLight}
      */
-	public Player(String name, String sex, String spriteSheet, Status status_, Weapon weapon, boolean self,
+	public Player(String name, String sex, int id, String spriteSheet, Status status_, Weapon weapon, boolean self,
 				  MediaManager mediaManager, World world, RayHandler rayHandler) {
 
 		this.name = name;
 
 		if(!sex.equals("m") && !sex.equals("f")) throw new IllegalArgumentException();
 		this.sex = sex;
+		this.id = id;
 
 		// CHARACTERS PROPERTIES
 		this.status_ = status_;
@@ -402,8 +404,7 @@ public class Player {
     }
 
     /* ......................................................................................... SETTERS & GETTERS .. */
-
-
+    
     public Rectangle convertFromPositionToCollider(Vector3 pos, Rectangle coll) {
         coll.x = pos.x - coll.width/2;
         coll.y = pos.y - coll.height/2;
@@ -418,6 +419,9 @@ public class Player {
 		return sex;
 	}
 
+    public int getId() {
+    	return id;
+    }
 
 	public Vector2 getPosition() {
 		return this.dynBody.getPosition();
@@ -451,9 +455,9 @@ public class Player {
 		return sprite;
 	}
 
-//    public Rectangle getDamageCollider() {
-//        return damageCollider;
-//    }
+    public Rectangle getDamageCollider() {
+        return attackCollider;
+    }
 
 
 
