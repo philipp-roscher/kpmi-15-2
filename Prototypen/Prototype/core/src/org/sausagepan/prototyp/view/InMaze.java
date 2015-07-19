@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -249,7 +248,7 @@ public class InMaze implements Screen {
         tiledMapRenderer.render();
 
         // Box2D Debugging
-        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
+//        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
 
         // Light
         rayHandler.setCombinedMatrix(camera.combined);
@@ -257,8 +256,8 @@ public class InMaze implements Screen {
 
 		// Status
 		for(Player c : playerMan.getPlayers()) {
+//			c.debugRenderer(shpRend);
 			c.drawCharacterStatus(shpRend);
-			c.debugRenderer(shpRend);
 		}
         // ................................................................................................... RENDERING
 
@@ -301,55 +300,6 @@ public class InMaze implements Screen {
 	
 	/* ........................................................... METHODS .. */
 
-//	public void handleInput() {
-//		if (Gdx.input.isTouched()) {
-//			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-//			camera.unproject(touchPos);
-//			playerMan.getPlayers().get(0).handleTouchInput(touchPos, colliderWalls, elapsedTime);
-//		}
-//
-//		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//			System.out.println("Attack!");
-//            playerMan.getPlayers().get(0).attack();
-//			battleSys.updateAttack(playerMan.getPlayers().get(0), playerMan.getPlayers());
-//		}
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            System.out.println("Shoot!");
-//            playerMan.getPlayers().get(0).shoot();
-//        }
-//	}
-
-//    /**
-//     * Debugging method which draws tiled map colliders as rectangles to the screen
-//     */
-//	public void handleInput() {
-//		if (Gdx.input.isTouched()) {
-//			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-//			camera.unproject(touchPos);
-////			selfPlayer.handleTouchInput(touchPos, colliderWalls, elapsedTime);
-//
-//			PositionUpdate posUpdate = new PositionUpdate();
-//			posUpdate.playerId = game.clientId;
-//			posUpdate.position = new Position(selfPlayer.getPosition(), selfPlayer.getDirection(), selfPlayer.isMoving());
-////			System.out.println("Position: "+ playerMan.getPlayers().get(0).getPosition());
-////			System.out.println("Direction: "+ playerMan.getPlayers().get(0).getDirection());
-//			game.client.sendUDP(posUpdate);
-//		}
-//
-//		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//			System.out.println("Attack!");
-//            selfPlayer.attack();
-//			battleSys.updateAttack(selfPlayer, playerMan.getPlayers());
-//		}
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-//            System.out.println("Shoot!");
-//            selfPlayer.shoot();
-//        }
-//	}
-
-
     /**
      * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithSprites} for the game
      */
@@ -358,7 +308,7 @@ public class InMaze implements Screen {
         //tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
     	MazeGenerator generator = new MazeGenerator();
     	generator.setParam(mapInformation.width, mapInformation.height);
-    	tiledMap = generator.createNewMapFromMap(mapInformation.entries);
+    	tiledMap = generator.createNewMapFromGrid(mapInformation.entries);
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, game.mediaManager);   // set up map renderer and scale
         // create static bodys from colliders
        Rectangle r;
@@ -398,7 +348,8 @@ public class InMaze implements Screen {
                                 false,
                                 game.mediaManager,
                                 world,
-                                rayHandler));
+                                rayHandler,
+                                new Vector2(32*2.5f, 32*.2f)));
 
 				tiledMapRenderer.addPlayer(playerMan.players.get(request.playerId));
 			}

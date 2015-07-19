@@ -84,7 +84,8 @@ public class Player {
      * @param rayHandler    for creation of characters {@link PointLight}
      */
 	public Player(String name, String sex, int id, String spriteSheet, Status status_, Weapon weapon, boolean self,
-				  MediaManager mediaManager, World world, RayHandler rayHandler) {
+				  MediaManager mediaManager, World world, RayHandler rayHandler,
+                  Vector2 spawnPos) {
 
 		this.name = name;
 
@@ -111,7 +112,7 @@ public class Player {
 		bodyDef.type = (self) ?
 			BodyDef.BodyType.DynamicBody :
 			BodyDef.BodyType.KinematicBody;    			// set up body definition for player
-		bodyDef.position.set(15.1f, 80.1f);               // set players bodys position
+		bodyDef.position.set(spawnPos.x, spawnPos.y);   // set players bodys position
 		dynBody = world.createBody(bodyDef);            // add body to the world
 		CircleShape circle = new CircleShape();         // give body a shape
 		circle.setRadius(.4f);                          // set the shapes radius
@@ -173,6 +174,7 @@ public class Player {
      * Spawns new bullets
      */
     public void shoot() {
+        System.out.println("Shoot!");
         if(TimeUtils.timeSinceMillis(lastAttack) < 100) return; // maximum 10 bullets per second
         Bullet newBullet = bulletPool.obtain();                 // obtain new bullet from pool
         newBullet.init(                                         // initialize obtained bullet
@@ -294,9 +296,10 @@ public class Player {
             b.x += Gdx.graphics.getDeltaTime() * 1 * b.direction.x;
             b.y += Gdx.graphics.getDeltaTime() * 1 * b.direction.y;
 
-            if(b.x > UnitConverter.pixelsToMeters(800) ||
-               b.x < 0 || b.y > UnitConverter.pixelsToMeters(480) ||
-               b.y < 0) {
+            if(b.x > UnitConverter.pixelsToMeters(800*10) ||
+               b.x < -1*UnitConverter.pixelsToMeters(800*10) ||
+               b.y > UnitConverter.pixelsToMeters(480*10) ||
+               b.y < -1*UnitConverter.pixelsToMeters(480*10)) {
 
                 b.reset();
                 i.remove();
@@ -352,8 +355,8 @@ public class Player {
         );
 
         // BULLETS .....................................................................................................
-        for(Bullet b : activeBullets)
-            shp.rect(b.x, b.y, b.width, b.height);
+//        for(Bullet b : activeBullets)
+//            shp.rect(b.x, b.y, b.width, b.height);
 
         shp.end();
 

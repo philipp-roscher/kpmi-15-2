@@ -79,7 +79,8 @@ public class MainMenuScreen implements Screen {
                                         e.getKey().equals(game.clientId),
                                         game.mediaManager,
                                         world,
-                                        rayHandler));
+                                        rayHandler,
+										new Vector2(32*2.5f, 32*.2f)));
 					}
 
 					game.connected = true;
@@ -106,7 +107,8 @@ public class MainMenuScreen implements Screen {
 						new Status(),
 						new Weapon(),
 						true,
-						game.mediaManager, world, rayHandler)
+						game.mediaManager, world, rayHandler,
+						new Vector2(32*2.5f, 32*.2f))
 		);
 
 		game.client.sendTCP(

@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.badlogic.gdx.math.MathUtils;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.managers.ServerBattleSystem;
@@ -212,9 +213,10 @@ public class GameServer {
 		map.height = height;
 		map.width = width;
 		map.entries = new HashMap<Vector2, Integer>();
+		System.out.println(map.entries);
 		for(int i = height; i > 0; i--){
 			for(int j = width; j > 0; j--){
-				map.entries.put(new Vector2(i,j), (int) ((Math.random()*2)+1));
+				map.entries.put(new Vector2(i,j), MathUtils.random(1,7));
 			}
 		}
 	}

@@ -2,120 +2,119 @@ package org.sausagepan.prototyp.model.components;
 
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 
+
+/**
+ * Generates a tiled map by merging several tmx tiled map files into one
+ */
 public class MazeGenerator {
-	int mazeheight = 5;
-	int mazewidth = 5;
-	
-	TiledMap tiledMap;
-	TiledMapRenderer tiledMapRenderer;
-	
-	TiledMap map = new TiledMap();
-	MapLayers layers = map.getLayers();
 
-	//einzelne Layer der Map
-	TiledMapTileLayer ground = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
-	TiledMapTileLayer walls = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
-	TiledMapTileLayer objects = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
-	TiledMapTileLayer tops = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);	
+    /* ................................................................................................ ATTRIBUTES .. */
+	int mazeHeight = 5; // grid height for generated tiled map
+	int mazeWidth  = 5; // grid width for generated tiled map
 	
-	int[][] positions = new int[5][2];
-	
-	MapLayer colliderWalls = new MapLayer();
-	
-	public MazeGenerator(){}
-	
-	//Hauptfunktion, leitet gesamte Generierung ein
-	private void generateMaze(){
-		map = new TiledMap();
+	TiledMap    tiledMap;   // containing one of the tiled maps
+	TiledMap    map;        // taking the new map merged from several other tiled maps
+
+	// new map layers
+	TiledMapTileLayer ground;
+	TiledMapTileLayer walls;
+	TiledMapTileLayer objects;
+	TiledMapTileLayer tops;
+    MapLayer          colliderWalls;
+
+	int[][] positions;
+
+
+    /* .............................................................................................. CONSTRUCTORS .. */
+
+    /**
+     * Factory for generating tiled maps from multiple given tiled maps by merging them into one according to a
+     * randomly created grid
+     */
+	public MazeGenerator(){
+
+        this.map = new TiledMap();
+
+        this.ground  = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
+        this.walls   = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
+        this.objects = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
+        this.tops    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
+        this.colliderWalls = new MapLayer();
+
+        this.positions = new int[5][2];
+
+    }
+
+
+    /* ................................................................................................... METHODS .. */
+
+    /**
+     * initializes map generation
+     * @param entries
+     */
+	private void generateMazeFromGrid(Map<Vector2, Integer> entries){
+
+		map = new TiledMap();   // initialize new map
 		
-		//so hoch un breit wie in den Settings festgelegt
-		for(int i = mazeheight; i > 0; i--){
-			for(int j = mazewidth; j > 0; j--){
-				addNewTile("tilemaps/maze" + atRandom() + ".tmx", i, j);
-			}
-		}
-		
-		//gesonderte Bereiche einfügen
-		addSaveZone();
-		addTreasure();	
-		
-		//Layer wieder zu kompleter TiledMap zusammenfügen
-		map.getLayers().add((MapLayer)ground);
-		map.getLayers().add((MapLayer)walls);
-		map.getLayers().add((MapLayer)objects);
-		map.getLayers().add((MapLayer)tops);
-		map.getLayers().add(colliderWalls);
+		// for each maze cell do
+		for(int i = mazeHeight; i > 0; i--)
+			for(int j = mazeWidth; j > 0; j--)
+				addNewMazeCell("tilemaps/maze" + entries.get(new Vector2(i, j)) + ".tmx", i, j);
+
+		addSafeZone();  // safe spawning zone
+		addTreasure();	// treasure cave
+
+        // combine layers to a new tiled map
+		map.getLayers().add(ground);        // ground layer
+		map.getLayers().add(walls);         // walls layer
+		map.getLayers().add(objects);       // objects layer
+		map.getLayers().add(tops);          // layer rendered above character
+		map.getLayers().add(colliderWalls); // layer containing collider rectangles
 	}
-	
-	private void generateMazeFromMap(Map<Vector2,Integer> entries){
-		map = new TiledMap();
-		
-		//so hoch un breit wie in den Settings festgelegt
-		for(int i = mazeheight; i > 0; i--){
-			for(int j = mazewidth; j > 0; j--){
-				addNewTile("tilemaps/maze" + entries.get(new Vector2(i,j)) + ".tmx", i, j);
-			}
-		}
-		
-		//gesonderte Bereiche einfügen
-		addSaveZone();
-		addTreasure();	
-		
-		//Layer wieder zu kompleter TiledMap zusammenfügen
-		map.getLayers().add((MapLayer)ground);
-		map.getLayers().add((MapLayer)walls);
-		map.getLayers().add((MapLayer)objects);
-		map.getLayers().add((MapLayer)tops);
-		map.getLayers().add(colliderWalls);
-	}
-	
-	//setzt Spawnräume und berechnet Ausgangspositionen für die Spieler
-	private void addSaveZone(){
-		addNewTile("tilemaps/room1.tmx", (int) Math.ceil(mazeheight / 2), 0);
-		positions[0][0] =  (int) Math.ceil(mazeheight / 2) * 32 + 16;
+
+
+    /**
+     * Calculates safe zones for spawning players
+     */
+	private void addSafeZone(){
+		addNewMazeCell("tilemaps/room1.tmx", (int) Math.ceil(mazeHeight / 2), 0);
+		positions[0][0] =  (int) Math.ceil(mazeHeight / 2) * 32 + 16;
 		positions[0][1] =  -16;
-		addNewTile("tilemaps/room2.tmx", 0, (int) Math.ceil(mazeheight / 2) + 1);
+		addNewMazeCell("tilemaps/room2.tmx", 0, (int) Math.ceil(mazeHeight / 2) + 1);
 		positions[1][0] =  16;
-		positions[1][1] =  (int) Math.ceil(mazeheight / 2) * 32 + 16;
+		positions[1][1] =  (int) Math.ceil(mazeHeight / 2) * 32 + 16;
 		positions[2][0] =  16;
-		positions[2][1] =  (int) Math.ceil(mazeheight / 2) * 32 + 17;
-		addNewTile("tilemaps/room3.tmx", mazewidth, (int) Math.ceil(mazeheight / 2) + 1);
-		positions[3][0] =  mazewidth * 32 + 16;
-		positions[3][1] =  (int) Math.ceil(mazeheight / 2) * 32 + 16;
-		positions[4][0] =  mazewidth * 32 + 16;
-		positions[4][1] =  (int) Math.ceil(mazeheight / 2) *32 + 17;
+		positions[2][1] =  (int) Math.ceil(mazeHeight / 2) * 32 + 17;
+		addNewMazeCell("tilemaps/room3.tmx", mazeWidth, (int) Math.ceil(mazeHeight / 2) + 1);
+		positions[3][0] =  mazeWidth * 32 + 16;
+		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 + 16;
+		positions[4][0] =  mazeWidth * 32 + 16;
+		positions[4][1] =  (int) Math.ceil(mazeHeight / 2) *32 + 17;
 		
 	}
 	
 	//Platzierung der Schatzkammer
 	private void addTreasure(){
-		//addNewTile("treasure.tmx", (int) Math.ceil(mazewidth / 2) + 1, (int) Math.ceil(mazeheight / 2) + 1);
+		//addNewMazeCell("treasure.tmx", (int) Math.ceil(mazeWidth / 2) + 1, (int) Math.ceil(mazeHeight / 2) + 1);
 	}
-	
-	//rendert neues Tile mit all seinen Layern, ObjectLayer werden weitergereicht
-	private void addNewTile(String tile, int x, int y){
+
+    /**
+     * Adds next maze cell to the big general maze containing the whole world
+     * @param tile  tiled map to add to the big map
+     * @param x     x position in the maze grid
+     * @param y     y position in the maze grid
+     */
+	private void addNewMazeCell(String tile, int x, int y){
 		tiledMap = new TmxMapLoader().load(tile);
 		
 		
@@ -157,89 +156,44 @@ public class MazeGenerator {
         for (MapObject mo : colliderLayer.getObjects()) {    // for every object in the original collider layer
             RectangleMapObject nmo = new RectangleMapObject();  // create new rectangle map object
 
-            // Coordinates before conversion
-//            System.out.println("Before: "
-//                    + mo.getProperties().get("x", Float.class)
-//                    + " "
-//                    + mo.getProperties().get("y", Float.class)
-//                    + " "
-//                    + mo.getProperties().get("width", Float.class)
-//                    + " "
-//                    + mo.getProperties().get("height", Float.class));
-
-            // Store x and y coordinates in a 2D vector
-            Vector2 pos = new Vector2(
+            // Store x, y, width, height in rectangle object
+            Rectangle pos = new Rectangle(
                     mo.getProperties().get("x", Float.class) + x*32*32,
-                    mo.getProperties().get("y", Float.class) + y*32*32
-            );
-
-            // set rectangle objects rectangle properties to the new position and original width and height
-            nmo.getRectangle().set(
-                    pos.x,
-                    pos.y,
+                    mo.getProperties().get("y", Float.class) + y*32*32,
                     mo.getProperties().get("width", Float.class),
                     mo.getProperties().get("height", Float.class)
             );
 
+            // set rectangle objects rectangle properties to the new position and original width and height
+            nmo.getRectangle().set(pos);
+
             // ad recently created new collider object to layer
             colliderWalls.getObjects().add(nmo);
-
-//            System.out.println("After: "
-//                    + nmo.getRectangle().x
-//                    + " "
-//                    + nmo.getRectangle().y
-//                    + " "
-//                    + nmo.getRectangle().width
-//                    + " "
-//                    + nmo.getRectangle().height);
-
 
             colliderWalls.setName("colliderWalls");
         }
     }
-	
-	//Rendering für ObjectLayer
-	private void addNewObjectTile(TiledMap tile, int x, int y){
-		MapLayer test = tile.getLayers().get(4);
 
-		for(MapObject mo : test.getObjects()) {										//alle Objekte aus dem ObjectLayer holen
-			
-		     Float tet = mo.getProperties().get("x", Float.class);					//berechne Positionierung in neuer Map
-		     mo.getProperties().put("x", tet / 32 + (x - 1) * 32 * 32 + 32 * 32);
-		     tet = mo.getProperties().get("y", Float.class);
-		     mo.getProperties().put("y", tet / 32 + (y - 1) * 32 * 32);
-		     
-		     colliderWalls.getObjects().add(mo);									//in entsprechenden Layer einfügen
-		     
-		}
-		
-		colliderWalls.setName("colliderWalls");
-	}
-	
-	private int atRandom(){
-		return (int) ((Math.random()*2)+1);
-	}
 	
 	public TiledMap getMap(){
 		return map;
 	}
-	
-	//für Neugenerierung
-	public TiledMap createNewMap(){
-		generateMaze();
-		return map;
-	}
-	
-	//für Neugenerierung
-	public TiledMap createNewMapFromMap(Map<Vector2,Integer> entries){
-		generateMazeFromMap(entries);
+
+
+    /**
+     * Re-initialize random map creation
+     * @param entries   template grid
+     * @return          generated tiled map
+     */
+	public TiledMap createNewMapFromGrid(Map<Vector2, Integer> entries){
+		generateMazeFromGrid(entries);
 		return map;
 	}
 	
 	//Settings übernehmen
 	public void setParam(int mazewidth, int mazeheight){
-		this.mazewidth = mazewidth;
-		this.mazeheight = mazeheight;
+		this.mazeWidth = mazewidth;
+		this.mazeHeight = mazeheight;
 	}
 	
 	//übergibt Startpsotionen der Spieler
