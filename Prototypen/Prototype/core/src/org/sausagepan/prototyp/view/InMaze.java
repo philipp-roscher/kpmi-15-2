@@ -19,6 +19,7 @@ import org.sausagepan.prototyp.input.PlayerInputAdapter;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.model.components.MazeGenerator;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
@@ -349,11 +350,13 @@ public class InMaze implements Screen {
      * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithSprites} for the game
      */
     public void setUpTiledMap() {
-        tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
-        tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap,32, game.mediaManager);   // set up map renderer and scale
 
+        //tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
+    	MazeGenerator generator = new MazeGenerator();
+    	tiledMap = generator.createNewMap();
+        tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, game.mediaManager);   // set up map renderer and scale
         // create static bodys from colliders
-        Rectangle r;
+       Rectangle r;
         for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
             r = ((RectangleMapObject) mo).getRectangle();
 

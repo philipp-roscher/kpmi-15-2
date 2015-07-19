@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="43">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+  <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
+ </tileset>
+ <layer name="ground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztlbsOgCAMRS+Jwgr//1s6MDjxI2Ki0cGhFHxE73AShrYnobR4A3gFIWMzbj0HZR0tiy8CSKj3D7nGpKDLub3R5Y7Y/RH191FKop9++umnn36h3wli7IX+JIjT1JLmSP767sP9p5/+1v6SmWnJNst3e8+Q7syWHHf5n9/fG/xPMgPwtIz+
+  </data>
+ </layer>
+ <layer name="walls" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztlo0KhDAIx33tuuo1+nzYJiQ3PJeLlhXnD6Q5jY05/g4AoAnWBvtE41rxO/hSbfFUbmqemILNwcZoPCj+Ev3fb/FUbmrekcF6dmrWdWA9FzXLDqvz4OuQT+dx9T74uWu+UwaukznfM9aCrL9HvmdsBtffGKxJfeP6WJMhM5d6vdTfLTSSer3U312bnLch9XsrcL29/o5x/lYvSZ8R/4e3+tPe27gf1Hd+Ny01foTfu+kaX54VGeZk3w==
+  </data>
+ </layer>
+ <layer name="objects" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
+  </data>
+ </layer>
+ <layer name="tops" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztl8EKwjAMhvModWq1B50Md/Gk6EXwoBff/1FMYMMQNrqWtBVm4D90G/2WNEuyGsqZRe0K8lc/wK/Z2qCuqLbTDXVKyLeCL98n9fmsB/h7wX+jjp0oHgtFvhW8CrUMWGvwS+afPP+58Sn/XvDNLy21E/WAecdffu+5jfzn578F3foyhR9abw8wnndNBr6myf6bm1/a/z+/PD9lf/dZ5bnPv3Xt2SfU5GxYgp+iV2xQDvyxTeG/GdmzP3dezylXLqCbC7H9X+u/KTamcm6PtVj/teoU+U/zB+UgzR6OaeharzvqzPYxI885z75P1AcieyLd
+  </data>
+ </layer>
+ <objectgroup name="colliderWalls">
+  <object id="1" name="collider" x="448" y="992" width="32" height="32"/>
+  <object id="3" name="collider" x="544" y="992" width="32" height="32"/>
+  <object id="7" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
+  <object id="10" name="topRightCollider" x="544" y="0" width="448" height="64"/>
+  <object id="11" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
+  <object id="12" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
+  <object id="13" name="leftWallCollider" x="0" y="0" width="32" height="736"/>
+  <object id="14" name="rightWallCollider" x="992" y="0" width="32" height="736"/>
+  <object id="15" name="leftWallCollider2" x="0" y="864" width="32" height="160"/>
+  <object id="17" name="rightWallCollider2" x="992" y="864" width="32" height="160"/>
+  <object id="28" name="centralWall" x="384" y="512" width="256" height="64"/>
+ </objectgroup>
+ <objectgroup name="gameMasterColliderWalls">
+  <object id="18" name="collider" x="448" y="992" width="32" height="32"/>
+  <object id="19" name="collider" x="544" y="992" width="32" height="32"/>
+  <object id="20" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
+  <object id="21" name="topRightCollider" x="544" y="0" width="448" height="64"/>
+  <object id="22" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
+  <object id="23" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
+  <object id="24" name="leftWallCollider" x="0" y="0" width="32" height="736"/>
+  <object id="25" name="rightWallCollider" x="992" y="0" width="32" height="736"/>
+  <object id="26" name="leftWallCollider2" x="0" y="864" width="32" height="160"/>
+  <object id="27" name="rightWallCollider2" x="992" y="864" width="32" height="160"/>
+  <object id="31" name="centralWallL" x="384" y="512" width="96" height="64"/>
+  <object id="33" name="centralWallR" x="544" y="512" width="96" height="64"/>
+ </objectgroup>
+</map>
