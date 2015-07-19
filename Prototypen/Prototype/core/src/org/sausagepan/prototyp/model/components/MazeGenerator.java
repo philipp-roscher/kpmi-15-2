@@ -32,6 +32,7 @@ public class MazeGenerator {
 	TiledMap map = new TiledMap();
 	MapLayers layers = map.getLayers();
 
+	//einzelne Layer der Map
 	TiledMapTileLayer ground = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
 	TiledMapTileLayer walls = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
 	TiledMapTileLayer objects = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
@@ -43,29 +44,30 @@ public class MazeGenerator {
 	
 	public MazeGenerator(){}
 	
+	//Hauptfunktion, leitet gesamte Generierung ein
 	private void generateMaze(){
 		map = new TiledMap();
 		
+		//so hoch un breit wie in den Settings festgelegt
 		for(int i = mazeheight; i > 0; i--){
 			for(int j = mazewidth; j > 0; j--){
 				addNewTile("tilemaps/maze" + atRandom() + ".tmx", i, j);
 			}
 		}
 		
+		//gesonderte Bereiche einfügen
 		addSaveZone();
 		addTreasure();	
 		
+		//Layer wieder zu kompleter TiledMap zusammenfügen
 		map.getLayers().add((MapLayer)ground);
 		map.getLayers().add((MapLayer)walls);
 		map.getLayers().add((MapLayer)objects);
 		map.getLayers().add((MapLayer)tops);
 		map.getLayers().add(colliderWalls);
-		
-		
-		
-		if(map.getLayers() != null) System.out.println(map.getLayers().getCount());
 	}
 	
+	//setzt Spawnräume und berechnet Ausgangspositionen für die Spieler
 	private void addSaveZone(){
 		addNewTile("tilemaps/room1.tmx", (int) Math.ceil(mazeheight / 2), 0);
 		positions[0][0] =  (int) Math.ceil(mazeheight / 2) * 32 + 16;
@@ -83,28 +85,30 @@ public class MazeGenerator {
 		
 	}
 	
+	//Platzierung der Schatzkammer
 	private void addTreasure(){
 		//addNewTile("treasure.tmx", (int) Math.ceil(mazewidth / 2) + 1, (int) Math.ceil(mazeheight / 2) + 1);
 	}
 	
+	//rendert neues Tile mit all seinen Layern, ObjectLayer werden weitergereicht
 	private void addNewTile(String tile, int x, int y){
 		tiledMap = new TmxMapLoader().load(tile);
 		
 		
-		for(int layer_nr = 0; layer_nr < 5; layer_nr++){
-			if(layer_nr==4){
+		for(int layer_nr = 0; layer_nr < 5; layer_nr++){ 	//für alle Layer
+			if(layer_nr==4){								//solange kein ObjectLayer
 				addNewObjectTile(tiledMap, x, y);
 				return;
 			}
 			TiledMapTileLayer test = (TiledMapTileLayer) tiledMap.getLayers().get(layer_nr);
 			
-			for(int k = 0; k < 32; k++){
+			for(int k = 0; k < 32; k++){					// füge alle 32*32 Positionen ein
 				for(int l = 0; l < 32; l++){
 						Cell cell = new Cell();
 						
-						if(test.getCell(k, l) != null)	cell.setTile(test.getCell(k, l).getTile());
+						if(test.getCell(k, l) != null)	cell.setTile(test.getCell(k, l).getTile()); //hol dir die Kachel falls die Zelle existiert
 
-						switch(layer_nr){
+						switch(layer_nr){															//setze Kachel auf entsprechenden Layer an korrekte Position
 							case 0: ground.setCell(k  + (x-1)*32 + 32, l + (y-1)*32, cell);
 							case 1: walls.setCell(k  + (x-1)*32 + 32, l + (y-1)*32, cell);
 							case 2: objects.setCell(k  + (x-1)*32 + 32, l + (y-1)*32, cell);
@@ -115,17 +119,18 @@ public class MazeGenerator {
 		}
 	}
 	
+	//Rendering für ObjectLayer
 	private void addNewObjectTile(TiledMap tile, int x, int y){
 		MapLayer test = tile.getLayers().get(4);
 
-		for(MapObject mo : test.getObjects()) {	
+		for(MapObject mo : test.getObjects()) {										//alle Objekte aus dem ObjectLayer holen
 			
-		     Float tet = mo.getProperties().get("x", Float.class);
+		     Float tet = mo.getProperties().get("x", Float.class);					//berechne Positionierung in neuer Map
 		     mo.getProperties().put("x", tet / 32  + (x-1) * 32 * 32 + 32 * 32);
 		     tet = mo.getProperties().get("y", Float.class);
 		     mo.getProperties().put("y", tet / 32 + (y-1) * 32 * 32);
 		     
-		     colliderWalls.getObjects().add(mo);
+		     colliderWalls.getObjects().add(mo);									//in entsprechenden Layer einfügen
 		     
 		}
 		
@@ -140,16 +145,19 @@ public class MazeGenerator {
 		return map;
 	}
 	
+	//für Neugenerierung
 	public TiledMap createNewMap(){
 		generateMaze();
 		return map;
 	}
 	
+	//Settings übernehmen
 	public void setParam(int mazewidth, int mazeheight){
 		this.mazewidth = mazewidth;
 		this.mazeheight = mazeheight;
 	}
 	
+	//übergibt Startpsotionen der Spieler
 	public int[][] getStartPositions(){
 		return positions;
 	}
