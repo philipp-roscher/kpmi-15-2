@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="10">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+  <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" trans="a8a8a8" width="960" height="808"/>
+ </tileset>
+ <layer name="Kachelebene 1" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJy9lssSgjAMRekM7qX//1foAsQN/IgwmDFm8uqLxR1qW3rS26Q4dl03Kpp3beQ3Hl+N90vF8YdwtrfGbI1/qBb/sestqA+8/5R/rPFCouvgfjyPO9MRMajPEh/3g6T90jGJD2rBh3HwmPZbfK1f08CwYvgfjySO2nwcgxaflP/eurFi0PjQrsGHXO+VnADRWpTqr2T/mic0j3PPmZsXhf1jz4/37uEnqc7AnwW1nwZfui9xPgCfzlkcZ7gy/CjUkZcveWbxpfPgvCrJm1S+5UWq5kR+ZHL6Sn7L/d/CmaOQq9CGewTn0jH3XZmfK/rfIUXWnerxefo+re92jlL4OIaB3AGpsc0JfEuU7VmzJh88gGcun8uznFigziRJfK5WtDVK5OVL8sYwNeJ71ZJfcv9ctf9W538V/wOgURao
+  </data>
+ </layer>
+ <layer name="walls" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztl+sKwyAMhX3ttro9hq1u71oDHgguvaRTHKwfHPxlgs21xvRlSJqSbJLLmvL5UNiBjZHZsEyj4IPs+6QlKSTFrCWfL4V/2JiZjcA0Cz409lvx7Oz/3dn/P0A1draWUCNWcecIqrGzuY4aCYo7PaBvagW19MfjQd80CGqFJoZ70DvQi3tA70AvvqkP6sAxbfWRFrMHdRCZtvIWs8ddVK3+GC/ql/vjzSd8tn6bP5g/5Z477dzhsxX5Mxg5t4/A/Cn33EX5Dm/k3B6UdmrjO/snEGNXnIhzrf6zBWIcixNxvvuPTDnXNPt3Dcp/qr3dbQUNdWUj
+  </data>
+ </layer>
+ <layer name="tops" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzll9EKwjAMRfMnxikTQVB0KviiL/6A//8xNuhYCUlNW9uhu3CfNnJKyA0tAkCneA+D0HkOsujbOtFnpSbX0vmmsLfGGpJy+W0m/2D871qIb9Uv8xH02a3Bb5wXBgY635l7lZo/XksT5yO88jt72890aq9j+NTTjeAHpPcjhh+qUYIfUyPE38Gw3y8j8H3x3fsvfMrDyrOWhxJ8KRfa7iE+wpBbnuNPzt2ppFY4r9WWnWrhj6kp8BH0GarB7zMpzVAqn/boUTHPRWgn0Tfp7p2TrVMEX1OTcYZv8KU6tfnUA+1txN9HJfipmjqfv6ms9+8p6glIYicH
+  </data>
+ </layer>
+ <objectgroup name="collider"/>
+</map>
