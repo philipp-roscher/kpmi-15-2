@@ -291,8 +291,8 @@ public class Player {
         Iterator<Bullet> i = activeBullets.iterator();
         while (i.hasNext()) {
             Bullet b = i.next();
-            b.x += Gdx.graphics.getDeltaTime() * 2 * b.direction.x;
-            b.y += Gdx.graphics.getDeltaTime() * 2 * b.direction.y;
+            b.x += Gdx.graphics.getDeltaTime() * 1 * b.direction.x;
+            b.y += Gdx.graphics.getDeltaTime() * 1 * b.direction.y;
 
             if(b.x > UnitConverter.pixelsToMeters(800) ||
                b.x < 0 || b.y > UnitConverter.pixelsToMeters(480) ||
@@ -459,7 +459,7 @@ public class Player {
         return attackCollider;
     }
 
-
-
-
+    public Direction getDir() {
+        return dir;
+    }
 }
