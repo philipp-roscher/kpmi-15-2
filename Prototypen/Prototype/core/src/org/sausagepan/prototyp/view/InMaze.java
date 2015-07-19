@@ -84,7 +84,7 @@ public class InMaze implements Screen {
 	
 	//Tiled Map for map creation and collision detection
 	private TiledMap                              tiledMap;         // contains the layers of the tiled map
-	private OrthogonalTiledMapRendererWithSprites tiledMapRenderer; // renders the tiled map, players and items
+	private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
 
     // Physics
     private final World world;    // create a box2d world which calculates all physics
@@ -153,7 +153,7 @@ public class InMaze implements Screen {
         // Tiled Map ...................................................................................................
 		setUpTiledMap();
 		for(Player p : playerMan.getPlayers())
-			tiledMapRenderer.addSprite(p.getSprite());
+			tiledMapRenderer.addPlayer(p);
 
 
 		// Set Up Client for Communication .............................................................................
@@ -350,11 +350,11 @@ public class InMaze implements Screen {
      * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithSprites} for the game
      */
     public void setUpTiledMap() {
+
         //tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
     	MazeGenerator generator = new MazeGenerator();
     	tiledMap = generator.createNewMap();
-        tiledMapRenderer = new OrthogonalTiledMapRendererWithSprites(tiledMap, 32);   // set up map renderer and scale
-
+        tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, game.mediaManager);   // set up map renderer and scale
         // create static bodys from colliders
        Rectangle r;
         for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
@@ -395,7 +395,7 @@ public class InMaze implements Screen {
                                 world,
                                 rayHandler));
 
-				tiledMapRenderer.addSprite(playerMan.players.get(request.playerId).getSprite());
+				tiledMapRenderer.addPlayer(playerMan.players.get(request.playerId));
 			}
 			
 			if (object instanceof DeleteHeroResponse) {
@@ -406,7 +406,7 @@ public class InMaze implements Screen {
 					game.connected = false;
 					
 					world.destroyBody(playerMan.players.get(playerId).getBody());
-					tiledMapRenderer.removeSprite(playerMan.players.get(playerId).getSprite());
+					tiledMapRenderer.removePlayer(playerMan.players.get(playerId));
 					playerMan.removeCharacter(playerId);
 			}
 			

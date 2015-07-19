@@ -18,6 +18,7 @@ public class MediaManager {
     private String mazeBackgroundMusicFile = "music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg";
     private String mainMenuBackgroundImgFile = "textures/backgrounds/main_menu_bg.png";
     private String knightSpriteSheetFile = "textures/spritesheets/knight_m.pack";
+    private String arrowImgFile          = "textures/arrow.png";
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
@@ -28,6 +29,7 @@ public class MediaManager {
         // load music
         assets.load(this.mazeBackgroundMusicFile, Music.class);
         assets.load(this.mainMenuBackgroundImgFile, Texture.class);
+        assets.load(this.arrowImgFile, Texture.class);
         assets.load(this.knightSpriteSheetFile, TextureAtlas.class);
 
 
@@ -52,10 +54,14 @@ public class MediaManager {
         return assets.get(this.mainMenuBackgroundImgFile, Texture.class);
     }
 
-    public TextureAtlas getTextureAtlas(String name) {
-    	return assets.get(name);
+    public Texture getArrowImg() {
+        return assets.get(this.arrowImgFile, Texture.class);
     }
-    
+
+    public TextureAtlas getTextureAtlas(String name) {
+        return assets.get(name);
+    }
+
 //    public TextureAtlas getKnightTextureAtlas() {
 //    	return this.getTextureAtlas("textures/spritesheets/knight_m.pack");
 //    }
