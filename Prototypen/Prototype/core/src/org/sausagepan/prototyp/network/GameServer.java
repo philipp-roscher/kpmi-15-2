@@ -20,6 +20,7 @@ import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateRequest;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
+import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
@@ -37,7 +38,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 public class GameServer {
-	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gelöscht wird
+	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gelï¿½scht wird
 	public static final int timeoutMs = 10000;
 	// Anzahl der GameStateUpdates pro Sekunde
 	public static final int updateRate = 32;
@@ -48,6 +49,7 @@ public class GameServer {
 	public static HashMap<Integer,Position> positions;
 	public static HashMap<Integer,Long> lastAccess;
 	public static HashMap<Integer,HeroInformation> cm;
+	public static MapInformation map;
 	
 	private static ServerPlayerManager playerMan = new ServerPlayerManager();
 	private ServerBattleSystem bs;
@@ -62,6 +64,7 @@ public class GameServer {
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,HeroInformation>();
 		bs = new ServerBattleSystem(this);
+		setupMap(5,5);
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
@@ -120,7 +123,7 @@ public class GameServer {
 		           if (object instanceof FullGameStateRequest) {
 		        	   // System.out.println("FullGameStateRequest eingegangen");
 
-		        	   FullGameStateResponse response = new FullGameStateResponse(cm);
+		        	   FullGameStateResponse response = new FullGameStateResponse(cm, map);
 		        	   connection.sendTCP(response);
 			       }
 		           
@@ -202,6 +205,18 @@ public class GameServer {
 		System.out.println(damage + " Schaden an Spieler Nr. "+playerId+", hat jetzt noch "+ player.getStatus_().getHP() +" HP.");
 		
 		server.sendToAllTCP(new HPUpdate(playerId, player.getStatus_().getHP()));
+	}
+	
+	public void setupMap(int width, int height) {
+		this.map = new MapInformation();
+		map.height = height;
+		map.width = width;
+		map.entries = new HashMap<Vector2, Integer>();
+		for(int i = height; i > 0; i--){
+			for(int j = width; j > 0; j--){
+				map.entries.put(new Vector2(i,j), (int) ((Math.random()*2)+1));
+			}
+		}
 	}
 	
 	public void stop() {

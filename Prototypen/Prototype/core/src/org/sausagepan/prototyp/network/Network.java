@@ -35,7 +35,8 @@ public class Network {
 		kryo.register(GameStateResponse.class);
 		kryo.register(FullGameStateRequest.class);
 		kryo.register(FullGameStateResponse.class);		
-		kryo.register(IDAssignment.class);
+		kryo.register(IDAssignment.class);	
+		kryo.register(MapInformation.class);
 
         kryo.register(Position.class);
         kryo.register(Direction.class);
@@ -144,10 +145,12 @@ public class Network {
 	
 	public static class FullGameStateResponse {
 		public HashMap<Integer,HeroInformation> heroes;
+		public MapInformation mapInformation;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes) {
+		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes, MapInformation mapInformation) {
 			this.heroes = heroes;
+			this.mapInformation = mapInformation;
 		}
 	}
 	
@@ -155,5 +158,17 @@ public class Network {
 		public int id;
 		
 		public IDAssignment() { }
+	}
+	
+	public static class MapInformation {
+		public int height, width;
+		public HashMap<Vector2,Integer> entries;
+		
+		public MapInformation() { }
+		public MapInformation(int height, int width, HashMap<Vector2,Integer> entries) {
+			this.height = height;
+			this.width = width;
+			this.entries = entries;
+		}
 	}
 }
