@@ -29,7 +29,7 @@
    eJztlksOgzAMRLPhHvwUYAHchNI7tD0EcHgmu1SqYjbTQQJLbwPID4tR8Oh05UEv9Ncn8FdCf5m4N2XOPcCc/e11vuoF7xt8RP4F3hVsZH/BbZ+sHIzE/laGarLfyhD7/LEyFPzM+a1S+8P3H4R+9fxX96v/v+r5b7/er9y/vNB91M/cA4/4mXtg8Fv7F3MPPEP+1ef/1ed/gga0oIv4dS0mzm2eeC7VdwY7KyIYmw==
   </data>
  </layer>
- <objectgroup name="colliderWalls" visible="0">
+ <objectgroup name="colliderWalls">
   <object id="1" name="collider" x="448" y="992" width="32" height="32"/>
   <object id="3" name="collider" x="544" y="992" width="32" height="32"/>
   <object id="7" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
