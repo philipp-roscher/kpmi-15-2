@@ -100,19 +100,21 @@ public class MazeGenerator {
 				addNewColliderLayer(tiledMap, x, y);
 				return;
 			}
-			TiledMapTileLayer test = (TiledMapTileLayer) tiledMap.getLayers().get(layer_nr);
+
+			// get Layer from Tiled Map
+			TiledMapTileLayer newLayer = (TiledMapTileLayer) tiledMap.getLayers().get(layer_nr);
 			
 			for(int k = 0; k < 32; k++){					// füge alle 32*32 Positionen ein
 				for(int l = 0; l < 32; l++){
 						Cell cell = new Cell();
 						
-						if(test.getCell(k, l) != null)	cell.setTile(test.getCell(k, l).getTile()); //hol dir die Kachel falls die Zelle existiert
+						if(newLayer.getCell(k, l) != null)	cell.setTile(newLayer.getCell(k, l).getTile()); //hol dir die Kachel falls die Zelle existiert
 
 						switch(layer_nr){															//setze Kachel auf entsprechenden Layer an korrekte Position
-							case 0: ground.setCell(k  + (x-1)*32 + 32, l + (y-1)*32, cell);
-							case 1: walls.setCell(k  + (x-1)*32 + 32, l + (y-1)*32, cell);
-							case 2: objects.setCell(k  + (x-1)*32 + 32, l + (y-1)*32, cell);
-							case 3: tops.setCell(k  + (x-1)*32 + 32, l + (y-1)*32, cell);
+							case 0: ground.setCell(k  + 32*x, l + 32*y, cell);
+							case 1: walls.setCell(k  + 32*x, l + 32*y, cell);
+							case 2: objects.setCell(k  + 32*x, l + 32*y, cell);
+							case 3: tops.setCell(k  + 32*x, l + 32*y, cell);
 						}
 				}
 			}
