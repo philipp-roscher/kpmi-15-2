@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="67">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+  <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
+ </tileset>
+ <layer name="ground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzllksOwjAMRF2Jz5Ym9z8VP7FgAxehkYiwhkniuBQWLEbQNvWznUmT3SCyc2ictJm0ff4fnXG8SryLiNxlPv8wxbg6tJreXQ++d4/y4l9kfj96dQe+twfe2pH/zR7cFD/PI/L3wuXhRbjWnil5gLFYHhjbIhZb81t15ueR8PeGODe4v6nwS32o5daaq8TfQu3MfylGq8ZWf0PDfxY+1tYzx16+pcf6XlBaml/rRYDnSZjDJ/jB2KNIxi1ZP3on16/H9vgv/eb9FXs6EuX1guO9fM3WHMaPcF36FtT4gfBLewHmx9Trfxyvc2fnnNYexTxi7b/VizhO5/EJfhx4bbU1oX3vWf/Ix163cqjtYT3+Zz7C/bd1BkB/9NbP5tjCLeVhOX/N9WLt3cTPZzDdA29cC1N7gp1/TgvxkZ10lvfzz1LsktB//8z/pR5f/BUB
+  </data>
+ </layer>
+ <layer name="walls" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztl0EKwCAMBP12te03qrWPrQGFZYnXeugOLIbFkPOE8D+OSbf3F+N13MeWRJ23l2C+6X7tXaV4Hfe5pVDn7RWYV7O1nAvvXy3PwvtCCCGEEEKI7zEPMVcb/sYON+s8J8Q/kfbRD3E2DzFXG/7GDjfrPCfEP5n20Q9xfgHH3USU
+  </data>
+ </layer>
+ <layer name="objects" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
+  </data>
+ </layer>
+ <layer name="tops" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJxTYGBg0BwgrAjEakAsD8Q6dMYgO/Wh9oNoegOYvSPVfnR3jNo/suwf6PQ3av+o/aP2j9o/av+o/aP2j9o/ku0H9YXo2e+TZ0D0v5QY6N/3A2EPIFamOBSHPgAAsxkk8Q==
+  </data>
+ </layer>
+ <objectgroup name="ColliderWalls">
+  <object id="57" x="0" y="0" width="64" height="1024"/>
+  <object id="58" x="0" y="896" width="1024" height="128"/>
+  <object id="59" x="960" y="256" width="64" height="768"/>
+  <object id="60" x="0" y="0" width="1024" height="128"/>
+  <object id="61" x="960" y="0" width="64" height="192"/>
+ </objectgroup>
+ <objectgroup name="GameMasterColliderWalls">
+  <object id="62" x="0" y="0" width="64" height="1024"/>
+  <object id="63" x="0" y="896" width="1024" height="128"/>
+  <object id="64" x="960" y="256" width="64" height="768"/>
+  <object id="65" x="0" y="0" width="1024" height="128"/>
+  <object id="66" x="960" y="0" width="64" height="192"/>
+ </objectgroup>
+</map>

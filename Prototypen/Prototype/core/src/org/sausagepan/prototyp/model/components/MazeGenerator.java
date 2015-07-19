@@ -69,8 +69,9 @@ public class MazeGenerator {
 	}
 	
 	private void addSaveZone(){
-		//addNewTile("room1.tmx", 0, (int) Math.ceil(mazeheight / 2) + 1);
-		//addNewTile("room2.tmx", 0, (int) Math.ceil(mazeheight / 2) + 1);
+		addNewTile("tilemaps/room1.tmx", (int) Math.ceil(mazeheight / 2), 0);
+		addNewTile("tilemaps/room2.tmx", 0, (int) Math.ceil(mazeheight / 2) + 1);
+		addNewTile("tilemaps/room3.tmx", mazewidth, (int) Math.ceil(mazeheight / 2) + 1);
 		
 	}
 	
@@ -107,17 +108,19 @@ public class MazeGenerator {
 	}
 	
 	private void addNewObjectTile(TiledMap tile, int x, int y){
-		/*MapLayer test = tile.getLayers().get(4);
+		MapLayer test = tile.getLayers().get(4);
 
 		for(MapObject mo : test.getObjects()) {	
+			
 		     Float tet = mo.getProperties().get("x", Float.class);
-		     mo.getProperties().put("x", tet*320  + (x-1) * 32 *320 + 32 * 320);
+		     mo.getProperties().put("x", tet / 32  + (x-1) * 32 * 32 + 32 * 32);
 		     tet = mo.getProperties().get("y", Float.class);
-		     mo.getProperties().put("y", tet*320 + (y-1) * 32 * 320);
+		     mo.getProperties().put("y", tet / 32 + (y-1) * 32 * 32);
 		     
 		     colliderWalls.getObjects().add(mo);
 		     
-		}*/
+		}
+		
 		colliderWalls.setName("colliderWalls");
 	}
 	
@@ -137,5 +140,9 @@ public class MazeGenerator {
 	public void setParam(int mazewidth, int mazeheight){
 		this.mazewidth = mazewidth;
 		this.mazeheight = mazeheight;
+	}
+	
+	public int[] getStartPositions(){
+		return null;
 	}
 }
