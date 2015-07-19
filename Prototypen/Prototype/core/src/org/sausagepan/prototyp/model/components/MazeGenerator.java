@@ -26,10 +26,6 @@ public class MazeGenerator {
 	int mazeheight = 5;
 	int mazewidth = 5;
 	
-	SpriteBatch batch;
-	Texture img;
-	OrthographicCamera camera;
-	
 	TiledMap tiledMap;
 	TiledMapRenderer tiledMapRenderer;
 	
@@ -40,6 +36,8 @@ public class MazeGenerator {
 	TiledMapTileLayer walls = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
 	TiledMapTileLayer objects = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);
 	TiledMapTileLayer tops = new TiledMapTileLayer(mazewidth * 32 + 64, mazeheight * 32 + 32, 32, 32);	
+	
+	int[][] positions = new int[5][2];
 	
 	MapLayer colliderWalls = new MapLayer();
 	
@@ -70,8 +68,18 @@ public class MazeGenerator {
 	
 	private void addSaveZone(){
 		addNewTile("tilemaps/room1.tmx", (int) Math.ceil(mazeheight / 2), 0);
+		positions[0][0] =  (int) Math.ceil(mazeheight / 2) * 32 + 16;
+		positions[0][1] =  -16;
 		addNewTile("tilemaps/room2.tmx", 0, (int) Math.ceil(mazeheight / 2) + 1);
+		positions[1][0] =  16;
+		positions[1][1] =  (int) Math.ceil(mazeheight / 2) * 32 + 16;
+		positions[2][0] =  16;
+		positions[2][1] =  (int) Math.ceil(mazeheight / 2) * 32 + 17;
 		addNewTile("tilemaps/room3.tmx", mazewidth, (int) Math.ceil(mazeheight / 2) + 1);
+		positions[3][0] =  mazewidth * 32 + 16;
+		positions[3][1] =  (int) Math.ceil(mazeheight / 2) * 32 + 16;
+		positions[4][0] =  mazewidth * 32 + 16;
+		positions[4][1] =  (int) Math.ceil(mazeheight / 2) *32 + 17;
 		
 	}
 	
@@ -142,7 +150,7 @@ public class MazeGenerator {
 		this.mazeheight = mazeheight;
 	}
 	
-	public int[] getStartPositions(){
-		return null;
+	public int[][] getStartPositions(){
+		return positions;
 	}
 }
