@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="43">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="98">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlbsOgCAMRS+Jwgr//1s6MDjxI2Ki0cGhFHxE73AShrYnobR4A3gFIWMzbj0HZR0tiy8CSKj3D7nGpKDLub3R5Y7Y/RH191FKop9++umnn36h3wli7IX+JIjT1JLmSP767sP9p5/+1v6SmWnJNst3e8+Q7syWHHf5n9/fG/xPMgPwtIz+
+   eJztV0luwzAMZADHuWb5/69coI3jg+OP1AJEhJ1ykRkDvfRAWAup4SaKPh+Izgm6rNSvdKrjS/KcLBW8LyJa6H38YT1jSlC3yh4POdkPeuEXO06Ofr2yFvFH+wvgP8nmvyt7Hn90HsetlV/TP9J32bCP+APER9Of4z4C71DzAs8b6cXfBf6/N8TDi2+L/xB/dvDRH5F+EWn+l/7ke/UQ9+zp+GsP/EgG8aW+fKcfda7lxEg/7dmKvzf94/+Oj4zlBGujMp9grPH8tf3a25HFb6k5iGedncH3arp1lvZ2afHH+4o5gLmBOSBrANbKFvsXUZO21nf0eYtvtfov8Wexf6vfq4GPNs4JfJ6XsazP10o38Y3wvTzpDXzUudR3GXtJUYw9fPaHZX8Uf01/z/8ZfO8+avKe/dhbd8Aj+2j2b2dgZ/AtW/j91nzL+zzGXl3KT4q+mEuWLYir/Qdgr2bpW2jLP4TkZR0xD6w1y7ao5/ZyROuLI/zPnfClHZyH2ItqfR3aL2VlP6jlSMtbFtG7fXChb4sxHWU=
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlo0KhDAIx33tuuo1+nzYJiQ3PJeLlhXnD6Q5jY05/g4AoAnWBvtE41rxO/hSbfFUbmqemILNwcZoPCj+Ev3fb/FUbmrekcF6dmrWdWA9FzXLDqvz4OuQT+dx9T74uWu+UwaukznfM9aCrL9HvmdsBtffGKxJfeP6WJMhM5d6vdTfLTSSer3U312bnLch9XsrcL29/o5x/lYvSZ8R/4e3+tPe27gf1Hd+Ny01foTfu+kaX54VGeZk3w==
+   eJztlgkOhCAMRXttZ/EazuJhB6KNTdONQUw0vIQgUgT8hRYA4JHKM5U7eb457RE2hrVfs9XeI59Uvqm8yfPLac9k/LT2a7ba+45M1nN0rRY7rqU0jtpFvpv1nF2rxY5rKY2jdpHvcqL/oxY+D7aj/6MWPo83L9WV13wfJfqXrJefce1+qNH/6lg6tqqpH1g6tqq7H2xgbEaoP0jaafH93zOOsRmh/iBpp8X3ru2+ZD+wdG5N9gNL5zPgxT4p3u+JFfsGsOO9lN/x8TXrnQL9ltZH5UWtOSq/1JB0z+ee+2bkbpdyidK94bnnvhm526Vc4go+0oofrbuYAw==
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
@@ -20,7 +20,7 @@
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztl8EKwjAMhvModWq1B50Md/Gk6EXwoBff/1FMYMMQNrqWtBVm4D90G/2WNEuyGsqZRe0K8lc/wK/Z2qCuqLbTDXVKyLeCL98n9fmsB/h7wX+jjp0oHgtFvhW8CrUMWGvwS+afPP+58Sn/XvDNLy21E/WAecdffu+5jfzn578F3foyhR9abw8wnndNBr6myf6bm1/a/z+/PD9lf/dZ5bnPv3Xt2SfU5GxYgp+iV2xQDvyxTeG/GdmzP3dezylXLqCbC7H9X+u/KTamcm6PtVj/teoU+U/zB+UgzR6OaeharzvqzPYxI885z75P1AcieyLd
+   eJzNVsFOwzAMtfolY7DBDjA0tRckRLsiIW5wGP//KcTKLBnj2E6JJiw9tUkcO8lz7Owhy1sHpnjjEV3Zv024j5ttLjf/wP+etVcJc8JwxmvCkzH/MaFnujj3YNgbxPhW+JfrifBDnGq68nwl/xvF/4Pw/wV5jwjc41VhHZp/aV+bw/2tE67P/3P3s63pW7aoz/Mv1yzPiLelPvKPnOLZHBMm1sbvCfL58T6L/5K8dBkyPqx1o3j8R/3TGmr0UTZgx683zmXs6vMV6T8X8iHF96CgV74ax1KfQ+pLHYwPeZ7R3G3Vg+iYvO+XFuJnrKhtrf3L/DaDzn2J6x5+c+vlSu6/lO//ym/krsj80PI9ELFl7X+pYN2Yg7nC88/ze6/8axwfk++pi71tIvvXuI5wfInzt/Rx//xuIQ5CB+fz+i7rvSdW/ZBr085x7din913pPlvrbXWXaN1W7dekdW6vtRet7bcJO/Bz5ZL9e/5XBZvEO49X5HoCP7dTzuC1X8Y9ifWesu69tzc+16oVtWdKYr3Da+0s9d/ibuH+PyHH4B3kOCRofYT3hJHZWRX0do7dj4RvpcVCtg==
   </data>
  </layer>
  <objectgroup name="colliderWalls">
@@ -30,11 +30,36 @@
   <object id="10" name="topRightCollider" x="544" y="0" width="448" height="64"/>
   <object id="11" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
   <object id="12" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
-  <object id="13" name="leftWallCollider" x="0" y="0" width="32" height="736"/>
-  <object id="14" name="rightWallCollider" x="992" y="0" width="32" height="736"/>
+  <object id="13" name="leftWallCollider" x="0" y="0" width="32" height="800"/>
+  <object id="14" name="rightWallCollider" x="992" y="0" width="32" height="797"/>
   <object id="15" name="leftWallCollider2" x="0" y="864" width="32" height="160"/>
   <object id="17" name="rightWallCollider2" x="992" y="864" width="32" height="160"/>
-  <object id="28" name="centralWall" x="384" y="512" width="256" height="64"/>
+  <object id="28" name="centralWall" x="160" y="511" width="545" height="64"/>
+  <object id="43" x="96" y="190" width="62" height="95"/>
+  <object id="44" x="96" y="123" width="190" height="66"/>
+  <object id="46" x="225" y="190.5" width="62" height="95"/>
+  <object id="47" x="352" y="189.5" width="62" height="193.5"/>
+  <object id="48" x="289" y="189" width="63" height="67"/>
+  <object id="49" x="33" y="379" width="959" height="68"/>
+  <object id="50" x="482" y="124" width="187" height="65"/>
+  <object id="51" x="736" y="122" width="187" height="68"/>
+  <object id="52" x="480" y="252" width="444" height="65"/>
+  <object id="53" x="578" y="189" width="60" height="61"/>
+  <object id="54" x="736" y="190" width="62" height="60"/>
+  <object id="55" x="737" y="317" width="61" height="62"/>
+  <object id="56" x="33" y="509" width="66" height="65"/>
+  <object id="57" x="95" y="510" width="63" height="287"/>
+  <object id="58" x="31" y="864" width="63" height="63"/>
+  <object id="59" x="159" y="892" width="94" height="65"/>
+  <object id="60" x="226" y="764" width="155" height="66"/>
+  <object id="61" x="322" y="831" width="60" height="125"/>
+  <object id="64" x="383" y="892" width="96" height="64"/>
+  <object id="65" x="416" y="953" width="64" height="37"/>
+  <object id="68" x="226" y="637" width="316" height="64"/>
+  <object id="69" x="481" y="702" width="61" height="128"/>
+  <object id="70" x="706" y="511" width="61" height="383"/>
+  <object id="71" x="642" y="893" width="187" height="65"/>
+  <object id="72" x="768" y="701" width="127" height="66"/>
  </objectgroup>
  <objectgroup name="gameMasterColliderWalls">
   <object id="18" name="collider" x="448" y="992" width="32" height="32"/>
@@ -43,11 +68,36 @@
   <object id="21" name="topRightCollider" x="544" y="0" width="448" height="64"/>
   <object id="22" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
   <object id="23" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
-  <object id="24" name="leftWallCollider" x="0" y="0" width="32" height="736"/>
-  <object id="25" name="rightWallCollider" x="992" y="0" width="32" height="736"/>
+  <object id="24" name="leftWallCollider" x="0" y="0" width="32" height="804"/>
+  <object id="25" name="rightWallCollider" x="992" y="0" width="32" height="797"/>
   <object id="26" name="leftWallCollider2" x="0" y="864" width="32" height="160"/>
   <object id="27" name="rightWallCollider2" x="992" y="864" width="32" height="160"/>
-  <object id="31" name="centralWallL" x="384" y="512" width="96" height="64"/>
-  <object id="33" name="centralWallR" x="544" y="512" width="96" height="64"/>
+  <object id="31" name="centralWallL" x="159" y="512" width="321" height="64"/>
+  <object id="33" name="centralWallR" x="544" y="512" width="160" height="64"/>
+  <object id="73" x="481" y="702.5" width="61" height="128"/>
+  <object id="74" x="226" y="637.5" width="316" height="64"/>
+  <object id="75" x="31.5" y="863.5" width="63" height="63"/>
+  <object id="76" x="416.5" y="952.5" width="64" height="37"/>
+  <object id="77" x="33.5" y="508.5" width="66" height="65"/>
+  <object id="78" x="95.5" y="509.5" width="63" height="287"/>
+  <object id="79" x="383.5" y="891.5" width="96" height="64"/>
+  <object id="80" x="322.5" y="830.5" width="60" height="125"/>
+  <object id="81" x="226.5" y="763.5" width="155" height="66"/>
+  <object id="82" x="159.5" y="891.5" width="94" height="65"/>
+  <object id="83" x="705.5" y="511.5" width="61" height="383"/>
+  <object id="84" x="641.5" y="893.5" width="187" height="65"/>
+  <object id="85" x="767.5" y="701.5" width="127" height="66"/>
+  <object id="86" x="95.5" y="189.5" width="62" height="95"/>
+  <object id="87" x="481.5" y="123.5" width="187" height="65"/>
+  <object id="88" x="736.5" y="316.5" width="61" height="62"/>
+  <object id="89" x="32.5" y="378.5" width="959" height="68"/>
+  <object id="90" x="95.5" y="122.5" width="190" height="66"/>
+  <object id="91" x="735.5" y="189.5" width="62" height="60"/>
+  <object id="92" x="288.5" y="188.5" width="63" height="67"/>
+  <object id="93" x="735.5" y="121.5" width="187" height="68"/>
+  <object id="94" x="224.5" y="190" width="62" height="95"/>
+  <object id="95" x="577.5" y="188.5" width="60" height="61"/>
+  <object id="96" x="351.5" y="189" width="62" height="193.5"/>
+  <object id="97" x="479.5" y="251.5" width="444" height="65"/>
  </objectgroup>
 </map>

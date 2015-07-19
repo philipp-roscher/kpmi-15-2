@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="69">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+  <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
+ </tileset>
+ <layer name="ground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzllksOwjAMRF2Jz5Ym9z8VP3XBBi5CIxFhDZPEdVtYsBhRaOJnOxOSQydycKgftRu1fz33zjheJd4gIg+Zzz+NMW4Obca528439yxv/iDz+zFVD+B7e+CtHfnf7MFd8fM6Iv8oXB5eJPzsm5IHGIvlgbGZMNadxNb8Vp35fST8YyGOfkb+rsIv9aGWW2utEn8PtTP/pRitGlv9Dg3/WfhYm8VzeZyXb+mx/i0orc2v9SLA+yTMYQl+MPYoknFr1o/eyfXj/rP6L33m8xV72hPl/YLjvXzN1hzGj/C99F9Q4wfCL50FmB/TVP/jeJ07u+e0zijmEWv/rV7EcTqPJfix47XV9oT2vWf/Ix973cqhdoZN8T/zEZ6/rTsA+mNq/WyNLdxSHpb711wv1uZa7l9Lie0Jdv+5rMRHdtJVPu8/a7FLQv/9M/+XegJOTxaZ
+  </data>
+ </layer>
+ <layer name="walls" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztl1EKgCAQBffaaXUNNTtsggqP13oC38DSMrD5PWb7cS3cOb44nmMf2kRy3l2E/aH363CVxnPsc5tCzrsrsAshhBBCCCHEbhzWW232Gzfcyt30D27DQPfYh7gn6602+40bbuVeeD/Zvw0z3WMf4v4BC5JANA==
+  </data>
+ </layer>
+ <layer name="objects" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
+  </data>
+ </layer>
+ <layer name="tops" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt10EKwDAIRFFv0qSFQCCQ+98uCvUCs7BQ/sDgSh64s5nZ/KjdO7yXdxU3zP36MauTLj4+Pj4+Pj4+Pj4+frWv/G8ZZTfd2/QfLqPshvtIl/tXDr6lJZY=
+  </data>
+ </layer>
+ <objectgroup name="ColliderWalls">
+  <object id="57" x="0" y="0" width="1024" height="128"/>
+  <object id="59" x="960" y="0" width="64" height="1024"/>
+  <object id="60" x="544" y="896" width="480" height="128"/>
+  <object id="62" x="0" y="896" width="480" height="128"/>
+  <object id="63" x="0" y="0" width="64" height="1024"/>
+ </objectgroup>
+ <objectgroup name="GameMasterColliderWalls">
+  <object id="64" x="0" y="0" width="1024" height="128"/>
+  <object id="65" x="960" y="0" width="64" height="1024"/>
+  <object id="66" x="544" y="896" width="480" height="128"/>
+  <object id="67" x="0" y="896" width="480" height="128"/>
+  <object id="68" x="0" y="0" width="64" height="1024"/>
+ </objectgroup>
+</map>
