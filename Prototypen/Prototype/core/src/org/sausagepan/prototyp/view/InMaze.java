@@ -25,6 +25,7 @@ import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
+import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
@@ -83,6 +84,7 @@ public class InMaze implements Screen {
 	private Array<Object> networkMessages;
 	
 	//Tiled Map for map creation and collision detection
+	private MapInformation						  mapInformation;
 	private TiledMap                              tiledMap;         // contains the layers of the tiled map
 	private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
 
@@ -104,7 +106,8 @@ public class InMaze implements Screen {
                   BattleSystem battleSystem,
                   PlayerManager playerManager,
                   final World world,
-                  final RayHandler rayHandler) {
+                  final RayHandler rayHandler,
+                  final MapInformation mapInformation) {
 
         Box2D.init();   // initialize Box2D
 
@@ -112,7 +115,7 @@ public class InMaze implements Screen {
 
         // set up the camera and viewport
 		camera   = new OrthographicCamera();
-		viewport = new FitViewport(UnitConverter.pixelsToMeters(800*4), UnitConverter.pixelsToMeters(480*4), camera);
+		viewport = new FitViewport(UnitConverter.pixelsToMeters(800), UnitConverter.pixelsToMeters(480), camera);
 		viewport.apply();
 		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0); // center camera
 
@@ -151,6 +154,7 @@ public class InMaze implements Screen {
 		this.selfPlayer = playerMan.players.get(game.clientId);
 
         // Tiled Map ...................................................................................................
+		this.mapInformation = mapInformation;
 		setUpTiledMap();
 		for(Player p : playerMan.getPlayers())
 			tiledMapRenderer.addPlayer(p);
@@ -353,7 +357,8 @@ public class InMaze implements Screen {
 
         //tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
     	MazeGenerator generator = new MazeGenerator();
-    	tiledMap = generator.createNewMap();
+    	generator.setParam(mapInformation.width, mapInformation.height);
+    	tiledMap = generator.createNewMapFromMap(mapInformation.entries);
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, game.mediaManager);   // set up map renderer and scale
         // create static bodys from colliders
        Rectangle r;

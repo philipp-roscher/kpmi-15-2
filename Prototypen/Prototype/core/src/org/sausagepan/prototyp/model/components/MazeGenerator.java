@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.model.components;
 
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -52,6 +54,28 @@ public class MazeGenerator {
 		for(int i = mazeheight; i > 0; i--){
 			for(int j = mazewidth; j > 0; j--){
 				addNewTile("tilemaps/maze" + atRandom() + ".tmx", i, j);
+			}
+		}
+		
+		//gesonderte Bereiche einfügen
+		addSaveZone();
+		addTreasure();	
+		
+		//Layer wieder zu kompleter TiledMap zusammenfügen
+		map.getLayers().add((MapLayer)ground);
+		map.getLayers().add((MapLayer)walls);
+		map.getLayers().add((MapLayer)objects);
+		map.getLayers().add((MapLayer)tops);
+		map.getLayers().add(colliderWalls);
+	}
+	
+	private void generateMazeFromMap(Map<Vector2,Integer> entries){
+		map = new TiledMap();
+		
+		//so hoch un breit wie in den Settings festgelegt
+		for(int i = mazeheight; i > 0; i--){
+			for(int j = mazewidth; j > 0; j--){
+				addNewTile("tilemaps/maze" + entries.get(new Vector2(i,j)) + ".tmx", i, j);
 			}
 		}
 		
@@ -134,14 +158,14 @@ public class MazeGenerator {
             RectangleMapObject nmo = new RectangleMapObject();  // create new rectangle map object
 
             // Coordinates before conversion
-            System.out.println("Before: "
-                    + mo.getProperties().get("x", Float.class)
-                    + " "
-                    + mo.getProperties().get("y", Float.class)
-                    + " "
-                    + mo.getProperties().get("width", Float.class)
-                    + " "
-                    + mo.getProperties().get("height", Float.class));
+//            System.out.println("Before: "
+//                    + mo.getProperties().get("x", Float.class)
+//                    + " "
+//                    + mo.getProperties().get("y", Float.class)
+//                    + " "
+//                    + mo.getProperties().get("width", Float.class)
+//                    + " "
+//                    + mo.getProperties().get("height", Float.class));
 
             // Store x and y coordinates in a 2D vector
             Vector2 pos = new Vector2(
@@ -160,14 +184,14 @@ public class MazeGenerator {
             // ad recently created new collider object to layer
             colliderWalls.getObjects().add(nmo);
 
-            System.out.println("After: "
-                    + nmo.getRectangle().x
-                    + " "
-                    + nmo.getRectangle().y
-                    + " "
-                    + nmo.getRectangle().width
-                    + " "
-                    + nmo.getRectangle().height);
+//            System.out.println("After: "
+//                    + nmo.getRectangle().x
+//                    + " "
+//                    + nmo.getRectangle().y
+//                    + " "
+//                    + nmo.getRectangle().width
+//                    + " "
+//                    + nmo.getRectangle().height);
 
 
             colliderWalls.setName("colliderWalls");
@@ -203,6 +227,12 @@ public class MazeGenerator {
 	//für Neugenerierung
 	public TiledMap createNewMap(){
 		generateMaze();
+		return map;
+	}
+	
+	//für Neugenerierung
+	public TiledMap createNewMapFromMap(Map<Vector2,Integer> entries){
+		generateMazeFromMap(entries);
 		return map;
 	}
 	

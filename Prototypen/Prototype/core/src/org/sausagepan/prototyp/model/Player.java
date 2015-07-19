@@ -360,7 +360,7 @@ public class Player {
         // draw weapon
         shp.begin(ShapeRenderer.ShapeType.Filled);
         if(attacking) {
-            System.out.println("Is attacking!");
+            //System.out.println("Is attacking!");
             switch (dir) {
                 case EAST:
                     shp.rect(

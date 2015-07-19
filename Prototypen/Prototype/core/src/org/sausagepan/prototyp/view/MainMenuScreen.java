@@ -3,13 +3,16 @@ package org.sausagepan.prototyp.view;
 import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
+import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 
 import com.badlogic.gdx.Gdx;
@@ -40,6 +43,7 @@ public class MainMenuScreen implements Screen {
 	private PlayerManager cm;
 	private final World world;
     private final RayHandler rayHandler;
+    private MapInformation mapInformation;
 	String serverIp;	
 	
 	/* ...................................................... CONSTRUCTORS .. */
@@ -59,6 +63,8 @@ public class MainMenuScreen implements Screen {
 			public void received (Connection connection, Object object) {
 				if (object instanceof FullGameStateResponse) {
 					FullGameStateResponse response = (FullGameStateResponse) object;
+					MainMenuScreen.this.mapInformation = response.mapInformation;
+					
 					cm = new PlayerManager();
 					for(Entry<Integer, HeroInformation> e : response.heroes.entrySet()) {
 						HeroInformation hero = e.getValue();
@@ -120,7 +126,8 @@ public class MainMenuScreen implements Screen {
 //		);
 
 		// Switch to game screen
-		game.setScreen(new InMaze(game, bs, cm, world, rayHandler));
+ 	   	System.out.println(mapInformation.height + " " + mapInformation.width);
+		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation));
 	}
 
 
