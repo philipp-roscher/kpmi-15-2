@@ -114,7 +114,8 @@ public class InMaze implements Screen {
 
         // set up the camera and viewport
 		camera   = new OrthographicCamera();
-		viewport = new FitViewport(UnitConverter.pixelsToMeters(800), UnitConverter.pixelsToMeters(480), camera);
+		int zoom = 1;
+		viewport = new FitViewport(UnitConverter.pixelsToMeters(800*zoom), UnitConverter.pixelsToMeters(480*zoom), camera);
 		viewport.apply();
 		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0); // center camera
 

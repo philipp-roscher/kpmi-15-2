@@ -214,11 +214,9 @@ public class GameServer {
 		map.width = width;
 		map.entries = new HashMap<Vector2, Integer>();
 		System.out.println(map.entries);
-		for(int i = height; i > 0; i--){
-			for(int j = width; j > 0; j--){
+		for(int i = height; i > 0; i--)
+			for(int j = width; j > 0; j--)
 				map.entries.put(new Vector2(i,j), MathUtils.random(1,7));
-			}
-		}
 	}
 	
 	public void stop() {
