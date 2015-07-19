@@ -214,7 +214,7 @@ public class GameServer {
 		map.entries = new HashMap<Vector2, Integer>();
 		for(int i = height; i > 0; i--){
 			for(int j = width; j > 0; j--){
-				map.entries.put(new Vector2(i,j), (int) ((Math.random()*2)+1));
+				map.entries.put(new Vector2(i,j), (int) ((Math.random()*5)+1));
 			}
 		}
 	}
