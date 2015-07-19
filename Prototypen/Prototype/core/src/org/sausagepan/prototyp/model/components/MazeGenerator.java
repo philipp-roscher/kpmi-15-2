@@ -97,7 +97,7 @@ public class MazeGenerator {
 		
 		for(int layer_nr = 0; layer_nr < 5; layer_nr++){ 	//für alle Layer
 			if(layer_nr==4){								//solange kein ObjectLayer
-				addNewObjectTile(tiledMap, x, y);
+				addNewColliderLayer(tiledMap, x, y);
 				return;
 			}
 			TiledMapTileLayer test = (TiledMapTileLayer) tiledMap.getLayers().get(layer_nr);
@@ -118,6 +118,59 @@ public class MazeGenerator {
 			}
 		}
 	}
+
+    /**
+     * Method for converting collider objects and merging them into one layer
+     * @param map   map to fetch colliders from
+     * @param x     x offset of colliders
+     * @param y     y offset of colliders
+     */
+    private void addNewColliderLayer(TiledMap map, int x, int y) {
+        MapLayer colliderLayer = map.getLayers().get(4); // get collider layer
+
+        for (MapObject mo : colliderLayer.getObjects()) {    // for every object in the original collider layer
+            RectangleMapObject nmo = new RectangleMapObject();  // create new rectangle map object
+
+            // Coordinates before conversion
+            System.out.println("Before: "
+                    + mo.getProperties().get("x", Float.class)
+                    + " "
+                    + mo.getProperties().get("y", Float.class)
+                    + " "
+                    + mo.getProperties().get("width", Float.class)
+                    + " "
+                    + mo.getProperties().get("height", Float.class));
+
+            // Store x and y coordinates in a 2D vector
+            Vector2 pos = new Vector2(
+                    mo.getProperties().get("x", Float.class) + x*32*32,
+                    mo.getProperties().get("y", Float.class) + y*32*32
+            );
+
+            // set rectangle objects rectangle properties to the new position and original width and height
+            nmo.getRectangle().set(
+                    pos.x,
+                    pos.y,
+                    mo.getProperties().get("width", Float.class),
+                    mo.getProperties().get("height", Float.class)
+            );
+
+            // ad recently created new collider object to layer
+            colliderWalls.getObjects().add(nmo);
+
+            System.out.println("After: "
+                    + nmo.getRectangle().x
+                    + " "
+                    + nmo.getRectangle().y
+                    + " "
+                    + nmo.getRectangle().width
+                    + " "
+                    + nmo.getRectangle().height);
+
+
+            colliderWalls.setName("colliderWalls");
+        }
+    }
 	
 	//Rendering für ObjectLayer
 	private void addNewObjectTile(TiledMap tile, int x, int y){
@@ -126,9 +179,9 @@ public class MazeGenerator {
 		for(MapObject mo : test.getObjects()) {										//alle Objekte aus dem ObjectLayer holen
 			
 		     Float tet = mo.getProperties().get("x", Float.class);					//berechne Positionierung in neuer Map
-		     mo.getProperties().put("x", tet / 32  + (x-1) * 32 * 32 + 32 * 32);
+		     mo.getProperties().put("x", tet / 32 + (x - 1) * 32 * 32 + 32 * 32);
 		     tet = mo.getProperties().get("y", Float.class);
-		     mo.getProperties().put("y", tet / 32 + (y-1) * 32 * 32);
+		     mo.getProperties().put("y", tet / 32 + (y - 1) * 32 * 32);
 		     
 		     colliderWalls.getObjects().add(mo);									//in entsprechenden Layer einfügen
 		     
