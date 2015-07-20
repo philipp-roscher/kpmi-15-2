@@ -350,7 +350,7 @@ public class InMaze implements Screen {
                                 game.mediaManager,
                                 world,
                                 rayHandler,
-                                new Vector2(32*2.5f, 32*.2f)));
+                                new Vector2(32*2.5f, 32*.5f)));
 
 				tiledMapRenderer.addPlayer(playerMan.players.get(request.playerId));
 			}

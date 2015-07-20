@@ -200,6 +200,7 @@ public class GameServer {
 		player.getStatus_().doPhysicalHarm(damage);
 		
 		if (player.getStatus_().getHP() == 0) {
+			// TODO
 			// Player dies
 		}
 		
@@ -216,7 +217,7 @@ public class GameServer {
 		System.out.println(map.entries);
 		for(int i = height; i > 0; i--)
 			for(int j = width; j > 0; j--)
-				map.entries.put(new Vector2(i,j), MathUtils.random(1,7));
+				map.entries.put(new Vector2(i,j), MathUtils.random(1,6));
 	}
 	
 	public void stop() {
