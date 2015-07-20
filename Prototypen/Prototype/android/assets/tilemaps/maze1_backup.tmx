@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="324">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="321">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" trans="a8a8a8" width="960" height="808"/>
  </tileset>
- <layer name="ground" width="32" height="32">
+ <layer name="Kachelebene 1" width="32" height="32">
   <data encoding="base64" compression="zlib">
    eJy9lssSgjAMRekM7qX//1foAsQN/IgwmDFm8uqLxR1qW3rS26Q4dl03Kpp3beQ3Hl+N90vF8YdwtrfGbI1/qBb/sestqA+8/5R/rPFCouvgfjyPO9MRMajPEh/3g6T90jGJD2rBh3HwmPZbfK1f08CwYvgfjySO2nwcgxaflP/eurFi0PjQrsGHXO+VnADRWpTqr2T/mic0j3PPmZsXhf1jz4/37uEnqc7AnwW1nwZfui9xPgCfzlkcZ7gy/CjUkZcveWbxpfPgvCrJm1S+5UWq5kR+ZHL6Sn7L/d/CmaOQq9CGewTn0jH3XZmfK/rfIUXWnerxefo+re92jlL4OIaB3AGpsc0JfEuU7VmzJh88gGcun8uznFigziRJfK5WtDVK5OVL8sYwNeJ71ZJfcv9ctf9W538V/wOgURao
   </data>
@@ -13,14 +13,14 @@
    eJztl+sKwyAMhX3ttro9hq1u71oDHgguvaRTHKwfHPxlgs21xvRlSJqSbJLLmvL5UNiBjZHZsEyj4IPs+6QlKSTFrCWfL4V/2JiZjcA0Cz409lvx7Oz/3dn/P0A1draWUCNWcecIqrGzuY4aCYo7PaBvagW19MfjQd80CGqFJoZ70DvQi3tA70AvvqkP6sAxbfWRFrMHdRCZtvIWs8ddVK3+GC/ql/vjzSd8tn6bP5g/5Z477dzhsxX5Mxg5t4/A/Cn33EX5Dm/k3B6UdmrjO/snEGNXnIhzrf6zBWIcixNxvvuPTDnXNPt3Dcp/qr3dbQUNdWUj
   </data>
  </layer>
- <layer name="objects" width="32" height="32">
+ <layer name="objects1" width="32" height="32">
   <data encoding="base64" compression="zlib">
    eJxjYBgcwI0JP59UM4hhj4JRMAqwg9F8QhgM13LlJCN5+k4RqW84hdUowARDMV+Q2nYYKv4aBYMLwNINNdIPNdrM6PpG0/XgAsOt/CG3bTEKaAMAuMAJsA==
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlt0KwjAMRvMmVgeTgaDI9MJ779X5/s9iAhNLSdK03Q9TPzg3ruSUtmntAGAnUMEnNbIHPrVSI4ZUk3NwY11CDS6lfm1dLKniQ0b1W7Nkv0PWM/o3YNtnh1wDhvBbU0e++R6HNMiqp/HIXesUP60pd588IH89NL91D0v2Q/On1ND8B6Ttuczg13zf4qd+2HpI/TCGn+sL6dzSWL9vwz6OUXqnUjpmvlasb6eWKd6uX/c7kM/QVP8dpHOW66d79CQQ9oV2J9EcWoaS3jon+KVsCuYwhJ+rM7Wf1oDbmzfHkf25+fuX4095b7X313m/P4NxN+Qu1HgB1ZQsNw==
+   eJzll9EKwjAMRfMnxikTQVB0KviiL/6A//8xNuhYCUlNW9uhu3CfNnJKyA0tAkCneA+D0HkOsujbOtFnpSbX0vmmsLfGGpJy+W0m/2D871qIb9Uv8xH02a3Bb5wXBgY635l7lZo/XksT5yO88jt72890aq9j+NTTjeAHpPcjhh+qUYIfUyPE38Gw3y8j8H3x3fsvfMrDyrOWhxJ8KRfa7iE+wpBbnuNPzt2ppFY4r9WWnWrhj6kp8BH0GarB7zMpzVAqn/boUTHPRWgn0Tfp7p2TrVMEX1OTcYZv8KU6tfnUA+1txN9HJfipmjqfv6ms9+8p6glIYicH
   </data>
  </layer>
  <objectgroup name="collider">
@@ -310,7 +310,5 @@
   <object id="317" x="0" y="672" width="32" height="32"/>
   <object id="319" x="0" y="704" width="32" height="32"/>
   <object id="320" x="0" y="736" width="32" height="32"/>
-  <object id="322" x="0" y="990.667" width="510.667" height="32"/>
-  <object id="323" x="574.667" y="990.667" width="448" height="32"/>
  </objectgroup>
 </map>

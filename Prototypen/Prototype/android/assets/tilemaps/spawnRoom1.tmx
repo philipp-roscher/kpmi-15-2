@@ -11,7 +11,7 @@
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzFV11OAjEQblL2BBpfSURclSOs4YkjQCIRj4AxHGIReRS9DsoVvILiE+gRnGZnwlA63bKblYcvS2mnX+fnm+3WlVL1grjRGYral8VXTanP2mG4PwAJ+N4/oP9d4B4dkL9K/6m2fDXWFfhDbAlLqJ8GrIm1295nO8yJv7TPqc44v2ub+X4gP9k2cP6ejWMdxp/o3RiNLH7JpzhSaqwzkC2NjyI5DhI/zdv+S/wdmPsBnt8o26fHxh3BTuLn83k6MnFvAccdPN/hOY+y+uvh+BlwC7+vot08uHRj8+fpyMR9ir6+In9i8ZsYpJ48cN2E+E8+D3TmN3HPACvm/xp+v7AzmDgMPLEYBvrP87uwuM3ZHrD+Y+sMC1Yf0r4h/nP/3hCcm2qYn4Gvk/qzK/5cxwTy7wzRBJxb3PwMrnWufe2eYLT7CJgAntizDbhm+ia0HfzSOvrftb+vRl35p7ym1hkMx9Sxruz7yc4/r/GU+cd1OQvIfygMRxP113LojMeHa+MS9XeCPaMoP8dFtK0zu/9xXVZxJ0mxjlp60395/5uj32Nd3ue898/a0f9WnvdP3p77rDV5II1T/dP42NP39+WX7h8p6nfCNEhjV9xD71JFbEL0XYTftvPdP6Va3+cOWhTDkv2tLJKKtB4K6f7/X8i7/1cN8/2wLPn9+webC/kx
+   eJzFV0tOwzAQteTmBCC2lSglQI4Q1FWPQKUiyhGKUA+RUrqkcJ1Cr9Ar8Fm1cATGyoyYmrHjJpQsnhIntp/fzDzHaSqlmiWxRJQdXxVvDaVeG/VwG92pVupS16f/ArhHNfLvUn9fb8KlX+IPGcvz2II+sZbH+8YOC+LvmudQ55zkn76lw8dPY1v4/oa1Yx3Gn+KzJeszsvhdmuJIqbHOQWOpvRe54yDx03NJv4u/C+8+gecryufpsXbXMc7Fz98X+cjEPQGOa7i+wHUe5fXXw/YD4Aruz6LfeZB8Y/MX+cjEfYpan5A/tfhNDDJPHrhvQvST5oHOdRP3DLBi+tdw/8jWYOIw8MRiGKif53dhcZu13WL9x9YaFqw+XPOG6Of6nhGcm2qYr4H3c+3PUvy5jwmk7wjRBhxb3HwNUj9pXntPMN69A0wA9+zaAZwzfxM6Ar+rHz2X5vfVqJR/ymtmrcFwTIV+Vb9Pdv55jWdMH/flLCD/oTAcbfRfIviMx4d74xT9d4B7Rll+jpNo02f2/sd9uYszSYZ1lOif/Zfvf3PUPdbVNRd9f9bC/rfyfH+K5tymr8kDeZzqn9r7nn1/W37X+SND/06YB6ktxT30LFVmTIi/y/Db43znT1etb3MGLYthxf2tKtIdeT0UrvP/f+ED/j3fa/r/NPiL/+9vMsj7ow==
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
@@ -21,7 +21,7 @@
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlj0OQEAQhYfE3VQoVaJAxQUQZ8CJzRYbijWYHTTzJZPsX94rNi95AM8pAoA43PdmXQYMISajw2v60P9tkgggxcmi93WO/2ip8H2N03j6X+kY79xx1+PZgDN6+l/puLwNM54vOKunv5SOolhSR14tCXEnRUd4tB/4K8qfUBmjsikFlTEqm8p9pPoXV0uqf3G1pPoXV0uyN2kHU5RzNs9rHIs=
+   eJxjYCAdxDEyMHgwMTA0skIwiJ3ASIZBZIIaLHbV0dF+WgM/YJj6A3EAK+3NAcUdOkgBqk8F4jQK7SdkDsjuCCxyVUCxaiCuodB+QuaA7G7BIjcBKDYRiCdRaD8hc5pw2E8v0DSAdo8C8oA/lvwKA3545KgFcvHYkUMH+0fBKBhIgC+P4cub1AL48hi+vDkKiAfUan+Raxa12l/kmkWt9he5ZlGr/UVts0bBKBhMoJkVgikBACxHIMc=
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
