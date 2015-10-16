@@ -8,11 +8,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.math.MathUtils;
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.managers.PlayerManager;
+
 import org.sausagepan.prototyp.managers.ServerBattleSystem;
 import org.sausagepan.prototyp.managers.ServerPlayerManager;
-import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.ServerPlayer;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
@@ -28,12 +26,8 @@ import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
-import org.sausagepan.prototyp.network.Position;
-
-import box2dLight.RayHandler;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -47,7 +41,7 @@ public class GameServer {
 	public static Server server;
 	public static int maxId = 1;
 	public static HashMap<InetSocketAddress,Integer> clientIds;
-	public static HashMap<Integer,Position> positions;
+	public static HashMap<Integer,NetworkPosition> positions;
 	public static HashMap<Integer,Long> lastAccess;
 	public static HashMap<Integer,HeroInformation> cm;
 	public static MapInformation map;
@@ -61,7 +55,7 @@ public class GameServer {
 	
 	public GameServer() {
 		clientIds = new HashMap<InetSocketAddress, Integer>();
-		positions = new HashMap<Integer,Position>();
+		positions = new HashMap<Integer,NetworkPosition>();
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,HeroInformation>();
 		bs = new ServerBattleSystem(this);

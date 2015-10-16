@@ -5,7 +5,7 @@ import org.sausagepan.prototyp.model.components.PlayerComponent;
 /**
  * Created by Georg on 26.06.2015.
  */
-public class Status extends PlayerComponent {
+public class Status {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
@@ -72,7 +72,6 @@ public class Status extends PlayerComponent {
 
     /* ................................................................................................... METHODS .. */
 
-    @Override
     public void update(float elapsedTime) {
         // TODO
     }

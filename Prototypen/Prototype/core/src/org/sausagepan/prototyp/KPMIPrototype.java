@@ -14,7 +14,7 @@ import com.esotericsoftware.kryonet.Listener;
 
 public class KPMIPrototype extends Game {
 	
-	/* ........................................................ ATTRIBUTES .. */
+	/* ............................................................................ ATTRIBUTES .. */
 	public SpriteBatch batch;
 	public BitmapFont font;
 	public MediaManager mediaManager;

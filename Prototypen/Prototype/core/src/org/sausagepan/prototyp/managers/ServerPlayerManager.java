@@ -3,9 +3,8 @@ package org.sausagepan.prototyp.managers;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.ServerPlayer;
-import org.sausagepan.prototyp.network.Position;
+import org.sausagepan.prototyp.network.NetworkPosition;
 
 /**
  * Created by Georg on 26.06.2015.
@@ -52,7 +51,7 @@ public class ServerPlayerManager {
      * @param position
      */
 
-	public void updatePosition(int id, Position position) {
+	public void updatePosition(int id, NetworkPosition position) {
 		if(players.get(id) != null) {
 			this.players.get(id).updatePosition(position.position, position.direction, position.isMoving);
 		}

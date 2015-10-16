@@ -29,7 +29,7 @@ import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.HeroInformation;
-import org.sausagepan.prototyp.network.Position;
+import org.sausagepan.prototyp.network.NetworkPosition;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -114,7 +114,7 @@ public class InMaze implements Screen {
 
         // set up the camera and viewport
 		camera   = new OrthographicCamera();
-		int zoom = 1;
+		int zoom = 2;
 		viewport = new FitViewport(UnitConverter.pixelsToMeters(800*zoom), UnitConverter.pixelsToMeters(480*zoom), camera);
 		viewport.apply();
 		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0); // center camera
@@ -234,8 +234,8 @@ public class InMaze implements Screen {
 
         // Update Player
         selfPlayer.update(elapsedTime);
-        selfPlayer.updateNetworkPosition();
-        posUpdate.position = selfPlayer.position;
+//        selfPlayer.updateNetworkPosition();
+        posUpdate.position = selfPlayer.getPos();
         game.client.sendUDP(posUpdate);
 
 		// Move character
@@ -258,7 +258,7 @@ public class InMaze implements Screen {
 		// Status
 		for(Player c : playerMan.getPlayers()) {
 //			c.debugRenderer(shpRend);
-			c.drawCharacterStatus(shpRend);
+			c.draw(shpRend);
 		}
         // ................................................................................................... RENDERING
 
@@ -370,7 +370,7 @@ public class InMaze implements Screen {
 			if (object instanceof GameStateResponse) {
 				GameStateResponse result = (GameStateResponse) object;
 				
-				for(Entry<Integer, Position> e : result.positions.entrySet()) {
+				for(Entry<Integer, NetworkPosition> e : result.positions.entrySet()) {
 					if(e.getKey() != game.clientId)
 						playerMan.updatePosition(e.getKey(), e.getValue(), elapsedTime);
 				}
@@ -379,9 +379,9 @@ public class InMaze implements Screen {
 			if (object instanceof AttackResponse) {
 				AttackResponse result = (AttackResponse) object;
 				if(result.stop == false)
-					playerMan.players.get(result.playerId).attack();
+					playerMan.players.get(result.playerId).getBattle().attack();
 				else 
-					playerMan.players.get(result.playerId).stopAttacking();
+					playerMan.players.get(result.playerId).getBattle().stopAttacking();
 			}	
 			
 			if (object instanceof HPUpdate) {

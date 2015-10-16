@@ -1,11 +1,12 @@
 package org.sausagepan.prototyp.model.components;
 
+import org.sausagepan.prototyp.model.ContainerMessage;
 import org.sausagepan.prototyp.model.components.PlayerComponent;
 
 /**
  * Created by Georg on 14.07.2015.
  */
-public class PlayerNetworkComponent extends PlayerComponent {
+public class PlayerNetworkComponent {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
@@ -13,8 +14,11 @@ public class PlayerNetworkComponent extends PlayerComponent {
 
     /* ................................................................................................... METHODS .. */
 
-    @Override
     public void update(float elapsedTime) {
+
+    }
+
+    public void update(ContainerMessage message) {
 
     }
 

@@ -1,28 +1,19 @@
 package org.sausagepan.prototyp.model;
 
 import box2dLight.PointLight;
-import box2dLight.RayHandler;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.components.PlayerPhysicsComponent;
-import org.sausagepan.prototyp.model.components.PlayerStatusComponent;
-import org.sausagepan.prototyp.network.Position;
-
-import java.util.Iterator;
+import org.sausagepan.prototyp.network.NetworkPosition;
 
 public class ServerPlayer {
 
@@ -37,7 +28,6 @@ public class ServerPlayer {
     private Status status_;
     private Weapon weapon;
     private PlayerPhysicsComponent physics;
-    private PlayerStatusComponent  status;
 
     // Character Status
     private boolean attacking = false;  // whether the character is attacking at the moment
@@ -50,7 +40,7 @@ public class ServerPlayer {
 	private Pool<Bullet>  bulletPool;       // pool of available bullets
     private Array<Bullet> activeBullets;    // bullets flying through the air right now
 
-    public  Position position;              // position container for network transmission
+    public NetworkPosition position;              // position container for network transmission
 
 	// Physics
 	private boolean moving;         // whether character is moving or not
@@ -89,7 +79,7 @@ public class ServerPlayer {
 		this.normDir   = new Vector2(0,0);
 
 		this.activeBullets = new Array<Bullet>();
-        this.position  = new Position(new Vector3(0,0,0), this.dir, this.moving);
+        this.position  = new NetworkPosition(new Vector3(0,0,0), this.dir, this.moving);
 
 		// Physics
 		this.moving = false;
@@ -98,7 +88,7 @@ public class ServerPlayer {
 //        this.bulletPool = new Pool<Bullet>() {
 //            @Override
 //            protected Bullet newObject() {
-//                return new Bullet(dynBody.getPosition().x, dynBody.getPosition().y, .1f, .1f, normDir);
+//                return new Bullet(dynBody.getNetPos().x, dynBody.getNetPos().y, .1f, .1f, normDir);
 //            }
 //        };
 	}
@@ -123,8 +113,8 @@ public class ServerPlayer {
 //        if(TimeUtils.timeSinceMillis(lastAttack) < 100) return; // maximum 10 bullets per second
 //        Bullet newBullet = bulletPool.obtain();                 // obtain new bullet from pool
 //        newBullet.init(                                         // initialize obtained bullet
-//                dynBody.getPosition().x,
-//                dynBody.getPosition().y,
+//                dynBody.getNetPos().x,
+//                dynBody.getNetPos().y,
 //                normDir);
 //        activeBullets.add(newBullet);                           // add initialized bullet to active bullets
 //        lastAttack = TimeUtils.millis();                        // remember spawn time

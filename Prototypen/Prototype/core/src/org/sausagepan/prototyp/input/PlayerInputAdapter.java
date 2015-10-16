@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
@@ -32,7 +31,7 @@ public class PlayerInputAdapter extends InputAdapter{
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchPos.set(screenX, screenY, 0);
         maze.camera.unproject(touchPos);
-        player.move(touchPos);
+        player.update(touchPos);
         return true;
     }
 
@@ -47,7 +46,7 @@ public class PlayerInputAdapter extends InputAdapter{
         touchPos.x = screenX;
         touchPos.y = screenY;
         maze.camera.unproject(touchPos);
-        player.move(touchPos);
+        player.update(touchPos);
         return false;
     }
 
@@ -56,13 +55,13 @@ public class PlayerInputAdapter extends InputAdapter{
 
         switch (keycode) {
             case Input.Keys.A: {
-                player.attack();
+                player.getBattle().attack();
 //                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
                 maze.attack();
                 break;
             }
             case Input.Keys.S: {
-                player.shoot();
+                player.getBattle().shoot();
 //                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
                 break;
             }
@@ -76,7 +75,7 @@ public class PlayerInputAdapter extends InputAdapter{
 
         switch (keycode) {
             case Input.Keys.A: {
-                player.stopAttacking();
+                player.getBattle().stopAttacking();
                 maze.stopAttacking();
                 break;
             }

@@ -10,7 +10,7 @@ import org.sausagepan.prototyp.model.components.PlayerComponent;
 /**
  * Created by Georg on 26.06.2015.
  */
-public class Weapon extends PlayerComponent {
+public class Weapon {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
@@ -58,7 +58,6 @@ public class Weapon extends PlayerComponent {
 
     /* ................................................................................................... METHODS .. */
 
-    @Override
     public void update(float elapsedTime) {
         // TODO
     }

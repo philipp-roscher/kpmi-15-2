@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.sausagepan.prototyp.model.Player;
-import org.sausagepan.prototyp.network.Position;
+import org.sausagepan.prototyp.network.NetworkPosition;
 
 /**
  * Created by Georg on 26.06.2015.
@@ -52,7 +52,7 @@ public class PlayerManager {
      * @param elapsedTime
      */
 
-	public void updatePosition(int id, Position position, float elapsedTime) {
+	public void updatePosition(int id, NetworkPosition position, float elapsedTime) {
 		if(players.get(id) != null) {
 			this.players.get(id).updatePosition(position.position, position.direction, position.isMoving);
 			this.players.get(id).update(elapsedTime);

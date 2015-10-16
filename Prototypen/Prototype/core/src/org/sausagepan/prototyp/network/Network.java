@@ -7,7 +7,6 @@ import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.enums.WEAPONTYPE;
 import org.sausagepan.prototyp.model.Status;
 import org.sausagepan.prototyp.model.Weapon;
-import org.sausagepan.prototyp.network.Position;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -38,7 +37,7 @@ public class Network {
 		kryo.register(IDAssignment.class);	
 		kryo.register(MapInformation.class);
 
-        kryo.register(Position.class);
+        kryo.register(NetworkPosition.class);
         kryo.register(Direction.class);
         kryo.register(HeroInformation.class);
         kryo.register(Status.class);
@@ -91,7 +90,7 @@ public class Network {
 	
 	public static class PositionUpdate {
 		public int playerId;
-		public Position position;
+		public NetworkPosition position;
 		
 		public PositionUpdate() { }
 	}	
@@ -134,7 +133,7 @@ public class Network {
 	}
 	
 	public static class GameStateResponse {
-		public HashMap<Integer, Position> positions;
+		public HashMap<Integer, NetworkPosition> positions;
 		
 		public GameStateResponse() { }
 	}
