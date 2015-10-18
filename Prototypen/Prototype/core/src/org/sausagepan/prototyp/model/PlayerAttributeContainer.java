@@ -184,6 +184,7 @@ public class PlayerAttributeContainer {
     }
 
     public void setDir(Direction dir) {
+        notifyObservers(ContainerMessage.DIRECTION);
         this.dir = dir;
     }
 

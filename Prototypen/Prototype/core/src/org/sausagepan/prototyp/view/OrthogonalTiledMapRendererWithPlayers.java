@@ -51,7 +51,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                 if(currentLayer == drawSpritesAfterLayer)
                     /* Draw players here */
                     for(Player player : players) {
-                        player.getSprite().draw(this.getBatch());
+                        player.graphics.getSprite().draw(this.getBatch());
 
                         /* draw arrows here */
                         for(Bullet b : player.getBullets()) {

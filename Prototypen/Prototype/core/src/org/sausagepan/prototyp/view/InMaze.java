@@ -14,10 +14,13 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
-import org.sausagepan.prototyp.input.PlayerInputAdapter;
+import org.sausagepan.prototyp.enums.PlayerAction;
+import org.sausagepan.prototyp.input.PlayerInputProcessor;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
+import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.model.PlayerObserver;
 import org.sausagepan.prototyp.model.components.MazeGenerator;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
@@ -39,7 +42,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -49,7 +51,7 @@ import com.esotericsoftware.kryonet.Listener;
 /**
  * Screen for all ingame action. Here everything is rendered to the screen
  */
-public class InMaze implements Screen {
+public class InMaze implements Screen, PlayerObserver {
 	
 	/* ................................................................................................ ATTRIBUTES .. */
 	final   KPMIPrototype game;
@@ -62,30 +64,24 @@ public class InMaze implements Screen {
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
 
-	// Geometry
-	private Vector3          touchPos;      // touch position
-
     // Managers
 	public  PlayerManager playerMan;        // manages players
 	public  BattleSystem  battleSys;        // manages battle
 
 	// Media
-	private Music bgMusic;
-	private float elapsedTime    = 0;
-	private int elapsedTimeSec = 0;
-	private float disconnectTime = 0;
-	private float timeOut        = 5;
+	private Music   bgMusic;
+	private float   elapsedTime    = 0;
+	private int     elapsedTimeSec = 0;
+	private float   disconnectTime = 0;
+	private float   timeOut        = 5;
 
     // Containers
-	private Player selfPlayer;
+	private Player localPlayer;
 	private PositionUpdate posUpdate;
 	private KeepAliveRequest keepAliveRequest;
 	private Array<Object> networkMessages;
-	
-	//Tiled Map for map creation and collision detection
-	private MapInformation						  mapInformation;
-	private TiledMap                              tiledMap;         // contains the layers of the tiled map
-	private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
+
+    private Maze maze;
 
     // Physics
     private final World world;    // create a box2d world which calculates all physics
@@ -112,33 +108,31 @@ public class InMaze implements Screen {
 
 		this.game = game;
 
-        // set up the camera and viewport
-		camera   = new OrthographicCamera();
-		int zoom = 1;
-		viewport = new FitViewport(UnitConverter.pixelsToMeters(800*zoom), UnitConverter.pixelsToMeters(480*zoom), camera);
+        // Rendering ...............................................................................
+		camera   = new OrthographicCamera();    // set up the camera and viewport
+		int zoom = 1;                           // zooms out of map
+		viewport = new FitViewport(
+                UnitConverter.pixelsToMeters(800*zoom),
+                UnitConverter.pixelsToMeters(480*zoom), camera);
 		viewport.apply();
 		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0); // center camera
 
-        // create batches and renderers
 		batch   = new SpriteBatch();
 		shpRend = new ShapeRenderer();
 		font    = new BitmapFont();
 		font.setColor(Color.WHITE);
 
 
-        // Set up World and Box2D-Renderer .............................................................................
+        // Set up World and Box2D-Renderer .........................................................
         this.world         = world;                     // create new world with no gravity in x and y
         this.debugRenderer = new Box2DDebugRenderer();  // set up Box2D-Debugger for drawing body shapes
 
 
-        // Light .......................................................................................................
+        // Light ...................................................................................
         RayHandler.useDiffuseLight(true);
         this.rayHandler = rayHandler;
         this.rayHandler.setAmbientLight(.3f, .3f, .3f, 0.5f);
         this.rayHandler.setBlurNum(3);
-
-        // create some geometry containers
-		touchPos = new Vector3();
 
         // load media
 		this.bgMusic = game.mediaManager.getMazeBackgroundMusic();
@@ -151,16 +145,15 @@ public class InMaze implements Screen {
 		this.playerMan = playerManager;
 		
 		// register own player
-		this.selfPlayer = playerMan.players.get(game.clientId);
+		this.localPlayer = playerMan.players.get(game.clientId);
 
-        // Tiled Map ...................................................................................................
-		this.mapInformation = mapInformation;
-		setUpTiledMap();
+        // Tiled Map ...............................................................................
+        this.maze = new Maze(mapInformation, world, game.mediaManager);
 		for(Player p : playerMan.getPlayers())
-			tiledMapRenderer.addPlayer(p);
+			maze.addPlayer(p);
 
 
-		// Set Up Client for Communication .............................................................................
+		// Set Up Client for Communication .........................................................
 		posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
 		networkMessages = new Array<Object>();
@@ -193,7 +186,7 @@ public class InMaze implements Screen {
 	@Override
 	public void show() {
 		this.batch = new SpriteBatch();
-        Gdx.input.setInputProcessor(new PlayerInputAdapter(selfPlayer, this));
+        Gdx.input.setInputProcessor(new PlayerInputProcessor(localPlayer, this.camera));
 	}
 
 	@Override
@@ -220,33 +213,29 @@ public class InMaze implements Screen {
         processNetworkMessages();
         
         // project to camera
-		camera.position.set(selfPlayer.getPosition().x, selfPlayer.getPosition().y, 0);
+		camera.position.set(localPlayer.getPosition().x, localPlayer.getPosition().y, 0);
         camera.update();
 		batch.  setProjectionMatrix(camera.combined);
 		shpRend.setProjectionMatrix(camera.combined);
 		
 		// Animation time calculation
 		elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
-		if(elapsedTimeSec != (int) elapsedTime) {
+		if(elapsedTimeSec != (int) elapsedTime)
 			sendKeepAliveRequest();
-		}
 		elapsedTimeSec = (int) elapsedTime;
 
         // Update Player
-        selfPlayer.update(elapsedTime);
-//        selfPlayer.updateNetworkPosition();
-        posUpdate.position = selfPlayer.getPos();
+        localPlayer.update(elapsedTime);
+//        localPlayer.updateNetworkPosition();
+        posUpdate.position = localPlayer.getPos();
         game.client.sendUDP(posUpdate);
 
 		// Move character
         for(Player p : playerMan.getPlayers()) p.update(elapsedTime);
-//		handleInput();
 
-
-        // ................................................................................................... RENDERING
+        // ............................................................................... RENDERING
         // Tiled Map
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
+        maze.render(camera);
 
         // Box2D Debugging
 //        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
@@ -260,7 +249,7 @@ public class InMaze implements Screen {
 //			c.debugRenderer(shpRend);
 			c.draw(shpRend);
 		}
-        // ................................................................................................... RENDERING
+        // ............................................................................... RENDERING
 
 
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
@@ -276,7 +265,6 @@ public class InMaze implements Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -300,32 +288,6 @@ public class InMaze implements Screen {
 	
 	
 	/* ........................................................... METHODS .. */
-
-    /**
-     * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithSprites} for the game
-     */
-    public void setUpTiledMap() {
-
-        //tiledMap         = new TmxMapLoader().load("tilemaps/maze.tmx");            // load tiled map from file
-    	MazeGenerator generator = new MazeGenerator();
-    	generator.setParam(mapInformation.width, mapInformation.height);
-    	tiledMap = generator.createNewMapFromGrid(mapInformation.entries);
-        tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, game.mediaManager);   // set up map renderer and scale
-        // create static bodys from colliders
-       Rectangle r;
-        for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
-            r = ((RectangleMapObject) mo).getRectangle();
-
-            BodyDef groundBodyDef  = new BodyDef();
-            groundBodyDef.type     = BodyDef.BodyType.StaticBody;
-            groundBodyDef.position.set(new Vector2(r.x/32f+r.width/64f, r.y/32f + r.height/64f));
-            Body groundBody        = world.createBody(groundBodyDef);
-            PolygonShape groundBox = new PolygonShape();
-            groundBox.setAsBox(r.width/64f, r.height/64f);
-            groundBody.createFixture(groundBox, 0.0f);
-            groundBox.dispose();
-        }
-    }
 
 	public void sendKeepAliveRequest() {
 		game.client.sendTCP(InMaze.this.keepAliveRequest);		
@@ -352,7 +314,7 @@ public class InMaze implements Screen {
                                 rayHandler,
                                 new Vector2(32*2.5f, 32*.5f)));
 
-				tiledMapRenderer.addPlayer(playerMan.players.get(request.playerId));
+				maze.addPlayer(playerMan.players.get(request.playerId));
 			}
 			
 			if (object instanceof DeleteHeroResponse) {
@@ -363,7 +325,7 @@ public class InMaze implements Screen {
 					game.connected = false;
 					
 					world.destroyBody(playerMan.players.get(playerId).getBody());
-					tiledMapRenderer.removePlayer(playerMan.players.get(playerId));
+					maze.removePlayer(playerMan.players.get(playerId));
 					playerMan.removeCharacter(playerId);
 			}
 			
@@ -395,11 +357,28 @@ public class InMaze implements Screen {
 
 
 	public void attack() {
-		game.client.sendUDP(new AttackRequest(game.clientId, false));
+
 	}
 
 
 	public void stopAttacking() {
-		game.client.sendUDP(new AttackRequest(game.clientId, true));		
+
+	}
+
+	/**
+	 * Observes player instance for submitting stuff to the server
+	 * @param observedPlayer
+	 */
+	@Override
+	public void update(Player observedPlayer, PlayerAction action) {
+        switch(action) {
+            case ATTACK:
+                game.client.sendUDP(new AttackRequest(game.clientId, false));
+                break;
+            case ATTACK_STOP:
+                game.client.sendUDP(new AttackRequest(game.clientId, true));
+                break;
+            default: break;
+        }
 	}
 }

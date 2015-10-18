@@ -53,8 +53,8 @@ public class PlayerBattleComponent extends PlayerComponent {
     /* ............................................................................... METHODS .. */
     @Override
     public void update(float elapsedTime) {
-        this.attackCollider.x = attributes.getSprite().getX();
-        this.attackCollider.y = attributes.getSprite().getY();
+        this.attackCollider.x = attributes.getPosition().x;
+        this.attackCollider.y = attributes.getPosition().y;
 
         // update bullets
         updateBullets();

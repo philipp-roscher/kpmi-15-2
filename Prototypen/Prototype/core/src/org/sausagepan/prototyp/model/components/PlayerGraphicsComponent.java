@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import org.sausagepan.prototyp.enums.Direction;
@@ -29,11 +30,19 @@ public class PlayerGraphicsComponent extends PlayerComponent {
 
     @Override
     public void update(ContainerMessage message) {
-        if(message == ContainerMessage.POSITION)
-            attributes.getSprite().setPosition(
-                    attributes.getPosition().x - attributes.getSprite().getWidth()/2,
-                    attributes.getPosition().y - attributes.getPlayerDimensions().height/2
-            );
+        switch(message) {
+            case POSITION:
+                attributes.getSprite().setPosition(
+                        attributes.getPosition().x - attributes.getSprite().getWidth()/2,
+                        attributes.getPosition().y - attributes.getPlayerDimensions().height/2
+                );
+                break;
+            case DIRECTION:
+                updateSprite(attributes.getDir());
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -52,7 +61,7 @@ public class PlayerGraphicsComponent extends PlayerComponent {
 
     public void drawCharacterStatus(ShapeRenderer shp) {
 
-        // HP ..........................................................................................................
+        // HP ......................................................................................
 
         shp.begin(ShapeRenderer.ShapeType.Filled);
         shp.setColor(Color.GREEN);
@@ -63,7 +72,7 @@ public class PlayerGraphicsComponent extends PlayerComponent {
                 .15f);
         shp.end();
 
-        // MP ..........................................................................................................
+        // MP ......................................................................................
         shp.begin(ShapeRenderer.ShapeType.Filled);
         shp.setColor(Color.BLUE);
         shp.rect(
@@ -73,7 +82,7 @@ public class PlayerGraphicsComponent extends PlayerComponent {
                 .1f);
         shp.end();
 
-        // WEAPON ......................................................................................................
+        // WEAPON ..................................................................................
         shp.begin(ShapeRenderer.ShapeType.Line);
         shp.setColor(Color.DARK_GRAY);
         shp.rect(
@@ -83,7 +92,7 @@ public class PlayerGraphicsComponent extends PlayerComponent {
                 attributes.getWeapon().getCollider().getHeight()
         );
 
-        // BULLETS .....................................................................................................
+        // BULLETS .................................................................................
 //        for(Bullet b : activeBullets)
 //            shp.rect(b.x, b.y, b.width, b.height);
 
@@ -122,6 +131,11 @@ public class PlayerGraphicsComponent extends PlayerComponent {
         }
         shp.end();
 
+    }
+
+    /* ..................................................................... SETTERS & GETTERS .. */
+    public Sprite getSprite() {
+        return attributes.getSprite();
     }
 
 }

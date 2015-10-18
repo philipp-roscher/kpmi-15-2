@@ -2,27 +2,34 @@ package org.sausagepan.prototyp.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+
+import org.sausagepan.prototyp.enums.PlayerAction;
+import org.sausagepan.prototyp.model.ContainerMessage;
 import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.model.PlayerAttributeContainer;
+import org.sausagepan.prototyp.model.components.PlayerComponent;
 import org.sausagepan.prototyp.view.InMaze;
 
 /**
  * Created by Georg on 06.07.2015.
  */
-public class PlayerInputAdapter extends InputAdapter{
+public class PlayerInputProcessor implements InputProcessor {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
     Player  player;
-    InMaze  maze;
     Vector3 touchPos;
+    Camera  camera;
 
     /* .............................................................................................. CONSTRUCTORS .. */
 
-    public PlayerInputAdapter(Player player, InMaze maze) {
+    public PlayerInputProcessor(Player player, Camera camera) {
         this.player   = player;
         this.touchPos = new Vector3(0,0,0);
-        this.maze     = maze;
+        this.camera   = camera;
     }
 
     /* ................................................................................................... METHODS .. */
@@ -30,14 +37,14 @@ public class PlayerInputAdapter extends InputAdapter{
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touchPos.set(screenX, screenY, 0);
-        maze.camera.unproject(touchPos);
-        player.update(touchPos);
+        camera.unproject(touchPos);
+        player.input.move(touchPos);
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        player.stop();
+        player.input.stop();
         return true;
     }
 
@@ -45,8 +52,18 @@ public class PlayerInputAdapter extends InputAdapter{
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         touchPos.x = screenX;
         touchPos.y = screenY;
-        maze.camera.unproject(touchPos);
-        player.update(touchPos);
+        camera.unproject(touchPos);
+        player.input.move(touchPos);
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
         return false;
     }
 
@@ -55,13 +72,13 @@ public class PlayerInputAdapter extends InputAdapter{
 
         switch (keycode) {
             case Input.Keys.A: {
-                player.getBattle().attack();
+                player.input.attack();
 //                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
-                maze.attack();
+                player.notifyPlayerObservers(PlayerAction.ATTACK);
                 break;
             }
             case Input.Keys.S: {
-                player.getBattle().shoot();
+                player.input.shoot();
 //                maze.battleSys.updateAttack(player, maze.playerMan.getPlayers());
                 break;
             }
@@ -76,13 +93,19 @@ public class PlayerInputAdapter extends InputAdapter{
         switch (keycode) {
             case Input.Keys.A: {
                 player.getBattle().stopAttacking();
-                maze.stopAttacking();
+                player.notifyPlayerObservers(PlayerAction.ATTACK_STOP);
                 break;
             }
         }
 
         return true;
     }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
 
 /* ......................................................................................... GETTERS & SETTERS .. */
 
