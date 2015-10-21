@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.view;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,6 +20,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     /* ................................................................................................ ATTRIBUTES .. */
 
     private Array<Player> players;
+    private Array<Sprite> sprites;
     private int drawSpritesAfterLayer = 3;
     private MediaManager media;
     private int bulletRotation=0;
@@ -29,6 +31,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     public OrthogonalTiledMapRendererWithPlayers(TiledMap map, float pixelsPerMeter, MediaManager media) {
         super(map, 1/pixelsPerMeter);
         players = new Array<Player>();
+        sprites = new Array<Sprite>();
         this.media = media;
     }
 
@@ -39,6 +42,9 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         players.add(newPlayer);
     }
 
+    public void addSprite(Sprite newSprite) {
+        sprites.add(newSprite);
+    }
 
     @Override
     public void render() {
@@ -48,27 +54,37 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
             if(layer instanceof TiledMapTileLayer) {
                 renderTileLayer((TiledMapTileLayer) layer);
                 currentLayer++;
-                if(currentLayer == drawSpritesAfterLayer)
+                if(currentLayer == drawSpritesAfterLayer) {
                     /* Draw players here */
-                    for(Player player : players) {
+                    for (Player player : players) {
                         player.graphics.getSprite().draw(this.getBatch());
 
                         /* draw arrows here */
-                        for(Bullet b : player.getBullets()) {
+                        for (Bullet b : player.getBullets()) {
                             switch (player.getDir()) {
-                                case NORTH: bulletRotation = 270;break;
-                                case SOUTH: bulletRotation = 90;break;
-                                case WEST:  bulletRotation = 0;break;
-                                case EAST:  bulletRotation = 180;break;
+                                case NORTH:
+                                    bulletRotation = 270;
+                                    break;
+                                case SOUTH:
+                                    bulletRotation = 90;
+                                    break;
+                                case WEST:
+                                    bulletRotation = 0;
+                                    break;
+                                case EAST:
+                                    bulletRotation = 180;
+                                    break;
                             }
                             this.batch.draw(media.getArrowImg(),
                                     b.x, b.y, 0, 0,
                                     media.getArrowImg().getWidth(),
                                     media.getArrowImg().getHeight(),
-                                    1/32f, 1/32f, bulletRotation, 0, 0, 20, 6, false, false);
+                                    1 / 32f, 1 / 32f, bulletRotation, 0, 0, 20, 6, false, false);
                         }
+                        for(Sprite s : sprites)
+                            s.draw(this.getBatch());
                     }
-                else
+                } else
                     for(MapObject object : layer.getObjects())
                         renderObject(object);
             }

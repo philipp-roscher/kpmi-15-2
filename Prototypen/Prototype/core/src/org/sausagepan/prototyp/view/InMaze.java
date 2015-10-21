@@ -4,11 +4,12 @@ import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
 
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -17,11 +18,15 @@ import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.input.PlayerInputProcessor;
 import org.sausagepan.prototyp.managers.BattleSystem;
+import org.sausagepan.prototyp.managers.MovementSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
-import org.sausagepan.prototyp.model.components.MazeGenerator;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.SpriteComponent;
+import org.sausagepan.prototyp.managers.SpriteSystem;
+import org.sausagepan.prototyp.model.components.VelocityComponent;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
@@ -63,6 +68,10 @@ public class InMaze implements Screen, PlayerObserver {
 	private SpriteBatch        batch;
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
+
+	// Entity-Component-System
+    private Engine engine;
+    private Family monsterFamily;
 
     // Managers
 	public  PlayerManager playerMan;        // manages players
@@ -152,6 +161,10 @@ public class InMaze implements Screen, PlayerObserver {
 		for(Player p : playerMan.getPlayers())
 			maze.addPlayer(p);
 
+
+        // Entity-Component-System ........................................................... START
+        setupEntityComponentSystem();
+        // Entity-Component-System ............................................................. END
 
 		// Set Up Client for Communication .........................................................
 		posUpdate = new PositionUpdate();
@@ -251,7 +264,7 @@ public class InMaze implements Screen, PlayerObserver {
 		}
         // ............................................................................... RENDERING
 
-
+        engine.update(delta);
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
 	}
 
@@ -381,4 +394,36 @@ public class InMaze implements Screen, PlayerObserver {
             default: break;
         }
 	}
+
+    /**
+     * Initializes the Entity-Component-System
+     */
+    private void setupEntityComponentSystem() {
+        // Creating Engine
+        this.engine = new Engine();
+
+        // Creating Entity Family
+        this.monsterFamily = Family.all(
+                DynamicBodyComponent.class,
+                VelocityComponent.class,
+                SpriteComponent.class).get();
+
+        // Creating Monster
+        Entity monsterEntity = new Entity();
+        monsterEntity.add(new DynamicBodyComponent(world, new Vector2(10.0f, 10.0f)));
+        monsterEntity.add(new VelocityComponent());
+        monsterEntity.add(new SpriteComponent());
+        TextureAtlas atlas = game.mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
+        monsterEntity.getComponent(SpriteComponent.class).sprite.setRegion(atlas
+                .findRegion("n", 1));
+        this.engine.addEntity(monsterEntity);
+
+        // Creating Component Systems
+        MovementSystem movementSystem = new MovementSystem();
+        movementSystem.addedToEngine(engine);
+        SpriteSystem spriteSystem = new SpriteSystem(game.batch, maze);
+        spriteSystem.addedToEngine(engine);
+        this.engine.addSystem(movementSystem);
+        this.engine.addSystem(spriteSystem);
+    }
 }

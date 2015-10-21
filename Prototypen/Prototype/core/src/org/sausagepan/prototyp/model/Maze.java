@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.model;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -16,7 +15,6 @@ import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.components.MazeGenerator;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
-import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithSprites;
 
 /**
  * Created by georg on 18.10.15.
@@ -44,7 +42,7 @@ public class Maze {
     }
 
     /**
-     * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithSprites} for the game
+     * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithPlayers} for the game
      */
     public void setUpTiledMap(World world) {
 
@@ -78,5 +76,9 @@ public class Maze {
 
     public void removePlayer(Player player) {
         this.tiledMapRenderer.removePlayer(player);
+    }
+
+    public OrthogonalTiledMapRendererWithPlayers getTiledMapRenderer() {
+        return tiledMapRenderer;
     }
 }
