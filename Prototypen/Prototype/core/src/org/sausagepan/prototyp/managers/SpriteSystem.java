@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 /**
@@ -32,9 +33,17 @@ public class SpriteSystem extends EntitySystem {
     }
     /* ............................................................................... METHODS .. */
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(SpriteComponent.class).get());
-        for(Entity e : entities)
-            tmr.addSprite(e.getComponent(SpriteComponent.class).sprite);
+        entities = engine.getEntitiesFor(Family.one(
+                SpriteComponent.class,
+                WeaponComponent.class).get());
+        for(Entity e : entities) {
+            if(e.getComponent(SpriteComponent.class) != null)
+                tmr.addSprite(e.getComponent(SpriteComponent.class).sprite);
+            if(e.getComponent(WeaponComponent.class) != null) {
+                tmr.addSprite(e.getComponent(WeaponComponent.class).sprite);
+                System.out.println("Adding weapon sprite");
+            }
+        }
     }
 
     public void update(float deltaTime) {

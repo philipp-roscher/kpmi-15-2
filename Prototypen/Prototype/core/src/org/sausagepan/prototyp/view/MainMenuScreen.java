@@ -51,8 +51,8 @@ public class MainMenuScreen implements Screen {
 		this.game  = game;
 		this.world = new World(new Vector2(0,0), true);
         this.rayHandler = new RayHandler(world);
-		camera     = new OrthographicCamera();
-		viewport        = new FitViewport(800, 480, camera);
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(800, 480, camera);
 		viewport.apply();
 		camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 		connectionStatus = 0;

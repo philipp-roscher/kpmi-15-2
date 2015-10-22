@@ -4,7 +4,6 @@ import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -20,13 +19,16 @@ import org.sausagepan.prototyp.input.PlayerInputProcessor;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.MovementSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
+import org.sausagepan.prototyp.managers.WeaponSystem;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
+import org.sausagepan.prototyp.model.Weapon;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.managers.SpriteSystem;
 import org.sausagepan.prototyp.model.components.VelocityComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
@@ -185,7 +187,6 @@ public class InMaze implements Screen, PlayerObserver {
 					networkMessages.add(object);
 				}
 			}
-
 			public void disconnected (Connection connection) {
                 game.connected = false;
                 Gdx.app.log("KPMIPrototype", "disconnected from server.");
@@ -369,15 +370,6 @@ public class InMaze implements Screen, PlayerObserver {
 	}
 
 
-	public void attack() {
-
-	}
-
-
-	public void stopAttacking() {
-
-	}
-
 	/**
 	 * Observes player instance for submitting stuff to the server
 	 * @param observedPlayer
@@ -418,12 +410,19 @@ public class InMaze implements Screen, PlayerObserver {
                 .findRegion("n", 1));
         this.engine.addEntity(monsterEntity);
 
+        this.engine.addEntity(localPlayer);
+        System.out.println(localPlayer.getComponent(WeaponComponent.class).sprite.getBoundingRectangle());
+
         // Creating Component Systems
         MovementSystem movementSystem = new MovementSystem();
         movementSystem.addedToEngine(engine);
         SpriteSystem spriteSystem = new SpriteSystem(game.batch, maze);
         spriteSystem.addedToEngine(engine);
+        WeaponSystem weaponSystem = new WeaponSystem();
+        weaponSystem.addedToEngine(engine);
         this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
+        this.engine.addSystem(weaponSystem);
+
     }
 }

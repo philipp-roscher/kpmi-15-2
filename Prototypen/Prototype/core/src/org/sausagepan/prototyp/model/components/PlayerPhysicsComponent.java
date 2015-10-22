@@ -28,7 +28,7 @@ public class PlayerPhysicsComponent extends PlayerComponent {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;    // set up body definition for player
-        bodyDef.position.set(1.1f, 1.1f);               // set players bodys position
+        bodyDef.position.set(attributes.getPosition()); // set players bodys position
         dynBody = world.createBody(bodyDef);            // add body to the world
         CircleShape circle = new CircleShape();         // give body a shape
         circle.setRadius(.4f);                          // set the shapes radius

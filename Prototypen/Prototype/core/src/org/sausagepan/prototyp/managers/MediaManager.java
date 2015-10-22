@@ -19,6 +19,7 @@ public class MediaManager {
     private String mainMenuBackgroundImgFile = "textures/backgrounds/main_menu_bg.png";
     private String knightSpriteSheetFile = "textures/spritesheets/knight_m.pack";
     private String arrowImgFile          = "textures/arrow.png";
+    private String weaponsSpriteSheetFile = "textures/spritesheets/weapons.pack";
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
@@ -31,6 +32,7 @@ public class MediaManager {
         assets.load(this.mainMenuBackgroundImgFile, Texture.class);
         assets.load(this.arrowImgFile, Texture.class);
         assets.load(this.knightSpriteSheetFile, TextureAtlas.class);
+        assets.load(this.weaponsSpriteSheetFile, TextureAtlas.class);
 
 
         assets.finishLoading();
@@ -61,6 +63,15 @@ public class MediaManager {
     public TextureAtlas getTextureAtlas(String name) {
         return assets.get(name);
     }
+
+    public TextureAtlas getTextureAtlasType(String type) {
+        if(type.equals("weapons")) {
+            return assets.get(weaponsSpriteSheetFile);
+        }
+
+        return null;
+    }
+
 
 //    public TextureAtlas getKnightTextureAtlas() {
 //    	return this.getTextureAtlas("textures/spritesheets/knight_m.pack");

@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.model;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,9 +21,12 @@ import org.sausagepan.prototyp.model.components.PlayerBattleComponent;
 import org.sausagepan.prototyp.model.components.PlayerGraphicsComponent;
 import org.sausagepan.prototyp.model.components.PlayerInputComponent;
 import org.sausagepan.prototyp.model.components.PlayerPhysicsComponent;
+import org.sausagepan.prototyp.model.components.PositionComponent;
+import org.sausagepan.prototyp.model.components.SkyDirectionComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.network.NetworkPosition;
 
-public class Player {
+public class Player extends Entity {
 
 	/* ............................................................................ ATTRIBUTES .. */
 
@@ -84,6 +88,10 @@ public class Player {
         attributes.subscribe(graphics);
         attributes.subscribe(physics);
         attributes.subscribe(battle);
+
+        this.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")));
+        this.add(new SkyDirectionComponent());
+        this.add(new PositionComponent());
 	}
 	
 	
@@ -101,6 +109,9 @@ public class Player {
         physics.update(elapsedTime);
         graphics.update(elapsedTime);
         battle.update(elapsedTime);
+        this.getComponent(PositionComponent.class).x = physics.getDynBody().getPosition().x-32;
+        this.getComponent(PositionComponent.class).y = physics.getDynBody().getPosition().y-32;
+        this.getComponent(SkyDirectionComponent.class).skyDirection = attributes.getDir();
 
 	}
 
@@ -136,7 +147,7 @@ public class Player {
 		return name;
 	}
 
-    public int getId() {
+    public int getPlayerId() {
     	return id;
     }
 
