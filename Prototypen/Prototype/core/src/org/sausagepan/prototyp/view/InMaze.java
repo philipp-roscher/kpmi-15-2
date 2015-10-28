@@ -17,6 +17,7 @@ import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.input.PlayerInputProcessor;
 import org.sausagepan.prototyp.managers.BattleSystem;
+import org.sausagepan.prototyp.managers.InputSystem;
 import org.sausagepan.prototyp.managers.MovementSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.managers.WeaponSystem;
@@ -25,10 +26,12 @@ import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
 import org.sausagepan.prototyp.model.Weapon;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.managers.SpriteSystem;
 import org.sausagepan.prototyp.model.components.VelocityComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
@@ -88,6 +91,7 @@ public class InMaze implements Screen, PlayerObserver {
 
     // Containers
 	private Player localPlayer;
+	private CharacterEntity localCharEntity;
 	private PositionUpdate posUpdate;
 	private KeepAliveRequest keepAliveRequest;
 	private Array<Object> networkMessages;
@@ -163,9 +167,9 @@ public class InMaze implements Screen, PlayerObserver {
 		for(Player p : playerMan.getPlayers())
 			maze.addPlayer(p);
 
-
         // Entity-Component-System ........................................................... START
         setupEntityComponentSystem();
+        maze.addSpriteComponent(localCharEntity.getComponent(SpriteComponent.class));
         // Entity-Component-System ............................................................. END
 
 		// Set Up Client for Communication .........................................................
@@ -200,7 +204,8 @@ public class InMaze implements Screen, PlayerObserver {
 	@Override
 	public void show() {
 		this.batch = new SpriteBatch();
-        Gdx.input.setInputProcessor(new PlayerInputProcessor(localPlayer, this.camera));
+//        Gdx.input.setInputProcessor(new PlayerInputProcessor(localPlayer, this.camera));
+        Gdx.input.setInputProcessor(localCharEntity.getComponent(InputComponent.class));
 	}
 
 	@Override
@@ -227,7 +232,12 @@ public class InMaze implements Screen, PlayerObserver {
         processNetworkMessages();
         
         // project to camera
-		camera.position.set(localPlayer.getPosition().x, localPlayer.getPosition().y, 0);
+//		camera.position.set(localPlayer.getPosition().x, localPlayer.getPosition().y, 0);
+        camera.position.set(
+                localCharEntity.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().x,
+                localCharEntity.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y,
+                0
+        );
         camera.update();
 		batch.  setProjectionMatrix(camera.combined);
 		shpRend.setProjectionMatrix(camera.combined);
@@ -424,5 +434,25 @@ public class InMaze implements Screen, PlayerObserver {
         this.engine.addSystem(spriteSystem);
         this.engine.addSystem(weaponSystem);
 
+		setUpLocalCharacterEntity(engine);
     }
+
+	private void setUpLocalCharacterEntity(Engine engine) {
+		this.localCharEntity = new CharacterEntity();
+        localCharEntity.add(new DynamicBodyComponent(world, new Vector2(0, 0)));
+        TextureAtlas atlas = game.mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
+        localCharEntity.add(new SpriteComponent());
+        localCharEntity.getComponent(SpriteComponent.class)
+                .sprite.setRegion(atlas.findRegion("n", 1));
+        this.engine.addEntity(localCharEntity);
+        localCharEntity.add(new InputComponent());
+        localCharEntity.add(new WeaponComponent(
+                        game.mediaManager.getTextureAtlasType("weapons").findRegion("sword")));
+        engine.getSystem(MovementSystem.class).addedToEngine(engine);
+        engine.getSystem(SpriteSystem.class).addedToEngine(engine);
+        engine.getSystem(WeaponSystem.class).addedToEngine(engine);
+        InputSystem inputSystem = new InputSystem();
+        engine.addSystem(inputSystem);
+        engine.getSystem(InputSystem.class).addedToEngine(engine);
+	}
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.components.MazeGenerator;
+import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
@@ -74,6 +75,9 @@ public class Maze {
         this.tiledMapRenderer.addPlayer(player);
     }
 
+    public void addSpriteComponent(SpriteComponent spriteComponent) {
+        this.tiledMapRenderer.addSpriteComponent(spriteComponent);
+    }
     public void removePlayer(Player player) {
         this.tiledMapRenderer.removePlayer(player);
     }
