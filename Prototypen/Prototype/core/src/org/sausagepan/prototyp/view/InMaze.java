@@ -15,8 +15,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.PlayerAction;
-import org.sausagepan.prototyp.input.PlayerInputProcessor;
 import org.sausagepan.prototyp.managers.BattleSystem;
+import org.sausagepan.prototyp.managers.CharacterSpriteSystem;
+import org.sausagepan.prototyp.managers.NetworkSystem;
+import org.sausagepan.prototyp.managers.PositionSynchroSystem;
 import org.sausagepan.prototyp.managers.InputSystem;
 import org.sausagepan.prototyp.managers.MovementSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
@@ -24,9 +26,11 @@ import org.sausagepan.prototyp.managers.WeaponSystem;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
-import org.sausagepan.prototyp.model.Weapon;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.LightComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.managers.SpriteSystem;
 import org.sausagepan.prototyp.model.components.VelocityComponent;
@@ -169,7 +173,6 @@ public class InMaze implements Screen, PlayerObserver {
 
         // Entity-Component-System ........................................................... START
         setupEntityComponentSystem();
-        maze.addSpriteComponent(localCharEntity.getComponent(SpriteComponent.class));
         // Entity-Component-System ............................................................. END
 
 		// Set Up Client for Communication .........................................................
@@ -262,7 +265,7 @@ public class InMaze implements Screen, PlayerObserver {
         maze.render(camera);
 
         // Box2D Debugging
-//        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
+        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
 
         // Light
         rayHandler.setCombinedMatrix(camera.combined);
@@ -439,20 +442,29 @@ public class InMaze implements Screen, PlayerObserver {
 
 	private void setUpLocalCharacterEntity(Engine engine) {
 		this.localCharEntity = new CharacterEntity();
-        localCharEntity.add(new DynamicBodyComponent(world, new Vector2(0, 0)));
+        localCharEntity.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f)));
         TextureAtlas atlas = game.mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
-        localCharEntity.add(new SpriteComponent());
-        localCharEntity.getComponent(SpriteComponent.class)
-                .sprite.setRegion(atlas.findRegion("n", 1));
+        localCharEntity.add(new CharacterSpriteComponent(atlas));
         this.engine.addEntity(localCharEntity);
         localCharEntity.add(new InputComponent());
         localCharEntity.add(new WeaponComponent(
-                        game.mediaManager.getTextureAtlasType("weapons").findRegion("sword")));
+                game.mediaManager.getTextureAtlasType("weapons").findRegion("sword")));
+		localCharEntity.add(new LightComponent(rayHandler));
         engine.getSystem(MovementSystem.class).addedToEngine(engine);
         engine.getSystem(SpriteSystem.class).addedToEngine(engine);
-        engine.getSystem(WeaponSystem.class).addedToEngine(engine);
-        InputSystem inputSystem = new InputSystem();
+        InputSystem inputSystem = new InputSystem(camera);
+        CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem();
+        characterSpriteSystem.addedToEngine(engine);
+        engine.addSystem(characterSpriteSystem);
         engine.addSystem(inputSystem);
         engine.getSystem(InputSystem.class).addedToEngine(engine);
+        engine.getSystem(WeaponSystem.class).addedToEngine(engine);
+		PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
+        positionSynchroSystem.addedToEngine(engine);
+        engine.addSystem(positionSynchroSystem);
+        NetworkSystem networkSystem = new NetworkSystem();
+        localCharEntity.add(new NetworkTransmissionComponent());
+        engine.addSystem(networkSystem);
+        networkSystem.addedToEngine(engine);
 	}
 }

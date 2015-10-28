@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
+import com.badlogic.ashley.core.EntitySystem;
+
 import java.util.ArrayList;
 
 import org.sausagepan.prototyp.model.*;
@@ -7,16 +9,16 @@ import org.sausagepan.prototyp.model.*;
 /**
  * Created by Georg on 26.06.2015.
  */
-public class BattleSystem {
+public class BattleSystem extends EntitySystem {
 
 
-    /* ................................................................................................ ATTRIBUTES .. */
+    /* ............................................................................ ATTRIBUTES .. */
 
-    /* .............................................................................................. CONSTRUCTORS .. */
+    /* .......................................................................... CONSTRUCTORS .. */
 
 
 
-    /* ................................................................................................... METHODS .. */
+    /* ............................................................................... METHODS .. */
 
 //    public void updateAttack(Player attacker, ArrayList<Player> characters) {
 //        for(Player c : characters) {

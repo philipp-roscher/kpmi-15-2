@@ -6,12 +6,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 
+import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.SpriteComponent;
-import org.sausagepan.prototyp.model.components.VelocityComponent;
 
 /**
  * Created by georg on 28.10.15.
@@ -25,18 +27,25 @@ public class InputSystem extends EntitySystem {
             = ComponentMapper.getFor(DynamicBodyComponent.class);
     private ComponentMapper<InputComponent> im
             = ComponentMapper.getFor(InputComponent.class);
-    private ComponentMapper<SpriteComponent> sm
-            = ComponentMapper.getFor(SpriteComponent.class);
+
+    private OrthographicCamera camera;
+
+    private float ax, ay;
+    private Vector2 directionVector;
+    private Vector2 normDirectionVector;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public InputSystem() {}
+    public InputSystem(OrthographicCamera camera) {
+        this.camera = camera;
+        this.directionVector = new Vector2();
+        this.normDirectionVector = new Vector2();
+    }
     
     /* ............................................................................... METHODS .. */
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,
-                InputComponent.class,
-                SpriteComponent.class).get());
+                InputComponent.class).get());
     }
 
     public void update(float deltaTime) {
@@ -44,7 +53,6 @@ public class InputSystem extends EntitySystem {
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
-            SpriteComponent sprite = sm.get(entity);
             if(input.moving)
                 switch(input.direction) {
                     case NORTH: body.dynamicBody.setLinearVelocity(0,10);break;
@@ -54,12 +62,51 @@ public class InputSystem extends EntitySystem {
                     default: body.dynamicBody.setLinearVelocity(0,0);break;
                 }
             else body.dynamicBody.setLinearVelocity(0,0);
-            sprite.sprite.setPosition(
-                    body.dynamicBody.getPosition().x,
-                    body.dynamicBody.getPosition().y
-            );
+
+            input.touchPosProj = camera.unproject(input.touchPosProj);
         }
     }
-    
+
+    /**
+     * Change characters velocities in x and y direction according to the touch position
+     * @param touchPos
+     */
+    public void move(Vector3 touchPos, Body body, InputComponent input) {
+
+        // calculate characters main moving direction for sprite choosing
+        if(Math.abs(touchPos.x - body.getPosition().x)
+                > Math.abs(touchPos.y - body.getPosition().y)) {
+            if(touchPos.x > body.getPosition().x) input.direction = Direction.EAST;
+            else input.direction = Direction.WEST;
+        } else {
+            if(touchPos.y > body.getPosition().y) input.direction = Direction.NORTH;
+            else input.direction = Direction.SOUTH;
+        }
+
+        // split up velocity vector in x and y component
+        ax = (-1)*(body.getPosition().x-touchPos.x);
+        ay = (-1)*(body.getPosition().y-touchPos.y);
+
+        directionVector.x = ax;
+        directionVector.y = ay;
+
+        // normalize velocity vector
+        normDirectionVector.x = (ax / Vector3.len(ax, ay, 0) * 5);
+        normDirectionVector.y = (ay / Vector3.len(ax, ay, 0) * 5);
+
+        // limit maximum velocity
+        if (directionVector.len() > 4) {
+            directionVector.x = normDirectionVector.x;
+            directionVector.y = normDirectionVector.y;
+        }
+
+        // set velocity to zero, if below the given value
+        if(directionVector.len() < 1) {
+            directionVector.x = 0;
+            directionVector.y = 0;
+            input.moving = false;
+        } else input.moving = true;
+
+    }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

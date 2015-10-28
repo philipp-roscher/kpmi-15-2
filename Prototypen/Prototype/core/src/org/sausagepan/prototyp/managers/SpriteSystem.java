@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
@@ -24,18 +25,17 @@ public class SpriteSystem extends EntitySystem {
     private ImmutableArray<Entity> entities;
     private ComponentMapper<SpriteComponent> sm
             = ComponentMapper.getFor(SpriteComponent.class);
-    private SpriteBatch batch;
     private OrthogonalTiledMapRendererWithPlayers tmr;
     /* ........................................................................... CONSTRUCTOR .. */
     public SpriteSystem(SpriteBatch batch, Maze maze) {
-        this.batch = batch;
         this.tmr = maze.getTiledMapRenderer();
     }
     /* ............................................................................... METHODS .. */
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.one(
                 SpriteComponent.class,
-                WeaponComponent.class).get());
+                WeaponComponent.class,
+                CharacterSpriteComponent.class).get());
         for(Entity e : entities) {
             if(e.getComponent(SpriteComponent.class) != null)
                 tmr.addSprite(e.getComponent(SpriteComponent.class).sprite);
@@ -43,6 +43,8 @@ public class SpriteSystem extends EntitySystem {
                 tmr.addSprite(e.getComponent(WeaponComponent.class).sprite);
                 System.out.println("Adding weapon sprite");
             }
+            if(e.getComponent(CharacterSpriteComponent.class) != null)
+                tmr.addSprite(e.getComponent(CharacterSpriteComponent.class).sprite);
         }
     }
 

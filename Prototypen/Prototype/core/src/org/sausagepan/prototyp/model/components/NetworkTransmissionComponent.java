@@ -1,23 +1,21 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+
+import org.sausagepan.prototyp.enums.Direction;
 
 /**
- * Created by georg on 22.10.15.
+ * Created by georg on 29.10.15.
  */
-public class WeaponComponent implements Component {
+public class NetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public Sprite sprite;
+    public Vector2 position = new Vector2(0,0);
+    public Direction direction = Direction.SOUTH;
+    public boolean moving = false;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public WeaponComponent(TextureRegion textureRegion) {
-        this.sprite = new Sprite(textureRegion);
-        this.sprite.setSize(1,1);
-        this.sprite.setOriginCenter();
-    }
-
+    
     /* ............................................................................... METHODS .. */
     
     /* ..................................................................... GETTERS & SETTERS .. */

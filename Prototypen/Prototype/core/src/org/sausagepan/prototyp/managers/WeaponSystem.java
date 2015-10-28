@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.PositionComponent;
 import org.sausagepan.prototyp.model.components.SkyDirectionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -23,10 +24,8 @@ public class WeaponSystem extends EntitySystem {
 
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
-    private ComponentMapper<SkyDirectionComponent> dm
-            = ComponentMapper.getFor(SkyDirectionComponent.class);
-    private ComponentMapper<PositionComponent> pm
-            = ComponentMapper.getFor(PositionComponent.class);
+    private ComponentMapper<InputComponent> im
+            = ComponentMapper.getFor(InputComponent.class);
 
     public WeaponSystem() {}
 
@@ -34,22 +33,19 @@ public class WeaponSystem extends EntitySystem {
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 WeaponComponent.class,
-                SkyDirectionComponent.class,
-                PositionComponent.class).get());
+                InputComponent.class).get());
     }
 
     public void update(float deltaTime) {
         for (Entity entity : entities) {
-            SkyDirectionComponent direction = dm.get(entity);
             WeaponComponent weapon = wm.get(entity);
-            PositionComponent position = pm.get(entity);
-            weapon.sprite.setPosition(position.x, position.y);
+            InputComponent input = im.get(entity);
             int rotation;
-            switch(direction.skyDirection) {
-                case SOUTH: rotation = 180; break;
-                case EAST:  rotation = 90; break;
-                case WEST:  rotation = 270; break;
-                default:    rotation = 0; break;
+            switch(input.direction) {
+                case SOUTH: rotation = 90; break;
+                case EAST:  rotation = 180; break;
+                case WEST:  rotation = 0; break;
+                default:    rotation = -90; break;
             }
             weapon.sprite.setRotation(rotation);
         }
