@@ -21,7 +21,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 public class InputSystem extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
-    private float elapsedTime=0;
+    private float elapsedTime = 0;
 
     private ComponentMapper<DynamicBodyComponent> pm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
@@ -52,7 +52,7 @@ public class InputSystem extends EntitySystem {
             InputComponent input = im.get(entity);
 
             if(input.moving) move(input.touchPos, body.dynamicBody, input);
-                // Keyboard Input
+                /* Keyboard Input */
 //                switch(input.direction) {
 //                    case NORTH: body.dynamicBody.setLinearVelocity(0,5);break;
 //                    case SOUTH: body.dynamicBody.setLinearVelocity(0,-5);break;

@@ -13,8 +13,10 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
+import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.VelocityComponent;
@@ -77,11 +79,11 @@ public class EntityComponentSystem {
         monsterEntity.add(new DynamicBodyComponent(world, new Vector2(10.0f, 10.0f)));
         monsterEntity.add(new VelocityComponent());
         monsterEntity.add(new SpriteComponent());
+        monsterEntity.add(new HealthComponent(20));
         TextureAtlas atlas = mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
         monsterEntity.getComponent(SpriteComponent.class).sprite.setRegion(atlas
                 .findRegion("n", 1));
         this.engine.addEntity(monsterEntity);
-
     }
 
     private void setUpEntitySystems() {
@@ -140,6 +142,8 @@ public class EntityComponentSystem {
         localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
         ));
         localCharacter.add(new LightComponent(rayHandler));
+        localCharacter.add(new HealthComponent(100));
+        localCharacter.add(new MagicComponent(80));
         localCharacter.add(new NetworkTransmissionComponent());
 
         this.engine.addEntity(localCharacter);

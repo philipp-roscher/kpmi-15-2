@@ -7,6 +7,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
+
+import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.Bullet;
 import org.sausagepan.prototyp.model.Player;
@@ -26,6 +28,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     private Array<Sprite> sprites;
     private Array<SpriteComponent> spriteComponents;
     private Array<WeaponComponent> weaponComponents;
+    private Array<EntitySprite> entitySprites;
     private int drawSpritesAfterLayer = 3;
     private MediaManager media;
     private int bulletRotation=0;
@@ -39,6 +42,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         sprites = new Array<Sprite>();
         spriteComponents = new Array<SpriteComponent>();
         weaponComponents = new Array<WeaponComponent>();
+        entitySprites = new Array<EntitySprite>();
         this.media = media;
     }
 
@@ -59,6 +63,10 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
 
     public void addSprite(Sprite newSprite) {
         sprites.add(newSprite);
+    }
+
+    public void addEntitySprite(EntitySprite entitySprite) {
+        this.entitySprites.add(entitySprite);
     }
 
     @Override
@@ -102,6 +110,11 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                         }
                         for(Sprite s : sprites)
                             s.draw(this.getBatch());
+
+                        // Draw entity sprites if visible
+                        for(EntitySprite es : entitySprites)
+                            if(es.visible)
+                                es.draw(this.batch);
                     }
                 } else
                     for(MapObject object : layer.getObjects())

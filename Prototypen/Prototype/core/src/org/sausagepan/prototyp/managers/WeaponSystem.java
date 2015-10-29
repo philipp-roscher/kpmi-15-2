@@ -42,12 +42,14 @@ public class WeaponSystem extends EntitySystem {
             InputComponent input = im.get(entity);
             int rotation;
             switch(input.direction) {
-                case SOUTH: rotation = 90; break;
+                case SOUTH: rotation = 90;  break;
                 case EAST:  rotation = 180; break;
-                case WEST:  rotation = 0; break;
+                case WEST:  rotation = 0;   break;
                 default:    rotation = -90; break;
             }
             weapon.sprite.setRotation(rotation);
+            if(!input.attacking) weapon.sprite.visible = false;
+            else                 weapon.sprite.visible = true;
         }
     }
 

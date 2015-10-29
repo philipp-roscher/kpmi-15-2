@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
+import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
@@ -19,7 +20,6 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 public class PositionSynchroSystem extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
-    private float elapsedTime=0;
 
     private ComponentMapper<DynamicBodyComponent> pm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
@@ -29,6 +29,8 @@ public class PositionSynchroSystem extends EntitySystem {
             = ComponentMapper.getFor(WeaponComponent.class);
     private ComponentMapper<LightComponent> lm
             = ComponentMapper.getFor(LightComponent.class);
+    private ComponentMapper<InputComponent> im
+            = ComponentMapper.getFor(InputComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public PositionSynchroSystem() {};
 
@@ -46,22 +48,43 @@ public class PositionSynchroSystem extends EntitySystem {
     }
 
     public void update(float deltaTime) {
-        elapsedTime += deltaTime;
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             WeaponComponent weapon = wm.get(entity);
             CharacterSpriteComponent sprite = sm.get(entity);
             LightComponent light = lm.get(entity);
+            InputComponent input = im.get(entity);
 
             sprite.sprite.setPosition(
                     body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
                     body.dynamicBody.getPosition().y - body.fixture.getShape().getRadius()
             );
 
-            weapon.sprite.setPosition(
-                    body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
-                    body.dynamicBody.getPosition().y
-            );
+            switch(input.direction) {
+                case NORTH:
+                    weapon.sprite.setPosition(
+                            body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
+                            body.dynamicBody.getPosition().y + sprite.sprite.getHeight()/2
+                    );break;
+                case WEST:
+                    weapon.sprite.setPosition(
+                            body.dynamicBody.getPosition().x - weapon.sprite.getWidth()
+                            - sprite.sprite.getWidth()/2,
+                            body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
+                    );break;
+                case EAST:
+                    weapon.sprite.setPosition(
+                            body.dynamicBody.getPosition().x + sprite.sprite.getWidth()/2,
+                            body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
+                    );break;
+                default:
+                    weapon.sprite.setPosition(
+                            body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
+                            body.dynamicBody.getPosition().y - sprite.sprite.getHeight()/2
+                            - weapon.sprite.getHeight()
+                    );break;
+            }
+            weapon.sprite.setOriginCenter();
 
             light.spriteLight.setPosition(
                     body.dynamicBody.getPosition().x,

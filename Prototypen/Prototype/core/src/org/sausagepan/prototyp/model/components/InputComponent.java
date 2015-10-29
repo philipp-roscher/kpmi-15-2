@@ -19,6 +19,7 @@ public class InputComponent implements Component, InputProcessor {
     public boolean moving;
     public Vector3 touchPos;
     private Viewport viewport;
+    public boolean attacking;
 
     public InputComponent(Viewport viewport) {
         direction = Direction.SOUTH;
@@ -34,20 +35,25 @@ public class InputComponent implements Component, InputProcessor {
             case Input.Keys.UP: direction = Direction.NORTH;break;
             case Input.Keys.LEFT: direction = Direction.WEST;break;
             case Input.Keys.RIGHT: direction = Direction.EAST;break;
-            default: direction = Direction.SOUTH;break;
+            case Input.Keys.DOWN: direction = Direction.SOUTH;break;
+            case Input.Keys.A: attacking = true;break;
+            default:break;
         }
-        moving = true;
+        if(keycode != Input.Keys.A) moving = true;
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if(Gdx.input.isKeyPressed(Input.Keys.UP) ||
-                Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
-                Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
-                Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            return false;
-        else moving = false;
+        if(keycode == Input.Keys.A) attacking = false;
+
+        /* Keyboard Input */
+//        if(Gdx.input.isKeyPressed(Input.Keys.UP) ||
+//                Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
+//                Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+//                Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+//            return false;
+//        else moving = false;
         return true;
     }
 
