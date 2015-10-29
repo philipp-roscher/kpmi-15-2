@@ -20,6 +20,7 @@ import org.sausagepan.prototyp.network.NetworkPosition;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
+@Deprecated
 /**
  * Created by georg on 16.10.15.
  *

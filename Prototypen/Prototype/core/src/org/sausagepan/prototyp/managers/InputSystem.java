@@ -28,15 +28,12 @@ public class InputSystem extends EntitySystem {
     private ComponentMapper<InputComponent> im
             = ComponentMapper.getFor(InputComponent.class);
 
-    private OrthographicCamera camera;
-
     private float ax, ay;
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public InputSystem(OrthographicCamera camera) {
-        this.camera = camera;
+    public InputSystem() {
         this.directionVector = new Vector2();
         this.normDirectionVector = new Vector2();
     }
@@ -53,17 +50,17 @@ public class InputSystem extends EntitySystem {
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
-            if(input.moving)
-                switch(input.direction) {
-                    case NORTH: body.dynamicBody.setLinearVelocity(0,10);break;
-                    case SOUTH: body.dynamicBody.setLinearVelocity(0,-10);break;
-                    case EAST: body.dynamicBody.setLinearVelocity(10,0);break;
-                    case WEST: body.dynamicBody.setLinearVelocity(-10,0);break;
-                    default: body.dynamicBody.setLinearVelocity(0,0);break;
-                }
-            else body.dynamicBody.setLinearVelocity(0,0);
 
-            input.touchPosProj = camera.unproject(input.touchPosProj);
+            if(input.moving) move(input.touchPos, body.dynamicBody, input);
+                // Keyboard Input
+//                switch(input.direction) {
+//                    case NORTH: body.dynamicBody.setLinearVelocity(0,5);break;
+//                    case SOUTH: body.dynamicBody.setLinearVelocity(0,-5);break;
+//                    case EAST: body.dynamicBody.setLinearVelocity(5,0);break;
+//                    case WEST: body.dynamicBody.setLinearVelocity(-5,0);break;
+//                    default: body.dynamicBody.setLinearVelocity(0,0);break;
+//                }
+            else body.dynamicBody.setLinearVelocity(0,0);
         }
     }
 
@@ -106,6 +103,8 @@ public class InputSystem extends EntitySystem {
             directionVector.y = 0;
             input.moving = false;
         } else input.moving = true;
+
+        body.setLinearVelocity(directionVector);
 
     }
     /* ..................................................................... GETTERS & SETTERS .. */

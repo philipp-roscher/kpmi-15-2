@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.model.PlayerAttributeContainer;
 
 import java.util.Iterator;
 
+@Deprecated
 /**
  * Created by georg on 16.10.15.
  *

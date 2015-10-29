@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.model;
 
 import org.sausagepan.prototyp.enums.PlayerAction;
 
+@Deprecated
 /**
  * Created by georg on 18.10.15.
  *

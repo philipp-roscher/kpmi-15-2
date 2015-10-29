@@ -55,7 +55,7 @@ public class PositionSynchroSystem extends EntitySystem {
 
             sprite.sprite.setPosition(
                     body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
-                    body.dynamicBody.getPosition().y
+                    body.dynamicBody.getPosition().y - body.fixture.getShape().getRadius()
             );
 
             weapon.sprite.setPosition(

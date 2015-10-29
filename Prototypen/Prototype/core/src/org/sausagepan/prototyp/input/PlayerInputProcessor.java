@@ -13,6 +13,7 @@ import org.sausagepan.prototyp.model.PlayerAttributeContainer;
 import org.sausagepan.prototyp.model.components.PlayerComponent;
 import org.sausagepan.prototyp.view.InMaze;
 
+@Deprecated
 /**
  * Created by Georg on 06.07.2015.
  */

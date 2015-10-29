@@ -4,12 +4,11 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import org.sausagepan.prototyp.enums.Direction;
 
-import javafx.scene.input.KeyCode;
 
 /**
  * Created by georg on 28.10.15.
@@ -18,13 +17,15 @@ public class InputComponent implements Component, InputProcessor {
 
     public Direction direction;
     public boolean moving;
-    public Vector3 touchPosProj;
+    public Vector3 touchPos;
+    private Viewport viewport;
 
-    public InputComponent() {
+    public InputComponent(Viewport viewport) {
         direction = Direction.SOUTH;
         moving = false;
         Gdx.input.setInputProcessor(this);
-        this.touchPosProj = new Vector3(0,0,0);
+        this.touchPos = new Vector3(0,0,0);
+        this.viewport = viewport;
     }
 
     @Override
@@ -41,7 +42,12 @@ public class InputComponent implements Component, InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        moving = false;
+        if(Gdx.input.isKeyPressed(Input.Keys.UP) ||
+                Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
+                Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+                Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            return false;
+        else moving = false;
         return true;
     }
 
@@ -52,8 +58,10 @@ public class InputComponent implements Component, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        this.touchPosProj.x = screenX;
-        this.touchPosProj.y = screenY;
+        this.touchPos.x = screenX;
+        this.touchPos.y = screenY;
+        this.viewport.unproject(touchPos);
+        this.moving = true;
         return true;
     }
 
@@ -65,8 +73,10 @@ public class InputComponent implements Component, InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        this.touchPosProj.x = screenX;
-        this.touchPosProj.y = screenY;
+        this.touchPos.x = screenX;
+        this.touchPos.y = screenY;
+        this.viewport.unproject(touchPos);
+        this.moving = true;
         return true;
     }
 

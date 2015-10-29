@@ -8,6 +8,7 @@ import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.ContainerMessage;
 import org.sausagepan.prototyp.model.PlayerAttributeContainer;
 
+@Deprecated
 /**
  * Created by georg on 16.10.15.
  */

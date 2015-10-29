@@ -26,6 +26,7 @@ import org.sausagepan.prototyp.model.components.SkyDirectionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.network.NetworkPosition;
 
+@Deprecated
 public class Player extends Entity {
 
 	/* ............................................................................ ATTRIBUTES .. */

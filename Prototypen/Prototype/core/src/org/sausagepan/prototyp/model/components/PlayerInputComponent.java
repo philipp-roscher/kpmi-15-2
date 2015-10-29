@@ -10,6 +10,7 @@ import org.sausagepan.prototyp.model.ContainerMessage;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerAttributeContainer;
 
+@Deprecated
 /**
  * Created by Georg on 06.07.2015.
  */

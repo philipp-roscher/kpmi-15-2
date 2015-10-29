@@ -6,6 +6,7 @@ import org.sausagepan.prototyp.model.PlayerAttributeContainer;
 
 import java.util.Observer;
 
+@Deprecated
 /**
  * Created by Georg on 14.07.2015.
  */

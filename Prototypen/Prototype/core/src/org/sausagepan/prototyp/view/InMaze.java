@@ -440,19 +440,29 @@ public class InMaze implements Screen, PlayerObserver {
 		setUpLocalCharacterEntity(engine);
     }
 
+	/**
+	 * Sets up the entity for the local players character, adding components and setting up
+	 * according entity system.
+	 * @param engine	Engine for Entity Component System
+	 */
 	private void setUpLocalCharacterEntity(Engine engine) {
+		// Create Entity
 		this.localCharEntity = new CharacterEntity();
+
+		// Add Components
         localCharEntity.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f)));
         TextureAtlas atlas = game.mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
         localCharEntity.add(new CharacterSpriteComponent(atlas));
         this.engine.addEntity(localCharEntity);
-        localCharEntity.add(new InputComponent());
+        localCharEntity.add(new InputComponent(viewport));
         localCharEntity.add(new WeaponComponent(
                 game.mediaManager.getTextureAtlasType("weapons").findRegion("sword")));
 		localCharEntity.add(new LightComponent(rayHandler));
+
+        // Setting up Systems
         engine.getSystem(MovementSystem.class).addedToEngine(engine);
         engine.getSystem(SpriteSystem.class).addedToEngine(engine);
-        InputSystem inputSystem = new InputSystem(camera);
+        InputSystem inputSystem = new InputSystem();
         CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem();
         characterSpriteSystem.addedToEngine(engine);
         engine.addSystem(characterSpriteSystem);
