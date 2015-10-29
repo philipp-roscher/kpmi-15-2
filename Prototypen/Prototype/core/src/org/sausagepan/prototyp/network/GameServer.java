@@ -10,8 +10,10 @@ import java.util.concurrent.TimeUnit;
 import com.badlogic.gdx.math.MathUtils;
 
 import org.sausagepan.prototyp.managers.ServerBattleSystem;
+import org.sausagepan.prototyp.managers.ServerCharacterSystem;
 import org.sausagepan.prototyp.managers.ServerPlayerManager;
 import org.sausagepan.prototyp.model.ServerPlayer;
+import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
@@ -47,6 +49,7 @@ public class GameServer {
 	public static MapInformation map;
 	
 	private static ServerPlayerManager playerMan = new ServerPlayerManager();
+	private static ServerCharacterSystem serverCharacterSystem = new ServerCharacterSystem();
 	private ServerBattleSystem bs;
 	
 	public static void main (String[] args) {
@@ -92,6 +95,8 @@ public class GameServer {
                                 hero.status,
                                 hero.weapon,
                                 false));
+                        serverCharacterSystem.addCharacter(request.playerId, new
+                                ServerCharacterEntity(request.playerId));
 		        		NewHeroResponse response = new NewHeroResponse(request.playerId, request.hero);
 		        		server.sendToAllUDP(response);
 		        		updateLastAccess(request.playerId);

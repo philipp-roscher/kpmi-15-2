@@ -6,7 +6,9 @@ import java.util.HashMap;
 import org.sausagepan.prototyp.model.ServerPlayer;
 import org.sausagepan.prototyp.network.NetworkPosition;
 
+@Deprecated
 /**
+ * @deprecated Use {@link ServerCharacterSystem} instead
  * Created by Georg on 26.06.2015.
  */
 public class ServerPlayerManager {
@@ -44,7 +46,7 @@ public class ServerPlayerManager {
 	public void removeCharacter(int playerId) {
 		this.players.remove(playerId);
 	}
-	
+
     /**
      * modifies position of currently existing player
      * @param id

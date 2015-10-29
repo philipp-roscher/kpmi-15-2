@@ -17,6 +17,7 @@ import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.CharacterSpriteSystem;
+import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.managers.NetworkSystem;
 import org.sausagepan.prototyp.managers.PositionSynchroSystem;
 import org.sausagepan.prototyp.managers.InputSystem;
@@ -78,13 +79,10 @@ public class InMaze implements Screen, PlayerObserver {
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
 
-	// Entity-Component-System
-    private Engine engine;
-    private Family monsterFamily;
-
     // Managers
 	public  PlayerManager playerMan;        // manages players
 	public  BattleSystem  battleSys;        // manages battle
+	public EntityComponentSystem ECS;		// entity component system
 
 	// Media
 	private Music   bgMusic;
@@ -95,7 +93,6 @@ public class InMaze implements Screen, PlayerObserver {
 
     // Containers
 	private Player localPlayer;
-	private CharacterEntity localCharEntity;
 	private PositionUpdate posUpdate;
 	private KeepAliveRequest keepAliveRequest;
 	private Array<Object> networkMessages;
@@ -172,7 +169,7 @@ public class InMaze implements Screen, PlayerObserver {
 			maze.addPlayer(p);
 
         // Entity-Component-System ........................................................... START
-        setupEntityComponentSystem();
+        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze);
         // Entity-Component-System ............................................................. END
 
 		// Set Up Client for Communication .........................................................
@@ -183,22 +180,23 @@ public class InMaze implements Screen, PlayerObserver {
 		this.keepAliveRequest = new KeepAliveRequest(game.clientId);
 
 		game.client.addListener(new Listener() {
-			public void received (Connection connection, Object object) {				
+			public void received(Connection connection, Object object) {
 				if ((object instanceof NewHeroResponse) ||
-					(object instanceof DeleteHeroResponse) ||
-					(object instanceof DeleteHeroResponse) ||
-					(object instanceof GameStateResponse) ||
-					(object instanceof AttackResponse) ||
-					(object instanceof HPUpdate)) {
+						(object instanceof DeleteHeroResponse) ||
+						(object instanceof DeleteHeroResponse) ||
+						(object instanceof GameStateResponse) ||
+						(object instanceof AttackResponse) ||
+						(object instanceof HPUpdate)) {
 					// System.out.println( object.getClass() +" empfangen");
 					networkMessages.add(object);
 				}
 			}
-			public void disconnected (Connection connection) {
-                game.connected = false;
-                Gdx.app.log("KPMIPrototype", "disconnected from server.");
+
+			public void disconnected(Connection connection) {
+				game.connected = false;
+				Gdx.app.log("KPMIPrototype", "disconnected from server.");
 //                Gdx.app.exit();
-            }
+			}
 		});
 	}
 
@@ -208,7 +206,7 @@ public class InMaze implements Screen, PlayerObserver {
 	public void show() {
 		this.batch = new SpriteBatch();
 //        Gdx.input.setInputProcessor(new PlayerInputProcessor(localPlayer, this.camera));
-        Gdx.input.setInputProcessor(localCharEntity.getComponent(InputComponent.class));
+        Gdx.input.setInputProcessor(ECS.getLocalCharacterEntity().getComponent(InputComponent.class));
 	}
 
 	@Override
@@ -235,10 +233,11 @@ public class InMaze implements Screen, PlayerObserver {
         processNetworkMessages();
         
         // project to camera
-//		camera.position.set(localPlayer.getPosition().x, localPlayer.getPosition().y, 0);
         camera.position.set(
-                localCharEntity.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().x,
-                localCharEntity.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y,
+                ECS.getLocalCharacterEntity()
+                        .getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().x,
+                ECS.getLocalCharacterEntity()
+                        .getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y,
                 0
         );
         camera.update();
@@ -252,8 +251,6 @@ public class InMaze implements Screen, PlayerObserver {
 		elapsedTimeSec = (int) elapsedTime;
 
         // Update Player
-        localPlayer.update(elapsedTime);
-//        localPlayer.updateNetworkPosition();
         posUpdate.position = localPlayer.getPos();
         game.client.sendUDP(posUpdate);
 
@@ -271,14 +268,8 @@ public class InMaze implements Screen, PlayerObserver {
         rayHandler.setCombinedMatrix(camera.combined);
         rayHandler.updateAndRender();
 
-		// Status
-		for(Player c : playerMan.getPlayers()) {
-//			c.debugRenderer(shpRend);
-			c.draw(shpRend);
-		}
         // ............................................................................... RENDERING
-
-        engine.update(delta);
+        ECS.update(delta);
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
 	}
 
@@ -398,83 +389,5 @@ public class InMaze implements Screen, PlayerObserver {
                 break;
             default: break;
         }
-	}
-
-    /**
-     * Initializes the Entity-Component-System
-     */
-    private void setupEntityComponentSystem() {
-        // Creating Engine
-        this.engine = new Engine();
-
-        // Creating Entity Family
-        this.monsterFamily = Family.all(
-                DynamicBodyComponent.class,
-                VelocityComponent.class,
-                SpriteComponent.class).get();
-
-        // Creating Monster
-        Entity monsterEntity = new Entity();
-        monsterEntity.add(new DynamicBodyComponent(world, new Vector2(10.0f, 10.0f)));
-        monsterEntity.add(new VelocityComponent());
-        monsterEntity.add(new SpriteComponent());
-        TextureAtlas atlas = game.mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
-        monsterEntity.getComponent(SpriteComponent.class).sprite.setRegion(atlas
-                .findRegion("n", 1));
-        this.engine.addEntity(monsterEntity);
-
-        this.engine.addEntity(localPlayer);
-        System.out.println(localPlayer.getComponent(WeaponComponent.class).sprite.getBoundingRectangle());
-
-        // Creating Component Systems
-        MovementSystem movementSystem = new MovementSystem();
-        movementSystem.addedToEngine(engine);
-        SpriteSystem spriteSystem = new SpriteSystem(game.batch, maze);
-        spriteSystem.addedToEngine(engine);
-        WeaponSystem weaponSystem = new WeaponSystem();
-        weaponSystem.addedToEngine(engine);
-        this.engine.addSystem(movementSystem);
-        this.engine.addSystem(spriteSystem);
-        this.engine.addSystem(weaponSystem);
-
-		setUpLocalCharacterEntity(engine);
-    }
-
-	/**
-	 * Sets up the entity for the local players character, adding components and setting up
-	 * according entity system.
-	 * @param engine	Engine for Entity Component System
-	 */
-	private void setUpLocalCharacterEntity(Engine engine) {
-		// Create Entity
-		this.localCharEntity = new CharacterEntity();
-
-		// Add Components
-        localCharEntity.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f)));
-        TextureAtlas atlas = game.mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
-        localCharEntity.add(new CharacterSpriteComponent(atlas));
-        this.engine.addEntity(localCharEntity);
-        localCharEntity.add(new InputComponent(viewport));
-        localCharEntity.add(new WeaponComponent(
-                game.mediaManager.getTextureAtlasType("weapons").findRegion("sword")));
-		localCharEntity.add(new LightComponent(rayHandler));
-
-        // Setting up Systems
-        engine.getSystem(MovementSystem.class).addedToEngine(engine);
-        engine.getSystem(SpriteSystem.class).addedToEngine(engine);
-        InputSystem inputSystem = new InputSystem();
-        CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem();
-        characterSpriteSystem.addedToEngine(engine);
-        engine.addSystem(characterSpriteSystem);
-        engine.addSystem(inputSystem);
-        engine.getSystem(InputSystem.class).addedToEngine(engine);
-        engine.getSystem(WeaponSystem.class).addedToEngine(engine);
-		PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
-        positionSynchroSystem.addedToEngine(engine);
-        engine.addSystem(positionSynchroSystem);
-        NetworkSystem networkSystem = new NetworkSystem();
-        localCharEntity.add(new NetworkTransmissionComponent());
-        engine.addSystem(networkSystem);
-        networkSystem.addedToEngine(engine);
 	}
 }
