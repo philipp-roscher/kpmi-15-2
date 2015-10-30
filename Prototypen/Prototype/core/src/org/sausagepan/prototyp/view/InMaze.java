@@ -4,10 +4,6 @@ import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -16,27 +12,13 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.managers.BattleSystem;
-import org.sausagepan.prototyp.managers.CharacterSpriteSystem;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
-import org.sausagepan.prototyp.managers.NetworkSystem;
-import org.sausagepan.prototyp.managers.PositionSynchroSystem;
-import org.sausagepan.prototyp.managers.InputSystem;
-import org.sausagepan.prototyp.managers.MovementSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
-import org.sausagepan.prototyp.managers.WeaponSystem;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.LightComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.SpriteComponent;
-import org.sausagepan.prototyp.managers.SpriteSystem;
-import org.sausagepan.prototyp.model.components.VelocityComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
@@ -126,7 +108,7 @@ public class InMaze implements Screen, PlayerObserver {
 
         // Rendering ...............................................................................
 		camera   = new OrthographicCamera();    // set up the camera and viewport
-		int zoom = 1;                           // zooms out of map
+		int zoom = 2;                           // zooms out of map
 		viewport = new FitViewport(
                 UnitConverter.pixelsToMeters(800*zoom),
                 UnitConverter.pixelsToMeters(480*zoom), camera);

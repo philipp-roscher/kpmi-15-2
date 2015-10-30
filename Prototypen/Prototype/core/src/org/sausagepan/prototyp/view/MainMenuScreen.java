@@ -26,8 +26,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import org.sausagepan.prototyp.enums.DAMAGETYPE;
-import org.sausagepan.prototyp.enums.WEAPONTYPE;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.model.*;

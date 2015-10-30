@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.model;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -20,7 +22,7 @@ import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 /**
  * Created by georg on 18.10.15.
  */
-public class Maze {
+public class Maze extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     //Tiled Map for map creation and collision detection
     private Network.MapInformation mapInformation;
@@ -66,17 +68,8 @@ public class Maze {
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */
-
-    public TiledMap getTiledMap() {
-        return tiledMap;
-    }
-
     public void addPlayer(Player player) {
         this.tiledMapRenderer.addPlayer(player);
-    }
-
-    public void addSpriteComponent(SpriteComponent spriteComponent) {
-        this.tiledMapRenderer.addSpriteComponent(spriteComponent);
     }
     public void removePlayer(Player player) {
         this.tiledMapRenderer.removePlayer(player);

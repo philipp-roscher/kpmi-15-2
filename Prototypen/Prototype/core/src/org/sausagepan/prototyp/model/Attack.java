@@ -1,7 +1,7 @@
 package org.sausagepan.prototyp.model;
 
 import com.badlogic.gdx.math.Rectangle;
-import org.sausagepan.prototyp.enums.DAMAGETYPE;
+import org.sausagepan.prototyp.enums.Damagetype;
 
 /**
  * Created by Georg on 06.07.2015.
@@ -12,7 +12,7 @@ public class Attack {
 
     /* ................................................................................................ ATTRIBUTES .. */
 
-    private DAMAGETYPE type;
+    private Damagetype type;
     private int intensity;
     private Rectangle  damageArea;
 
@@ -20,7 +20,7 @@ public class Attack {
 
     /* .............................................................................................. CONSTRUCTORS .. */
 
-    public Attack(DAMAGETYPE type, int intensity, Rectangle damageArea) {
+    public Attack(Damagetype type, int intensity, Rectangle damageArea) {
         this.type = type;
         this.intensity = intensity;
         this.damageArea = damageArea;
@@ -30,7 +30,7 @@ public class Attack {
     
     /* ......................................................................................... GETTERS & SETTERS .. */
 
-    public DAMAGETYPE getType() {
+    public Damagetype getType() {
         return type;
     }
 

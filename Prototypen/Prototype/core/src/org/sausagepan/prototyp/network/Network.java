@@ -2,9 +2,9 @@ package org.sausagepan.prototyp.network;
 
 import java.util.HashMap;
 
-import org.sausagepan.prototyp.enums.DAMAGETYPE;
+import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Direction;
-import org.sausagepan.prototyp.enums.WEAPONTYPE;
+import org.sausagepan.prototyp.enums.Weapontype;
 import org.sausagepan.prototyp.model.Status;
 import org.sausagepan.prototyp.model.Weapon;
 
@@ -42,8 +42,8 @@ public class Network {
         kryo.register(HeroInformation.class);
         kryo.register(Status.class);
         kryo.register(Weapon.class);
-        kryo.register(DAMAGETYPE.class);
-        kryo.register(WEAPONTYPE.class);
+        kryo.register(Damagetype.class);
+        kryo.register(Weapontype.class);
 		kryo.register(Rectangle.class);
 		kryo.register(Vector2.class);
 		kryo.register(Vector3.class);

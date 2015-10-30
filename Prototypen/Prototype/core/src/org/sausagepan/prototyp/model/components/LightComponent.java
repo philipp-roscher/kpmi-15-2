@@ -16,6 +16,20 @@ public class LightComponent implements Component {
     public LightComponent(RayHandler rayHandler) {
         spriteLight = new PointLight(rayHandler, 256, new Color(1,1,1,1), 8, 0, 0);
     }
+
+    /**
+     *
+     * @param rayHandler
+     * @param x
+     * @param y
+     * @param color
+     * @param rays  number of rays for light calculation, less is faster
+     * @param dist
+     */
+    public LightComponent(
+            RayHandler rayHandler, float x, float y, Color color, int rays, float dist) {
+        spriteLight = new PointLight(rayHandler, rays, color, dist, x, y);
+    }
     /* ............................................................................... METHODS .. */
     
     /* ..................................................................... GETTERS & SETTERS .. */

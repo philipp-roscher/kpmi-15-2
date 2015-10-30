@@ -19,6 +19,8 @@ import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
+ * Takes all {@link Entity}s capable of joining the battle and process their actions against each
+ * other.
  * Created by Georg on 26.06.2015.
  */
 public class BattleSystem extends EntitySystem {

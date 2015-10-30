@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.managers;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -70,6 +71,7 @@ public class EntityComponentSystem {
         setUpEntities();
         setUpLocalCharacterEntity();
         setUpEntitySystems();
+        setUpMazeLights();
     }
 
     /* ............................................................................... METHODS .. */
@@ -147,6 +149,18 @@ public class EntityComponentSystem {
         localCharacter.add(new NetworkTransmissionComponent());
 
         this.engine.addEntity(localCharacter);
+    }
+
+    public void setUpMazeLights() {
+        // Get Objects from Maps Light Layer and add light entities there
+        // TODO
+        Entity torch = new Entity().add(
+                new LightComponent(rayHandler,48,48,new Color(1,.8f,.8f, 1),50,8));
+        engine.addEntity(torch);
+
+        LightSystem lightSystem = new LightSystem(rayHandler);
+        lightSystem.addedToEngine(engine);
+        engine.addSystem(lightSystem);
     }
 
     public void update(float delta) {

@@ -12,6 +12,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 
 /**
+ * Turns and refreshes characters sprite.
  * Created by georg on 28.10.15.
  */
 public class CharacterSpriteSystem extends EntitySystem {

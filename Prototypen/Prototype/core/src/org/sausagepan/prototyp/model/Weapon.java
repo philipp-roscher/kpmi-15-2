@@ -3,9 +3,8 @@ package org.sausagepan.prototyp.model;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import org.sausagepan.prototyp.Utils.UnitConverter;
-import org.sausagepan.prototyp.enums.DAMAGETYPE;
-import org.sausagepan.prototyp.enums.WEAPONTYPE;
-import org.sausagepan.prototyp.model.components.PlayerComponent;
+import org.sausagepan.prototyp.enums.Damagetype;
+import org.sausagepan.prototyp.enums.Weapontype;
 
 /**
  * Created by Georg on 26.06.2015.
@@ -17,8 +16,8 @@ public class Weapon {
     private String name;
 
     private int        damage;
-    private WEAPONTYPE type;
-    private DAMAGETYPE damageType;
+    private Weapontype type;
+    private Damagetype damageType;
     private float      range;
     private float      angle;
     private Vector2    direction = new Vector2(0,0);
@@ -36,7 +35,7 @@ public class Weapon {
      * @param range         weapons range in which others can get hit
      * @param angle         the weapons angle in the aiming direction
      */
-    public Weapon(String name, int damage, WEAPONTYPE type, DAMAGETYPE damageType, float range, float angle) {
+    public Weapon(String name, int damage, Weapontype type, Damagetype damageType, float range, float angle) {
         this.name = name;
         this.damage = damage;
         this.type = type;
@@ -50,8 +49,8 @@ public class Weapon {
     	this(
                 "standard_sword",
                 3,
-                WEAPONTYPE.SWORD,
-                DAMAGETYPE.PHYSICAL,
+                Weapontype.SWORD,
+                Damagetype.PHYSICAL,
                 UnitConverter.pixelsToMeters(20),
                 180);
     }
@@ -72,11 +71,11 @@ public class Weapon {
         return damage;
     }
 
-    public WEAPONTYPE getType() {
+    public Weapontype getType() {
         return type;
     }
 
-    public DAMAGETYPE getDamageType() {
+    public Damagetype getDamageType() {
         return damageType;
     }
 
