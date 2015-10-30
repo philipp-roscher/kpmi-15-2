@@ -78,13 +78,11 @@ public class EntityComponentSystem {
     private void setUpEntities() {
         // Monsters
         Entity monsterEntity = new Entity();
-        monsterEntity.add(new DynamicBodyComponent(world, new Vector2(10.0f, 10.0f)));
-        monsterEntity.add(new VelocityComponent());
-        monsterEntity.add(new SpriteComponent());
+        monsterEntity.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.4f)));
         monsterEntity.add(new HealthComponent(20));
-        TextureAtlas atlas = mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack");
-        monsterEntity.getComponent(SpriteComponent.class).sprite.setRegion(atlas
-                .findRegion("n", 1));
+        monsterEntity.add(new CharacterSpriteComponent(
+                mediaManager.getTextureAtlas("textures/spritesheets/zombie_01.pack")
+        ));
         this.engine.addEntity(monsterEntity);
     }
 

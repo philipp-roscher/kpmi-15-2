@@ -108,7 +108,7 @@ public class InMaze implements Screen, PlayerObserver {
 
         // Rendering ...............................................................................
 		camera   = new OrthographicCamera();    // set up the camera and viewport
-		int zoom = 2;                           // zooms out of map
+		int zoom = 1;                           // zooms out of map
 		viewport = new FitViewport(
                 UnitConverter.pixelsToMeters(800*zoom),
                 UnitConverter.pixelsToMeters(480*zoom), camera);

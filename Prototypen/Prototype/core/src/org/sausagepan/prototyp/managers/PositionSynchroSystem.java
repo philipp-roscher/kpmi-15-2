@@ -7,12 +7,12 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
-import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 
 /**
  * Created by georg on 28.10.15.
@@ -41,57 +41,63 @@ public class PositionSynchroSystem extends EntitySystem {
      */
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
-                DynamicBodyComponent.class,
-                InputComponent.class,
+                DynamicBodyComponent.class).one(
+                LightComponent.class,
                 CharacterSpriteComponent.class,
-                LightComponent.class).get());
+                WeaponComponent.class,
+                InputComponent.class
+        ).get());
     }
 
     public void update(float deltaTime) {
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
-            WeaponComponent weapon = wm.get(entity);
-            CharacterSpriteComponent sprite = sm.get(entity);
-            LightComponent light = lm.get(entity);
-            InputComponent input = im.get(entity);
 
-            sprite.sprite.setPosition(
-                    body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
-                    body.dynamicBody.getPosition().y - body.fixture.getShape().getRadius()
-            );
-
-            switch(input.direction) {
-                case NORTH:
-                    weapon.sprite.setPosition(
-                            body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
-                            body.dynamicBody.getPosition().y + sprite.sprite.getHeight()/2
-                    );break;
-                case WEST:
-                    weapon.sprite.setPosition(
-                            body.dynamicBody.getPosition().x - weapon.sprite.getWidth()
-                            - sprite.sprite.getWidth()/2,
-                            body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
-                    );break;
-                case EAST:
-                    weapon.sprite.setPosition(
-                            body.dynamicBody.getPosition().x + sprite.sprite.getWidth()/2,
-                            body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
-                    );break;
-                default:
-                    weapon.sprite.setPosition(
-                            body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
-                            body.dynamicBody.getPosition().y - sprite.sprite.getHeight()/2
-                            - weapon.sprite.getHeight()
-                    );break;
+            if(entity.getComponent(CharacterSpriteComponent.class) != null) {
+                CharacterSpriteComponent sprite = sm.get(entity);
+                sprite.sprite.setPosition(
+                        body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
+                        body.dynamicBody.getPosition().y - body.fixture.getShape().getRadius()
+                );
             }
-            weapon.sprite.setOriginCenter();
+            if(entity.getComponent(WeaponComponent.class) != null &&
+                    entity.getComponent(InputComponent.class) != null) {
+                WeaponComponent weapon = wm.get(entity);
+                InputComponent input = im.get(entity);
 
-            light.spriteLight.setPosition(
-                    body.dynamicBody.getPosition().x,
-                    body.dynamicBody.getPosition().y
-            );
+                switch(input.direction) {
+                    case NORTH:
+                        weapon.sprite.setPosition(
+                                body.dynamicBody.getPosition().x - weapon.sprite.getWidth()/2,
+                                body.dynamicBody.getPosition().y + .5f
+                        );break;
+                    case WEST:
+                        weapon.sprite.setPosition(
+                                body.dynamicBody.getPosition().x - weapon.sprite.getWidth() - .5f,
+                                body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
+                        );break;
+                    case EAST:
+                        weapon.sprite.setPosition(
+                                body.dynamicBody.getPosition().x + .5f,
+                                body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
+                        );break;
+                    default:
+                        weapon.sprite.setPosition(
+                                body.dynamicBody.getPosition().x - weapon.sprite.getWidth()/2,
+                                body.dynamicBody.getPosition().y - .5f
+                                        - weapon.sprite.getHeight()
+                        );break;
+                }
+                weapon.sprite.setOriginCenter();
+            }
+            if(entity.getComponent(LightComponent.class) != null) {
+                LightComponent light = lm.get(entity);
 
-
+                light.spriteLight.setPosition(
+                        body.dynamicBody.getPosition().x,
+                        body.dynamicBody.getPosition().y
+                );
+            }
         }
     }
     

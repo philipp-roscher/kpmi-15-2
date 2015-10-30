@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.MathUtils;
 
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -22,36 +23,46 @@ public class CharacterSpriteSystem extends EntitySystem {
 
     private ComponentMapper<CharacterSpriteComponent> cm
             = ComponentMapper.getFor(CharacterSpriteComponent.class);
-    private ComponentMapper<InputComponent> im
-            = ComponentMapper.getFor(InputComponent.class);
+    private ComponentMapper<DynamicBodyComponent> dm
+            = ComponentMapper.getFor(DynamicBodyComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public CharacterSpriteSystem() {};
     /* ............................................................................... METHODS .. */
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 CharacterSpriteComponent.class,
-                InputComponent.class).get());
+                DynamicBodyComponent.class).get());
     }
 
     public void update(float deltaTime) {
         elapsedTime += deltaTime;
         for (Entity entity : entities) {
-            CharacterSpriteComponent characterSprite = cm.get(entity);
-            InputComponent input = im.get(entity);
+            CharacterSpriteComponent sprite = cm.get(entity);
+            DynamicBodyComponent body = dm.get(entity);
 
-            switch(input.direction) {
-                case NORTH: characterSprite.recentAnim = characterSprite.playerAnims.get("n");break;
-                case SOUTH: characterSprite.recentAnim = characterSprite.playerAnims.get("s");break;
-                case WEST:  characterSprite.recentAnim = characterSprite.playerAnims.get("w");break;
-                case EAST:  characterSprite.recentAnim = characterSprite.playerAnims.get("e");break;
+            if(Math.abs(body.dynamicBody.getLinearVelocity().x)
+             > Math.abs(body.dynamicBody.getLinearVelocity().y)) {
+                // Character horizontally
+                if(body.dynamicBody.getLinearVelocity().x > 0)
+                    sprite.recentAnim = sprite.playerAnims.get("e");
+                else
+                    sprite.recentAnim = sprite.playerAnims.get("w");
+            } else {
+                // Character vertically
+                if(body.dynamicBody.getLinearVelocity().y > 0)
+                    sprite.recentAnim = sprite.playerAnims.get("n");
+                else
+                    sprite.recentAnim = sprite.playerAnims.get("s");
             }
-            characterSprite.recentIdleImg = characterSprite.recentAnim.getKeyFrames()[0];
 
-            // set sprite image
-            if(input.moving) characterSprite.sprite.setRegion(
-                        characterSprite.recentAnim.getKeyFrame(elapsedTime, true));
-            else characterSprite.sprite.setRegion(
-                    characterSprite.recentIdleImg);
+            sprite.recentIdleImg = sprite.recentAnim.getKeyFrames()[0];
+
+            if(Math.abs(body.dynamicBody.getLinearVelocity().x) < 0.1 &&
+               Math.abs(body.dynamicBody.getLinearVelocity().y) < 0.1)
+                sprite.sprite.setRegion(sprite.recentIdleImg);
+            else
+                sprite.sprite.setRegion(sprite.recentAnim.getKeyFrame(elapsedTime, true));
+
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */
