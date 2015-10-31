@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+  <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
+ </tileset>
+ <layer name="ground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztl8EKgCAMhn+h9Ji+/2vVwUMnXySNRlIRNEEDd/hxoNsn08N+qwDLkIvSUeaIHbMOV4nnAQSU8+dYY2VoiLmj4uUuOPke5f34qiD8faV3rM2nf1Ob+0fpBkyTxT3/f+ELX/jCF77wW/DTDNSKT/NXz/0XPjCpu6/Lz9D9aGanffK/T/XffOFw4XNF/rekxgYoSo9C
+  </data>
+ </layer>
+ <layer name="walls" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt0ksOgCAMRdG3bb/bQNTFWiPGThpmdnJP0oR+SAcgSbPFYjG589jJV32G1o9mo/prtzgsqjtvnfx090vrR7NRHc97ZLn/TU3cXxJ3AwAAAMDfLshGIH0=
+  </data>
+ </layer>
+ <layer name="objects" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
+  </data>
+ </layer>
+ <layer name="tops" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1lsKgCAQQNFaSRZiDwi3UptuXU1/8yEGRV3BGbg/ER4UesSGmyCtoO8L8BfQH0DbpozpQdtJEfSD+ajvYZ/ef+0+/f2l929+3T79/jPf/C/9o033l3831/O/S6M0SbMqdU2n/5td5r7cupvUPUyfm3+xzgm9jRXN
+  </data>
+ </layer>
+</map>

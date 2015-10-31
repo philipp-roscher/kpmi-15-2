@@ -35,6 +35,7 @@ public class MazeGenerator {
     MapLayer          lights;
 
     Array<Vector2> lightPositions;
+    Array<Vector2> monsterPositions;
 
 	int[][] positions;
 
@@ -57,6 +58,7 @@ public class MazeGenerator {
         this.lights        = new MapLayer();
 
         this.lightPositions = new Array<Vector2>();
+        this.monsterPositions = new Array<Vector2>();
 
         this.positions = new int[5][2];
 
@@ -125,6 +127,7 @@ public class MazeGenerator {
 	private void addNewMazeCell(String tile, int x, int y){
 		tiledMap = new TmxMapLoader().load(tile);
 		calculateLightPositions(tiledMap, x, y);
+        calculateMonsterPositions(tiledMap, x, y);
 		
 		for(int layer_nr = 0; layer_nr < 5; layer_nr++){ 	//für alle Layer
 			if(layer_nr==4){								//solange kein ObjectLayer
@@ -210,6 +213,31 @@ public class MazeGenerator {
         }
     }
 
+	private void calculateMonsterPositions(TiledMap map, int x, int y) {
+		MapLayer monstersLayer;
+		if(map.getLayers().get("monsters") != null) {
+			System.out.println("Found Monsters Layer");
+			System.out.println("Adding monsters for Tile [" + x + "," + y + "]");
+			try {
+				monstersLayer = map.getLayers().get("monsters");   // get lights layer
+
+				for (MapObject mo : monstersLayer.getObjects()) {
+					System.out.println("Position: ("
+							+ mo.getProperties().get("x", Float.class)/32 + "|"
+							+ mo.getProperties().get("y", Float.class)/32 + ")");
+					monsterPositions.add(new Vector2(
+							mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
+							mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
+					));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.err.println("TMX does not contain a monster layer");
+		}
+	}
+
 	
 	public TiledMap getMap(){
 		return map;
@@ -234,6 +262,10 @@ public class MazeGenerator {
 
     public Array<Vector2> getLightPositions() {
         return lightPositions;
+    }
+
+    public Array<Vector2> getMonsterPositions() {
+        return monsterPositions;
     }
 
     //übergibt Startpsotionen der Spieler

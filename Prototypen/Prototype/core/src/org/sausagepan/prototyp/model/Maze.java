@@ -33,6 +33,7 @@ public class Maze extends EntitySystem {
     private TiledMap tiledMap;         // contains the layers of the tiled map
     private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
     private Array<Vector2> lightPositions;
+    private Array<Vector2> monsterPositions;
 
     /* ........................................................................... CONSTRUCTOR .. */
 
@@ -57,6 +58,7 @@ public class Maze extends EntitySystem {
         generator.setParam(mapInformation.width, mapInformation.height);
         tiledMap = generator.createNewMapFromGrid(mapInformation.entries);
         lightPositions = generator.getLightPositions();
+        monsterPositions = generator.getMonsterPositions();
         // create static bodies from colliders
         Rectangle r;
         for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
@@ -86,5 +88,9 @@ public class Maze extends EntitySystem {
 
     public Array<Vector2> getLightPositions() {
         return lightPositions;
+    }
+
+    public Array<Vector2> getMonsterPositions() {
+        return monsterPositions;
     }
 }

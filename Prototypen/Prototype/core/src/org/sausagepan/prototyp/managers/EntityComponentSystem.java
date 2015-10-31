@@ -74,20 +74,29 @@ public class EntityComponentSystem {
 
         setUpEntities();
         setUpLocalCharacterEntity();
-        setUpEntitySystems();
         setUpMazeLights();
+        setUpMonsters();
+        setUpEntitySystems();
     }
 
     /* ............................................................................... METHODS .. */
     private void setUpEntities() {
-        // Monsters
-        Entity monsterEntity = new Entity();
-        monsterEntity.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.4f)));
-        monsterEntity.add(new HealthComponent(20));
-        monsterEntity.add(new CharacterSpriteComponent(
-                mediaManager.getTextureAtlas("textures/spritesheets/zombie_01.pack")
-        ));
-        this.engine.addEntity(monsterEntity);
+        // TODO
+    }
+
+    private void setUpMonsters() {
+        // Get Objects from Maps Monster Layer and add monster entities there
+        for(Vector2 pos : maze.getMonsterPositions()) {
+            Entity monster = new Entity();
+            monster.add(new DynamicBodyComponent(world, new Vector2(pos.x, pos.y)));
+            monster.add(new HealthComponent(20));
+            monster.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/zombie_01.pack")
+            ));
+            this.engine.addEntity(monster);
+            System.out.println("Added monster at (" + pos.x + "|" + pos.y + ")");
+        }
+        // TODO
     }
 
     private void setUpEntitySystems() {
