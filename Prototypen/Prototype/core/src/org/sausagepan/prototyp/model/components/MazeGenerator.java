@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 
 /**
@@ -31,6 +32,9 @@ public class MazeGenerator {
 	TiledMapTileLayer objects;
 	TiledMapTileLayer tops;
     MapLayer          colliderWalls;
+    MapLayer          lights;
+
+    Array<Vector2> lightPositions;
 
 	int[][] positions;
 
@@ -50,6 +54,9 @@ public class MazeGenerator {
         this.objects = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.tops    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.colliderWalls = new MapLayer();
+        this.lights        = new MapLayer();
+
+        this.lightPositions = new Array<Vector2>();
 
         this.positions = new int[5][2];
 
@@ -80,6 +87,7 @@ public class MazeGenerator {
 		map.getLayers().add(objects);       // objects layer
 		map.getLayers().add(tops);          // layer rendered above character
 		map.getLayers().add(colliderWalls); // layer containing collider rectangles
+        map.getLayers().add(lights);
 	}
 
 
@@ -116,7 +124,7 @@ public class MazeGenerator {
      */
 	private void addNewMazeCell(String tile, int x, int y){
 		tiledMap = new TmxMapLoader().load(tile);
-		
+		calculateLightPositions(tiledMap, x, y);
 		
 		for(int layer_nr = 0; layer_nr < 5; layer_nr++){ 	//für alle Layer
 			if(layer_nr==4){								//solange kein ObjectLayer
@@ -174,6 +182,34 @@ public class MazeGenerator {
         }
     }
 
+    private void calculateLightPositions(TiledMap map, int x, int y) {
+        System.out.println("Map contains following layers:");
+        for(MapLayer m : map.getLayers())
+            System.out.println(m.getName());
+        MapLayer lightsLayer;
+        if(map.getLayers().get("lights") != null) {
+            System.out.println("Found Lights Layer");
+            System.out.println("Adding light sources for Tile [" + x + "," + y + "]");
+            try {
+                lightsLayer = map.getLayers().get("lights");   // get lights layer
+
+                for (MapObject mo : lightsLayer.getObjects()) {
+                    System.out.println("Position: ("
+                            + mo.getProperties().get("x", Float.class)/32 + "|"
+                            + mo.getProperties().get("y", Float.class)/32 + ")");
+                    lightPositions.add(new Vector2(
+                            mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
+                            mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
+                    ));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("TMX does not contain a lights layer");
+        }
+    }
+
 	
 	public TiledMap getMap(){
 		return map;
@@ -195,8 +231,12 @@ public class MazeGenerator {
 		this.mazeWidth = mazewidth;
 		this.mazeHeight = mazeheight;
 	}
-	
-	//übergibt Startpsotionen der Spieler
+
+    public Array<Vector2> getLightPositions() {
+        return lightPositions;
+    }
+
+    //übergibt Startpsotionen der Spieler
 	public int[][] getStartPositions(){
 		return positions;
 	}

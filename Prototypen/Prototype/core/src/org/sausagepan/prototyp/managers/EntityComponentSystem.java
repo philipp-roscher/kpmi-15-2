@@ -4,8 +4,9 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,7 +21,6 @@ import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
-import org.sausagepan.prototyp.model.components.VelocityComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 
@@ -39,23 +39,27 @@ public class EntityComponentSystem {
     private Family monsterFamily;
     private World world;
     private MediaManager mediaManager;
+    private OrthographicCamera camera;
     private Viewport viewport;
     private RayHandler rayHandler;
     private Maze maze;
     private SpriteBatch batch;
+    private ShapeRenderer shpRend;
 
     private CharacterEntity localCharacter;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
             KPMIPrototype game, World world, Viewport viewport,
-            RayHandler rayHandler, Maze maze) {
+            RayHandler rayHandler, Maze maze, OrthographicCamera camera) {
         this.mediaManager = game.mediaManager;
         this.world = world;
+        this.camera = camera;
         this.viewport = viewport;
         this.rayHandler = rayHandler;
         this.maze = maze;
         this.batch = game.batch;
+        this.shpRend = new ShapeRenderer();
 
         this.engine = new Engine(); // Create Engine
         this.characterFamily = Family.all(
@@ -115,6 +119,10 @@ public class EntityComponentSystem {
         NetworkSystem networkSystem = new NetworkSystem();
         networkSystem.addedToEngine(engine);
 
+        // Debugging System
+        VisualDebuggingSystem visualDebuggingSystem = new VisualDebuggingSystem(shpRend, camera);
+        visualDebuggingSystem.addedToEngine(engine);
+
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
@@ -123,6 +131,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(inputSystem);
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(networkSystem);
+        this.engine.addSystem(visualDebuggingSystem);
     }
 
     /**
@@ -151,11 +160,14 @@ public class EntityComponentSystem {
 
     public void setUpMazeLights() {
         // Get Objects from Maps Light Layer and add light entities there
+        for(Vector2 pos : maze.getLightPositions()) {
+            Entity torch = new Entity().add(
+                    new LightComponent(rayHandler,pos.x, pos.y ,new Color(1,.8f,.5f, 1),20,2));
+            engine.addEntity(torch);
+            System.out.println("Added light source at (" + pos.x + "|" + pos.y + ")");
+        }
         // TODO
-        Entity torch = new Entity().add(
-                new LightComponent(rayHandler,48,48,new Color(1,.8f,.8f, 1),50,8));
-        engine.addEntity(torch);
-
+        // Lights must not collide with walls!
         LightSystem lightSystem = new LightSystem(rayHandler);
         lightSystem.addedToEngine(engine);
         engine.addSystem(lightSystem);

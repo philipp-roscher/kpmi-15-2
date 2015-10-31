@@ -6,6 +6,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -89,6 +91,16 @@ public class PositionSynchroSystem extends EntitySystem {
                         );break;
                 }
                 weapon.sprite.setOriginCenter();
+
+                // Set Weapons damage Area
+                Rectangle rect = weapon.damageArea;
+                rect.setPosition(body.dynamicBody.getPosition());
+                switch(input.direction) {
+                    case NORTH: rect.x -= rect.width/2;rect.y += .5f;break;
+                    case WEST:  rect.x -= 1.f;         rect.y -= rect.height/2;break;
+                    case EAST:  rect.x += .5f;         rect.y -= rect.height/2;break;
+                    default:    rect.x -= rect.width/2;rect.y -= 1.f;break;
+                }
             }
             if(entity.getComponent(LightComponent.class) != null) {
                 LightComponent light = lm.get(entity);

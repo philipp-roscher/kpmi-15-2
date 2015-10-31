@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="93">
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
@@ -23,76 +23,85 @@
    eJzVl0sOwiAQhuco+Kq60PqKiY+VRte6sMfxJB7WYWHSUArDDC34J/+iZDofA3RIS0inAr0IfGcdkT9m8PeR+WVCfsHg39G7QG9ack0YfE7975ZxXf+yB/7HwU95/jj7nyt/BeHn8gXN9T8YMUcinyNb/WZ+3/M/83X/M7+/3Oun9L8buPuehE+pn7pGqfm2+zf3+reEvJQYLt+UQg+IvC74nB6eE3/UA9+8U36+WGK74If0TDP2BP47tPLEnAV8nyT7r3UF/ly1htA8Q1QpkM1dKunaScX5/4mpHOp/oqfoGXpes22s7nrPV444V94H+guoPCtO
   </data>
  </layer>
- <objectgroup name="colliderWalls">
-  <object id="1" name="collider" x="448" y="992" width="32" height="32"/>
-  <object id="3" name="collider" x="544" y="992" width="32" height="32"/>
-  <object id="7" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
-  <object id="10" name="topRightCollider" x="544" y="0" width="448" height="64"/>
-  <object id="11" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
-  <object id="12" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
-  <object id="13" name="leftWallCollider" x="0" y="0" width="32" height="736"/>
-  <object id="14" name="rightWallCollider" x="992" y="0" width="32" height="736"/>
-  <object id="15" name="leftWallCollider2" x="0" y="864" width="32" height="160"/>
-  <object id="17" name="rightWallCollider2" x="992" y="864" width="32" height="160"/>
-  <object id="34" name="topRightCollider" x="415" y="157" width="414.333" height="64"/>
-  <object id="35" name="leftWallCollider" x="381" y="64" width="32" height="606.667"/>
-  <object id="36" name="topRightCollider" x="577" y="319" width="414.333" height="64"/>
-  <object id="37" name="leftWallCollider" x="672" y="478.667" width="32" height="192"/>
-  <object id="38" name="topRightCollider" x="416" y="478" width="253.333" height="64"/>
-  <object id="39" name="leftWallCollider" x="256" y="351.333" width="32" height="446"/>
-  <object id="40" name="topLeftCollider" x="160" y="351" width="95" height="64"/>
-  <object id="41" name="leftWallCollider" x="128" y="352" width="32" height="510.667"/>
-  <object id="42" name="topLeftCollider" x="34" y="863" width="126" height="64"/>
-  <object id="43" name="topRightCollider" x="705.333" y="478" width="61" height="64"/>
-  <object id="44" name="topLeftCollider" x="257" y="799" width="255" height="64"/>
-  <object id="45" name="topLeftCollider" x="577" y="799" width="255" height="64"/>
-  <object id="46" name="topLeftCollider" x="801" y="735" width="222" height="64"/>
-  <object id="47" name="leftWallCollider" x="512" y="640" width="64" height="285.667"/>
-  <object id="49" name="leftWallCollider" x="31" y="64" width="32" height="126.667"/>
-  <object id="50" name="topRightCollider" x="925.333" y="62" width="66.6667" height="64"/>
-  <object id="51" name="topLeftCollider" x="288" y="737.333" width="96" height="30.6667"/>
-  <object id="52" name="leftWallCollider2" x="31" y="926.667" width="32" height="66.3333"/>
-  <object id="53" x="416.333" y="63" width="32" height="32"/>
-  <object id="54" x="351" y="64.3333" width="32" height="32"/>
-  <object id="55" x="479" y="735" width="32" height="32"/>
-  <object id="56" x="960.333" y="672.333" width="32" height="32"/>
-  <object id="57" x="577.667" y="863" width="32" height="32"/>
+ <objectgroup name="colliderWalls" width="0" height="0">
+  <object x="0" y="0" width="480" height="64"/>
+  <object x="544" y="0" width="448" height="64"/>
+  <object x="992" y="0" width="32" height="320"/>
+  <object x="928" y="64" width="64" height="64"/>
+  <object x="0" y="64" width="64" height="128"/>
+  <object x="576" y="320" width="448" height="64"/>
+  <object x="992" y="384" width="32" height="352"/>
+  <object x="384" y="64" width="32" height="96"/>
+  <object x="384" y="160" width="448" height="64"/>
+  <object x="384" y="224" width="32" height="256"/>
+  <object x="384" y="480" width="320" height="64"/>
+  <object x="704" y="480" width="64" height="64"/>
+  <object x="672" y="544" width="32" height="128"/>
+  <object x="384" y="544" width="32" height="128"/>
+  <object x="0" y="192" width="32" height="352"/>
+  <object x="0" y="544" width="32" height="256"/>
+  <object x="128" y="352" width="160" height="64"/>
+  <object x="128" y="416" width="32" height="448"/>
+  <object x="256" y="416" width="32" height="384"/>
+  <object x="256" y="800" width="576" height="64"/>
+  <object x="512" y="864" width="64" height="64"/>
+  <object x="512" y="640" width="64" height="160"/>
+  <object x="800" y="736" width="224" height="64"/>
+  <object x="288" y="736" width="96" height="32"/>
+  <object x="0" y="864" width="160" height="64"/>
+  <object x="0" y="928" width="64" height="64"/>
+  <object x="0" y="992" width="480" height="32"/>
+  <object x="544" y="992" width="480" height="32"/>
+  <object x="992" y="864" width="32" height="128"/>
  </objectgroup>
- <objectgroup name="gameMasterColliderWalls">
-  <object id="58" name="collider" x="448" y="992" width="32" height="32"/>
-  <object id="59" name="collider" x="544" y="992" width="32" height="32"/>
-  <object id="60" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
-  <object id="61" name="topRightCollider" x="544" y="0" width="448" height="64"/>
-  <object id="62" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
-  <object id="63" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
-  <object id="64" name="leftWallCollider" x="0" y="0" width="32" height="736"/>
-  <object id="65" name="rightWallCollider" x="992" y="0" width="32" height="736"/>
-  <object id="66" name="leftWallCollider2" x="0" y="864" width="32" height="160"/>
-  <object id="67" name="rightWallCollider2" x="992" y="864" width="32" height="160"/>
-  <object id="68" name="topRightCollider" x="415" y="157" width="414.333" height="64"/>
-  <object id="69" name="leftWallCollider" x="381" y="64" width="32" height="606.667"/>
-  <object id="70" name="topRightCollider" x="577" y="319" width="414.333" height="64"/>
-  <object id="71" name="leftWallCollider" x="672" y="478.667" width="32" height="192"/>
-  <object id="72" name="topRightCollider" x="416" y="478" width="253.333" height="64"/>
-  <object id="73" name="leftWallCollider" x="256" y="351.333" width="32" height="446"/>
-  <object id="74" name="topLeftCollider" x="160" y="351" width="30.6667" height="64"/>
-  <object id="75" name="leftWallCollider" x="128" y="352" width="32" height="510.667"/>
-  <object id="76" name="topLeftCollider" x="34" y="863" width="126" height="64"/>
-  <object id="77" name="topRightCollider" x="705.333" y="478" width="61" height="64"/>
-  <object id="78" name="topLeftCollider" x="257" y="799" width="255" height="64"/>
-  <object id="79" name="topLeftCollider" x="577" y="799" width="255" height="64"/>
-  <object id="80" name="topLeftCollider" x="801" y="735" width="93.6667" height="64"/>
-  <object id="81" name="leftWallCollider" x="512" y="640" width="64" height="285.667"/>
-  <object id="82" name="leftWallCollider" x="31" y="64" width="32" height="126.667"/>
-  <object id="83" name="topRightCollider" x="925.333" y="62" width="66.6667" height="64"/>
-  <object id="84" name="topLeftCollider" x="288" y="737.333" width="96" height="30.6667"/>
-  <object id="85" name="leftWallCollider2" x="31" y="926.667" width="32" height="66.3333"/>
-  <object id="86" x="416.333" y="63" width="32" height="32"/>
-  <object id="87" x="351" y="64.3333" width="32" height="32"/>
-  <object id="88" x="479" y="735" width="32" height="32"/>
-  <object id="89" x="960.333" y="672.333" width="32" height="32"/>
-  <object id="90" x="577.667" y="863" width="32" height="32"/>
-  <object id="91" name="topLeftCollider" x="224" y="351" width="30.6667" height="64"/>
-  <object id="92" name="topLeftCollider" x="930" y="735" width="93.6667" height="64"/>
+ <objectgroup name="gameMasterColliderWalls" width="0" height="0">
+  <object x="0" y="0" width="480" height="64"/>
+  <object x="544" y="0" width="448" height="64"/>
+  <object x="992" y="0" width="32" height="320"/>
+  <object x="928" y="64" width="64" height="64"/>
+  <object x="0" y="64" width="64" height="128"/>
+  <object x="576" y="320" width="448" height="64"/>
+  <object x="992" y="384" width="32" height="352"/>
+  <object x="384" y="64" width="32" height="96"/>
+  <object x="384" y="160" width="448" height="64"/>
+  <object x="384" y="224" width="32" height="256"/>
+  <object x="384" y="480" width="320" height="64"/>
+  <object x="704" y="480" width="64" height="64"/>
+  <object x="672" y="544" width="32" height="128"/>
+  <object x="384" y="544" width="32" height="128"/>
+  <object x="0" y="192" width="32" height="352"/>
+  <object x="0" y="544" width="32" height="256"/>
+  <object x="128" y="352" width="160" height="64"/>
+  <object x="128" y="416" width="32" height="448"/>
+  <object x="256" y="416" width="32" height="384"/>
+  <object x="256" y="800" width="576" height="64"/>
+  <object x="512" y="864" width="64" height="64"/>
+  <object x="512" y="640" width="64" height="160"/>
+  <object x="800" y="736" width="224" height="64"/>
+  <object x="288" y="736" width="96" height="32"/>
+  <object x="0" y="864" width="160" height="64"/>
+  <object x="0" y="928" width="64" height="64"/>
+  <object x="0" y="992" width="480" height="32"/>
+  <object x="544" y="992" width="480" height="32"/>
+  <object x="992" y="864" width="32" height="128"/>
+ </objectgroup>
+ <objectgroup name="lights" width="32" height="32">
+  <object name="light" x="768" y="800" width="32" height="32"/>
+  <object name="light" x="448" y="800" width="32" height="32"/>
+  <object name="light" x="640" y="800" width="32" height="32"/>
+  <object name="light" x="320" y="800" width="32" height="32"/>
+  <object name="light" x="544" y="864" width="32" height="32"/>
+  <object name="light" x="512" y="864" width="32" height="32"/>
+  <object name="light" x="64" y="864" width="32" height="32"/>
+  <object name="light" x="384" y="608" width="32" height="32"/>
+  <object name="light" x="672" y="608" width="32" height="32"/>
+  <object name="light" x="864" y="736" width="32" height="32"/>
+  <object name="light" x="960" y="736" width="32" height="32"/>
+  <object name="light" x="608" y="320" width="32" height="32"/>
+  <object name="light" x="768" y="320" width="32" height="32"/>
+  <object name="light" x="928" y="320" width="32" height="32"/>
+  <object name="light" x="768" y="160" width="32" height="32"/>
+  <object name="light" x="608" y="160" width="32" height="32"/>
+  <object name="light" x="448" y="160" width="32" height="32"/>
  </objectgroup>
 </map>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="695">
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
@@ -29,652 +29,446 @@
    eJzt1jsOgCAQhGGPgkp8FMJV8P6Xcei2MLT/Juwm0xDCl2mAunBzKA/oZwf+DvobaMf4mBW0k1JBn75/uk/3J/1+/xXQp/vP7tPvL90//PDDD39WP8O+h/6vciqXcpv8rdnYf3sa7Bud25QPsfoNwQ==
   </data>
  </layer>
- <objectgroup name="colliderWalls" visible="0">
-  <object id="1" name="collider" x="448" y="992" width="32" height="32"/>
-  <object id="3" name="collider" x="544" y="992" width="32" height="32"/>
-  <object id="7" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
-  <object id="10" name="topRightCollider" x="544" y="0" width="448" height="64"/>
-  <object id="11" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
-  <object id="12" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
-  <object id="13" name="leftWallCollider" x="0" y="288" width="32" height="736"/>
-  <object id="14" name="rightWallCollider" x="992" y="288" width="32" height="736"/>
-  <object id="15" name="leftWallCollider2" x="0" y="0" width="32" height="192"/>
-  <object id="17" name="rightWallCollider2" x="992" y="0" width="32" height="192"/>
-  <object id="57" name="collider" x="448" y="800" width="32" height="32"/>
-  <object id="58" name="collider" x="448" y="832" width="32" height="32"/>
-  <object id="59" name="collider" x="448" y="864" width="32" height="32"/>
-  <object id="60" name="collider" x="448" y="896" width="32" height="32"/>
-  <object id="61" name="collider" x="448" y="928" width="32" height="32"/>
-  <object id="62" name="collider" x="448" y="960" width="32" height="32"/>
-  <object id="63" name="collider" x="448" y="96" width="32" height="32"/>
-  <object id="64" name="collider" x="448" y="160" width="32" height="32"/>
-  <object id="65" name="collider" x="448" y="128" width="32" height="32"/>
-  <object id="67" name="collider" x="448" y="192" width="32" height="32"/>
-  <object id="68" name="collider" x="448" y="64" width="32" height="32"/>
-  <object id="69" name="collider" x="544" y="192" width="32" height="32"/>
-  <object id="70" name="collider" x="544" y="160" width="32" height="32"/>
-  <object id="71" name="collider" x="544" y="128" width="32" height="32"/>
-  <object id="72" name="collider" x="544" y="96" width="32" height="32"/>
-  <object id="73" name="collider" x="544" y="64" width="32" height="32"/>
-  <object id="74" name="collider" x="896" y="288" width="32" height="32"/>
-  <object id="75" name="collider" x="896" y="256" width="32" height="32"/>
-  <object id="76" name="collider" x="896" y="224" width="32" height="32"/>
-  <object id="77" name="collider" x="896" y="192" width="32" height="32"/>
-  <object id="78" name="collider" x="896" y="160" width="32" height="32"/>
-  <object id="84" name="collider" x="896" y="352" width="32" height="32"/>
-  <object id="85" name="collider" x="896" y="384" width="32" height="32"/>
-  <object id="86" name="collider" x="896" y="416" width="32" height="32"/>
-  <object id="87" name="collider" x="896" y="320" width="32" height="32"/>
-  <object id="88" name="collider" x="896" y="448" width="32" height="32"/>
-  <object id="89" name="collider" x="96" y="352" width="32" height="32"/>
-  <object id="90" name="collider" x="96" y="192" width="32" height="32"/>
-  <object id="91" name="collider" x="96" y="416" width="32" height="32"/>
-  <object id="92" name="collider" x="96" y="448" width="32" height="32"/>
-  <object id="93" name="collider" x="96" y="320" width="32" height="32"/>
-  <object id="94" name="collider" x="96" y="224" width="32" height="32"/>
-  <object id="95" name="collider" x="96" y="384" width="32" height="32"/>
-  <object id="96" name="collider" x="96" y="256" width="32" height="32"/>
-  <object id="97" name="collider" x="96" y="160" width="32" height="32"/>
-  <object id="98" name="collider" x="96" y="288" width="32" height="32"/>
-  <object id="99" name="collider" x="192" y="416" width="32" height="32"/>
-  <object id="100" name="collider" x="192" y="384" width="32" height="32"/>
-  <object id="101" name="collider" x="192" y="448" width="32" height="32"/>
-  <object id="102" name="collider" x="192" y="352" width="32" height="32"/>
-  <object id="103" name="collider" x="800" y="416" width="32" height="32"/>
-  <object id="104" name="collider" x="800" y="384" width="32" height="32"/>
-  <object id="105" name="collider" x="800" y="448" width="32" height="32"/>
-  <object id="106" name="collider" x="800" y="352" width="32" height="32"/>
-  <object id="107" name="collider" x="640" y="256" width="32" height="32"/>
-  <object id="108" name="collider" x="640" y="224" width="32" height="32"/>
-  <object id="109" name="collider" x="640" y="288" width="32" height="32"/>
-  <object id="110" name="collider" x="640" y="192" width="32" height="32"/>
-  <object id="111" name="collider" x="352" y="256" width="32" height="32"/>
-  <object id="112" name="collider" x="352" y="224" width="32" height="32"/>
-  <object id="113" name="collider" x="352" y="288" width="32" height="32"/>
-  <object id="114" name="collider" x="352" y="192" width="32" height="32"/>
-  <object id="115" name="collider" x="352" y="768" width="32" height="32"/>
-  <object id="116" name="collider" x="352" y="736" width="32" height="32"/>
-  <object id="117" name="collider" x="352" y="800" width="32" height="32"/>
-  <object id="118" name="collider" x="352" y="704" width="32" height="32"/>
-  <object id="119" name="collider" x="192" y="608" width="32" height="32"/>
-  <object id="120" name="collider" x="192" y="576" width="32" height="32"/>
-  <object id="121" name="collider" x="192" y="640" width="32" height="32"/>
-  <object id="122" name="collider" x="192" y="544" width="32" height="32"/>
-  <object id="123" name="collider" x="640" y="768" width="32" height="32"/>
-  <object id="124" name="collider" x="640" y="736" width="32" height="32"/>
-  <object id="125" name="collider" x="640" y="800" width="32" height="32"/>
-  <object id="126" name="collider" x="640" y="704" width="32" height="32"/>
-  <object id="127" name="collider" x="800" y="608" width="32" height="32"/>
-  <object id="128" name="collider" x="800" y="576" width="32" height="32"/>
-  <object id="129" name="collider" x="800" y="640" width="32" height="32"/>
-  <object id="130" name="collider" x="800" y="544" width="32" height="32"/>
-  <object id="131" name="collider" x="704" y="640" width="32" height="32"/>
-  <object id="132" name="collider" x="704" y="704" width="32" height="32"/>
-  <object id="133" name="collider" x="704" y="672" width="32" height="32"/>
-  <object id="134" name="collider" x="288" y="640" width="32" height="32"/>
-  <object id="135" name="collider" x="288" y="704" width="32" height="32"/>
-  <object id="136" name="collider" x="288" y="672" width="32" height="32"/>
-  <object id="137" name="collider" x="288" y="288" width="32" height="32"/>
-  <object id="138" name="collider" x="288" y="352" width="32" height="32"/>
-  <object id="139" name="collider" x="288" y="320" width="32" height="32"/>
-  <object id="140" name="collider" x="704" y="288" width="32" height="32"/>
-  <object id="141" name="collider" x="704" y="352" width="32" height="32"/>
-  <object id="142" name="collider" x="704" y="320" width="32" height="32"/>
-  <object id="143" name="collider" x="416" y="800" width="32" height="32"/>
-  <object id="144" name="collider" x="384" y="800" width="32" height="32"/>
-  <object id="145" name="collider" x="320" y="704" width="32" height="32"/>
-  <object id="146" name="collider" x="672" y="704" width="32" height="32"/>
-  <object id="147" name="collider" x="672" y="288" width="32" height="32"/>
-  <object id="148" name="collider" x="320" y="288" width="32" height="32"/>
-  <object id="149" name="collider" x="544" y="800" width="32" height="32"/>
-  <object id="150" name="collider" x="576" y="800" width="32" height="32"/>
-  <object id="151" name="collider" x="224" y="640" width="32" height="32"/>
-  <object id="152" name="collider" x="256" y="640" width="32" height="32"/>
-  <object id="153" name="collider" x="224" y="352" width="32" height="32"/>
-  <object id="154" name="collider" x="256" y="352" width="32" height="32"/>
-  <object id="155" name="collider" x="384" y="192" width="32" height="32"/>
-  <object id="156" name="collider" x="416" y="192" width="32" height="32"/>
-  <object id="157" name="collider" x="576" y="192" width="32" height="32"/>
-  <object id="158" name="collider" x="608" y="192" width="32" height="32"/>
-  <object id="159" name="collider" x="736" y="352" width="32" height="32"/>
-  <object id="160" name="collider" x="768" y="352" width="32" height="32"/>
-  <object id="161" name="collider" x="832" y="448" width="32" height="32"/>
-  <object id="162" name="collider" x="864" y="448" width="32" height="32"/>
-  <object id="163" name="collider" x="832" y="544" width="32" height="32"/>
-  <object id="164" name="collider" x="864" y="544" width="32" height="32"/>
-  <object id="165" name="collider" x="896" y="544" width="32" height="32"/>
-  <object id="166" name="collider" x="928" y="544" width="32" height="32"/>
-  <object id="167" name="collider" x="736" y="640" width="32" height="32"/>
-  <object id="168" name="collider" x="768" y="640" width="32" height="32"/>
-  <object id="169" name="collider" x="960" y="544" width="32" height="32"/>
-  <object id="170" name="collider" x="608" y="800" width="32" height="32"/>
-  <object id="171" name="collider" x="96" y="544" width="32" height="32"/>
-  <object id="172" name="collider" x="128" y="544" width="32" height="32"/>
-  <object id="173" name="collider" x="64" y="160" width="32" height="32"/>
-  <object id="174" name="collider" x="160" y="544" width="32" height="32"/>
-  <object id="175" name="collider" x="32" y="160" width="32" height="32"/>
-  <object id="176" name="collider" x="64" y="544" width="32" height="32"/>
-  <object id="177" name="collider" x="32" y="544" width="32" height="32"/>
-  <object id="178" name="collider" x="960" y="160" width="32" height="32"/>
-  <object id="179" name="collider" x="928" y="160" width="32" height="32"/>
-  <object id="180" name="collider" x="544" y="832" width="32" height="32"/>
-  <object id="181" name="collider" x="544" y="896" width="32" height="32"/>
-  <object id="182" name="collider" x="544" y="864" width="32" height="32"/>
-  <object id="183" name="collider" x="544" y="960" width="32" height="32"/>
-  <object id="184" name="collider" x="544" y="928" width="32" height="32"/>
-  <object id="185" name="collider" x="544" y="352" width="32" height="32"/>
-  <object id="186" name="collider" x="544" y="320" width="32" height="32"/>
-  <object id="187" name="collider" x="544" y="384" width="32" height="32"/>
-  <object id="188" name="collider" x="544" y="288" width="32" height="32"/>
-  <object id="189" name="collider" x="576" y="352" width="32" height="32"/>
-  <object id="190" name="collider" x="576" y="320" width="32" height="32"/>
-  <object id="191" name="collider" x="576" y="384" width="32" height="32"/>
-  <object id="192" name="collider" x="576" y="288" width="32" height="32"/>
-  <object id="193" name="collider" x="448" y="352" width="32" height="32"/>
-  <object id="194" name="collider" x="448" y="320" width="32" height="32"/>
-  <object id="195" name="collider" x="448" y="384" width="32" height="32"/>
-  <object id="196" name="collider" x="448" y="288" width="32" height="32"/>
-  <object id="197" name="collider" x="416" y="352" width="32" height="32"/>
-  <object id="198" name="collider" x="416" y="320" width="32" height="32"/>
-  <object id="199" name="collider" x="416" y="384" width="32" height="32"/>
-  <object id="200" name="collider" x="416" y="288" width="32" height="32"/>
-  <object id="201" name="collider" x="448" y="672" width="32" height="32"/>
-  <object id="202" name="collider" x="448" y="640" width="32" height="32"/>
-  <object id="203" name="collider" x="448" y="704" width="32" height="32"/>
-  <object id="204" name="collider" x="448" y="608" width="32" height="32"/>
-  <object id="205" name="collider" x="416" y="672" width="32" height="32"/>
-  <object id="206" name="collider" x="416" y="640" width="32" height="32"/>
-  <object id="207" name="collider" x="416" y="704" width="32" height="32"/>
-  <object id="208" name="collider" x="416" y="608" width="32" height="32"/>
-  <object id="209" name="collider" x="544" y="704" width="32" height="32"/>
-  <object id="210" name="collider" x="576" y="608" width="32" height="32"/>
-  <object id="211" name="collider" x="576" y="704" width="32" height="32"/>
-  <object id="212" name="collider" x="544" y="640" width="32" height="32"/>
-  <object id="213" name="collider" x="576" y="640" width="32" height="32"/>
-  <object id="214" name="collider" x="544" y="608" width="32" height="32"/>
-  <object id="215" name="collider" x="544" y="672" width="32" height="32"/>
-  <object id="216" name="collider" x="576" y="672" width="32" height="32"/>
-  <object id="217" name="collider" x="704" y="448" width="32" height="32"/>
-  <object id="218" name="collider" x="608" y="448" width="32" height="32"/>
-  <object id="219" name="collider" x="640" y="448" width="32" height="32"/>
-  <object id="220" name="collider" x="672" y="448" width="32" height="32"/>
-  <object id="221" name="collider" x="704" y="416" width="32" height="32"/>
-  <object id="222" name="collider" x="608" y="416" width="32" height="32"/>
-  <object id="223" name="collider" x="640" y="416" width="32" height="32"/>
-  <object id="224" name="collider" x="672" y="416" width="32" height="32"/>
-  <object id="225" name="collider" x="320" y="448" width="32" height="32"/>
-  <object id="226" name="collider" x="288" y="416" width="32" height="32"/>
-  <object id="227" name="collider" x="352" y="448" width="32" height="32"/>
-  <object id="228" name="collider" x="288" y="448" width="32" height="32"/>
-  <object id="229" name="collider" x="384" y="448" width="32" height="32"/>
-  <object id="230" name="collider" x="384" y="416" width="32" height="32"/>
-  <object id="231" name="collider" x="352" y="416" width="32" height="32"/>
-  <object id="232" name="collider" x="320" y="416" width="32" height="32"/>
-  <object id="233" name="collider" x="320" y="576" width="32" height="32"/>
-  <object id="234" name="collider" x="288" y="544" width="32" height="32"/>
-  <object id="235" name="collider" x="352" y="576" width="32" height="32"/>
-  <object id="236" name="collider" x="288" y="576" width="32" height="32"/>
-  <object id="237" name="collider" x="384" y="576" width="32" height="32"/>
-  <object id="238" name="collider" x="384" y="544" width="32" height="32"/>
-  <object id="239" name="collider" x="352" y="544" width="32" height="32"/>
-  <object id="240" name="collider" x="320" y="544" width="32" height="32"/>
-  <object id="241" name="collider" x="640" y="576" width="32" height="32"/>
-  <object id="242" name="collider" x="608" y="544" width="32" height="32"/>
-  <object id="243" name="collider" x="672" y="576" width="32" height="32"/>
-  <object id="244" name="collider" x="608" y="576" width="32" height="32"/>
-  <object id="245" name="collider" x="704" y="576" width="32" height="32"/>
-  <object id="246" name="collider" x="704" y="544" width="32" height="32"/>
-  <object id="247" name="collider" x="672" y="544" width="32" height="32"/>
-  <object id="248" name="collider" x="640" y="544" width="32" height="32"/>
-  <object id="249" name="collider" x="576" y="576" width="32" height="32"/>
-  <object id="250" name="collider" x="416" y="576" width="32" height="32"/>
-  <object id="251" name="collider" x="416" y="416" width="32" height="32"/>
-  <object id="252" name="collider" x="576" y="416" width="32" height="32"/>
-  <object id="253" name="collider" x="640" y="384" width="32" height="32"/>
-  <object id="254" name="collider" x="608" y="352" width="32" height="32"/>
-  <object id="255" name="collider" x="384" y="640" width="32" height="32"/>
-  <object id="256" name="collider" x="352" y="608" width="32" height="32"/>
-  <object id="257" name="collider" x="608" y="640" width="32" height="32"/>
-  <object id="258" name="collider" x="640" y="608" width="32" height="32"/>
-  <object id="259" name="collider" x="352" y="384" width="32" height="32"/>
-  <object id="260" name="collider" x="384" y="352" width="32" height="32"/>
-  <object id="261" name="collider" x="384" y="384" width="32" height="32"/>
-  <object id="262" name="collider" x="608" y="384" width="32" height="32"/>
-  <object id="263" name="collider" x="384" y="608" width="32" height="32"/>
-  <object id="264" name="collider" x="608" y="608" width="32" height="32"/>
-  <object id="477" name="collider" x="128" y="448" width="32" height="32"/>
-  <object id="478" name="collider" x="160" y="448" width="32" height="32"/>
+ <objectgroup name="colliderWalls" width="0" height="0">
+  <object name="collider" x="448" y="992" width="32" height="32"/>
+  <object name="collider" x="544" y="992" width="32" height="32"/>
+  <object name="topLeftCollider" x="33" y="0" width="448" height="64"/>
+  <object name="topRightCollider" x="544" y="0" width="448" height="64"/>
+  <object name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
+  <object name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
+  <object name="leftWallCollider" x="0" y="288" width="32" height="736"/>
+  <object name="rightWallCollider" x="992" y="288" width="32" height="736"/>
+  <object name="leftWallCollider2" x="0" y="0" width="32" height="192"/>
+  <object name="rightWallCollider2" x="992" y="0" width="32" height="192"/>
+  <object name="collider" x="448" y="800" width="32" height="32"/>
+  <object name="collider" x="448" y="832" width="32" height="32"/>
+  <object name="collider" x="448" y="864" width="32" height="32"/>
+  <object name="collider" x="448" y="896" width="32" height="32"/>
+  <object name="collider" x="448" y="928" width="32" height="32"/>
+  <object name="collider" x="448" y="960" width="32" height="32"/>
+  <object name="collider" x="448" y="96" width="32" height="32"/>
+  <object name="collider" x="448" y="160" width="32" height="32"/>
+  <object name="collider" x="448" y="128" width="32" height="32"/>
+  <object name="collider" x="448" y="192" width="32" height="32"/>
+  <object name="collider" x="448" y="64" width="32" height="32"/>
+  <object name="collider" x="544" y="192" width="32" height="32"/>
+  <object name="collider" x="544" y="160" width="32" height="32"/>
+  <object name="collider" x="544" y="128" width="32" height="32"/>
+  <object name="collider" x="544" y="96" width="32" height="32"/>
+  <object name="collider" x="544" y="64" width="32" height="32"/>
+  <object name="collider" x="896" y="288" width="32" height="32"/>
+  <object name="collider" x="896" y="256" width="32" height="32"/>
+  <object name="collider" x="896" y="224" width="32" height="32"/>
+  <object name="collider" x="896" y="192" width="32" height="32"/>
+  <object name="collider" x="896" y="160" width="32" height="32"/>
+  <object name="collider" x="896" y="352" width="32" height="32"/>
+  <object name="collider" x="896" y="384" width="32" height="32"/>
+  <object name="collider" x="896" y="416" width="32" height="32"/>
+  <object name="collider" x="896" y="320" width="32" height="32"/>
+  <object name="collider" x="896" y="448" width="32" height="32"/>
+  <object name="collider" x="96" y="352" width="32" height="32"/>
+  <object name="collider" x="96" y="192" width="32" height="32"/>
+  <object name="collider" x="96" y="416" width="32" height="32"/>
+  <object name="collider" x="96" y="448" width="32" height="32"/>
+  <object name="collider" x="96" y="320" width="32" height="32"/>
+  <object name="collider" x="96" y="224" width="32" height="32"/>
+  <object name="collider" x="96" y="384" width="32" height="32"/>
+  <object name="collider" x="96" y="256" width="32" height="32"/>
+  <object name="collider" x="96" y="160" width="32" height="32"/>
+  <object name="collider" x="96" y="288" width="32" height="32"/>
+  <object name="collider" x="192" y="416" width="32" height="32"/>
+  <object name="collider" x="192" y="384" width="32" height="32"/>
+  <object name="collider" x="192" y="448" width="32" height="32"/>
+  <object name="collider" x="192" y="352" width="32" height="32"/>
+  <object name="collider" x="800" y="416" width="32" height="32"/>
+  <object name="collider" x="800" y="384" width="32" height="32"/>
+  <object name="collider" x="800" y="448" width="32" height="32"/>
+  <object name="collider" x="800" y="352" width="32" height="32"/>
+  <object name="collider" x="640" y="256" width="32" height="32"/>
+  <object name="collider" x="640" y="224" width="32" height="32"/>
+  <object name="collider" x="640" y="288" width="32" height="32"/>
+  <object name="collider" x="640" y="192" width="32" height="32"/>
+  <object name="collider" x="352" y="256" width="32" height="32"/>
+  <object name="collider" x="352" y="224" width="32" height="32"/>
+  <object name="collider" x="352" y="288" width="32" height="32"/>
+  <object name="collider" x="352" y="192" width="32" height="32"/>
+  <object name="collider" x="352" y="768" width="32" height="32"/>
+  <object name="collider" x="352" y="736" width="32" height="32"/>
+  <object name="collider" x="352" y="800" width="32" height="32"/>
+  <object name="collider" x="352" y="704" width="32" height="32"/>
+  <object name="collider" x="192" y="608" width="32" height="32"/>
+  <object name="collider" x="192" y="576" width="32" height="32"/>
+  <object name="collider" x="192" y="640" width="32" height="32"/>
+  <object name="collider" x="192" y="544" width="32" height="32"/>
+  <object name="collider" x="640" y="768" width="32" height="32"/>
+  <object name="collider" x="640" y="736" width="32" height="32"/>
+  <object name="collider" x="640" y="800" width="32" height="32"/>
+  <object name="collider" x="640" y="704" width="32" height="32"/>
+  <object name="collider" x="800" y="608" width="32" height="32"/>
+  <object name="collider" x="800" y="576" width="32" height="32"/>
+  <object name="collider" x="800" y="640" width="32" height="32"/>
+  <object name="collider" x="800" y="544" width="32" height="32"/>
+  <object name="collider" x="704" y="640" width="32" height="32"/>
+  <object name="collider" x="704" y="704" width="32" height="32"/>
+  <object name="collider" x="704" y="672" width="32" height="32"/>
+  <object name="collider" x="288" y="640" width="32" height="32"/>
+  <object name="collider" x="288" y="704" width="32" height="32"/>
+  <object name="collider" x="288" y="672" width="32" height="32"/>
+  <object name="collider" x="288" y="288" width="32" height="32"/>
+  <object name="collider" x="288" y="352" width="32" height="32"/>
+  <object name="collider" x="288" y="320" width="32" height="32"/>
+  <object name="collider" x="704" y="288" width="32" height="32"/>
+  <object name="collider" x="704" y="352" width="32" height="32"/>
+  <object name="collider" x="704" y="320" width="32" height="32"/>
+  <object name="collider" x="416" y="800" width="32" height="32"/>
+  <object name="collider" x="384" y="800" width="32" height="32"/>
+  <object name="collider" x="320" y="704" width="32" height="32"/>
+  <object name="collider" x="672" y="704" width="32" height="32"/>
+  <object name="collider" x="672" y="288" width="32" height="32"/>
+  <object name="collider" x="320" y="288" width="32" height="32"/>
+  <object name="collider" x="544" y="800" width="32" height="32"/>
+  <object name="collider" x="576" y="800" width="32" height="32"/>
+  <object name="collider" x="224" y="640" width="32" height="32"/>
+  <object name="collider" x="256" y="640" width="32" height="32"/>
+  <object name="collider" x="224" y="352" width="32" height="32"/>
+  <object name="collider" x="256" y="352" width="32" height="32"/>
+  <object name="collider" x="384" y="192" width="32" height="32"/>
+  <object name="collider" x="416" y="192" width="32" height="32"/>
+  <object name="collider" x="576" y="192" width="32" height="32"/>
+  <object name="collider" x="608" y="192" width="32" height="32"/>
+  <object name="collider" x="736" y="352" width="32" height="32"/>
+  <object name="collider" x="768" y="352" width="32" height="32"/>
+  <object name="collider" x="832" y="448" width="32" height="32"/>
+  <object name="collider" x="864" y="448" width="32" height="32"/>
+  <object name="collider" x="832" y="544" width="32" height="32"/>
+  <object name="collider" x="864" y="544" width="32" height="32"/>
+  <object name="collider" x="896" y="544" width="32" height="32"/>
+  <object name="collider" x="928" y="544" width="32" height="32"/>
+  <object name="collider" x="736" y="640" width="32" height="32"/>
+  <object name="collider" x="768" y="640" width="32" height="32"/>
+  <object name="collider" x="960" y="544" width="32" height="32"/>
+  <object name="collider" x="608" y="800" width="32" height="32"/>
+  <object name="collider" x="96" y="544" width="32" height="32"/>
+  <object name="collider" x="128" y="544" width="32" height="32"/>
+  <object name="collider" x="64" y="160" width="32" height="32"/>
+  <object name="collider" x="160" y="544" width="32" height="32"/>
+  <object name="collider" x="32" y="160" width="32" height="32"/>
+  <object name="collider" x="64" y="544" width="32" height="32"/>
+  <object name="collider" x="32" y="544" width="32" height="32"/>
+  <object name="collider" x="960" y="160" width="32" height="32"/>
+  <object name="collider" x="928" y="160" width="32" height="32"/>
+  <object name="collider" x="544" y="832" width="32" height="32"/>
+  <object name="collider" x="544" y="896" width="32" height="32"/>
+  <object name="collider" x="544" y="864" width="32" height="32"/>
+  <object name="collider" x="544" y="960" width="32" height="32"/>
+  <object name="collider" x="544" y="928" width="32" height="32"/>
+  <object name="collider" x="544" y="352" width="32" height="32"/>
+  <object name="collider" x="544" y="320" width="32" height="32"/>
+  <object name="collider" x="544" y="384" width="32" height="32"/>
+  <object name="collider" x="544" y="288" width="32" height="32"/>
+  <object name="collider" x="576" y="352" width="32" height="32"/>
+  <object name="collider" x="576" y="320" width="32" height="32"/>
+  <object name="collider" x="576" y="384" width="32" height="32"/>
+  <object name="collider" x="576" y="288" width="32" height="32"/>
+  <object name="collider" x="448" y="352" width="32" height="32"/>
+  <object name="collider" x="448" y="320" width="32" height="32"/>
+  <object name="collider" x="448" y="384" width="32" height="32"/>
+  <object name="collider" x="448" y="288" width="32" height="32"/>
+  <object name="collider" x="416" y="352" width="32" height="32"/>
+  <object name="collider" x="416" y="320" width="32" height="32"/>
+  <object name="collider" x="416" y="384" width="32" height="32"/>
+  <object name="collider" x="416" y="288" width="32" height="32"/>
+  <object name="collider" x="448" y="672" width="32" height="32"/>
+  <object name="collider" x="448" y="640" width="32" height="32"/>
+  <object name="collider" x="448" y="704" width="32" height="32"/>
+  <object name="collider" x="448" y="608" width="32" height="32"/>
+  <object name="collider" x="416" y="672" width="32" height="32"/>
+  <object name="collider" x="416" y="640" width="32" height="32"/>
+  <object name="collider" x="416" y="704" width="32" height="32"/>
+  <object name="collider" x="416" y="608" width="32" height="32"/>
+  <object name="collider" x="544" y="704" width="32" height="32"/>
+  <object name="collider" x="576" y="608" width="32" height="32"/>
+  <object name="collider" x="576" y="704" width="32" height="32"/>
+  <object name="collider" x="544" y="640" width="32" height="32"/>
+  <object name="collider" x="576" y="640" width="32" height="32"/>
+  <object name="collider" x="544" y="608" width="32" height="32"/>
+  <object name="collider" x="544" y="672" width="32" height="32"/>
+  <object name="collider" x="576" y="672" width="32" height="32"/>
+  <object name="collider" x="704" y="448" width="32" height="32"/>
+  <object name="collider" x="608" y="448" width="32" height="32"/>
+  <object name="collider" x="640" y="448" width="32" height="32"/>
+  <object name="collider" x="672" y="448" width="32" height="32"/>
+  <object name="collider" x="704" y="416" width="32" height="32"/>
+  <object name="collider" x="608" y="416" width="32" height="32"/>
+  <object name="collider" x="640" y="416" width="32" height="32"/>
+  <object name="collider" x="672" y="416" width="32" height="32"/>
+  <object name="collider" x="320" y="448" width="32" height="32"/>
+  <object name="collider" x="288" y="416" width="32" height="32"/>
+  <object name="collider" x="352" y="448" width="32" height="32"/>
+  <object name="collider" x="288" y="448" width="32" height="32"/>
+  <object name="collider" x="384" y="448" width="32" height="32"/>
+  <object name="collider" x="384" y="416" width="32" height="32"/>
+  <object name="collider" x="352" y="416" width="32" height="32"/>
+  <object name="collider" x="320" y="416" width="32" height="32"/>
+  <object name="collider" x="320" y="576" width="32" height="32"/>
+  <object name="collider" x="288" y="544" width="32" height="32"/>
+  <object name="collider" x="352" y="576" width="32" height="32"/>
+  <object name="collider" x="288" y="576" width="32" height="32"/>
+  <object name="collider" x="384" y="576" width="32" height="32"/>
+  <object name="collider" x="384" y="544" width="32" height="32"/>
+  <object name="collider" x="352" y="544" width="32" height="32"/>
+  <object name="collider" x="320" y="544" width="32" height="32"/>
+  <object name="collider" x="640" y="576" width="32" height="32"/>
+  <object name="collider" x="608" y="544" width="32" height="32"/>
+  <object name="collider" x="672" y="576" width="32" height="32"/>
+  <object name="collider" x="608" y="576" width="32" height="32"/>
+  <object name="collider" x="704" y="576" width="32" height="32"/>
+  <object name="collider" x="704" y="544" width="32" height="32"/>
+  <object name="collider" x="672" y="544" width="32" height="32"/>
+  <object name="collider" x="640" y="544" width="32" height="32"/>
+  <object name="collider" x="576" y="576" width="32" height="32"/>
+  <object name="collider" x="416" y="576" width="32" height="32"/>
+  <object name="collider" x="416" y="416" width="32" height="32"/>
+  <object name="collider" x="576" y="416" width="32" height="32"/>
+  <object name="collider" x="640" y="384" width="32" height="32"/>
+  <object name="collider" x="608" y="352" width="32" height="32"/>
+  <object name="collider" x="384" y="640" width="32" height="32"/>
+  <object name="collider" x="352" y="608" width="32" height="32"/>
+  <object name="collider" x="608" y="640" width="32" height="32"/>
+  <object name="collider" x="640" y="608" width="32" height="32"/>
+  <object name="collider" x="352" y="384" width="32" height="32"/>
+  <object name="collider" x="384" y="352" width="32" height="32"/>
+  <object name="collider" x="384" y="384" width="32" height="32"/>
+  <object name="collider" x="608" y="384" width="32" height="32"/>
+  <object name="collider" x="384" y="608" width="32" height="32"/>
+  <object name="collider" x="608" y="608" width="32" height="32"/>
+  <object name="collider" x="128" y="448" width="32" height="32"/>
+  <object name="collider" x="160" y="448" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Kopie von colliderWalls" visible="0">
-  <object id="479" name="collider" x="448" y="992" width="32" height="32"/>
-  <object id="480" name="collider" x="544" y="992" width="32" height="32"/>
-  <object id="481" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
-  <object id="482" name="topRightCollider" x="544" y="0" width="448" height="64"/>
-  <object id="483" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
-  <object id="484" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
-  <object id="485" name="leftWallCollider" x="0" y="288" width="32" height="736"/>
-  <object id="486" name="rightWallCollider" x="992" y="288" width="32" height="736"/>
-  <object id="487" name="leftWallCollider2" x="0" y="0" width="32" height="192"/>
-  <object id="488" name="rightWallCollider2" x="992" y="0" width="32" height="192"/>
-  <object id="489" name="collider" x="448" y="800" width="32" height="32"/>
-  <object id="490" name="collider" x="448" y="832" width="32" height="32"/>
-  <object id="491" name="collider" x="448" y="864" width="32" height="32"/>
-  <object id="492" name="collider" x="448" y="896" width="32" height="32"/>
-  <object id="493" name="collider" x="448" y="928" width="32" height="32"/>
-  <object id="494" name="collider" x="448" y="960" width="32" height="32"/>
-  <object id="495" name="collider" x="448" y="96" width="32" height="32"/>
-  <object id="496" name="collider" x="448" y="160" width="32" height="32"/>
-  <object id="497" name="collider" x="448" y="128" width="32" height="32"/>
-  <object id="498" name="collider" x="448" y="192" width="32" height="32"/>
-  <object id="499" name="collider" x="448" y="64" width="32" height="32"/>
-  <object id="500" name="collider" x="544" y="192" width="32" height="32"/>
-  <object id="501" name="collider" x="544" y="160" width="32" height="32"/>
-  <object id="502" name="collider" x="544" y="128" width="32" height="32"/>
-  <object id="503" name="collider" x="544" y="96" width="32" height="32"/>
-  <object id="504" name="collider" x="544" y="64" width="32" height="32"/>
-  <object id="505" name="collider" x="896" y="288" width="32" height="32"/>
-  <object id="506" name="collider" x="896" y="256" width="32" height="32"/>
-  <object id="507" name="collider" x="896" y="224" width="32" height="32"/>
-  <object id="508" name="collider" x="896" y="192" width="32" height="32"/>
-  <object id="509" name="collider" x="896" y="160" width="32" height="32"/>
-  <object id="510" name="collider" x="896" y="352" width="32" height="32"/>
-  <object id="511" name="collider" x="896" y="384" width="32" height="32"/>
-  <object id="512" name="collider" x="896" y="416" width="32" height="32"/>
-  <object id="513" name="collider" x="896" y="320" width="32" height="32"/>
-  <object id="514" name="collider" x="896" y="448" width="32" height="32"/>
-  <object id="515" name="collider" x="96" y="352" width="32" height="32"/>
-  <object id="516" name="collider" x="96" y="192" width="32" height="32"/>
-  <object id="517" name="collider" x="96" y="416" width="32" height="32"/>
-  <object id="518" name="collider" x="96" y="448" width="32" height="32"/>
-  <object id="519" name="collider" x="96" y="320" width="32" height="32"/>
-  <object id="520" name="collider" x="96" y="224" width="32" height="32"/>
-  <object id="521" name="collider" x="96" y="384" width="32" height="32"/>
-  <object id="522" name="collider" x="96" y="256" width="32" height="32"/>
-  <object id="523" name="collider" x="96" y="160" width="32" height="32"/>
-  <object id="524" name="collider" x="96" y="288" width="32" height="32"/>
-  <object id="525" name="collider" x="192" y="416" width="32" height="32"/>
-  <object id="526" name="collider" x="192" y="384" width="32" height="32"/>
-  <object id="527" name="collider" x="192" y="448" width="32" height="32"/>
-  <object id="528" name="collider" x="192" y="352" width="32" height="32"/>
-  <object id="529" name="collider" x="800" y="416" width="32" height="32"/>
-  <object id="530" name="collider" x="800" y="384" width="32" height="32"/>
-  <object id="531" name="collider" x="800" y="448" width="32" height="32"/>
-  <object id="532" name="collider" x="800" y="352" width="32" height="32"/>
-  <object id="533" name="collider" x="640" y="256" width="32" height="32"/>
-  <object id="534" name="collider" x="640" y="224" width="32" height="32"/>
-  <object id="535" name="collider" x="640" y="288" width="32" height="32"/>
-  <object id="536" name="collider" x="640" y="192" width="32" height="32"/>
-  <object id="537" name="collider" x="352" y="256" width="32" height="32"/>
-  <object id="538" name="collider" x="352" y="224" width="32" height="32"/>
-  <object id="539" name="collider" x="352" y="288" width="32" height="32"/>
-  <object id="540" name="collider" x="352" y="192" width="32" height="32"/>
-  <object id="541" name="collider" x="352" y="768" width="32" height="32"/>
-  <object id="542" name="collider" x="352" y="736" width="32" height="32"/>
-  <object id="543" name="collider" x="352" y="800" width="32" height="32"/>
-  <object id="544" name="collider" x="352" y="704" width="32" height="32"/>
-  <object id="545" name="collider" x="192" y="608" width="32" height="32"/>
-  <object id="546" name="collider" x="192" y="576" width="32" height="32"/>
-  <object id="547" name="collider" x="192" y="640" width="32" height="32"/>
-  <object id="548" name="collider" x="192" y="544" width="32" height="32"/>
-  <object id="549" name="collider" x="640" y="768" width="32" height="32"/>
-  <object id="550" name="collider" x="640" y="736" width="32" height="32"/>
-  <object id="551" name="collider" x="640" y="800" width="32" height="32"/>
-  <object id="552" name="collider" x="640" y="704" width="32" height="32"/>
-  <object id="553" name="collider" x="800" y="608" width="32" height="32"/>
-  <object id="554" name="collider" x="800" y="576" width="32" height="32"/>
-  <object id="555" name="collider" x="800" y="640" width="32" height="32"/>
-  <object id="556" name="collider" x="800" y="544" width="32" height="32"/>
-  <object id="557" name="collider" x="704" y="640" width="32" height="32"/>
-  <object id="558" name="collider" x="704" y="704" width="32" height="32"/>
-  <object id="559" name="collider" x="704" y="672" width="32" height="32"/>
-  <object id="560" name="collider" x="288" y="640" width="32" height="32"/>
-  <object id="561" name="collider" x="288" y="704" width="32" height="32"/>
-  <object id="562" name="collider" x="288" y="672" width="32" height="32"/>
-  <object id="563" name="collider" x="288" y="288" width="32" height="32"/>
-  <object id="564" name="collider" x="288" y="352" width="32" height="32"/>
-  <object id="565" name="collider" x="288" y="320" width="32" height="32"/>
-  <object id="566" name="collider" x="704" y="288" width="32" height="32"/>
-  <object id="567" name="collider" x="704" y="352" width="32" height="32"/>
-  <object id="568" name="collider" x="704" y="320" width="32" height="32"/>
-  <object id="569" name="collider" x="416" y="800" width="32" height="32"/>
-  <object id="570" name="collider" x="384" y="800" width="32" height="32"/>
-  <object id="571" name="collider" x="320" y="704" width="32" height="32"/>
-  <object id="572" name="collider" x="672" y="704" width="32" height="32"/>
-  <object id="573" name="collider" x="672" y="288" width="32" height="32"/>
-  <object id="574" name="collider" x="320" y="288" width="32" height="32"/>
-  <object id="575" name="collider" x="544" y="800" width="32" height="32"/>
-  <object id="576" name="collider" x="576" y="800" width="32" height="32"/>
-  <object id="577" name="collider" x="224" y="640" width="32" height="32"/>
-  <object id="578" name="collider" x="256" y="640" width="32" height="32"/>
-  <object id="579" name="collider" x="224" y="352" width="32" height="32"/>
-  <object id="580" name="collider" x="256" y="352" width="32" height="32"/>
-  <object id="581" name="collider" x="384" y="192" width="32" height="32"/>
-  <object id="582" name="collider" x="416" y="192" width="32" height="32"/>
-  <object id="583" name="collider" x="576" y="192" width="32" height="32"/>
-  <object id="584" name="collider" x="608" y="192" width="32" height="32"/>
-  <object id="585" name="collider" x="736" y="352" width="32" height="32"/>
-  <object id="586" name="collider" x="768" y="352" width="32" height="32"/>
-  <object id="587" name="collider" x="832" y="448" width="32" height="32"/>
-  <object id="588" name="collider" x="864" y="448" width="32" height="32"/>
-  <object id="589" name="collider" x="832" y="544" width="32" height="32"/>
-  <object id="590" name="collider" x="864" y="544" width="32" height="32"/>
-  <object id="591" name="collider" x="896" y="544" width="32" height="32"/>
-  <object id="592" name="collider" x="928" y="544" width="32" height="32"/>
-  <object id="593" name="collider" x="736" y="640" width="32" height="32"/>
-  <object id="594" name="collider" x="768" y="640" width="32" height="32"/>
-  <object id="595" name="collider" x="960" y="544" width="32" height="32"/>
-  <object id="596" name="collider" x="608" y="800" width="32" height="32"/>
-  <object id="597" name="collider" x="96" y="544" width="32" height="32"/>
-  <object id="598" name="collider" x="128" y="544" width="32" height="32"/>
-  <object id="599" name="collider" x="64" y="160" width="32" height="32"/>
-  <object id="600" name="collider" x="160" y="544" width="32" height="32"/>
-  <object id="601" name="collider" x="32" y="160" width="32" height="32"/>
-  <object id="602" name="collider" x="64" y="544" width="32" height="32"/>
-  <object id="603" name="collider" x="32" y="544" width="32" height="32"/>
-  <object id="604" name="collider" x="960" y="160" width="32" height="32"/>
-  <object id="605" name="collider" x="928" y="160" width="32" height="32"/>
-  <object id="606" name="collider" x="544" y="832" width="32" height="32"/>
-  <object id="607" name="collider" x="544" y="896" width="32" height="32"/>
-  <object id="608" name="collider" x="544" y="864" width="32" height="32"/>
-  <object id="609" name="collider" x="544" y="960" width="32" height="32"/>
-  <object id="610" name="collider" x="544" y="928" width="32" height="32"/>
-  <object id="611" name="collider" x="544" y="352" width="32" height="32"/>
-  <object id="612" name="collider" x="544" y="320" width="32" height="32"/>
-  <object id="613" name="collider" x="544" y="384" width="32" height="32"/>
-  <object id="614" name="collider" x="544" y="288" width="32" height="32"/>
-  <object id="615" name="collider" x="576" y="352" width="32" height="32"/>
-  <object id="616" name="collider" x="576" y="320" width="32" height="32"/>
-  <object id="617" name="collider" x="576" y="384" width="32" height="32"/>
-  <object id="618" name="collider" x="576" y="288" width="32" height="32"/>
-  <object id="619" name="collider" x="448" y="352" width="32" height="32"/>
-  <object id="620" name="collider" x="448" y="320" width="32" height="32"/>
-  <object id="621" name="collider" x="448" y="384" width="32" height="32"/>
-  <object id="622" name="collider" x="448" y="288" width="32" height="32"/>
-  <object id="623" name="collider" x="416" y="352" width="32" height="32"/>
-  <object id="624" name="collider" x="416" y="320" width="32" height="32"/>
-  <object id="625" name="collider" x="416" y="384" width="32" height="32"/>
-  <object id="626" name="collider" x="416" y="288" width="32" height="32"/>
-  <object id="627" name="collider" x="448" y="672" width="32" height="32"/>
-  <object id="628" name="collider" x="448" y="640" width="32" height="32"/>
-  <object id="629" name="collider" x="448" y="704" width="32" height="32"/>
-  <object id="630" name="collider" x="448" y="608" width="32" height="32"/>
-  <object id="631" name="collider" x="416" y="672" width="32" height="32"/>
-  <object id="632" name="collider" x="416" y="640" width="32" height="32"/>
-  <object id="633" name="collider" x="416" y="704" width="32" height="32"/>
-  <object id="634" name="collider" x="416" y="608" width="32" height="32"/>
-  <object id="635" name="collider" x="544" y="704" width="32" height="32"/>
-  <object id="636" name="collider" x="576" y="608" width="32" height="32"/>
-  <object id="637" name="collider" x="576" y="704" width="32" height="32"/>
-  <object id="638" name="collider" x="544" y="640" width="32" height="32"/>
-  <object id="639" name="collider" x="576" y="640" width="32" height="32"/>
-  <object id="640" name="collider" x="544" y="608" width="32" height="32"/>
-  <object id="641" name="collider" x="544" y="672" width="32" height="32"/>
-  <object id="642" name="collider" x="576" y="672" width="32" height="32"/>
-  <object id="643" name="collider" x="704" y="448" width="32" height="32"/>
-  <object id="644" name="collider" x="608" y="448" width="32" height="32"/>
-  <object id="645" name="collider" x="640" y="448" width="32" height="32"/>
-  <object id="646" name="collider" x="672" y="448" width="32" height="32"/>
-  <object id="647" name="collider" x="704" y="416" width="32" height="32"/>
-  <object id="648" name="collider" x="608" y="416" width="32" height="32"/>
-  <object id="649" name="collider" x="640" y="416" width="32" height="32"/>
-  <object id="650" name="collider" x="672" y="416" width="32" height="32"/>
-  <object id="651" name="collider" x="320" y="448" width="32" height="32"/>
-  <object id="652" name="collider" x="288" y="416" width="32" height="32"/>
-  <object id="653" name="collider" x="352" y="448" width="32" height="32"/>
-  <object id="654" name="collider" x="288" y="448" width="32" height="32"/>
-  <object id="655" name="collider" x="384" y="448" width="32" height="32"/>
-  <object id="656" name="collider" x="384" y="416" width="32" height="32"/>
-  <object id="657" name="collider" x="352" y="416" width="32" height="32"/>
-  <object id="658" name="collider" x="320" y="416" width="32" height="32"/>
-  <object id="659" name="collider" x="320" y="576" width="32" height="32"/>
-  <object id="660" name="collider" x="288" y="544" width="32" height="32"/>
-  <object id="661" name="collider" x="352" y="576" width="32" height="32"/>
-  <object id="662" name="collider" x="288" y="576" width="32" height="32"/>
-  <object id="663" name="collider" x="384" y="576" width="32" height="32"/>
-  <object id="664" name="collider" x="384" y="544" width="32" height="32"/>
-  <object id="665" name="collider" x="352" y="544" width="32" height="32"/>
-  <object id="666" name="collider" x="320" y="544" width="32" height="32"/>
-  <object id="667" name="collider" x="640" y="576" width="32" height="32"/>
-  <object id="668" name="collider" x="608" y="544" width="32" height="32"/>
-  <object id="669" name="collider" x="672" y="576" width="32" height="32"/>
-  <object id="670" name="collider" x="608" y="576" width="32" height="32"/>
-  <object id="671" name="collider" x="704" y="576" width="32" height="32"/>
-  <object id="672" name="collider" x="704" y="544" width="32" height="32"/>
-  <object id="673" name="collider" x="672" y="544" width="32" height="32"/>
-  <object id="674" name="collider" x="640" y="544" width="32" height="32"/>
-  <object id="675" name="collider" x="576" y="576" width="32" height="32"/>
-  <object id="676" name="collider" x="416" y="576" width="32" height="32"/>
-  <object id="677" name="collider" x="416" y="416" width="32" height="32"/>
-  <object id="678" name="collider" x="576" y="416" width="32" height="32"/>
-  <object id="679" name="collider" x="640" y="384" width="32" height="32"/>
-  <object id="680" name="collider" x="608" y="352" width="32" height="32"/>
-  <object id="681" name="collider" x="384" y="640" width="32" height="32"/>
-  <object id="682" name="collider" x="352" y="608" width="32" height="32"/>
-  <object id="683" name="collider" x="608" y="640" width="32" height="32"/>
-  <object id="684" name="collider" x="640" y="608" width="32" height="32"/>
-  <object id="685" name="collider" x="352" y="384" width="32" height="32"/>
-  <object id="686" name="collider" x="384" y="352" width="32" height="32"/>
-  <object id="687" name="collider" x="384" y="384" width="32" height="32"/>
-  <object id="688" name="collider" x="608" y="384" width="32" height="32"/>
-  <object id="689" name="collider" x="384" y="608" width="32" height="32"/>
-  <object id="690" name="collider" x="608" y="608" width="32" height="32"/>
-  <object id="691" name="collider" x="128" y="448" width="32" height="32"/>
-  <object id="692" name="collider" x="160" y="448" width="32" height="32"/>
+ <objectgroup name="gameMasterColliderWalls" width="0" height="0">
+  <object name="collider" x="448" y="992" width="32" height="32"/>
+  <object name="collider" x="544" y="992" width="32" height="32"/>
+  <object name="topLeftCollider" x="33" y="0" width="448" height="64"/>
+  <object name="topRightCollider" x="544" y="0" width="448" height="64"/>
+  <object name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
+  <object name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
+  <object name="leftWallCollider" x="0" y="288" width="32" height="736"/>
+  <object name="rightWallCollider" x="992" y="288" width="32" height="736"/>
+  <object name="leftWallCollider2" x="0" y="0" width="32" height="192"/>
+  <object name="rightWallCollider2" x="992" y="0" width="32" height="192"/>
+  <object name="collider" x="448" y="800" width="32" height="32"/>
+  <object name="collider" x="448" y="832" width="32" height="32"/>
+  <object name="collider" x="448" y="864" width="32" height="32"/>
+  <object name="collider" x="448" y="896" width="32" height="32"/>
+  <object name="collider" x="448" y="928" width="32" height="32"/>
+  <object name="collider" x="448" y="960" width="32" height="32"/>
+  <object name="collider" x="448" y="96" width="32" height="32"/>
+  <object name="collider" x="448" y="160" width="32" height="32"/>
+  <object name="collider" x="448" y="128" width="32" height="32"/>
+  <object name="collider" x="448" y="192" width="32" height="32"/>
+  <object name="collider" x="448" y="64" width="32" height="32"/>
+  <object name="collider" x="544" y="192" width="32" height="32"/>
+  <object name="collider" x="544" y="160" width="32" height="32"/>
+  <object name="collider" x="544" y="128" width="32" height="32"/>
+  <object name="collider" x="544" y="96" width="32" height="32"/>
+  <object name="collider" x="544" y="64" width="32" height="32"/>
+  <object name="collider" x="896" y="288" width="32" height="32"/>
+  <object name="collider" x="896" y="256" width="32" height="32"/>
+  <object name="collider" x="896" y="224" width="32" height="32"/>
+  <object name="collider" x="896" y="192" width="32" height="32"/>
+  <object name="collider" x="896" y="160" width="32" height="32"/>
+  <object name="collider" x="896" y="352" width="32" height="32"/>
+  <object name="collider" x="896" y="384" width="32" height="32"/>
+  <object name="collider" x="896" y="416" width="32" height="32"/>
+  <object name="collider" x="896" y="320" width="32" height="32"/>
+  <object name="collider" x="896" y="448" width="32" height="32"/>
+  <object name="collider" x="96" y="352" width="32" height="32"/>
+  <object name="collider" x="96" y="192" width="32" height="32"/>
+  <object name="collider" x="96" y="416" width="32" height="32"/>
+  <object name="collider" x="96" y="448" width="32" height="32"/>
+  <object name="collider" x="96" y="320" width="32" height="32"/>
+  <object name="collider" x="96" y="224" width="32" height="32"/>
+  <object name="collider" x="96" y="384" width="32" height="32"/>
+  <object name="collider" x="96" y="256" width="32" height="32"/>
+  <object name="collider" x="96" y="160" width="32" height="32"/>
+  <object name="collider" x="96" y="288" width="32" height="32"/>
+  <object name="collider" x="192" y="416" width="32" height="32"/>
+  <object name="collider" x="192" y="384" width="32" height="32"/>
+  <object name="collider" x="192" y="448" width="32" height="32"/>
+  <object name="collider" x="192" y="352" width="32" height="32"/>
+  <object name="collider" x="800" y="416" width="32" height="32"/>
+  <object name="collider" x="800" y="384" width="32" height="32"/>
+  <object name="collider" x="800" y="448" width="32" height="32"/>
+  <object name="collider" x="800" y="352" width="32" height="32"/>
+  <object name="collider" x="640" y="256" width="32" height="32"/>
+  <object name="collider" x="640" y="224" width="32" height="32"/>
+  <object name="collider" x="640" y="288" width="32" height="32"/>
+  <object name="collider" x="640" y="192" width="32" height="32"/>
+  <object name="collider" x="352" y="256" width="32" height="32"/>
+  <object name="collider" x="352" y="224" width="32" height="32"/>
+  <object name="collider" x="352" y="288" width="32" height="32"/>
+  <object name="collider" x="352" y="192" width="32" height="32"/>
+  <object name="collider" x="352" y="768" width="32" height="32"/>
+  <object name="collider" x="352" y="736" width="32" height="32"/>
+  <object name="collider" x="352" y="800" width="32" height="32"/>
+  <object name="collider" x="352" y="704" width="32" height="32"/>
+  <object name="collider" x="192" y="608" width="32" height="32"/>
+  <object name="collider" x="192" y="576" width="32" height="32"/>
+  <object name="collider" x="192" y="640" width="32" height="32"/>
+  <object name="collider" x="192" y="544" width="32" height="32"/>
+  <object name="collider" x="640" y="768" width="32" height="32"/>
+  <object name="collider" x="640" y="736" width="32" height="32"/>
+  <object name="collider" x="640" y="800" width="32" height="32"/>
+  <object name="collider" x="640" y="704" width="32" height="32"/>
+  <object name="collider" x="800" y="608" width="32" height="32"/>
+  <object name="collider" x="800" y="576" width="32" height="32"/>
+  <object name="collider" x="800" y="640" width="32" height="32"/>
+  <object name="collider" x="800" y="544" width="32" height="32"/>
+  <object name="collider" x="704" y="640" width="32" height="32"/>
+  <object name="collider" x="704" y="704" width="32" height="32"/>
+  <object name="collider" x="704" y="672" width="32" height="32"/>
+  <object name="collider" x="288" y="640" width="32" height="32"/>
+  <object name="collider" x="288" y="704" width="32" height="32"/>
+  <object name="collider" x="288" y="672" width="32" height="32"/>
+  <object name="collider" x="288" y="288" width="32" height="32"/>
+  <object name="collider" x="288" y="352" width="32" height="32"/>
+  <object name="collider" x="288" y="320" width="32" height="32"/>
+  <object name="collider" x="704" y="288" width="32" height="32"/>
+  <object name="collider" x="704" y="352" width="32" height="32"/>
+  <object name="collider" x="704" y="320" width="32" height="32"/>
+  <object name="collider" x="416" y="800" width="32" height="32"/>
+  <object name="collider" x="384" y="800" width="32" height="32"/>
+  <object name="collider" x="320" y="704" width="32" height="32"/>
+  <object name="collider" x="672" y="704" width="32" height="32"/>
+  <object name="collider" x="672" y="288" width="32" height="32"/>
+  <object name="collider" x="320" y="288" width="32" height="32"/>
+  <object name="collider" x="544" y="800" width="32" height="32"/>
+  <object name="collider" x="576" y="800" width="32" height="32"/>
+  <object name="collider" x="224" y="640" width="32" height="32"/>
+  <object name="collider" x="256" y="640" width="32" height="32"/>
+  <object name="collider" x="224" y="352" width="32" height="32"/>
+  <object name="collider" x="256" y="352" width="32" height="32"/>
+  <object name="collider" x="384" y="192" width="32" height="32"/>
+  <object name="collider" x="416" y="192" width="32" height="32"/>
+  <object name="collider" x="576" y="192" width="32" height="32"/>
+  <object name="collider" x="608" y="192" width="32" height="32"/>
+  <object name="collider" x="736" y="352" width="32" height="32"/>
+  <object name="collider" x="768" y="352" width="32" height="32"/>
+  <object name="collider" x="832" y="448" width="32" height="32"/>
+  <object name="collider" x="864" y="448" width="32" height="32"/>
+  <object name="collider" x="832" y="544" width="32" height="32"/>
+  <object name="collider" x="864" y="544" width="32" height="32"/>
+  <object name="collider" x="896" y="544" width="32" height="32"/>
+  <object name="collider" x="928" y="544" width="32" height="32"/>
+  <object name="collider" x="736" y="640" width="32" height="32"/>
+  <object name="collider" x="768" y="640" width="32" height="32"/>
+  <object name="collider" x="960" y="544" width="32" height="32"/>
+  <object name="collider" x="608" y="800" width="32" height="32"/>
+  <object name="collider" x="96" y="544" width="32" height="32"/>
+  <object name="collider" x="128" y="544" width="32" height="32"/>
+  <object name="collider" x="64" y="160" width="32" height="32"/>
+  <object name="collider" x="160" y="544" width="32" height="32"/>
+  <object name="collider" x="32" y="160" width="32" height="32"/>
+  <object name="collider" x="64" y="544" width="32" height="32"/>
+  <object name="collider" x="32" y="544" width="32" height="32"/>
+  <object name="collider" x="960" y="160" width="32" height="32"/>
+  <object name="collider" x="928" y="160" width="32" height="32"/>
+  <object name="collider" x="544" y="832" width="32" height="32"/>
+  <object name="collider" x="544" y="896" width="32" height="32"/>
+  <object name="collider" x="544" y="864" width="32" height="32"/>
+  <object name="collider" x="544" y="960" width="32" height="32"/>
+  <object name="collider" x="544" y="928" width="32" height="32"/>
+  <object name="collider" x="544" y="352" width="32" height="32"/>
+  <object name="collider" x="544" y="320" width="32" height="32"/>
+  <object name="collider" x="544" y="384" width="32" height="32"/>
+  <object name="collider" x="544" y="288" width="32" height="32"/>
+  <object name="collider" x="576" y="352" width="32" height="32"/>
+  <object name="collider" x="576" y="320" width="32" height="32"/>
+  <object name="collider" x="576" y="384" width="32" height="32"/>
+  <object name="collider" x="576" y="288" width="32" height="32"/>
+  <object name="collider" x="448" y="352" width="32" height="32"/>
+  <object name="collider" x="448" y="320" width="32" height="32"/>
+  <object name="collider" x="448" y="384" width="32" height="32"/>
+  <object name="collider" x="448" y="288" width="32" height="32"/>
+  <object name="collider" x="416" y="352" width="32" height="32"/>
+  <object name="collider" x="416" y="320" width="32" height="32"/>
+  <object name="collider" x="416" y="384" width="32" height="32"/>
+  <object name="collider" x="416" y="288" width="32" height="32"/>
+  <object name="collider" x="448" y="672" width="32" height="32"/>
+  <object name="collider" x="448" y="640" width="32" height="32"/>
+  <object name="collider" x="448" y="704" width="32" height="32"/>
+  <object name="collider" x="448" y="608" width="32" height="32"/>
+  <object name="collider" x="416" y="672" width="32" height="32"/>
+  <object name="collider" x="416" y="640" width="32" height="32"/>
+  <object name="collider" x="416" y="704" width="32" height="32"/>
+  <object name="collider" x="416" y="608" width="32" height="32"/>
+  <object name="collider" x="544" y="704" width="32" height="32"/>
+  <object name="collider" x="576" y="608" width="32" height="32"/>
+  <object name="collider" x="576" y="704" width="32" height="32"/>
+  <object name="collider" x="544" y="640" width="32" height="32"/>
+  <object name="collider" x="576" y="640" width="32" height="32"/>
+  <object name="collider" x="544" y="608" width="32" height="32"/>
+  <object name="collider" x="544" y="672" width="32" height="32"/>
+  <object name="collider" x="576" y="672" width="32" height="32"/>
+  <object name="collider" x="704" y="448" width="32" height="32"/>
+  <object name="collider" x="608" y="448" width="32" height="32"/>
+  <object name="collider" x="640" y="448" width="32" height="32"/>
+  <object name="collider" x="672" y="448" width="32" height="32"/>
+  <object name="collider" x="704" y="416" width="32" height="32"/>
+  <object name="collider" x="608" y="416" width="32" height="32"/>
+  <object name="collider" x="640" y="416" width="32" height="32"/>
+  <object name="collider" x="672" y="416" width="32" height="32"/>
+  <object name="collider" x="320" y="448" width="32" height="32"/>
+  <object name="collider" x="288" y="416" width="32" height="32"/>
+  <object name="collider" x="352" y="448" width="32" height="32"/>
+  <object name="collider" x="288" y="448" width="32" height="32"/>
+  <object name="collider" x="384" y="448" width="32" height="32"/>
+  <object name="collider" x="384" y="416" width="32" height="32"/>
+  <object name="collider" x="352" y="416" width="32" height="32"/>
+  <object name="collider" x="320" y="416" width="32" height="32"/>
+  <object name="collider" x="320" y="576" width="32" height="32"/>
+  <object name="collider" x="288" y="544" width="32" height="32"/>
+  <object name="collider" x="352" y="576" width="32" height="32"/>
+  <object name="collider" x="288" y="576" width="32" height="32"/>
+  <object name="collider" x="384" y="576" width="32" height="32"/>
+  <object name="collider" x="384" y="544" width="32" height="32"/>
+  <object name="collider" x="352" y="544" width="32" height="32"/>
+  <object name="collider" x="320" y="544" width="32" height="32"/>
+  <object name="collider" x="640" y="576" width="32" height="32"/>
+  <object name="collider" x="608" y="544" width="32" height="32"/>
+  <object name="collider" x="672" y="576" width="32" height="32"/>
+  <object name="collider" x="608" y="576" width="32" height="32"/>
+  <object name="collider" x="704" y="576" width="32" height="32"/>
+  <object name="collider" x="704" y="544" width="32" height="32"/>
+  <object name="collider" x="672" y="544" width="32" height="32"/>
+  <object name="collider" x="640" y="544" width="32" height="32"/>
+  <object name="collider" x="576" y="576" width="32" height="32"/>
+  <object name="collider" x="416" y="576" width="32" height="32"/>
+  <object name="collider" x="416" y="416" width="32" height="32"/>
+  <object name="collider" x="576" y="416" width="32" height="32"/>
+  <object name="collider" x="640" y="384" width="32" height="32"/>
+  <object name="collider" x="608" y="352" width="32" height="32"/>
+  <object name="collider" x="384" y="640" width="32" height="32"/>
+  <object name="collider" x="352" y="608" width="32" height="32"/>
+  <object name="collider" x="608" y="640" width="32" height="32"/>
+  <object name="collider" x="640" y="608" width="32" height="32"/>
+  <object name="collider" x="352" y="384" width="32" height="32"/>
+  <object name="collider" x="384" y="352" width="32" height="32"/>
+  <object name="collider" x="384" y="384" width="32" height="32"/>
+  <object name="collider" x="608" y="384" width="32" height="32"/>
+  <object name="collider" x="384" y="608" width="32" height="32"/>
+  <object name="collider" x="608" y="608" width="32" height="32"/>
+  <object name="collider" x="128" y="448" width="32" height="32"/>
+  <object name="collider" x="160" y="448" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="gameMasterColliderWalls">
-  <object id="265" name="collider" x="448" y="992" width="32" height="32"/>
-  <object id="266" name="collider" x="544" y="992" width="32" height="32"/>
-  <object id="267" name="topLeftCollider" x="33" y="0" width="448" height="64"/>
-  <object id="268" name="topRightCollider" x="544" y="0" width="448" height="64"/>
-  <object id="269" name="bottomLeftCollider" x="33" y="992" width="412" height="32"/>
-  <object id="270" name="bottomRightCollider" x="576" y="992" width="412" height="32"/>
-  <object id="271" name="leftWallCollider" x="0" y="288" width="32" height="736"/>
-  <object id="272" name="rightWallCollider" x="992" y="288" width="32" height="736"/>
-  <object id="273" name="leftWallCollider2" x="0" y="0" width="32" height="192"/>
-  <object id="274" name="rightWallCollider2" x="992" y="0" width="32" height="192"/>
-  <object id="275" name="collider" x="448" y="800" width="32" height="32"/>
-  <object id="276" name="collider" x="448" y="832" width="32" height="32"/>
-  <object id="277" name="collider" x="448" y="864" width="32" height="32"/>
-  <object id="278" name="collider" x="448" y="896" width="32" height="32"/>
-  <object id="279" name="collider" x="448" y="928" width="32" height="32"/>
-  <object id="280" name="collider" x="448" y="960" width="32" height="32"/>
-  <object id="281" name="collider" x="448" y="96" width="32" height="32"/>
-  <object id="282" name="collider" x="448" y="160" width="32" height="32"/>
-  <object id="283" name="collider" x="448" y="128" width="32" height="32"/>
-  <object id="284" name="collider" x="448" y="192" width="32" height="32"/>
-  <object id="285" name="collider" x="448" y="64" width="32" height="32"/>
-  <object id="286" name="collider" x="544" y="192" width="32" height="32"/>
-  <object id="287" name="collider" x="544" y="160" width="32" height="32"/>
-  <object id="288" name="collider" x="544" y="128" width="32" height="32"/>
-  <object id="289" name="collider" x="544" y="96" width="32" height="32"/>
-  <object id="290" name="collider" x="544" y="64" width="32" height="32"/>
-  <object id="291" name="collider" x="896" y="288" width="32" height="32"/>
-  <object id="292" name="collider" x="896" y="256" width="32" height="32"/>
-  <object id="293" name="collider" x="896" y="224" width="32" height="32"/>
-  <object id="294" name="collider" x="896" y="192" width="32" height="32"/>
-  <object id="295" name="collider" x="896" y="160" width="32" height="32"/>
-  <object id="296" name="collider" x="896" y="352" width="32" height="32"/>
-  <object id="297" name="collider" x="896" y="384" width="32" height="32"/>
-  <object id="298" name="collider" x="896" y="416" width="32" height="32"/>
-  <object id="299" name="collider" x="896" y="320" width="32" height="32"/>
-  <object id="300" name="collider" x="896" y="448" width="32" height="32"/>
-  <object id="301" name="collider" x="96" y="352" width="32" height="32"/>
-  <object id="302" name="collider" x="96" y="192" width="32" height="32"/>
-  <object id="303" name="collider" x="96" y="416" width="32" height="32"/>
-  <object id="304" name="collider" x="96" y="448" width="32" height="32"/>
-  <object id="305" name="collider" x="96" y="320" width="32" height="32"/>
-  <object id="306" name="collider" x="96" y="224" width="32" height="32"/>
-  <object id="307" name="collider" x="96" y="384" width="32" height="32"/>
-  <object id="308" name="collider" x="96" y="256" width="32" height="32"/>
-  <object id="309" name="collider" x="96" y="160" width="32" height="32"/>
-  <object id="310" name="collider" x="96" y="288" width="32" height="32"/>
-  <object id="311" name="collider" x="192" y="416" width="32" height="32"/>
-  <object id="312" name="collider" x="192" y="384" width="32" height="32"/>
-  <object id="313" name="collider" x="192" y="448" width="32" height="32"/>
-  <object id="314" name="collider" x="192" y="352" width="32" height="32"/>
-  <object id="315" name="collider" x="800" y="416" width="32" height="32"/>
-  <object id="316" name="collider" x="800" y="384" width="32" height="32"/>
-  <object id="317" name="collider" x="800" y="448" width="32" height="32"/>
-  <object id="318" name="collider" x="800" y="352" width="32" height="32"/>
-  <object id="319" name="collider" x="640" y="256" width="32" height="32"/>
-  <object id="320" name="collider" x="640" y="224" width="32" height="32"/>
-  <object id="321" name="collider" x="640" y="288" width="32" height="32"/>
-  <object id="322" name="collider" x="640" y="192" width="32" height="32"/>
-  <object id="323" name="collider" x="352" y="256" width="32" height="32"/>
-  <object id="324" name="collider" x="352" y="224" width="32" height="32"/>
-  <object id="325" name="collider" x="352" y="288" width="32" height="32"/>
-  <object id="326" name="collider" x="352" y="192" width="32" height="32"/>
-  <object id="327" name="collider" x="352" y="768" width="32" height="32"/>
-  <object id="328" name="collider" x="352" y="736" width="32" height="32"/>
-  <object id="329" name="collider" x="352" y="800" width="32" height="32"/>
-  <object id="330" name="collider" x="352" y="704" width="32" height="32"/>
-  <object id="331" name="collider" x="192" y="608" width="32" height="32"/>
-  <object id="332" name="collider" x="192" y="576" width="32" height="32"/>
-  <object id="333" name="collider" x="192" y="640" width="32" height="32"/>
-  <object id="334" name="collider" x="192" y="544" width="32" height="32"/>
-  <object id="335" name="collider" x="640" y="768" width="32" height="32"/>
-  <object id="336" name="collider" x="640" y="736" width="32" height="32"/>
-  <object id="337" name="collider" x="640" y="800" width="32" height="32"/>
-  <object id="338" name="collider" x="640" y="704" width="32" height="32"/>
-  <object id="339" name="collider" x="800" y="608" width="32" height="32"/>
-  <object id="340" name="collider" x="800" y="576" width="32" height="32"/>
-  <object id="341" name="collider" x="800" y="640" width="32" height="32"/>
-  <object id="342" name="collider" x="800" y="544" width="32" height="32"/>
-  <object id="343" name="collider" x="704" y="640" width="32" height="32"/>
-  <object id="344" name="collider" x="704" y="704" width="32" height="32"/>
-  <object id="345" name="collider" x="704" y="672" width="32" height="32"/>
-  <object id="346" name="collider" x="288" y="640" width="32" height="32"/>
-  <object id="347" name="collider" x="288" y="704" width="32" height="32"/>
-  <object id="348" name="collider" x="288" y="672" width="32" height="32"/>
-  <object id="349" name="collider" x="288" y="288" width="32" height="32"/>
-  <object id="350" name="collider" x="288" y="352" width="32" height="32"/>
-  <object id="351" name="collider" x="288" y="320" width="32" height="32"/>
-  <object id="352" name="collider" x="704" y="288" width="32" height="32"/>
-  <object id="353" name="collider" x="704" y="352" width="32" height="32"/>
-  <object id="354" name="collider" x="704" y="320" width="32" height="32"/>
-  <object id="355" name="collider" x="416" y="800" width="32" height="32"/>
-  <object id="356" name="collider" x="384" y="800" width="32" height="32"/>
-  <object id="357" name="collider" x="320" y="704" width="32" height="32"/>
-  <object id="358" name="collider" x="672" y="704" width="32" height="32"/>
-  <object id="359" name="collider" x="672" y="288" width="32" height="32"/>
-  <object id="360" name="collider" x="320" y="288" width="32" height="32"/>
-  <object id="361" name="collider" x="544" y="800" width="32" height="32"/>
-  <object id="362" name="collider" x="576" y="800" width="32" height="32"/>
-  <object id="363" name="collider" x="224" y="640" width="32" height="32"/>
-  <object id="364" name="collider" x="256" y="640" width="32" height="32"/>
-  <object id="365" name="collider" x="224" y="352" width="32" height="32"/>
-  <object id="366" name="collider" x="256" y="352" width="32" height="32"/>
-  <object id="367" name="collider" x="384" y="192" width="32" height="32"/>
-  <object id="368" name="collider" x="416" y="192" width="32" height="32"/>
-  <object id="369" name="collider" x="576" y="192" width="32" height="32"/>
-  <object id="370" name="collider" x="608" y="192" width="32" height="32"/>
-  <object id="371" name="collider" x="736" y="352" width="32" height="32"/>
-  <object id="372" name="collider" x="768" y="352" width="32" height="32"/>
-  <object id="373" name="collider" x="832" y="448" width="32" height="32"/>
-  <object id="374" name="collider" x="864" y="448" width="32" height="32"/>
-  <object id="375" name="collider" x="832" y="544" width="32" height="32"/>
-  <object id="376" name="collider" x="864" y="544" width="32" height="32"/>
-  <object id="377" name="collider" x="896" y="544" width="32" height="32"/>
-  <object id="378" name="collider" x="928" y="544" width="32" height="32"/>
-  <object id="379" name="collider" x="736" y="640" width="32" height="32"/>
-  <object id="380" name="collider" x="768" y="640" width="32" height="32"/>
-  <object id="381" name="collider" x="960" y="544" width="32" height="32"/>
-  <object id="382" name="collider" x="608" y="800" width="32" height="32"/>
-  <object id="383" name="collider" x="96" y="544" width="32" height="32"/>
-  <object id="384" name="collider" x="128" y="544" width="32" height="32"/>
-  <object id="385" name="collider" x="64" y="160" width="32" height="32"/>
-  <object id="386" name="collider" x="160" y="544" width="32" height="32"/>
-  <object id="387" name="collider" x="32" y="160" width="32" height="32"/>
-  <object id="388" name="collider" x="64" y="544" width="32" height="32"/>
-  <object id="389" name="collider" x="32" y="544" width="32" height="32"/>
-  <object id="390" name="collider" x="960" y="160" width="32" height="32"/>
-  <object id="391" name="collider" x="928" y="160" width="32" height="32"/>
-  <object id="392" name="collider" x="544" y="832" width="32" height="32"/>
-  <object id="393" name="collider" x="544" y="896" width="32" height="32"/>
-  <object id="394" name="collider" x="544" y="864" width="32" height="32"/>
-  <object id="395" name="collider" x="544" y="960" width="32" height="32"/>
-  <object id="396" name="collider" x="544" y="928" width="32" height="32"/>
-  <object id="397" name="collider" x="544" y="352" width="32" height="32"/>
-  <object id="398" name="collider" x="544" y="320" width="32" height="32"/>
-  <object id="399" name="collider" x="544" y="384" width="32" height="32"/>
-  <object id="400" name="collider" x="544" y="288" width="32" height="32"/>
-  <object id="401" name="collider" x="576" y="352" width="32" height="32"/>
-  <object id="402" name="collider" x="576" y="320" width="32" height="32"/>
-  <object id="403" name="collider" x="576" y="384" width="32" height="32"/>
-  <object id="404" name="collider" x="576" y="288" width="32" height="32"/>
-  <object id="405" name="collider" x="448" y="352" width="32" height="32"/>
-  <object id="406" name="collider" x="448" y="320" width="32" height="32"/>
-  <object id="407" name="collider" x="448" y="384" width="32" height="32"/>
-  <object id="408" name="collider" x="448" y="288" width="32" height="32"/>
-  <object id="409" name="collider" x="416" y="352" width="32" height="32"/>
-  <object id="410" name="collider" x="416" y="320" width="32" height="32"/>
-  <object id="411" name="collider" x="416" y="384" width="32" height="32"/>
-  <object id="412" name="collider" x="416" y="288" width="32" height="32"/>
-  <object id="413" name="collider" x="448" y="672" width="32" height="32"/>
-  <object id="414" name="collider" x="448" y="640" width="32" height="32"/>
-  <object id="415" name="collider" x="448" y="704" width="32" height="32"/>
-  <object id="416" name="collider" x="448" y="608" width="32" height="32"/>
-  <object id="417" name="collider" x="416" y="672" width="32" height="32"/>
-  <object id="418" name="collider" x="416" y="640" width="32" height="32"/>
-  <object id="419" name="collider" x="416" y="704" width="32" height="32"/>
-  <object id="420" name="collider" x="416" y="608" width="32" height="32"/>
-  <object id="421" name="collider" x="544" y="704" width="32" height="32"/>
-  <object id="422" name="collider" x="576" y="608" width="32" height="32"/>
-  <object id="423" name="collider" x="576" y="704" width="32" height="32"/>
-  <object id="424" name="collider" x="544" y="640" width="32" height="32"/>
-  <object id="425" name="collider" x="576" y="640" width="32" height="32"/>
-  <object id="426" name="collider" x="544" y="608" width="32" height="32"/>
-  <object id="427" name="collider" x="544" y="672" width="32" height="32"/>
-  <object id="428" name="collider" x="576" y="672" width="32" height="32"/>
-  <object id="429" name="collider" x="704" y="448" width="32" height="32"/>
-  <object id="430" name="collider" x="608" y="448" width="32" height="32"/>
-  <object id="431" name="collider" x="640" y="448" width="32" height="32"/>
-  <object id="432" name="collider" x="672" y="448" width="32" height="32"/>
-  <object id="433" name="collider" x="704" y="416" width="32" height="32"/>
-  <object id="434" name="collider" x="608" y="416" width="32" height="32"/>
-  <object id="435" name="collider" x="640" y="416" width="32" height="32"/>
-  <object id="436" name="collider" x="672" y="416" width="32" height="32"/>
-  <object id="437" name="collider" x="320" y="448" width="32" height="32"/>
-  <object id="438" name="collider" x="288" y="416" width="32" height="32"/>
-  <object id="439" name="collider" x="352" y="448" width="32" height="32"/>
-  <object id="440" name="collider" x="288" y="448" width="32" height="32"/>
-  <object id="441" name="collider" x="384" y="448" width="32" height="32"/>
-  <object id="442" name="collider" x="384" y="416" width="32" height="32"/>
-  <object id="443" name="collider" x="352" y="416" width="32" height="32"/>
-  <object id="444" name="collider" x="320" y="416" width="32" height="32"/>
-  <object id="445" name="collider" x="320" y="576" width="32" height="32"/>
-  <object id="446" name="collider" x="288" y="544" width="32" height="32"/>
-  <object id="447" name="collider" x="352" y="576" width="32" height="32"/>
-  <object id="448" name="collider" x="288" y="576" width="32" height="32"/>
-  <object id="449" name="collider" x="384" y="576" width="32" height="32"/>
-  <object id="450" name="collider" x="384" y="544" width="32" height="32"/>
-  <object id="451" name="collider" x="352" y="544" width="32" height="32"/>
-  <object id="452" name="collider" x="320" y="544" width="32" height="32"/>
-  <object id="453" name="collider" x="640" y="576" width="32" height="32"/>
-  <object id="454" name="collider" x="608" y="544" width="32" height="32"/>
-  <object id="455" name="collider" x="672" y="576" width="32" height="32"/>
-  <object id="456" name="collider" x="608" y="576" width="32" height="32"/>
-  <object id="457" name="collider" x="704" y="576" width="32" height="32"/>
-  <object id="458" name="collider" x="704" y="544" width="32" height="32"/>
-  <object id="459" name="collider" x="672" y="544" width="32" height="32"/>
-  <object id="460" name="collider" x="640" y="544" width="32" height="32"/>
-  <object id="461" name="collider" x="576" y="576" width="32" height="32"/>
-  <object id="462" name="collider" x="416" y="576" width="32" height="32"/>
-  <object id="463" name="collider" x="416" y="416" width="32" height="32"/>
-  <object id="464" name="collider" x="576" y="416" width="32" height="32"/>
-  <object id="465" name="collider" x="640" y="384" width="32" height="32"/>
-  <object id="466" name="collider" x="608" y="352" width="32" height="32"/>
-  <object id="467" name="collider" x="384" y="640" width="32" height="32"/>
-  <object id="468" name="collider" x="352" y="608" width="32" height="32"/>
-  <object id="469" name="collider" x="608" y="640" width="32" height="32"/>
-  <object id="470" name="collider" x="640" y="608" width="32" height="32"/>
-  <object id="471" name="collider" x="352" y="384" width="32" height="32"/>
-  <object id="472" name="collider" x="384" y="352" width="32" height="32"/>
-  <object id="473" name="collider" x="384" y="384" width="32" height="32"/>
-  <object id="474" name="collider" x="608" y="384" width="32" height="32"/>
-  <object id="475" name="collider" x="384" y="608" width="32" height="32"/>
-  <object id="476" name="collider" x="608" y="608" width="32" height="32"/>
-  <object id="693" name="collider" x="128" y="448" width="32" height="32"/>
-  <object id="694" name="collider" x="160" y="448" width="32" height="32"/>
+ <objectgroup name="lights" width="32" height="32">
+  <object name="light" x="448" y="448" width="32" height="32"/>
+  <object name="light" x="544" y="448" width="32" height="32"/>
+  <object name="light" x="448" y="544" width="32" height="32"/>
+  <object name="light" x="544" y="544" width="32" height="32"/>
+  <object name="light" x="992" y="128" width="32" height="32"/>
+  <object name="light" x="0" y="128" width="32" height="32"/>
+  <object name="light" x="448" y="0" width="32" height="32"/>
+  <object name="light" x="544" y="0" width="32" height="32"/>
  </objectgroup>
 </map>

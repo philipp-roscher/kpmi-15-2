@@ -129,7 +129,7 @@ public class InMaze implements Screen, PlayerObserver {
         // Light ...................................................................................
         RayHandler.useDiffuseLight(true);
         this.rayHandler = rayHandler;
-        this.rayHandler.setAmbientLight(.3f, .3f, .3f, 0.5f);
+        this.rayHandler.setAmbientLight(.2f, .2f, .2f, 1);
         this.rayHandler.setBlurNum(3);
 
         // load media
@@ -151,7 +151,7 @@ public class InMaze implements Screen, PlayerObserver {
 			maze.addPlayer(p);
 
         // Entity-Component-System ........................................................... START
-        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze);
+        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera);
         // Entity-Component-System ............................................................. END
 
 		// Set Up Client for Communication .........................................................
