@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.view;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -12,9 +14,12 @@ import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.Bullet;
 import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+
+import java.util.IntSummaryStatistics;
 
 
 /**
@@ -32,6 +37,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     private int drawSpritesAfterLayer = 3;
     private MediaManager media;
     private int bulletRotation=0;
+    private BitmapFont font;
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
@@ -44,6 +50,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         weaponComponents = new Array<WeaponComponent>();
         entitySprites = new Array<EntitySprite>();
         this.media = media;
+        this.font = new BitmapFont();
     }
 
 
@@ -123,7 +130,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         }
         endRender();
     }
-
 
 	public void removePlayer(Player player) {
 		players.removeValue(player, false);

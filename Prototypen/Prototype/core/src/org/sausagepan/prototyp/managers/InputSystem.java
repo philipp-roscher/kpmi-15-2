@@ -6,10 +6,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -18,7 +22,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 /**
  * Created by georg on 28.10.15.
  */
-public class InputSystem extends EntitySystem {
+public class InputSystem extends EntitySystem implements InputProcessor {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime = 0;
@@ -32,10 +36,14 @@ public class InputSystem extends EntitySystem {
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
 
+    private Viewport viewport;
+
     /* ........................................................................... CONSTRUCTOR .. */
-    public InputSystem() {
+    public InputSystem(Viewport viewport) {
         this.directionVector = new Vector2();
         this.normDirectionVector = new Vector2();
+        this.viewport = viewport;
+        Gdx.input.setInputProcessor(this);
     }
     
     /* ............................................................................... METHODS .. */
@@ -105,7 +113,75 @@ public class InputSystem extends EntitySystem {
         } else input.moving = true;
 
         body.setLinearVelocity(directionVector);
+    }
 
+    /* ....................................................................... INPUT PROCESSOR .. */
+    @Override
+    public boolean keyDown(int keycode) {
+        for (Entity entity : entities) {
+            InputComponent input = im.get(entity);
+            switch(keycode) {
+                case Input.Keys.UP:     input.direction = Direction.NORTH;break;
+                case Input.Keys.LEFT:   input.direction = Direction.WEST;break;
+                case Input.Keys.RIGHT:  input.direction = Direction.EAST;break;
+                case Input.Keys.DOWN:   input.direction = Direction.SOUTH;break;
+                case Input.Keys.A:
+                    input.attacking = true;System.out.println("Attacking!");break;
+                default:break;
+            }
+            if(keycode != Input.Keys.A) input.moving = true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        for (Entity entity : entities) {
+            InputComponent input = im.get(entity);
+            if (keycode == Input.Keys.A) input.attacking = false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return touchDragged(screenX,screenY,pointer);
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        for (Entity entity : entities) {
+            InputComponent input = im.get(entity);
+            input.moving = false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        for (Entity entity : entities) {
+            InputComponent input = im.get(entity);
+            input.touchPos.x = screenX;
+            input.touchPos.y = screenY;
+            viewport.unproject(input.touchPos);
+            input.moving = true;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

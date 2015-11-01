@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.managers;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -43,7 +44,6 @@ public class EntityComponentSystem {
     private Viewport viewport;
     private RayHandler rayHandler;
     private Maze maze;
-    private SpriteBatch batch;
     private ShapeRenderer shpRend;
 
     private CharacterEntity localCharacter;
@@ -58,7 +58,6 @@ public class EntityComponentSystem {
         this.viewport = viewport;
         this.rayHandler = rayHandler;
         this.maze = maze;
-        this.batch = game.batch;
         this.shpRend = new ShapeRenderer();
 
         this.engine = new Engine(); // Create Engine
@@ -105,7 +104,7 @@ public class EntityComponentSystem {
         movementSystem.addedToEngine(engine);
 
         // Sprite System
-        SpriteSystem spriteSystem = new SpriteSystem(batch, maze);
+        SpriteSystem spriteSystem = new SpriteSystem(maze);
         spriteSystem.addedToEngine(engine);
 
         // Weapon System
@@ -113,7 +112,7 @@ public class EntityComponentSystem {
         weaponSystem.addedToEngine(engine);
 
         // Input System
-        InputSystem inputSystem = new InputSystem();
+        InputSystem inputSystem = new InputSystem(viewport);
         inputSystem.addedToEngine(engine);
 
         // Character Sprite System
@@ -132,6 +131,10 @@ public class EntityComponentSystem {
         VisualDebuggingSystem visualDebuggingSystem = new VisualDebuggingSystem(shpRend, camera);
         visualDebuggingSystem.addedToEngine(engine);
 
+        // Status System
+        StatusSystem statusSystem = new StatusSystem(maze.getTiledMapRenderer().getBatch());
+        statusSystem.addedToEngine(engine);
+
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
@@ -141,6 +144,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(networkSystem);
         this.engine.addSystem(visualDebuggingSystem);
+        this.engine.addSystem(statusSystem);
     }
 
     /**
@@ -156,7 +160,7 @@ public class EntityComponentSystem {
         localCharacter.add(new CharacterSpriteComponent(
                 mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack")
         ));
-        localCharacter.add(new InputComponent(viewport));
+        localCharacter.add(new InputComponent());
         localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
         ));
         localCharacter.add(new LightComponent(rayHandler));
@@ -188,5 +192,10 @@ public class EntityComponentSystem {
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;
+    }
+
+    public InputProcessor getInputProcessor() {
+        InputSystem inputSystem = this.engine.getSystem(InputSystem.class);
+        return inputSystem;
     }
 }

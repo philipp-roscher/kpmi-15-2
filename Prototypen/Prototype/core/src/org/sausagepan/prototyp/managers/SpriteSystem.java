@@ -27,7 +27,7 @@ public class SpriteSystem extends EntitySystem {
             = ComponentMapper.getFor(SpriteComponent.class);
     private OrthogonalTiledMapRendererWithPlayers tmr;
     /* ........................................................................... CONSTRUCTOR .. */
-    public SpriteSystem(SpriteBatch batch, Maze maze) {
+    public SpriteSystem(Maze maze) {
         this.tmr = maze.getTiledMapRenderer();
     }
     /* ............................................................................... METHODS .. */

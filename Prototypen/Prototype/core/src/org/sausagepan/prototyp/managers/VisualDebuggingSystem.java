@@ -7,7 +7,11 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
@@ -22,15 +26,20 @@ public class VisualDebuggingSystem extends EntitySystem {
 
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
+    private ComponentMapper<HealthComponent> hm
+            = ComponentMapper.getFor(HealthComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
-    public VisualDebuggingSystem(ShapeRenderer shapeRenderer, OrthographicCamera camera) {
+    public VisualDebuggingSystem(
+            ShapeRenderer shapeRenderer,
+            OrthographicCamera camera) {
         this.shapeRenderer = shapeRenderer;
         this.camera = camera;
     }
     /* ............................................................................... METHODS .. */
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.one(
-                WeaponComponent.class
+                WeaponComponent.class,
+                HealthComponent.class
         ).get());
     }
 

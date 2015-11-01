@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -39,6 +40,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -188,13 +190,14 @@ public class InMaze implements Screen, PlayerObserver {
 	public void show() {
 		this.batch = new SpriteBatch();
 //        Gdx.input.setInputProcessor(new PlayerInputProcessor(localPlayer, this.camera));
-        Gdx.input.setInputProcessor(ECS.getLocalCharacterEntity().getComponent(InputComponent.class));
+//        Gdx.input.setInputProcessor(ECS.getLocalCharacterEntity().getComponent(InputComponent.class));
+        Gdx.input.setInputProcessor(ECS.getInputProcessor());
 	}
 
 	@Override
 	public void render(float delta) {
 
-        // Check Server Connection ............................................................................. NETWORK
+        // Check Server Connection ......................................................... NETWORK
 		if(!game.connected) {
 			if( disconnectTime == 0 ) disconnectTime = elapsedTime;
 			else
@@ -204,7 +207,7 @@ public class InMaze implements Screen, PlayerObserver {
 		            dispose();
 				}
 		}
-        // ..................................................................................................... NETWORK
+        // ................................................................................. NETWORK
 
         // Clear screen
         Gdx.gl.glClearColor(.2f, .2f, .2f, 1);

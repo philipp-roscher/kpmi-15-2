@@ -33,6 +33,8 @@ public class BattleSystem extends EntitySystem {
             = ComponentMapper.getFor(HealthComponent.class);
     private ComponentMapper<MagicComponent> mm
             = ComponentMapper.getFor(MagicComponent.class);
+    private ComponentMapper<WeaponComponent> wm
+            = ComponentMapper.getFor(WeaponComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
     public BattleSystem() {}
