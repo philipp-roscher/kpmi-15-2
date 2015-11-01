@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -18,6 +19,7 @@ public class DynamicBodyComponent implements Component {
     public float y = 0.0f;
     public Body dynamicBody;
     public Fixture fixture;
+    public Rectangle injurableArea;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public DynamicBodyComponent(World world, Vector2 startPosition) {

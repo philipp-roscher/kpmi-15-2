@@ -30,7 +30,7 @@ public class ServerPlayer {
     private PlayerPhysicsComponent physics;
 
     // Character Status
-    private boolean attacking = false;  // whether the character is attacking at the moment
+    private boolean attacking = false;  // whether the character is weaponDrawn at the moment
 
 	// Geometry
 	private Direction dir;                  // looking direction of character (N,S,W,E)

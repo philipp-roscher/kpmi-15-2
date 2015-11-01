@@ -26,7 +26,7 @@ public class PlayerBattleComponent extends PlayerComponent {
     private Pool<Bullet>    bulletPool;     // pool of available bullets
     private Array<Bullet>   activeBullets;  // bullets flying through the air right now
     private Rectangle       attackCollider; // represents the characters body in battles
-    private boolean         attacking;      // whether the character is attacking at the moment
+    private boolean         attacking;      // whether the character is weaponDrawn at the moment
 
     private long lastAttack = 0;
 

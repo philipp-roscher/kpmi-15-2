@@ -247,7 +247,7 @@ public class InMaze implements Screen, PlayerObserver {
         maze.render(camera);
 
         // Box2D Debugging
-        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
+//        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
 
         // Light
         rayHandler.setCombinedMatrix(camera.combined);

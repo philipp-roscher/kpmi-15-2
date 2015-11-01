@@ -102,7 +102,7 @@ public class PlayerGraphicsComponent extends PlayerComponent {
         // draw weapon
         shp.begin(ShapeRenderer.ShapeType.Filled);
         if(true) { /* isAttacking */
-            //System.out.println("Is attacking!");
+            //System.out.println("Is weaponDrawn!");
             switch (attributes.getDir()) {
                 case EAST:
                     shp.rect(

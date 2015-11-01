@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -33,6 +34,8 @@ public class PositionSynchroSystem extends EntitySystem {
             = ComponentMapper.getFor(LightComponent.class);
     private ComponentMapper<InputComponent> im
             = ComponentMapper.getFor(InputComponent.class);
+    private ComponentMapper<InjurableAreaComponent> jm
+            = ComponentMapper.getFor(InjurableAreaComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public PositionSynchroSystem() {};
 
@@ -47,7 +50,8 @@ public class PositionSynchroSystem extends EntitySystem {
                 LightComponent.class,
                 CharacterSpriteComponent.class,
                 WeaponComponent.class,
-                InputComponent.class
+                InputComponent.class,
+                InjurableAreaComponent.class
         ).get());
     }
 
@@ -108,6 +112,15 @@ public class PositionSynchroSystem extends EntitySystem {
                 light.spriteLight.setPosition(
                         body.dynamicBody.getPosition().x,
                         body.dynamicBody.getPosition().y
+                );
+            }
+
+            if(entity.getComponent(InjurableAreaComponent.class) != null) {
+                InjurableAreaComponent area = jm.get(entity);
+
+                area.area.setPosition(
+                        body.dynamicBody.getPosition().x-area.area.width/2,
+                        body.dynamicBody.getPosition().y-body.fixture.getShape().getRadius()
                 );
             }
         }

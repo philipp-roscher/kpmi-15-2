@@ -17,6 +17,7 @@ import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
@@ -92,6 +93,8 @@ public class EntityComponentSystem {
             monster.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/zombie_01.pack")
             ));
+            monster.add(new InjurableAreaComponent(pos.x, pos.y, .8f, 1f));
+
             this.engine.addEntity(monster);
             System.out.println("Added monster at (" + pos.x + "|" + pos.y + ")");
         }
@@ -131,9 +134,9 @@ public class EntityComponentSystem {
         VisualDebuggingSystem visualDebuggingSystem = new VisualDebuggingSystem(shpRend, camera);
         visualDebuggingSystem.addedToEngine(engine);
 
-        // Status System
-        StatusSystem statusSystem = new StatusSystem(maze.getTiledMapRenderer().getBatch());
-        statusSystem.addedToEngine(engine);
+        // Battle System
+        BattleSystem battleSystem = new BattleSystem();
+        battleSystem.addedToEngine(engine);
 
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
@@ -144,7 +147,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(networkSystem);
         this.engine.addSystem(visualDebuggingSystem);
-        this.engine.addSystem(statusSystem);
+        this.engine.addSystem(battleSystem);
     }
 
     /**
@@ -167,6 +170,7 @@ public class EntityComponentSystem {
         localCharacter.add(new HealthComponent(100));
         localCharacter.add(new MagicComponent(80));
         localCharacter.add(new NetworkTransmissionComponent());
+        localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f, 1f));
 
         this.engine.addEntity(localCharacter);
     }

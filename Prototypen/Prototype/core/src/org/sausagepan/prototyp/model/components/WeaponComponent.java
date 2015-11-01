@@ -1,7 +1,6 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -14,17 +13,21 @@ public class WeaponComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public EntitySprite sprite;
     public Rectangle damageArea;
+    public boolean justUsed;
+    public int strength;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public WeaponComponent(TextureRegion textureRegion) {
         this.sprite = new EntitySprite(textureRegion);
-        this.sprite.setSize(1,1);
+        this.sprite.setSize(1, 1);
         this.sprite.setOriginCenter();
         this.sprite.visible = false;
         this.damageArea = new Rectangle(0, 0, .5f, .5f);
+        this.justUsed = false;
+        this.strength = 5;
     }
 
     /* ............................................................................... METHODS .. */
-    
+
     /* ..................................................................... GETTERS & SETTERS .. */
 }

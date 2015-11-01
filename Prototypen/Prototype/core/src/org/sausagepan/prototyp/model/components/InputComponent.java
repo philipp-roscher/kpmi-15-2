@@ -1,9 +1,6 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -19,12 +16,13 @@ public class InputComponent implements Component {
     public boolean moving;
     public Vector3 touchPos;
     private Viewport viewport;
-    public boolean attacking;
+    public boolean weaponDrawn;
 
     public InputComponent() {
         direction = Direction.SOUTH;
         moving = false;
         this.touchPos = new Vector3(0,0,0);
+        this.weaponDrawn = false;
     }
 
 

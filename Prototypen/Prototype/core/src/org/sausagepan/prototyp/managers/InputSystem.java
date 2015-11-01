@@ -9,7 +9,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
  * Created by georg on 28.10.15.
@@ -31,6 +31,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             = ComponentMapper.getFor(DynamicBodyComponent.class);
     private ComponentMapper<InputComponent> im
             = ComponentMapper.getFor(InputComponent.class);
+    private ComponentMapper<WeaponComponent> wm
+            = ComponentMapper.getFor(WeaponComponent.class);
 
     private float ax, ay;
     private Vector2 directionVector;
@@ -50,7 +52,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,
-                InputComponent.class).get());
+                InputComponent.class,
+                WeaponComponent.class).get());
     }
 
     public void update(float deltaTime) {
@@ -120,13 +123,16 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     public boolean keyDown(int keycode) {
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
+            WeaponComponent weapon = wm.get(entity);
             switch(keycode) {
                 case Input.Keys.UP:     input.direction = Direction.NORTH;break;
                 case Input.Keys.LEFT:   input.direction = Direction.WEST;break;
                 case Input.Keys.RIGHT:  input.direction = Direction.EAST;break;
                 case Input.Keys.DOWN:   input.direction = Direction.SOUTH;break;
                 case Input.Keys.A:
-                    input.attacking = true;System.out.println("Attacking!");break;
+                    input.weaponDrawn = true;System.out.println("Attacking!");
+                    weapon.justUsed = true;
+                    break;
                 default:break;
             }
             if(keycode != Input.Keys.A) input.moving = true;
@@ -138,7 +144,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     public boolean keyUp(int keycode) {
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
-            if (keycode == Input.Keys.A) input.attacking = false;
+            if (keycode == Input.Keys.A) input.weaponDrawn = false;
         }
         return true;
     }

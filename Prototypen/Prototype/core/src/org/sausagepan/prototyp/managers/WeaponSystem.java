@@ -7,10 +7,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.PositionComponent;
-import org.sausagepan.prototyp.model.components.SkyDirectionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
@@ -48,7 +45,7 @@ public class WeaponSystem extends EntitySystem {
                 default:    rotation = -90; break;
             }
             weapon.sprite.setRotation(rotation);
-            if(!input.attacking) weapon.sprite.visible = false;
+            if(!input.weaponDrawn) weapon.sprite.visible = false;
             else                 weapon.sprite.visible = true;
         }
     }
