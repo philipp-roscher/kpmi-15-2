@@ -1,19 +1,21 @@
 package org.sausagepan.prototyp.model;
-import org.sausagepan.prototyp.enums.KeyPart;
+
+import org.sausagepan.prototyp.enums.KeySection;
 
 /**
- * Created by Bettina on 31.10.2015.
+ * Created by Bettina on 02.11.2015.
  */
-public class Key{
+public class Key {
 
-    private KeyPart keyPart;
+    private KeySection keySection;
 
-    public Key(KeyPart keyPart) {
-        this.keyPart = keyPart;
+    public Key(KeySection keySection)
+    {
+        this.keySection = keySection;
     }
 
-    public KeyPart getKeyPart()
+    public KeySection getKeySection()
     {
-        return this.keyPart;
+        return this.keySection;
     }
 }
