@@ -87,7 +87,7 @@ public class VisualDebuggingSystem extends EntitySystem {
                 shapeRenderer.rect(
                         body.dynamicBody.getPosition().x - .5f,
                         body.dynamicBody.getPosition().y + .7f,
-                        ((float)health.HP)/100f,
+                        ((float)health.HP)/health.initialHP,
                         .05f
                 );
             }
