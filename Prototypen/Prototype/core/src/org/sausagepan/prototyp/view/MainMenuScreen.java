@@ -44,6 +44,9 @@ public class MainMenuScreen implements Screen {
     private MapInformation mapInformation;
 	String serverIp;
 
+	//choosen Player Class
+	private String playerClass = "archer";
+
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(final KPMIPrototype game) {
@@ -121,7 +124,8 @@ public class MainMenuScreen implements Screen {
 		);
 
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
-		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation));
+		//TODO: Ask player about wanted character clas (Sara)
+		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation, playerClass));
 	}
 
 
@@ -184,13 +188,13 @@ public class MainMenuScreen implements Screen {
 			game.batch.begin();
 			if(game.playerCount < game.maxPlayers) {
 				game.font.setColor(1, 0, 0, 1);
-				game.font.draw(game.batch, "Waiting for players... "+game.playerCount+"/"+game.maxPlayers, 343, 380);
+				game.font.draw(game.batch, "Waiting for players... "+game.playerCount+"/"+game.maxPlayers, 320, 380);
 				game.font.setColor(1, 1, 1, 1);
 			}
 
 			if(game.playerCount == game.maxPlayers) {
 				game.font.setColor(0, 1, 0, 1);
-				game.font.draw(game.batch, "Starting... " + game.playerCount + "/" + game.maxPlayers, 360, 380);
+				game.font.draw(game.batch, "Starting... " + game.playerCount + "/" + game.maxPlayers, 340, 380);
 				game.font.setColor(1, 1, 1, 1);
 				setUpGame();
 			}
