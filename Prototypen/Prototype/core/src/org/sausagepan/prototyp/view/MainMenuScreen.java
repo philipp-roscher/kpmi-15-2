@@ -186,15 +186,15 @@ public class MainMenuScreen implements Screen {
 		if(game.connected == true && game.clientId != 0) {
 			//waiting for full group of players
 			game.batch.begin();
-			if(game.playerCount < game.maxPlayers) {
+			if(game.clientCount < game.maxClients) {
 				game.font.setColor(1, 0, 0, 1);
-				game.font.draw(game.batch, "Waiting for players... "+game.playerCount+"/"+game.maxPlayers, 320, 380);
+				game.font.draw(game.batch, "Waiting for players... "+game.clientCount+"/"+game.maxClients, 320, 380);
 				game.font.setColor(1, 1, 1, 1);
 			}
 
-			if(game.playerCount == game.maxPlayers) {
+			if(game.clientCount == game.maxClients) {
 				game.font.setColor(0, 1, 0, 1);
-				game.font.draw(game.batch, "Starting... " + game.playerCount + "/" + game.maxPlayers, 340, 380);
+				game.font.draw(game.batch, "Starting... " + game.clientCount + "/" + game.maxClients, 340, 380);
 				game.font.setColor(1, 1, 1, 1);
 				setUpGame();
 			}
