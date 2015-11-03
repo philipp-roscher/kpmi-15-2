@@ -5,42 +5,49 @@ filter: Nearest,Nearest
 repeat: none
 sword
   rotate: false
-  xy: 1, 23
+  xy: 1, 31
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 1
 bow
   rotate: false
-  xy: 1, 6
+  xy: 1, 14
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: 2
-sword
+fireball
   rotate: false
-  xy: 35, 49
-  size: 16, 6
-  orig: 16, 6
+  xy: 35, 51
+  size: 12, 12
+  orig: 12, 12
   offset: 0, 0
-  index: 2
+  index: -1
 bow
   rotate: false
-  xy: 35, 31
+  xy: 35, 33
   size: 5, 16
   orig: 5, 16
   offset: 0, 0
   index: 1
+sword
+  rotate: false
+  xy: 1, 6
+  size: 16, 6
+  orig: 16, 6
+  offset: 0, 0
+  index: 2
 arrow
   rotate: false
-  xy: 53, 52
+  xy: 1, 1
   size: 10, 3
   orig: 10, 3
   offset: 0, 0
   index: 2
 arrow
   rotate: false
-  xy: 1, 1
+  xy: 13, 1
   size: 8, 3
   orig: 8, 3
   offset: 0, 0

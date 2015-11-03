@@ -60,6 +60,7 @@ public class PositionSynchroSystem extends EntitySystem {
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
 
+            // Synchronize CharacterScprite with DynamicBody
             if(entity.getComponent(CharacterSpriteComponent.class) != null) {
                 CharacterSpriteComponent sprite = sm.get(entity);
                 sprite.sprite.setPosition(
@@ -67,6 +68,8 @@ public class PositionSynchroSystem extends EntitySystem {
                         body.dynamicBody.getPosition().y - body.fixture.getShape().getRadius()
                 );
             }
+
+            // Synchronize Weapon with DynamicBody
             if(entity.getComponent(WeaponComponent.class) != null &&
                     entity.getComponent(InputComponent.class) != null) {
                 WeaponComponent weapon = wm.get(entity);
@@ -74,34 +77,28 @@ public class PositionSynchroSystem extends EntitySystem {
 
                 switch(input.direction) {
                     case NORTH:
-                        weapon.weapon.sprite.setPosition(
-                                body.dynamicBody.getPosition().x - weapon.weapon.sprite.getWidth
-                                        ()/2,
-                                body.dynamicBody.getPosition().y + .5f
-                        );break;
+                        weapon.weapon.sprite.setPosition(body.dynamicBody.getPosition().x
+                                        - weapon.weapon.sprite.getWidth() / 2,
+                                body.dynamicBody .getPosition().y + .5f);break;
                     case WEST:
-                        weapon.weapon.sprite.setPosition(
-                                body.dynamicBody.getPosition().x - weapon.weapon.sprite.getWidth
-                                        () - .5f,
-                                body.dynamicBody.getPosition().y - weapon.weapon.sprite.getHeight
-                                        ()/2
-                        );break;
+                        weapon.weapon.sprite.setPosition(body.dynamicBody.getPosition().x
+                                        - weapon.weapon.sprite.getWidth() - .5f,
+                                body.dynamicBody.getPosition().y
+                                        - weapon.weapon.sprite.getHeight()/2);break;
                     case EAST:
                         weapon.weapon.sprite.setPosition(
                                 body.dynamicBody.getPosition().x + .5f,
-                                body.dynamicBody.getPosition().y - weapon.weapon.sprite.getHeight
-                                        ()/2
-                        );break;
+                                body.dynamicBody.getPosition().y
+                                        - weapon.weapon.sprite.getHeight()/2);break;
                     default:
-                        weapon.weapon.sprite.setPosition(
-                                body.dynamicBody.getPosition().x - weapon.weapon.sprite.getWidth
-                                        ()/2,
+                        weapon.weapon.sprite.setPosition(body.dynamicBody.getPosition().x
+                                        - weapon.weapon.sprite.getWidth()/2,
                                 body.dynamicBody.getPosition().y - .5f
-                                        - weapon.weapon.sprite.getHeight()
-                        );break;
+                                        - weapon.weapon.sprite.getHeight());break;
                 }
                 weapon.weapon.sprite.setOriginCenter();
 
+                // Synchronize Swords DamageArea with DynamicBody
                 if(weapon.weapon.getClass().equals(Sword.class)) {
                     // Set Swords damage Area
                     Rectangle rect = ((Sword)weapon.weapon).damageArea;
@@ -126,6 +123,8 @@ public class PositionSynchroSystem extends EntitySystem {
                     }
                 }
             }
+
+            // Synchronize Light with DynamicBody
             if(entity.getComponent(LightComponent.class) != null) {
                 LightComponent light = lm.get(entity);
 
@@ -135,9 +134,9 @@ public class PositionSynchroSystem extends EntitySystem {
                 );
             }
 
+            // Synchronize InjurableArea with DynamicBody
             if(entity.getComponent(InjurableAreaComponent.class) != null) {
                 InjurableAreaComponent area = jm.get(entity);
-
                 area.area.setPosition(
                         body.dynamicBody.getPosition().x-area.area.width/2,
                         body.dynamicBody.getPosition().y-body.fixture.getShape().getRadius()

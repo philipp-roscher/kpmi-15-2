@@ -30,6 +30,10 @@ public class Bow extends WeaponItem {
         super(region, strength, damagetype);
         this.activeArrows = new Array<Bullet>();
         this.arrowSprite = new EntitySprite(arrowTexture);
+        this.arrowSprite.setSize(
+                UnitConverter.pixelsToMeters(this.arrowSprite.getRegionWidth()),
+                UnitConverter.pixelsToMeters(this.arrowSprite.getRegionHeight())
+        );
         this.lastAttack = 0;
 
         // TODO

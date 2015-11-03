@@ -16,6 +16,7 @@ import org.sausagepan.prototyp.model.Bullet;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
 
 
 /**
@@ -32,7 +33,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     private Array<EntitySprite> entitySprites;
     private int drawSpritesAfterLayer = 3;
     private MediaManager media;
-    private int bulletRotation=0;
     private BitmapFont font;
 
 
@@ -84,46 +84,30 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                     /* Draw players here */
                     for(SpriteComponent spriteComponent : spriteComponents)
                         spriteComponent.sprite.draw(this.getBatch());
-                    for(WeaponComponent weaponComponent : weaponComponents)
-                        weaponComponent.weapon.sprite.draw(this.getBatch());
-                    for (Player player : players) {
-                        player.graphics.getSprite().draw(this.getBatch());
-
-                        /* draw activeArrows here */
-                        for (Bullet b : player.getBullets()) {
-                            switch (player.getDir()) {
-                                case NORTH:
-                                    bulletRotation = 270;
-                                    break;
-                                case SOUTH:
-                                    bulletRotation = 90;
-                                    break;
-                                case WEST:
-                                    bulletRotation = 0;
-                                    break;
-                                case EAST:
-                                    bulletRotation = 180;
-                                    break;
+                    for(WeaponComponent w : weaponComponents) {
+                        if(w.weapon.sprite.visible)
+                            w.weapon.sprite.draw(this.getBatch());
+                        if(w.weapon.getClass().equals(Bow.class)) {
+                            Bow bow = (Bow) w.weapon;
+                            for (Bullet b : bow.activeArrows) {
+                                bow.arrowSprite.setPosition(b.x,b.y);
+                                bow.arrowSprite.draw(this.batch);
                             }
-                            this.batch.draw(media.getArrowImg(),
-                                    b.x, b.y, 0, 0,
-                                    media.getArrowImg().getWidth(),
-                                    media.getArrowImg().getHeight(),
-                                    1 / 32f, 1 / 32f, bulletRotation, 0, 0, 20, 6, false, false);
                         }
-                        for(Sprite s : sprites)
-                            s.draw(this.getBatch());
+                    }
 
-                        // Draw entity sprites if visible
-                        for(EntitySprite es : entitySprites)
-                            if(es.visible)
-                                es.draw(this.batch);
+                    for(Sprite s : sprites)
+                        s.draw(this.getBatch());
+
+                    // Draw entity sprites if visible
+                    for(EntitySprite es : entitySprites)
+                        if(es.visible)
+                            es.draw(this.batch);
                     }
                 } else
                     for(MapObject object : layer.getObjects())
                         renderObject(object);
             }
-        }
         endRender();
     }
 

@@ -198,7 +198,7 @@ public class EntityComponentSystem {
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), playerClass
             ));
-            localCharacter.add(new WeaponComponent(itemFactory.createBow()));
+            localCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f*2, 1f*2));

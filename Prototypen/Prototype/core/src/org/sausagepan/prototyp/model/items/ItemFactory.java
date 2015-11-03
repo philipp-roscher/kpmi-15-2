@@ -31,6 +31,14 @@ public class ItemFactory {
         );
     }
 
+    public Bow createFireBreather() {
+        return new Bow(
+                mediaManager.getTextureAtlasType("weapons").findRegion("bow", 1),
+                5, Damagetype.MAGICAL,
+                mediaManager.getTextureAtlasType("weapons").findRegion("fireball")
+        );
+    }
+
     /**
      * Creates a standard {@link Sword} item of {@link org.sausagepan.prototyp.enums.Damagetype}
      * Physical

@@ -40,8 +40,7 @@ public class SpriteSystem extends EntitySystem {
             if(e.getComponent(SpriteComponent.class) != null)
                 tmr.addSprite(e.getComponent(SpriteComponent.class).sprite);
             if(e.getComponent(WeaponComponent.class) != null) {
-                tmr.addEntitySprite(e.getComponent(WeaponComponent.class).weapon.sprite);
-                System.out.println("Adding weapon sprite");
+                tmr.addWeaponComponent(e.getComponent(WeaponComponent.class));
             }
             if(e.getComponent(CharacterSpriteComponent.class) != null)
                 tmr.addSprite(e.getComponent(CharacterSpriteComponent.class).sprite);

@@ -20,7 +20,6 @@ public class MediaManager {
     private String knightSpriteSheetFile        = "textures/spritesheets/knight_m.pack";
     private String archerSpriteSheetFile        = "textures/spritesheets/archer_f.pack";
     private String dragonSpriteSheetFile        = "textures/spritesheets/dragon.pack";
-    private String arrowImgFile                 = "textures/arrow.png";
     private String weaponsSpriteSheetFile       = "textures/spritesheets/weapons.pack";
     private String zombieSpriteFile             = "textures/spritesheets/zombie_01.pack";
 
@@ -33,7 +32,6 @@ public class MediaManager {
         // load music
         assets.load(this.mazeBackgroundMusicFile, Music.class);
         assets.load(this.mainMenuBackgroundImgFile, Texture.class);
-        assets.load(this.arrowImgFile, Texture.class);
         assets.load(this.knightSpriteSheetFile, TextureAtlas.class);
         assets.load(this.archerSpriteSheetFile, TextureAtlas.class);
         assets.load(this.dragonSpriteSheetFile, TextureAtlas.class);
@@ -62,10 +60,6 @@ public class MediaManager {
         return assets.get(this.mainMenuBackgroundImgFile, Texture.class);
     }
 
-    public Texture getArrowImg() {
-        return assets.get(this.arrowImgFile, Texture.class);
-    }
-
     public TextureAtlas getTextureAtlas(String name) {
         return assets.get(name);
     }
@@ -77,10 +71,5 @@ public class MediaManager {
 
         return null;
     }
-
-
-//    public TextureAtlas getKnightTextureAtlas() {
-//    	return this.getTextureAtlas("textures/spritesheets/knight_m.pack");
-//    }
 
 }

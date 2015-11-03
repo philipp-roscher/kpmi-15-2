@@ -52,6 +52,10 @@ public class WeaponSystem extends EntitySystem {
                 default:    rotation = -90; break;
             }
             weapon.weapon.sprite.setRotation(rotation);
+            if(weapon.weapon.getClass().equals(Bow.class)) {
+                ((Bow) weapon.weapon).arrowSprite.setRotation(rotation);
+                ((Bow) weapon.weapon).arrowSprite.setOriginCenter();
+            }
             if(!input.weaponDrawn) weapon.weapon.sprite.visible = false;
             else                 weapon.weapon.sprite.visible = true;
 
