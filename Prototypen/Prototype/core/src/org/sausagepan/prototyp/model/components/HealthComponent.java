@@ -8,10 +8,12 @@ import com.badlogic.ashley.core.Component;
  */
 public class HealthComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
+    public final int initialHP;
     public int HP;
     /* ........................................................................... CONSTRUCTOR .. */
     public HealthComponent(int HP) {
         this.HP = HP;
+        this.initialHP = HP;
     };
     
     /* ............................................................................... METHODS .. */

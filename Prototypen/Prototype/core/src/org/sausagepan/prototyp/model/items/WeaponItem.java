@@ -1,6 +1,5 @@
-package org.sausagepan.prototyp.model.components;
+package org.sausagepan.prototyp.model.items;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -8,29 +7,27 @@ import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.graphics.EntitySprite;
 
 /**
- * Created by georg on 22.10.15.
+ * Created by georg on 02.11.15.
  */
-public class WeaponComponent implements Component {
+public abstract class WeaponItem {
     /* ............................................................................ ATTRIBUTES .. */
     public EntitySprite sprite;
-    public Rectangle damageArea;
     public boolean justUsed;
     public int strength;
     public Damagetype damagetype;
-
     /* ........................................................................... CONSTRUCTOR .. */
-    public WeaponComponent(TextureRegion textureRegion) {
-        this.sprite = new EntitySprite(textureRegion);
+
+    public WeaponItem(TextureRegion region, int strength, Damagetype damagetype) {
+        this.sprite = new EntitySprite(region);
         this.sprite.setSize(1, 1);
         this.sprite.setOriginCenter();
         this.sprite.visible = false;
-        this.damageArea = new Rectangle(0, 0, .5f, .5f);
         this.justUsed = false;
-        this.strength = 5;
         this.damagetype = Damagetype.PHYSICAL;
+        this.strength = strength;
+        this.damagetype = damagetype;
     }
-
     /* ............................................................................... METHODS .. */
-
+    
     /* ..................................................................... GETTERS & SETTERS .. */
 }
