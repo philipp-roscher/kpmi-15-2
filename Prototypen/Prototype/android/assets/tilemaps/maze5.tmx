@@ -5,85 +5,67 @@
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzVl90OgyAMhWvi9Fbf/7HcLvzZlS8yzGzSNFQqtLpdnExm6Qd6KNhVAF2G+qAmqN2v+8w8udp4IwCsUM5/hhxvhV77L8bXoe+j0vWN5UL+CLpxrnvcpIzX5MrhW+hqfnMznzNK+Jv/ZuKlWWjT/2rD+d/tv1/jt878Ab6S+Dm+jPGlPBO7z/lbDZQ8KLVj9Y/6eyExKb7V++f5pbaFruLzulfKH9gY0JtU9L7k7RQ/5nfkH9U/9AzG8LpnwR8jc+ZrNLWmS/mpvF78VG5PPtYZfKe07qLPeYwl/2iu2j3kH/kewtz0bOLJl874sVgP/tGexWs09TvWt4XVO7o/4vwW0J//6Nrh3tHur/T5nN2Tad/UWCXRby9tnxj/7NqxkOfaOqMP9OUdSA==
+   eJzdl80OwjAIgGky9er7v5bbYT+e9iK6ZEQkUGjpFiMJhxngA6GsA6iX8a1rwD8q/8Lv3/p06MDsuwRwST5fLRbWcU+2Yq0eW2+sGn6NXJVY8/4/Hs3nNW59m511c36/5429nJVn+ptWo5SbxZ8K827d/1/j31JgMBhfkseuGj+6g5CvxZkgXz/Osmcmc/uHzvdCbCx+q/7z+NpzlB3llwjfe2fztbNl8aV59+y/gdloey/CH+FzJrmuLGZt/y2+FfcsPsoZfNwz2FO6d3HOuU1LvidGq/NP+VRq+JZY/FwdUl6l/C75668V6Y4t5X4UX5ohyxbv9ts8L/C97+j7cZOe2Hjuf7k7i/f9ulb4SL5g5Kop/fbx+mj8Et8W2mK2vOcrJy+yAPE8
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlg0KwjAMhd+1N3Ueo1PnXVdZg2GkpmszmZIPAml+oIXXtABwjnaJdmJ+r6wHvOlSPlebixP3aI9oN+aPynpi/SHlc7W5uPObkN5KNEY5S0hvJRqjnPPfWGqS15diqUle7xwP7W1G8gexux3tbUbyJ7HbaeFqVFPL06jGWdjrjq7pIf/hv3VHR3z+w+d4vavarIMQp/O2zsEAfdZBiNN5S+Yg3/vWvXYVPWv43rfqIVT0OMdhBhWQajU=
+   eJztlgEOwyAIRbl2u647hl3X3XU2k4QYGBbdahZeQoLIjxoVBTifKdo12oX4o9KeiX5I/VKuFEfWaI9od+IvSnsj+pD6pVwp3gPTiWPv+7YadaV7jH0cwTA26kr3GPuc/6bVmYQsv5SWZ5LmO/2hvY2Q/JlV16O9jZD8jVU7Ndwa5Vh5Nspx3nzrjuaMwP+hf3VHF/j8h5bY31Wt1gETx/XW1sEAeq0DJo7rLamDdO5H5zoYNDl07kfPQzBonH54AeITbFs=
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJxjYMAOEhlxSOAB5OjBBerJMIscPSBgzUScutNQ809R6E+Qfch2Ems/tcBA248OyLHfDYseYsVGwcCDk1QsKwYawMqD0TRJHTCc0gatADXrWnIAuXXtKKAMEFN2jJYvhMHpIZR+HZgQGBmQ2g5FTheDMY3gK/fR3YvL/cSqG2yAXHeC9IEwpX2SgQTo6Xok2D9Y2jgAIJISjQ==
+   eJxjYBicIJGRPnpwgXoyzCJHDwhYMxGn7jTU/FMU+hNkH7KdxNpPLUAN+92w6CFWbBQMPDhJxbw60ACWH0fTJHXAcEobtALUrOvIAeTWdaOAMkBM2TFavhAGp4dQ+nVgQmBkQGo7EDldDMY0gq/cR3cvLvcTq26wAXLdCdIHwpT2CQYSoKfrkWD/YGnjAABmrhJQ
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzVl0sOwiAQhuco+Kq60PqKiY+VRte6sMfxJB7WYWHSUArDDC34J/+iZDofA3RIS0inAr0IfGcdkT9m8PeR+WVCfsHg39G7QG9ack0YfE7975ZxXf+yB/7HwU95/jj7nyt/BeHn8gXN9T8YMUcinyNb/WZ+3/M/83X/M7+/3Oun9L8buPuehE+pn7pGqfm2+zf3+reEvJQYLt+UQg+IvC74nB6eE3/UA9+8U36+WGK74If0TDP2BP47tPLEnAV8nyT7r3UF/ly1htA8Q1QpkM1dKunaScX5/4mpHOp/oqfoGXpes22s7nrPV444V94H+guoPCtO
+   eJztllkOgjAQhucoCMQVl6gxcXnVZ5eot/EkHtYhKbEOpZ2WYjHxT/6EwjBfh2XaCwBk6CF6JI4Ly+Pi+l2ME3grFtdpbEZMz5/RY7DTyjJep7QF/MQY1Rw/drjngF5aeu5jskIu9T8C85+B+Tp1AvIj9NQTfwb23+UVyv//msRsmHwXdaFcP81vGv8yP+9/k4B8l/o5/W8PvL7X1PPnPqPQfNX62/b6F4y8nBhXPlUE9j3cJ1+V48//FF1T5PXnG/yqHJz6t2BeQ2+GmF0Nvkl13z+de9Vcq5TvoW338DLfde4+FJqfBua3of4TuofuoweSVedkyz0/0sTp8h7RL/jNMD8=
   </data>
  </layer>
- <objectgroup name="colliderWalls" width="0" height="0">
-  <object x="0" y="0" width="480" height="64"/>
-  <object x="544" y="0" width="448" height="64"/>
-  <object x="992" y="0" width="32" height="320"/>
-  <object x="928" y="64" width="64" height="64"/>
-  <object x="0" y="64" width="64" height="128"/>
-  <object x="576" y="320" width="448" height="64"/>
-  <object x="992" y="384" width="32" height="352"/>
-  <object x="384" y="64" width="32" height="96"/>
-  <object x="384" y="160" width="448" height="64"/>
-  <object x="384" y="224" width="32" height="256"/>
-  <object x="384" y="480" width="320" height="64"/>
-  <object x="704" y="480" width="64" height="64"/>
-  <object x="672" y="544" width="32" height="128"/>
-  <object x="384" y="544" width="32" height="128"/>
-  <object x="0" y="192" width="32" height="352"/>
-  <object x="0" y="544" width="32" height="256"/>
+ <objectgroup name="colliderWalls" width="32" height="32">
+  <object x="0" y="0" width="480" height="96"/>
+  <object x="544" y="0" width="480" height="96"/>
+  <object x="928" y="96" width="96" height="64"/>
+  <object x="992" y="160" width="32" height="32"/>
+  <object x="0" y="96" width="64" height="96"/>
+  <object x="384" y="96" width="32" height="576"/>
+  <object x="416" y="160" width="416" height="64"/>
+  <object x="576" y="320" width="416" height="64"/>
+  <object x="992" y="288" width="32" height="736"/>
+  <object x="0" y="288" width="32" height="736"/>
   <object x="128" y="352" width="160" height="64"/>
-  <object x="128" y="416" width="32" height="448"/>
-  <object x="256" y="416" width="32" height="384"/>
+  <object x="416" y="480" width="352" height="64"/>
+  <object x="672" y="544" width="32" height="128"/>
+  <object x="128" y="416" width="32" height="416"/>
+  <object x="32" y="832" width="128" height="96"/>
+  <object x="32" y="928" width="32" height="64"/>
   <object x="256" y="800" width="576" height="64"/>
   <object x="512" y="864" width="64" height="64"/>
-  <object x="512" y="640" width="64" height="160"/>
-  <object x="800" y="736" width="224" height="64"/>
-  <object x="288" y="736" width="96" height="32"/>
-  <object x="0" y="864" width="160" height="64"/>
-  <object x="0" y="928" width="64" height="64"/>
-  <object x="0" y="992" width="480" height="32"/>
-  <object x="544" y="992" width="480" height="32"/>
-  <object x="992" y="864" width="32" height="128"/>
+  <object x="512" y="640" width="64" height="128"/>
+  <object x="800" y="736" width="192" height="64"/>
  </objectgroup>
- <objectgroup name="gameMasterColliderWalls" width="0" height="0">
-  <object x="0" y="0" width="480" height="64"/>
-  <object x="544" y="0" width="448" height="64"/>
-  <object x="992" y="0" width="32" height="320"/>
-  <object x="928" y="64" width="64" height="64"/>
-  <object x="0" y="64" width="64" height="128"/>
-  <object x="576" y="320" width="448" height="64"/>
-  <object x="992" y="384" width="32" height="352"/>
-  <object x="384" y="64" width="32" height="96"/>
-  <object x="384" y="160" width="448" height="64"/>
-  <object x="384" y="224" width="32" height="256"/>
-  <object x="384" y="480" width="320" height="64"/>
-  <object x="704" y="480" width="64" height="64"/>
-  <object x="672" y="544" width="32" height="128"/>
-  <object x="384" y="544" width="32" height="128"/>
-  <object x="0" y="192" width="32" height="352"/>
-  <object x="0" y="544" width="32" height="256"/>
+ <objectgroup name="gameMasterColliderWalls" width="32" height="32">
+  <object x="0" y="0" width="480" height="96"/>
+  <object x="544" y="0" width="480" height="96"/>
+  <object x="928" y="96" width="96" height="64"/>
+  <object x="992" y="160" width="32" height="32"/>
+  <object x="0" y="96" width="64" height="96"/>
+  <object x="384" y="96" width="32" height="576"/>
+  <object x="416" y="160" width="416" height="64"/>
+  <object x="576" y="320" width="416" height="64"/>
+  <object x="992" y="288" width="32" height="736"/>
+  <object x="0" y="288" width="32" height="736"/>
   <object x="128" y="352" width="160" height="64"/>
-  <object x="128" y="416" width="32" height="448"/>
-  <object x="256" y="416" width="32" height="384"/>
+  <object x="416" y="480" width="352" height="64"/>
+  <object x="672" y="544" width="32" height="128"/>
+  <object x="128" y="416" width="32" height="416"/>
+  <object x="32" y="832" width="128" height="96"/>
+  <object x="32" y="928" width="32" height="64"/>
   <object x="256" y="800" width="576" height="64"/>
   <object x="512" y="864" width="64" height="64"/>
-  <object x="512" y="640" width="64" height="160"/>
-  <object x="800" y="736" width="224" height="64"/>
-  <object x="288" y="736" width="96" height="32"/>
-  <object x="0" y="864" width="160" height="64"/>
-  <object x="0" y="928" width="64" height="64"/>
-  <object x="0" y="992" width="480" height="32"/>
-  <object x="544" y="992" width="480" height="32"/>
-  <object x="992" y="864" width="32" height="128"/>
+  <object x="512" y="640" width="64" height="128"/>
+  <object x="800" y="736" width="192" height="64"/>
  </objectgroup>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="768" y="800" width="32" height="32"/>
