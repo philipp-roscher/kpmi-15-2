@@ -52,12 +52,12 @@ public class EntityComponentSystem {
 
     private CharacterEntity localCharacter;
 
-    private String playerClass;
+    private String clientClass;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
             KPMIPrototype game, World world, Viewport viewport,
-            RayHandler rayHandler, Maze maze, OrthographicCamera camera, String playerClass) {
+            RayHandler rayHandler, Maze maze, OrthographicCamera camera, String clientClass) {
         this.mediaManager = game.mediaManager;
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = world;
@@ -66,7 +66,7 @@ public class EntityComponentSystem {
         this.rayHandler = rayHandler;
         this.maze = maze;
         this.shpRend = new ShapeRenderer();
-        this.playerClass = playerClass;
+        this.clientClass = clientClass;
 
         this.engine = new Engine(); // Create Engine
         this.characterFamily = Family.all(
@@ -171,10 +171,10 @@ public class EntityComponentSystem {
         localCharacter.add(new LightComponent(rayHandler));
         localCharacter.add(new NetworkTransmissionComponent());
 
-        if (playerClass == "knight") {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), playerClass));
+        if (clientClass == "knight") {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), playerClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), clientClass
             ));
             localCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
             localCharacter.add(new HealthComponent(100));
@@ -182,26 +182,37 @@ public class EntityComponentSystem {
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
         }
 
-        if (playerClass == "archer") {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), playerClass));
+        if (clientClass == "archer") {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), playerClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), clientClass
             ));
             localCharacter.add(new WeaponComponent(itemFactory.createBow()));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f, 1f));
+            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
         }
 
-        if (playerClass == "dragon") {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), playerClass));
+        if (clientClass == "shaman") {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), playerClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/shaman_m.pack"), clientClass
+            ));
+            localCharacter.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
+            localCharacter.add(new HealthComponent(100));
+            localCharacter.add(new MagicComponent(80));
+            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+        }
+
+        if (clientClass == "dragon") {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
+            localCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), clientClass
             ));
             localCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f*2, 1f*2));
+            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
         }
 
         this.engine.addEntity(localCharacter);

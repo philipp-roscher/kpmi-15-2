@@ -1,8 +1,10 @@
 package org.sausagepan.prototyp.network;
 
 import java.net.InetSocketAddress;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +31,7 @@ import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
+import org.sausagepan.prototyp.network.Network.GameClientCount;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
@@ -37,7 +40,7 @@ import com.esotericsoftware.kryonet.Server;
 
 public class GameServer {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
-	public static final int timeoutMs = 10000;
+	public static final int timeoutMs = 50000;
 	// Anzahl der GameStateUpdates pro Sekunde
 	public static final int updateRate = 32;
 	
@@ -56,8 +59,15 @@ public class GameServer {
 	public static void main (String[] args) {
 		GameServer gs = new GameServer();
 	}
-	
+
+	//to count active Clients in Session
+	public int clientCount;
+	//collect current connections
+	private Connection[] connections = {};
+
+
 	public GameServer() {
+		this.clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
 		positions = new HashMap<Integer,NetworkPosition>();
 		lastAccess = new HashMap<Integer,Long>();		
@@ -145,8 +155,22 @@ public class GameServer {
 		        	connection.sendTCP(idAssignment);
 			        updateLastAccess(maxId);
 		        	maxId++;
-					//playerCount++; send info to client(s)
-					//if 5 players: random choose GM + Teams and send to Client(s)
+
+					//increase ClientCount and send to all clients via TCP
+					clientCount++;
+					System.out.println("clientCount at: "+clientCount);
+					GameClientCount GameClientCount = new GameClientCount();
+					GameClientCount.count = clientCount;
+					server.sendToAllTCP(clientCount);
+					//TODO: if reached maxClients: random choose GM + Teams and send to Client(s) (Sara)
+					Collection<Integer> ClientCol = clientIds.values();
+					Object[] ClientColArray = ClientCol.toArray();
+					for (int i=0; i < ClientCol.size(); i++) {
+						//Object currentClient = ClientColArray[i];
+
+
+					}
+
 		        }
 		        
 				public void disconnected (Connection connection) {
@@ -155,7 +179,13 @@ public class GameServer {
 					positions.remove(clientIds.get(ip));
 					clientIds.remove(ip);
 					System.out.println(ip + " has disconnected");
-					//playerCount--; send info to client(s)
+
+					//decrease clientCount and send to all cleints via TCP
+					clientCount--;
+					System.out.println("clientCount at: "+clientCount);
+					GameClientCount GameClientCount = new GameClientCount();
+					GameClientCount.count = clientCount;
+					server.sendToAllTCP(clientCount);
 				}
 		     });
 		    

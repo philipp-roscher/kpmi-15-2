@@ -3,6 +3,7 @@ package org.sausagepan.prototyp;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
+import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;
@@ -23,9 +24,9 @@ public class KPMIPrototype extends Game {
 	public int clientId;
 
 	//Numer of Players needed to start game:
-	public int maxPlayers = 3;
+	public int maxClients = 0;
 	//counts players on server
-	public int playerCount =3;
+	public int clientCount;
 	/* .................................................... LibGDX METHODS .. */
 	@Override
 	public void create () {
@@ -38,13 +39,23 @@ public class KPMIPrototype extends Game {
 		new Thread(client).start();
 		Network.register(client);
 		client.addListener(new Listener() {
-			public void received (Connection connection, Object object) {
+			public void received(Connection connection, Object object) {
 				if (object instanceof IDAssignment) {
-					IDAssignment result = (IDAssignment)object;
+					IDAssignment result = (IDAssignment) object;
 					clientId = result.id;
 				}
 			}
 		});
+		client.addListener(new Listener() {
+			public void received(Connection connection, Object object) {
+				if(object instanceof GameClientCount) {
+					GameClientCount result = (GameClientCount) object;
+					clientCount = result.count;
+				}
+			}
+		});
+
+
 
 		// switch to main menu screen
 		this.setScreen(new MainMenuScreen(this));

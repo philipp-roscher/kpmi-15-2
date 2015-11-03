@@ -20,6 +20,7 @@ public class MediaManager {
     private String knightSpriteSheetFile        = "textures/spritesheets/knight_m.pack";
     private String archerSpriteSheetFile        = "textures/spritesheets/archer_f.pack";
     private String dragonSpriteSheetFile        = "textures/spritesheets/dragon.pack";
+    private String shamanSpriteSheetFile        = "textures/spritesheets/shaman_m.pack";
     private String weaponsSpriteSheetFile       = "textures/spritesheets/weapons.pack";
     private String zombieSpriteFile             = "textures/spritesheets/zombie_01.pack";
 
@@ -35,6 +36,7 @@ public class MediaManager {
         assets.load(this.knightSpriteSheetFile, TextureAtlas.class);
         assets.load(this.archerSpriteSheetFile, TextureAtlas.class);
         assets.load(this.dragonSpriteSheetFile, TextureAtlas.class);
+        assets.load(this.shamanSpriteSheetFile, TextureAtlas.class);
         assets.load(this.weaponsSpriteSheetFile, TextureAtlas.class);
         assets.load(this.zombieSpriteFile, TextureAtlas.class);
 
