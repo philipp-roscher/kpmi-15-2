@@ -1,3 +1,5 @@
+*.crt
+
 ## Java
 
 *.class
