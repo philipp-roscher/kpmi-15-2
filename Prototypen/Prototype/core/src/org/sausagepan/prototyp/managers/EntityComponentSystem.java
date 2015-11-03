@@ -167,21 +167,19 @@ public class EntityComponentSystem {
 
         // Add Components
         //TODO: add further if-circle(s) to choose character class (Sara)
+        localCharacter.add(new InputComponent());
+        localCharacter.add(new LightComponent(rayHandler));
+        localCharacter.add(new NetworkTransmissionComponent());
 
         if (playerClass == "knight") {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), playerClass));
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), playerClass
             ));
-            localCharacter.add(new InputComponent());
             localCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
-            localCharacter.add(new LightComponent(rayHandler));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new NetworkTransmissionComponent());
-            localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f, 1f));
-
-            this.engine.addEntity(localCharacter);
+            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
         }
 
         if (playerClass == "archer") {
@@ -189,15 +187,10 @@ public class EntityComponentSystem {
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), playerClass
             ));
-            localCharacter.add(new InputComponent());
             localCharacter.add(new WeaponComponent(itemFactory.createBow()));
-            localCharacter.add(new LightComponent(rayHandler));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new NetworkTransmissionComponent());
             localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f, 1f));
-
-            this.engine.addEntity(localCharacter);
         }
 
         if (playerClass == "dragon") {
@@ -205,16 +198,13 @@ public class EntityComponentSystem {
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), playerClass
             ));
-            localCharacter.add(new InputComponent());
             localCharacter.add(new WeaponComponent(itemFactory.createBow()));
-            localCharacter.add(new LightComponent(rayHandler));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new NetworkTransmissionComponent());
             localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f*2, 1f*2));
-
-            this.engine.addEntity(localCharacter);
         }
+
+        this.engine.addEntity(localCharacter);
     }
 
     public void setUpMazeLights() {
