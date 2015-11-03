@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.model.items;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.graphics.EntitySprite;
 
@@ -19,7 +20,10 @@ public abstract class WeaponItem {
 
     public WeaponItem(TextureRegion region, int strength, Damagetype damagetype) {
         this.sprite = new EntitySprite(region);
-        this.sprite.setSize(1, 1);
+        this.sprite.setSize(
+                UnitConverter.pixelsToMeters(this.sprite.getRegionWidth()),
+                UnitConverter.pixelsToMeters(this.sprite.getRegionHeight())
+        );
         this.sprite.setOriginCenter();
         this.sprite.visible = false;
         this.justUsed = false;

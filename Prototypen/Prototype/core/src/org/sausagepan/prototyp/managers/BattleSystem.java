@@ -22,6 +22,7 @@ import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.items.Sword;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each
@@ -95,15 +96,19 @@ public void addedToEngine(Engine engine) {
                 if(!attacker.equals(v)) {
                     HealthComponent health = hm.get(v);
                     InjurableAreaComponent area = jm.get(v);
-                    if(weapon.justUsed) {
+                    if(weapon.weapon.justUsed) {
                         // If weapon area and injurable area of character overlap
-                        if (area.area.overlaps(weapon.damageArea)) caluclateDamage(weapon, health);
-                        weapon.justUsed = false; // usage over, waiting for next attack
+
+                        // Handle Sword
+                        if(weapon.weapon.getClass().equals(Sword.class))
+                            if (((Sword)weapon.weapon).checkHit(area.area))
+                                caluclateDamage(weapon, health);
 
                         // Handle Bow
                         if(weapon.weapon.getClass().equals(Bow.class)) {
                             Bow bow = (Bow)weapon.weapon;
                             bow.shoot(body.dynamicBody.getPosition(),body.direction);
+                            weapon.weapon.justUsed = false; // usage over, waiting for next attack
                         }
                     }
 
@@ -113,6 +118,7 @@ public void addedToEngine(Engine engine) {
                             caluclateDamage(weapon, health);
                 }
             }
+            weapon.weapon.justUsed = false; // usage over, waiting for next attack
         }
         // Remove Entity from the system, wenn killed
         // TODO
@@ -120,7 +126,7 @@ public void addedToEngine(Engine engine) {
     }
 
     public void caluclateDamage(WeaponComponent weapon, HealthComponent health) {
-        if(health.HP - weapon.strength > 0) health.HP -= weapon.strength;
+        if(health.HP - weapon.weapon.strength > 0) health.HP -= weapon.weapon.strength;
         else health.HP = 0;
     }
 

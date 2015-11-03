@@ -131,7 +131,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 case Input.Keys.DOWN:   input.direction = Direction.SOUTH;break;
                 case Input.Keys.A:
                     input.weaponDrawn = true;System.out.println("Attacking!");
-                    weapon.justUsed = true;
+                    weapon.weapon.justUsed = true;
                     break;
                 default:break;
             }

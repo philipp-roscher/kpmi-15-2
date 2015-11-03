@@ -29,7 +29,7 @@ public class Bow extends WeaponItem {
             TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture) {
         super(region, strength, damagetype);
         this.activeArrows = new Array<Bullet>();
-        this.sprite = new EntitySprite(arrowTexture);
+        this.arrowSprite = new EntitySprite(arrowTexture);
         this.lastAttack = 0;
 
         // TODO

@@ -18,6 +18,7 @@ import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.items.Sword;
 
 /**
  * Created by georg on 31.10.15.
@@ -67,12 +68,14 @@ public class VisualDebuggingSystem extends EntitySystem {
         for (Entity entity : entities) {
             if(entity.getComponent(WeaponComponent.class) != null) {
                 WeaponComponent weapon = wm.get(entity);
-                shapeRenderer.rect(
-                        weapon.damageArea.x,
-                        weapon.damageArea.y,
-                        weapon.damageArea.width,
-                        weapon.damageArea.height
-                );
+                if(weapon.weapon.getClass().equals(Sword.class)) {
+                    shapeRenderer.rect(
+                            ((Sword)weapon.weapon).damageArea.x,
+                            ((Sword)weapon.weapon).damageArea.y,
+                            ((Sword)weapon.weapon).damageArea.width,
+                            ((Sword)weapon.weapon).damageArea.height
+                    );
+                }
                 if(weapon.weapon.getClass().equals(Bow.class))
                     for(Bullet a : ((Bow)weapon.weapon).activeArrows)
                         shapeRenderer.rect(a.x, a.y, .1f, .1f);

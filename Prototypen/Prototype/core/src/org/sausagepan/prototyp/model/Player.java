@@ -92,9 +92,7 @@ public class Player extends Entity {
         attributes.subscribe(physics);
         attributes.subscribe(battle);
 
-        this.add(
-                new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
-                        new Bow(
+        this.add(new WeaponComponent(new Bow(
                                 mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
                                 1, Damagetype.PHYSICAL,
                                 mediaManager.getTextureAtlasType("weapons").findRegion("sword")

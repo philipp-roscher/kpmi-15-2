@@ -16,6 +16,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
+import org.sausagepan.prototyp.model.items.Sword;
 
 /**
  * Created by georg on 28.10.15.
@@ -73,37 +74,56 @@ public class PositionSynchroSystem extends EntitySystem {
 
                 switch(input.direction) {
                     case NORTH:
-                        weapon.sprite.setPosition(
-                                body.dynamicBody.getPosition().x - weapon.sprite.getWidth()/2,
+                        weapon.weapon.sprite.setPosition(
+                                body.dynamicBody.getPosition().x - weapon.weapon.sprite.getWidth
+                                        ()/2,
                                 body.dynamicBody.getPosition().y + .5f
                         );break;
                     case WEST:
-                        weapon.sprite.setPosition(
-                                body.dynamicBody.getPosition().x - weapon.sprite.getWidth() - .5f,
-                                body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
+                        weapon.weapon.sprite.setPosition(
+                                body.dynamicBody.getPosition().x - weapon.weapon.sprite.getWidth
+                                        () - .5f,
+                                body.dynamicBody.getPosition().y - weapon.weapon.sprite.getHeight
+                                        ()/2
                         );break;
                     case EAST:
-                        weapon.sprite.setPosition(
+                        weapon.weapon.sprite.setPosition(
                                 body.dynamicBody.getPosition().x + .5f,
-                                body.dynamicBody.getPosition().y - weapon.sprite.getHeight()/2
+                                body.dynamicBody.getPosition().y - weapon.weapon.sprite.getHeight
+                                        ()/2
                         );break;
                     default:
-                        weapon.sprite.setPosition(
-                                body.dynamicBody.getPosition().x - weapon.sprite.getWidth()/2,
+                        weapon.weapon.sprite.setPosition(
+                                body.dynamicBody.getPosition().x - weapon.weapon.sprite.getWidth
+                                        ()/2,
                                 body.dynamicBody.getPosition().y - .5f
-                                        - weapon.sprite.getHeight()
+                                        - weapon.weapon.sprite.getHeight()
                         );break;
                 }
-                weapon.sprite.setOriginCenter();
+                weapon.weapon.sprite.setOriginCenter();
 
-                // Set Weapons damage Area
-                Rectangle rect = weapon.damageArea;
-                rect.setPosition(body.dynamicBody.getPosition());
-                switch(input.direction) {
-                    case NORTH: rect.x -= rect.width/2;rect.y += .5f;break;
-                    case WEST:  rect.x -= 1.f;         rect.y -= rect.height/2;break;
-                    case EAST:  rect.x += .5f;         rect.y -= rect.height/2;break;
-                    default:    rect.x -= rect.width/2;rect.y -= 1.f;break;
+                if(weapon.weapon.getClass().equals(Sword.class)) {
+                    // Set Swords damage Area
+                    Rectangle rect = ((Sword)weapon.weapon).damageArea;
+                    rect.setPosition(body.dynamicBody.getPosition());
+                    switch (input.direction) {
+                        case NORTH:
+                            rect.x -= rect.width / 2;
+                            rect.y += .5f;
+                            break;
+                        case WEST:
+                            rect.x -= 1.f;
+                            rect.y -= rect.height / 2;
+                            break;
+                        case EAST:
+                            rect.x += .5f;
+                            rect.y -= rect.height / 2;
+                            break;
+                        default:
+                            rect.x -= rect.width / 2;
+                            rect.y -= 1.f;
+                            break;
+                    }
                 }
             }
             if(entity.getComponent(LightComponent.class) != null) {

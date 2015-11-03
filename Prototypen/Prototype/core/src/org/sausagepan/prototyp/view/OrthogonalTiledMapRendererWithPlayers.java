@@ -85,7 +85,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                     for(SpriteComponent spriteComponent : spriteComponents)
                         spriteComponent.sprite.draw(this.getBatch());
                     for(WeaponComponent weaponComponent : weaponComponents)
-                        weaponComponent.sprite.draw(this.getBatch());
+                        weaponComponent.weapon.sprite.draw(this.getBatch());
                     for (Player player : players) {
                         player.graphics.getSprite().draw(this.getBatch());
 

@@ -25,9 +25,9 @@ public class ItemFactory {
      */
     public Bow createBow() {
         return new Bow(
-                mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
+                mediaManager.getTextureAtlasType("weapons").findRegion("bow", 1),
                 1, Damagetype.PHYSICAL,
-                mediaManager.getTextureAtlasType("weapons").findRegion("sword")
+                mediaManager.getTextureAtlasType("weapons").findRegion("arrow", 1)
         );
     }
 
@@ -36,9 +36,16 @@ public class ItemFactory {
      * Physical
      * @return  the sword item
      */
-    public Sword createSword() {
-        return new Sword(mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
-                1, Damagetype.PHYSICAL);
+    public Sword createSmallSword() {
+        return new Sword(
+                mediaManager.getTextureAtlasType("weapons").findRegion("sword", 2),
+                5, Damagetype.PHYSICAL);
+    }
+
+    public Sword createBigSword() {
+        return new Sword(
+                mediaManager.getTextureAtlasType("weapons").findRegion("sword", 1),
+                10, Damagetype.PHYSICAL);
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

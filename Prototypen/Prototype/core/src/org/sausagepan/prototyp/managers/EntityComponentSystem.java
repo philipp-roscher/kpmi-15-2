@@ -167,9 +167,8 @@ public class EntityComponentSystem {
         localCharacter.add(new CharacterSpriteComponent(
                 mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack")));
         localCharacter.add(new InputComponent());
-        localCharacter.add(
-                new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
-                        itemFactory.createBow()));
+//        localCharacter.add(new WeaponComponent(itemFactory.createBow()));
+        localCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
         localCharacter.add(new LightComponent(rayHandler));
         localCharacter.add(new HealthComponent(100));
         localCharacter.add(new MagicComponent(80));
@@ -185,10 +184,7 @@ public class EntityComponentSystem {
             Entity torch = new Entity().add(
                     new LightComponent(rayHandler,pos.x, pos.y ,new Color(1,.8f,.5f, 1),20,2));
             engine.addEntity(torch);
-            System.out.println("Added light source at (" + pos.x + "|" + pos.y + ")");
         }
-        // TODO
-        // Lights must not collide with walls!
         LightSystem lightSystem = new LightSystem(rayHandler);
         lightSystem.addedToEngine(engine);
         engine.addSystem(lightSystem);
