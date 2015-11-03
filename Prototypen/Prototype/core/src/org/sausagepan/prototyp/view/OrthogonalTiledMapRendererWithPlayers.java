@@ -14,12 +14,8 @@ import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.Bullet;
 import org.sausagepan.prototyp.model.Player;
-import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.CharacterEntity;
-
-import java.util.IntSummaryStatistics;
 
 
 /**

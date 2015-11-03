@@ -42,7 +42,8 @@ public class MainMenuScreen implements Screen {
 	private final World world;
     private final RayHandler rayHandler;
     private MapInformation mapInformation;
-	String serverIp;	
+	String serverIp;
+
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(final KPMIPrototype game) {
@@ -62,7 +63,7 @@ public class MainMenuScreen implements Screen {
 				if (object instanceof FullGameStateResponse) {
 					FullGameStateResponse response = (FullGameStateResponse) object;
 					MainMenuScreen.this.mapInformation = response.mapInformation;
-					
+
 					cm = new PlayerManager();
 					for(Entry<Integer, HeroInformation> e : response.heroes.entrySet()) {
 						HeroInformation hero = e.getValue();
@@ -84,7 +85,7 @@ public class MainMenuScreen implements Screen {
 					game.connected = true;
 				}
 			}
-			
+
 		});
 
 	}
@@ -106,7 +107,7 @@ public class MainMenuScreen implements Screen {
 						new Weapon(),
 						true,
 						game.mediaManager, world, rayHandler,
-						new Vector2(32*2.5f, 32*.5f))
+						new Vector2(32 * 2.5f, 32 * .5f))
 		);
 
 		game.client.sendTCP(
@@ -118,14 +119,7 @@ public class MainMenuScreen implements Screen {
 				)
 			)
 		);
-		// Player 2
-//		cm.addCharacter(
-//				new Player("hero2", "m", "knight_m.pack",
-//						new Status(),
-//						new Weapon("standard_sword", 3, WEAPONTYPE.SWORD, DAMAGETYPE.PHYSICAL, 20, 180))
-//		);
 
-		// Switch to game screen
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
 		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation));
 	}
@@ -186,7 +180,22 @@ public class MainMenuScreen implements Screen {
 		}
 
 		if(game.connected == true && game.clientId != 0) {
-			setUpGame();
+			//waiting for full group of players
+			game.batch.begin();
+			if(game.playerCount < game.maxPlayers) {
+				game.font.setColor(1, 0, 0, 1);
+				game.font.draw(game.batch, "Waiting for players... "+game.playerCount+"/"+game.maxPlayers, 343, 380);
+				game.font.setColor(1, 1, 1, 1);
+			}
+
+			if(game.playerCount == game.maxPlayers) {
+				game.font.setColor(0, 1, 0, 1);
+				game.font.draw(game.batch, "Starting... " + game.playerCount + "/" + game.maxPlayers, 360, 380);
+				game.font.setColor(1, 1, 1, 1);
+				setUpGame();
+			}
+			game.batch.end();
+
 			dispose();
 		}
 		

@@ -21,8 +21,11 @@ public class KPMIPrototype extends Game {
 	public Client client;
 	public boolean connected = false;
 	public int clientId;
-	
-	
+
+	//Numer of Players needed to start game:
+	public int maxPlayers = 3;
+	//counts players on server
+	public int playerCount =3;
 	/* .................................................... LibGDX METHODS .. */
 	@Override
 	public void create () {

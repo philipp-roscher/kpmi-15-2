@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.math.MathUtils;
 
+import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.managers.ServerBattleSystem;
 import org.sausagepan.prototyp.managers.ServerCharacterSystem;
 import org.sausagepan.prototyp.managers.ServerPlayerManager;
@@ -144,6 +145,7 @@ public class GameServer {
 		        	connection.sendTCP(idAssignment);
 			        updateLastAccess(maxId);
 		        	maxId++;
+					//playerCount++;
 		        }
 		        
 				public void disconnected (Connection connection) {
@@ -152,6 +154,7 @@ public class GameServer {
 					positions.remove(clientIds.get(ip));
 					clientIds.remove(ip);
 					System.out.println(ip + " has disconnected");
+					//playerCount--;
 				}
 		     });
 		    
