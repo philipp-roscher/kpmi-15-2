@@ -12,10 +12,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import org.sausagepan.prototyp.model.Bullet;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
 
 /**
  * Created by georg on 31.10.15.
@@ -71,6 +73,9 @@ public class VisualDebuggingSystem extends EntitySystem {
                         weapon.damageArea.width,
                         weapon.damageArea.height
                 );
+                if(weapon.weapon.getClass().equals(Bow.class))
+                    for(Bullet a : ((Bow)weapon.weapon).activeArrows)
+                        shapeRenderer.rect(a.x, a.y, .1f, .1f);
             }
             if(entity.getComponent(InjurableAreaComponent.class) != null) {
                 InjurableAreaComponent area = jm.get(entity);

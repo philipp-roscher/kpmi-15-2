@@ -21,6 +21,7 @@ import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.items.Bow;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each
@@ -87,31 +88,40 @@ public void addedToEngine(Engine engine) {
     public void update(float deltaTime) {
         for (Entity attacker : attackers) {
             WeaponComponent weapon = wm.get(attacker);
-            // If weapon just has been used
-            if(weapon.justUsed) {
-                for(Entity v : victims) {
-                    if(!attacker.equals(v)) {
-                        HealthComponent health = hm.get(v);
-                        InjurableAreaComponent area = jm.get(v);
-                        System.out.println(
-                                "Checking for hit: \n" +
-                                "Attacker: " + weapon.damageArea
-                                + "\nVictim: " + area.area);
-                        if (area.area.overlaps(weapon.damageArea)) {
-                            System.out.println("Processing Attack");
-                            if(health.HP - weapon.strength > 0)
-                                health.HP -= weapon.strength;
-                            else
-                                health.HP = 0;
+            DynamicBodyComponent body = dm.get(attacker);
+
+            // Check victims for damage
+            for(Entity v : victims) {
+                if(!attacker.equals(v)) {
+                    HealthComponent health = hm.get(v);
+                    InjurableAreaComponent area = jm.get(v);
+                    if(weapon.justUsed) {
+                        // If weapon area and injurable area of character overlap
+                        if (area.area.overlaps(weapon.damageArea)) caluclateDamage(weapon, health);
+                        weapon.justUsed = false; // usage over, waiting for next attack
+
+                        // Handle Bow
+                        if(weapon.weapon.getClass().equals(Bow.class)) {
+                            Bow bow = (Bow)weapon.weapon;
+                            bow.shoot(body.dynamicBody.getPosition(),body.direction);
                         }
                     }
+
+                    // If weapon is a bow
+                    if(weapon.weapon.getClass().equals(Bow.class))
+                        if(((Bow)weapon.weapon).checkHit(area.area))
+                            caluclateDamage(weapon, health);
                 }
-                weapon.justUsed = false; // usage over, waiting for next attack
             }
         }
         // Remove Entity from the system, wenn killed
         // TODO
         // remember to implement EntityListener, so Systems can react to deletion
+    }
+
+    public void caluclateDamage(WeaponComponent weapon, HealthComponent health) {
+        if(health.HP - weapon.strength > 0) health.HP -= weapon.strength;
+        else health.HP = 0;
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */

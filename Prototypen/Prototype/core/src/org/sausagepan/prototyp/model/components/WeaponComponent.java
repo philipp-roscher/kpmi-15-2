@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.graphics.EntitySprite;
+import org.sausagepan.prototyp.model.items.WeaponItem;
 
 /**
  * Created by georg on 22.10.15.
@@ -18,8 +19,10 @@ public class WeaponComponent implements Component {
     public int strength;
     public Damagetype damagetype;
 
+    public WeaponItem weapon;   // the weapon itself
+
     /* ........................................................................... CONSTRUCTOR .. */
-    public WeaponComponent(TextureRegion textureRegion) {
+    public WeaponComponent(TextureRegion textureRegion, WeaponItem weapon) {
         this.sprite = new EntitySprite(textureRegion);
         this.sprite.setSize(1, 1);
         this.sprite.setOriginCenter();
@@ -28,6 +31,7 @@ public class WeaponComponent implements Component {
         this.justUsed = false;
         this.strength = 5;
         this.damagetype = Damagetype.PHYSICAL;
+        this.weapon = weapon;
     }
 
     /* ............................................................................... METHODS .. */
