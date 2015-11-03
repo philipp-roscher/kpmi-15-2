@@ -45,7 +45,7 @@ public class MainMenuScreen implements Screen {
 	String serverIp;
 
 	//choosen Player Class
-	private String playerClass = "archer";
+	private String clientClass = "shaman";
 
 	
 	/* ...................................................... CONSTRUCTORS .. */
@@ -124,8 +124,8 @@ public class MainMenuScreen implements Screen {
 		);
 
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
-		//TODO: Ask player about wanted character clas (Sara)
-		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation, playerClass));
+		//TODO: Ask player about wanted character class (Sara)
+		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation, clientClass));
 	}
 
 
