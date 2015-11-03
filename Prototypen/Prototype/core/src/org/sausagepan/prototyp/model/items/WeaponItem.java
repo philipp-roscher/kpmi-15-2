@@ -10,7 +10,7 @@ import org.sausagepan.prototyp.graphics.EntitySprite;
 /**
  * Created by georg on 02.11.15.
  */
-public abstract class WeaponItem {
+public abstract class  WeaponItem {
     /* ............................................................................ ATTRIBUTES .. */
     public EntitySprite sprite;
     public boolean justUsed;

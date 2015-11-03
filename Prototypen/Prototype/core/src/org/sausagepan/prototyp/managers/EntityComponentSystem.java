@@ -19,6 +19,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -145,6 +146,11 @@ public class EntityComponentSystem {
         BattleSystem battleSystem = new BattleSystem();
         battleSystem.addedToEngine(engine);
 
+        //Inventory System
+        InventorySystem inventorySystem = new InventorySystem();
+        inventorySystem.addedToEngine(engine);
+        inventorySystem.setWeaponInInventory();
+
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
@@ -155,6 +161,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(networkSystem);
         this.engine.addSystem(visualDebuggingSystem);
         this.engine.addSystem(battleSystem);
+        this.engine.addSystem(inventorySystem);
     }
 
     /**
@@ -180,6 +187,7 @@ public class EntityComponentSystem {
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            localCharacter.add(new InventoryComponent());
         }
 
         if (clientClass == "archer") {
@@ -191,6 +199,7 @@ public class EntityComponentSystem {
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            localCharacter.add(new InventoryComponent());
         }
 
         if (clientClass == "shaman") {
@@ -202,6 +211,7 @@ public class EntityComponentSystem {
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            localCharacter.add(new InventoryComponent());
         }
 
         if (clientClass == "dragon") {
@@ -213,6 +223,7 @@ public class EntityComponentSystem {
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
+            localCharacter.add(new InventoryComponent());
         }
 
         this.engine.addEntity(localCharacter);

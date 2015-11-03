@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 
 import org.sausagepan.prototyp.model.Item;
 import org.sausagepan.prototyp.model.Key;
+import org.sausagepan.prototyp.model.items.WeaponItem;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -16,29 +17,18 @@ import java.util.LinkedList;
  */
 public class InventoryComponent implements Component {
 
-    private Map<Item, Integer> backpack;
-    private List<Key> keyBag;
-    private boolean isKeyHolder;
+    public Map<Item, Integer> backpack;
+    public List<Key> keyBag;
+    public boolean isKeyHolder;
+    public WeaponItem weapon;
+    //public Map map;
 
-    public InventoryComponent(boolean hasKeyBag)
+    public InventoryComponent()
     {
-        if(!hasKeyBag)
-            return;
-
         backpack = new HashMap<Item, Integer>();
-        this.isKeyHolder = hasKeyBag;
-        this.keyBag = new LinkedList<Key>();
-        for(int x = 0; x <3; x++)
-        {
-            this.keyBag.add(null);
-        }
     }
 
-    public Map<Item, Integer> getBackpack()
-    {
-        return this.backpack;
-    }
-
+    //backpack functions
     public void addItemToBackpack(Item item, Integer value)
     {
         if(this.backpack.containsKey(item))
@@ -60,7 +50,20 @@ public class InventoryComponent implements Component {
         this.backpack.put(item, number);
     }
 
-    //here start the key functions
+    //keyBag functions
+    public void createKeyBag(boolean isKeyHolder)
+    {
+        if(!isKeyHolder)
+            return;
+
+        this.isKeyHolder = isKeyHolder;
+        this.keyBag = new LinkedList<Key>();
+        for(int x = 0; x < 3; x++)
+        {
+            this.keyBag.add(x, null);
+        }
+    }
+
     public List<Key> getKeyBag()
     {
         return this.keyBag;
@@ -96,6 +99,13 @@ public class InventoryComponent implements Component {
             case PartTwo: keyBag.remove(1); break;
             case PartThree: keyBag.remove(2); break;
         }
+    }
+
+    public List<Key> loseKey()
+    {
+        List<Key> keys = this.keyBag;
+        this.keyBag.clear();
+        return keys;
     }
 
 }

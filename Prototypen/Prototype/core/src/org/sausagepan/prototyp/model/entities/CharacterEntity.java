@@ -7,6 +7,7 @@ import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
@@ -33,7 +34,8 @@ public class CharacterEntity extends Entity {
                 WeaponComponent.class,
                 InputComponent.class,
                 HealthComponent.class,
-                MagicComponent.class
+                MagicComponent.class,
+                InventoryComponent.class
         ).get();
     }
 }
