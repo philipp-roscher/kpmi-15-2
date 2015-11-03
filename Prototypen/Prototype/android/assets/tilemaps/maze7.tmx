@@ -5,7 +5,7 @@
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzFlkkOwjAMRROJYQnckKNxqS66YMU5KkFFLczH33FSApWsUpL4eUySUvszPuS2Yn30OeZPOeUX/7R8W/M8+Rb/mvryD/nJQNnkJ3/WxeYwGZRvI/FRbPTGb86YJ3rdL/i7nM7L+21dNEatfOSJL9uFXat7B9+iZyC6MHZeLCN8tl7s0LGL2GP5ZOm01mNOI3mR9fuGmMw9tmmoPWu9V//iVyl2Eb7eF5jtENNi7Gr4LLaMP//GWpL8oy5rXqn+IvyanEb0R/lSH/vOfMzxSOKLErFLetHbD+TctPiagWdaKaeeD7M9Q7L5wtHnaW29WT3GcsL813Nwr/mmRPhr+4DtYVH+WvH09Obr/tI1zOqvp/8st5H6q7lPYn9OKV3YmaP5OGdr/Nda415MIvevnvxS/Szvs/XdymdjeH+ScbTX2jOZTAW+9oXdURk/sjfW9D/6gnc0vLNHatM7K/Cc+afcAfSR9Ho=
+   eJzFlktuwzAMRCUgTZZtbpij9VJeeNFVzhGgFWKi7JRDj2S7NUAkhkU+8SeqlPFn/pL7Bn31eau/5Vq/+dflPVqXyV78j3Is/7U+GSin+uQ3W2wNk8n5NhMfbY/Z93vyLROv9xf8cy235feHnhqjUT7yzJeXhd1r+wzvZmcitjB2WSwVPtO3ffjYKfuJfIpsRvqYUyUvpn8ZiEnrsdNA7UX6Wf2bX2uxU/j+XGB7h5iuxq6Hz2LL+O0/1pLlH21F69bqT+H35FSxr/KtPi4H8zHHM4kvirIv68XsPLC5GfE9A2faWk4zH9p+phLzjePnaW+9RT3GcsL892vwrNlTFP7WPmBnmMrfKpmdo/m+v3wNs/o70n+WW6X+eu6T2J+PUt7ZzPH8tsbzrce21n5Uv8hnc2UPUfhZ/Sy/t+h9lO+/eT7en0wXayg6M5k8BvtP4StnY0//oy94R8M7u1Kb2azAOfOf8glH8vkT
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
@@ -20,7 +20,7 @@
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzdVttOwzAMNV/SwqbBOhBiQ0gVAvUFkHgafFE/LU98FzZthGtycZIWISwdtWodn8R2TlIBQBXAO0Df4PMSsRufhBV82wOiYf+kr+/7a4SbcA1xu1P4uGz9B/ibETtw5+xxQf6zmWK3AN3t8OxDfgf0U4RL5pfzsJDzycmTjYk1MpgvkzJW8uXWiawb+Ptc/naAkT6nGbG4hWr6DJNa/OCuQbe/QvyhnMbyvUFcef7tMde8l148frLnNGM4P+qrwd7qCKH+yukdzfq5zof6awl+rr+bSG+X7F2fHvD1S/4WprV8UmpcbD58/Fj/r/NV5t633lC/7RVz4HGJ37X/fFoxh3F+qr9r/5XoZAq/b/3/hV/2sNSkpfldcTTr5+dGKvj+Oij4Vw4f1zitxXLH/9P96+OkgMxh3aDjRsNP3HPzY067kJZr+GNzcvW1hUtLU/hvhL+835Rqo+THc2Uy//vIOZDSm/IOI+9hNcTvXyVaYPMrYW29MH/MfPrzW/y0/jfEOeICsWWw3yrx3YLf22uPzzYQl96PiE/EO1dV
+   eJzdVs1OwzAMNk/SAdNgHQhtQ0gVAvUCSJyAA8/TR8tpz4VDG+Eax3GaVUJY+pQtdfzFP3FSAUCl4AOgq3G8QmyG0eMcfuQBUZNvXDc2/5rg9riBtNwZdCRZ/gH+esAG5Jg9zsh/diTbDUB724+dprdHPYO5bH6+jwC+nylxCjYxRw7j5XLWcr6pefLS9vzdVP6mh+M6pxNsUdFy+gyjXPziXoDtfGn8WkxT8V4hriPfdhhrWksvET1ec5Y1lB/7q8Paaj20+ppSOxb/aZ/X6msOftp/V4naLjm7sX5A/ef8DYxz+WTscan90PVD/r/vVx77mL9ave0Me6B2Pb90/mK94hhC+X3+pfNX0idz+GP+/xd+XsO8J83NL9nh/kv5p/dGLuj52hv4Jf+ldVZJxc5S/yXS9n3cWfhj/pcI2my1Xm7hP5zoHFJdB0i9NId/y/7z901pb+T8nzDe/33iHsipTf6G4e8wS/5LeoHPo4Qgy5n5UzK3/ynx/r8jLhCXiDVBmKvYfAB9ty8iOmvFrv/9hvgCC+NSkg==
   </data>
  </layer>
  <objectgroup name="colliderWalls" width="32" height="32">
@@ -75,6 +75,8 @@
   <object x="96" y="384" width="32" height="96"/>
   <object x="544" y="352" width="192" height="64"/>
   <object x="416" y="896" width="32" height="32"/>
+  <object x="0" y="800" width="32" height="96"/>
+  <object x="992" y="800" width="32" height="96"/>
  </objectgroup>
  <objectgroup name="gameMasterColliderWalls" width="32" height="32">
   <object x="0" y="0" width="480" height="96"/>
@@ -128,6 +130,8 @@
   <object x="96" y="384" width="32" height="96"/>
   <object x="544" y="352" width="192" height="64"/>
   <object x="416" y="896" width="32" height="32"/>
+  <object x="0" y="800" width="32" height="96"/>
+  <object x="992" y="800" width="32" height="96"/>
  </objectgroup>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="608" y="32" width="32" height="32"/>
