@@ -145,7 +145,8 @@ public class GameServer {
 		        	connection.sendTCP(idAssignment);
 			        updateLastAccess(maxId);
 		        	maxId++;
-					//playerCount++;
+					//playerCount++; send info to client(s)
+					//if 5 players: random choose GM + Teams and send to Client(s)
 		        }
 		        
 				public void disconnected (Connection connection) {
@@ -154,7 +155,7 @@ public class GameServer {
 					positions.remove(clientIds.get(ip));
 					clientIds.remove(ip);
 					System.out.println(ip + " has disconnected");
-					//playerCount--;
+					//playerCount--; send info to client(s)
 				}
 		     });
 		    

@@ -49,10 +49,12 @@ public class EntityComponentSystem {
 
     private CharacterEntity localCharacter;
 
+    private String playerClass;
+
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
             KPMIPrototype game, World world, Viewport viewport,
-            RayHandler rayHandler, Maze maze, OrthographicCamera camera) {
+            RayHandler rayHandler, Maze maze, OrthographicCamera camera, String playerClass) {
         this.mediaManager = game.mediaManager;
         this.world = world;
         this.camera = camera;
@@ -60,6 +62,7 @@ public class EntityComponentSystem {
         this.rayHandler = rayHandler;
         this.maze = maze;
         this.shpRend = new ShapeRenderer();
+        this.playerClass = playerClass;
 
         this.engine = new Engine(); // Create Engine
         this.characterFamily = Family.all(
@@ -88,10 +91,10 @@ public class EntityComponentSystem {
         // Get Objects from Maps Monster Layer and add monster entities there
         for(Vector2 pos : maze.getMonsterPositions()) {
             Entity monster = new Entity();
-            monster.add(new DynamicBodyComponent(world, new Vector2(pos.x, pos.y)));
+            monster.add(new DynamicBodyComponent(world, new Vector2(pos.x, pos.y), "monster"));
             monster.add(new HealthComponent(20));
             monster.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/zombie_01.pack")
+                    mediaManager.getTextureAtlas("textures/spritesheets/zombie_01.pack"), "monster"
             ));
             monster.add(new InjurableAreaComponent(pos.x, pos.y, .8f, 1f));
 
@@ -159,20 +162,59 @@ public class EntityComponentSystem {
         this.localCharacter = new CharacterEntity();
 
         // Add Components
-        localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f)));
-        localCharacter.add(new CharacterSpriteComponent(
-                mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack")
-        ));
-        localCharacter.add(new InputComponent());
-        localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
-        ));
-        localCharacter.add(new LightComponent(rayHandler));
-        localCharacter.add(new HealthComponent(100));
-        localCharacter.add(new MagicComponent(80));
-        localCharacter.add(new NetworkTransmissionComponent());
-        localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f, 1f));
+        //TODO: add further if-circle(s) to choose character class (Sara)
 
-        this.engine.addEntity(localCharacter);
+        if (playerClass == "knight") {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), playerClass));
+            localCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), playerClass
+            ));
+            localCharacter.add(new InputComponent());
+            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
+            ));
+            localCharacter.add(new LightComponent(rayHandler));
+            localCharacter.add(new HealthComponent(100));
+            localCharacter.add(new MagicComponent(80));
+            localCharacter.add(new NetworkTransmissionComponent());
+            localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f, 1f));
+
+            this.engine.addEntity(localCharacter);
+        }
+
+        if (playerClass == "archer") {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), playerClass));
+            localCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), playerClass
+            ));
+            localCharacter.add(new InputComponent());
+            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
+            )); //TODO change Weapon to bow
+            localCharacter.add(new LightComponent(rayHandler));
+            localCharacter.add(new HealthComponent(100));
+            localCharacter.add(new MagicComponent(80));
+            localCharacter.add(new NetworkTransmissionComponent());
+            localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f, 1f));
+
+            this.engine.addEntity(localCharacter);
+        }
+
+        if (playerClass == "dragon") {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), playerClass));
+            localCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), playerClass
+            ));
+            localCharacter.add(new InputComponent());
+            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
+            )); //TODO change Weapon to no weapon?
+            localCharacter.add(new LightComponent(rayHandler));
+            localCharacter.add(new HealthComponent(100));
+            localCharacter.add(new MagicComponent(80));
+            localCharacter.add(new NetworkTransmissionComponent());
+            localCharacter.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f*2, 1f*2));
+
+            this.engine.addEntity(localCharacter);
+        }
+
     }
 
     public void setUpMazeLights() {

@@ -22,7 +22,7 @@ public class CharacterSpriteComponent implements Component {
      *
      * @param textureAtlas  representing a character sprite sheet
      */
-    public CharacterSpriteComponent (TextureAtlas textureAtlas) {
+    public CharacterSpriteComponent (TextureAtlas textureAtlas, String playerClass) {
         // load animation textures
         playerAnims = new ArrayMap<String,Animation>();
         playerAnims.put("n", new Animation(.2f, textureAtlas.findRegions("n")));
@@ -33,7 +33,13 @@ public class CharacterSpriteComponent implements Component {
         recentAnim    = playerAnims.get("s");
         recentIdleImg = playerAnims.get("s").getKeyFrames()[0];
         this.sprite = new Sprite(recentIdleImg);
-        this.sprite.setSize(.8f, 1);
+        //bigger size for dragon/GM
+        if (playerClass == "dragon") {
+            this.sprite.setSize(.8f*2, 1*2);
+        }
+        else {
+            this.sprite.setSize(.8f, 1);
+        }
     }
     /* ............................................................................... METHODS .. */
     

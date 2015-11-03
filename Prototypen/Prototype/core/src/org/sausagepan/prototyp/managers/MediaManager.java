@@ -18,6 +18,8 @@ public class MediaManager {
     private String mazeBackgroundMusicFile      = "music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg";
     private String mainMenuBackgroundImgFile    = "textures/backgrounds/main_menu_bg.png";
     private String knightSpriteSheetFile        = "textures/spritesheets/knight_m.pack";
+    private String archerSpriteSheetFile        = "textures/spritesheets/archer_f.pack";
+    private String dragonSpriteSheetFile        = "textures/spritesheets/dragon.pack";
     private String arrowImgFile                 = "textures/arrow.png";
     private String weaponsSpriteSheetFile       = "textures/spritesheets/weapons.pack";
     private String zombieSpriteFile             = "textures/spritesheets/zombie_01.pack";
@@ -33,6 +35,8 @@ public class MediaManager {
         assets.load(this.mainMenuBackgroundImgFile, Texture.class);
         assets.load(this.arrowImgFile, Texture.class);
         assets.load(this.knightSpriteSheetFile, TextureAtlas.class);
+        assets.load(this.archerSpriteSheetFile, TextureAtlas.class);
+        assets.load(this.dragonSpriteSheetFile, TextureAtlas.class);
         assets.load(this.weaponsSpriteSheetFile, TextureAtlas.class);
         assets.load(this.zombieSpriteFile, TextureAtlas.class);
 

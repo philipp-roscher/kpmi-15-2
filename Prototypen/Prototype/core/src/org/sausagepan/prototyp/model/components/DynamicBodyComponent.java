@@ -22,13 +22,19 @@ public class DynamicBodyComponent implements Component {
     public Rectangle injurableArea;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public DynamicBodyComponent(World world, Vector2 startPosition) {
+    public DynamicBodyComponent(World world, Vector2 startPosition, String playerClass) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;    // set up body definition for player
         bodyDef.position.set(startPosition.x, startPosition.y); // set players bodys position
         dynamicBody = world.createBody(bodyDef);        // add body to the world
         CircleShape circle = new CircleShape();         // give body a shape
-        circle.setRadius(.4f);                          // set the shapes radius
+        //bigger size for dragon/GM
+        if (playerClass == "dragon") {
+            circle.setRadius(.4f*2);                    // set the shapes radius
+        }
+        else {
+            circle.setRadius(.4f);                    // set the shapes radius
+        }
         FixtureDef fixDef = new FixtureDef();           // create players fixture
         fixDef.shape       = circle;                    // give shape to fixture
         fixDef.density     = 0.5f;                      // objects density
