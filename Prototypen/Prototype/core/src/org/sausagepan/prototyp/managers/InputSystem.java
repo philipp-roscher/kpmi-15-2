@@ -62,7 +62,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
 
-            if(input.moving) move(input.touchPos, body.dynamicBody, input);
+            if(input.moving) move(input.touchPos, body, input);
                 /* Keyboard Input */
 //                switch(input.direction) {
 //                    case NORTH: body.dynamicBody.setLinearVelocity(0,5);break;
@@ -79,21 +79,21 @@ public class InputSystem extends EntitySystem implements InputProcessor {
      * Change characters velocities in x and y direction according to the touch position
      * @param touchPos
      */
-    public void move(Vector3 touchPos, Body body, InputComponent input) {
+    public void move(Vector3 touchPos, DynamicBodyComponent body, InputComponent input) {
 
         // calculate characters main moving direction for sprite choosing
-        if(Math.abs(touchPos.x - body.getPosition().x)
-                > Math.abs(touchPos.y - body.getPosition().y)) {
-            if(touchPos.x > body.getPosition().x) input.direction = Direction.EAST;
+        if(Math.abs(touchPos.x - body.dynamicBody.getPosition().x)
+                > Math.abs(touchPos.y - body.dynamicBody.getPosition().y)) {
+            if(touchPos.x > body.dynamicBody.getPosition().x) input.direction = Direction.EAST;
             else input.direction = Direction.WEST;
         } else {
-            if(touchPos.y > body.getPosition().y) input.direction = Direction.NORTH;
+            if(touchPos.y > body.dynamicBody.getPosition().y) input.direction = Direction.NORTH;
             else input.direction = Direction.SOUTH;
         }
 
         // split up velocity vector in x and y component
-        ax = (-1)*(body.getPosition().x-touchPos.x);
-        ay = (-1)*(body.getPosition().y-touchPos.y);
+        ax = (-1)*(body.dynamicBody.getPosition().x-touchPos.x);
+        ay = (-1)*(body.dynamicBody.getPosition().y-touchPos.y);
 
         directionVector.x = ax;
         directionVector.y = ay;
@@ -114,8 +114,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             directionVector.y = 0;
             input.moving = false;
         } else input.moving = true;
-
-        body.setLinearVelocity(directionVector);
+        body.direction = normDirectionVector;
+        body.dynamicBody.setLinearVelocity(directionVector);
     }
 
     /* ....................................................................... INPUT PROCESSOR .. */

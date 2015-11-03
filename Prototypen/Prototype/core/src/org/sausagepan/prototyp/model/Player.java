@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 
+import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.input.PlayerInputProcessor;
@@ -24,6 +25,7 @@ import org.sausagepan.prototyp.model.components.PlayerPhysicsComponent;
 import org.sausagepan.prototyp.model.components.PositionComponent;
 import org.sausagepan.prototyp.model.components.SkyDirectionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.network.NetworkPosition;
 
 @Deprecated
@@ -90,7 +92,13 @@ public class Player extends Entity {
         attributes.subscribe(physics);
         attributes.subscribe(battle);
 
-        this.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")));
+        this.add(
+                new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
+                        new Bow(
+                                mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
+                                1, Damagetype.PHYSICAL,
+                                mediaManager.getTextureAtlasType("weapons").findRegion("sword")
+                        )));
         this.add(new SkyDirectionComponent());
         this.add(new PositionComponent());
 	}

@@ -89,7 +89,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                     for (Player player : players) {
                         player.graphics.getSprite().draw(this.getBatch());
 
-                        /* draw arrows here */
+                        /* draw activeArrows here */
                         for (Bullet b : player.getBullets()) {
                             switch (player.getDir()) {
                                 case NORTH:

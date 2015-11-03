@@ -6,13 +6,13 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -25,6 +25,8 @@ import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.items.ItemFactory;
 
 import box2dLight.RayHandler;
 
@@ -41,6 +43,7 @@ public class EntityComponentSystem {
     private Family monsterFamily;
     private World world;
     private MediaManager mediaManager;
+    private ItemFactory itemFactory;
     private OrthographicCamera camera;
     private Viewport viewport;
     private RayHandler rayHandler;
@@ -56,6 +59,7 @@ public class EntityComponentSystem {
             KPMIPrototype game, World world, Viewport viewport,
             RayHandler rayHandler, Maze maze, OrthographicCamera camera, String playerClass) {
         this.mediaManager = game.mediaManager;
+        this.itemFactory = new ItemFactory(mediaManager);
         this.world = world;
         this.camera = camera;
         this.viewport = viewport;
@@ -170,8 +174,8 @@ public class EntityComponentSystem {
                     mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), playerClass
             ));
             localCharacter.add(new InputComponent());
-            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
-            ));
+            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
+                    itemFactory.createBow()));
             localCharacter.add(new LightComponent(rayHandler));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
@@ -187,8 +191,8 @@ public class EntityComponentSystem {
                     mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), playerClass
             ));
             localCharacter.add(new InputComponent());
-            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
-            )); //TODO change Weapon to bow
+            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
+                    itemFactory.createBow())); //TODO change Weapon to bow (?)
             localCharacter.add(new LightComponent(rayHandler));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
@@ -204,8 +208,8 @@ public class EntityComponentSystem {
                     mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), playerClass
             ));
             localCharacter.add(new InputComponent());
-            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword")
-            )); //TODO change Weapon to no weapon?
+            localCharacter.add(new WeaponComponent(mediaManager.getTextureAtlasType("weapons").findRegion("sword"),
+                    itemFactory.createBow())); //TODO change Weapon to no weapon?
             localCharacter.add(new LightComponent(rayHandler));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
@@ -214,7 +218,6 @@ public class EntityComponentSystem {
 
             this.engine.addEntity(localCharacter);
         }
-
     }
 
     public void setUpMazeLights() {

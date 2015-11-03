@@ -20,6 +20,7 @@ public class DynamicBodyComponent implements Component {
     public Body dynamicBody;
     public Fixture fixture;
     public Rectangle injurableArea;
+    public Vector2 direction;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public DynamicBodyComponent(World world, Vector2 startPosition, String playerClass) {
@@ -42,6 +43,7 @@ public class DynamicBodyComponent implements Component {
         fixDef.restitution = 0.0f;                      // bouncing
         fixture = dynamicBody.createFixture(fixDef);    // add fixture to body
         circle.dispose();
+        direction = new Vector2(0,-1);
     }
 
 

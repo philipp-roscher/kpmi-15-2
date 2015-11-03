@@ -7,8 +7,11 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
+import org.sausagepan.prototyp.model.Weapon;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
 
 /**
  * Created by georg on 22.10.15.
@@ -23,6 +26,8 @@ public class WeaponSystem extends EntitySystem {
             = ComponentMapper.getFor(WeaponComponent.class);
     private ComponentMapper<InputComponent> im
             = ComponentMapper.getFor(InputComponent.class);
+    private ComponentMapper<DynamicBodyComponent> dm
+            = ComponentMapper.getFor(DynamicBodyComponent.class);
 
     public WeaponSystem() {}
 
@@ -30,13 +35,15 @@ public class WeaponSystem extends EntitySystem {
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 WeaponComponent.class,
-                InputComponent.class).get());
+                InputComponent.class,
+                DynamicBodyComponent.class).get());
     }
 
     public void update(float deltaTime) {
         for (Entity entity : entities) {
             WeaponComponent weapon = wm.get(entity);
             InputComponent input = im.get(entity);
+            DynamicBodyComponent body = dm.get(entity);
             int rotation;
             switch(input.direction) {
                 case SOUTH: rotation = 90;  break;
@@ -47,6 +54,12 @@ public class WeaponSystem extends EntitySystem {
             weapon.sprite.setRotation(rotation);
             if(!input.weaponDrawn) weapon.sprite.visible = false;
             else                 weapon.sprite.visible = true;
+
+            // Update Bow and Arrows
+            if(weapon.weapon.getClass().equals(Bow.class)) {
+                Bow bow = (Bow)weapon.weapon;
+                bow.updateArrows();
+            }
         }
     }
 
