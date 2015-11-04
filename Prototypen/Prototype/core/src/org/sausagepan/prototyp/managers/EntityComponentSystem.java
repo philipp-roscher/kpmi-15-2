@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.HashMap;
+
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.model.Maze;
@@ -28,6 +30,9 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
+import org.sausagepan.prototyp.network.HeroInformation;
+import org.sausagepan.prototyp.network.NetworkPosition;
+import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
 import box2dLight.RayHandler;
 
@@ -50,7 +55,9 @@ public class EntityComponentSystem {
     private RayHandler rayHandler;
     private Maze maze;
     private ShapeRenderer shpRend;
+    private HashMap<Integer,CharacterEntity> characters;
 
+    private int localCharacterId;
     private CharacterEntity localCharacter;
 
     private String clientClass;
@@ -79,7 +86,9 @@ public class EntityComponentSystem {
                 SpriteComponent.class,
                 DynamicBodyComponent.class
         ).get();
-
+        this.characters = new HashMap<Integer,CharacterEntity>();
+        this.localCharacterId = game.clientId;
+        
         setUpEntities();
         setUpLocalCharacterEntity();
         setUpMazeLights();
@@ -226,6 +235,7 @@ public class EntityComponentSystem {
             localCharacter.add(new InventoryComponent());
         }
 
+        characters.put(localCharacterId, localCharacter);
         this.engine.addEntity(localCharacter);
     }
 
@@ -244,6 +254,83 @@ public class EntityComponentSystem {
     public void update(float delta) {
         engine.update(delta);
     }
+
+	public CharacterEntity addNewCharacter(NewHeroResponse request) {
+		return addNewCharacter(request.playerId, request.hero);
+	}
+		
+	public CharacterEntity addNewCharacter(int newCharacterId, HeroInformation newHero) {		
+		// Create Entity
+        CharacterEntity newCharacter = new CharacterEntity();
+
+        // Add Components
+        //TODO: add further if-circle(s) to choose character class (Sara)
+        newCharacter.add(new LightComponent(rayHandler));
+        newCharacter.add(new NetworkTransmissionComponent());
+
+        if (newHero.clientClass == "knight") {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
+            newCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), clientClass
+            ));
+            newCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
+            newCharacter.add(new HealthComponent(100));
+            newCharacter.add(new MagicComponent(80));
+            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            newCharacter.add(new InventoryComponent());
+        }
+
+        if (clientClass == "archer") {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
+            newCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), clientClass
+            ));
+            newCharacter.add(new WeaponComponent(itemFactory.createBow()));
+            newCharacter.add(new HealthComponent(100));
+            newCharacter.add(new MagicComponent(80));
+            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            newCharacter.add(new InventoryComponent());
+        }
+
+        if (clientClass == "shaman") {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
+            newCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/shaman_m.pack"), clientClass
+            ));
+            newCharacter.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
+            newCharacter.add(new HealthComponent(100));
+            newCharacter.add(new MagicComponent(80));
+            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            newCharacter.add(new InventoryComponent());
+        }
+
+        if (clientClass == "dragon") {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
+            newCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), clientClass
+            ));
+            newCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
+            newCharacter.add(new HealthComponent(100));
+            newCharacter.add(new MagicComponent(80));
+            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
+            newCharacter.add(new InventoryComponent());
+        }
+
+        characters.put(newCharacterId, newCharacter);
+        this.engine.addEntity(newCharacter);
+        System.out.println("created new hero: " + newHero.clientClass + "(" + newCharacterId + ")");
+        return newCharacter;
+	}
+	
+	public void updatePosition(int id, NetworkTransmissionComponent position) {
+		if(characters.get(id) != null) {
+			this.characters.get(id).getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(position.position, 0f);
+		}
+	}
+
+	public void deleteCharacter(int playerId) {
+	}
+	
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;

@@ -16,6 +16,7 @@ import org.sausagepan.prototyp.managers.ServerBattleSystem;
 import org.sausagepan.prototyp.managers.ServerCharacterSystem;
 import org.sausagepan.prototyp.managers.ServerPlayerManager;
 import org.sausagepan.prototyp.model.ServerPlayer;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
@@ -47,7 +48,7 @@ public class GameServer {
 	public static Server server;
 	public static int maxId = 1;
 	public static HashMap<InetSocketAddress,Integer> clientIds;
-	public static HashMap<Integer,NetworkPosition> positions;
+	public static HashMap<Integer,NetworkTransmissionComponent> positions;
 	public static HashMap<Integer,Long> lastAccess;
 	public static HashMap<Integer,HeroInformation> cm;
 	public static MapInformation map;
@@ -69,7 +70,7 @@ public class GameServer {
 	public GameServer() {
 		this.clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
-		positions = new HashMap<Integer,NetworkPosition>();
+		positions = new HashMap<Integer,NetworkTransmissionComponent>();
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,HeroInformation>();
 		bs = new ServerBattleSystem(this);
@@ -95,17 +96,17 @@ public class GameServer {
 		        	if (object instanceof NewHeroRequest) {
 		        		NewHeroRequest request = (NewHeroRequest) object;
 		        		HeroInformation hero = request.hero;
-		        		System.out.println("New Hero (ID "+ request.playerId +"): "+ request.hero.name);
+		        		System.out.println("New Hero (ID "+ request.playerId +"): "+ request.hero.clientClass);
 		        		
 		        		cm.put(request.playerId, hero);
-		        		playerMan.addCharacter(request.playerId, new ServerPlayer(
+		        		/*playerMan.addCharacter(request.playerId, new ServerPlayer(
                                 hero.name,
                                 hero.sex,
                                 request.playerId,
                                 hero.spriteSheet,
                                 hero.status,
                                 hero.weapon,
-                                false));
+                                false));*/
                         serverCharacterSystem.addCharacter(request.playerId, new
                                 ServerCharacterEntity(request.playerId));
 		        		NewHeroResponse response = new NewHeroResponse(request.playerId, request.hero);
@@ -118,7 +119,8 @@ public class GameServer {
 					
 					   PositionUpdate request = (PositionUpdate)object;
 					   positions.put(request.playerId, request.position);
-					   playerMan.updatePosition(request.playerId, request.position);
+					   //serverCharacterSystem.updatePosition(request.playerId, request.position);
+					   //playerMan.updatePosition(request.playerId, request.position);
 
 					   updateLastAccess(request.playerId);
 		        	}

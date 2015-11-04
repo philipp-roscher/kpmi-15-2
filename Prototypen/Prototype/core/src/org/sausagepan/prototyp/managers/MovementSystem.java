@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.VelocityComponent;
 
@@ -33,7 +34,7 @@ public class MovementSystem extends EntitySystem {
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family
                 .all(DynamicBodyComponent.class)
-                .exclude(InputComponent.class).get());
+                .exclude(InventoryComponent.class).get());
     }
 
     public void update(float deltaTime) {

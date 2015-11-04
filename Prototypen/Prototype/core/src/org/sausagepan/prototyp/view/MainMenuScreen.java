@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.view;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
@@ -38,10 +39,10 @@ public class MainMenuScreen implements Screen {
 	public Viewport viewport;
 	private Texture bgImg;
 	private int connectionStatus;
-	private PlayerManager cm;
 	private final World world;
     private final RayHandler rayHandler;
     private MapInformation mapInformation;
+    private HashMap<Integer,HeroInformation> otherCharacters;
 	String serverIp;
 
 	//choosen Player Class
@@ -66,25 +67,7 @@ public class MainMenuScreen implements Screen {
 				if (object instanceof FullGameStateResponse) {
 					FullGameStateResponse response = (FullGameStateResponse) object;
 					MainMenuScreen.this.mapInformation = response.mapInformation;
-
-					cm = new PlayerManager();
-					for(Entry<Integer, HeroInformation> e : response.heroes.entrySet()) {
-						HeroInformation hero = e.getValue();
-						cm.addCharacter(e.getKey(),
-								new Player(
-                                        hero.name,
-                                        hero.sex,
-                                        e.getKey(),
-                                        hero.spriteSheet,
-                                        hero.status,
-                                        hero.weapon,
-                                        e.getKey().equals(game.clientId),
-                                        game.mediaManager,
-                                        world,
-                                        rayHandler,
-										new Vector2(32*2.5f, 32*.5f)));
-					}
-
+					otherCharacters = response.heroes;
 					game.connected = true;
 				}
 			}
@@ -100,32 +83,16 @@ public class MainMenuScreen implements Screen {
 		BattleSystem bs = new BattleSystem();
 
 		// Player 1
-		cm.addCharacter(
-				game.clientId,
-				new Player("hero" + game.clientId,
-						"m",
-						game.clientId,
-						"knight_m.pack",
-						new Status(),
-						new Weapon(),
-						true,
-						game.mediaManager, world, rayHandler,
-						new Vector2(32 * 2.5f, 32 * .5f))
-		);
-
 		game.client.sendTCP(
 			new NewHeroRequest(
 				game.clientId,
-				new HeroInformation("hero" + game.clientId, "m", "knight_m.pack",
-						new Status(),
-						new Weapon()
-				)
+				new HeroInformation(clientClass)
 			)
 		);
 
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
 		//TODO: Ask player about wanted character class (Sara)
-		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation, clientClass));
+		game.setScreen(new InMaze(game, bs, world, rayHandler, mapInformation, otherCharacters, clientClass));
 	}
 
 

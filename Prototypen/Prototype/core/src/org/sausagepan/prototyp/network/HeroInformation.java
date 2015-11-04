@@ -4,7 +4,15 @@ import org.sausagepan.prototyp.model.Status;
 import org.sausagepan.prototyp.model.Weapon;
 
 public class HeroInformation {
-	public String name;
+	public String clientClass;
+
+	public HeroInformation() { }
+	
+	public HeroInformation(String clientClass) {
+		this.clientClass = clientClass;
+	}
+	
+	/*public String name;
 	public String sex;
 	public String spriteSheet;
 	public Status status;
@@ -19,5 +27,5 @@ public class HeroInformation {
 		this.status = status;
 		this.weapon = weapon;
 		this.spriteSheet = spriteSheet;		
-	}
+	}*/
 }
