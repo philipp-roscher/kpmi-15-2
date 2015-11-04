@@ -5,6 +5,7 @@ import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
+import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;
@@ -37,10 +38,18 @@ public class KPMIPrototype extends Game {
 		font  = new BitmapFont();
 		mediaManager = new MediaManager();
 
+
 		// Client starten
 		client = new Client();
 		new Thread(client).start();
 		Network.register(client);
+		//send maxClient to server
+		//TODO: doesn't work yet... :/ (Sara)
+		MaxClients MaxClients = new MaxClients();
+		MaxClients.count = maxClients;
+		client.sendTCP(MaxClients);
+
+		//Listeners to receive data from server
 		client.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
 				if (object instanceof IDAssignment) {

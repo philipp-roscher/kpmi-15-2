@@ -34,6 +34,7 @@ import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
+import org.sausagepan.prototyp.network.Network.MaxClients;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
@@ -64,8 +65,8 @@ public class GameServer {
 
 	//to count active Clients in Session
 	public static int clientCount;
-	//collect current connections
-	private Connection[] connections = {};
+	//maximal Number of Clients per Session
+	private int maxClients = 3;
 
 
 	public GameServer() {
@@ -112,15 +113,17 @@ public class GameServer {
 						GameClientCount GameClientCount = new GameClientCount();
 						GameClientCount.count = clientCount;
 						server.sendToAllTCP(GameClientCount);
-						updateLastAccess(clientCount);
-						//if reached maxClients: random choose GM + Teams and send to Client(s) (Sara)
-						if (clientCount == 3) {
+						
+						//if reached maxClients: random choose GM + Teams and send to Clients
+
+						if (clientCount == maxClients) {
 							Collection<Integer> ClientCol = clientIds.values();
 							//Sets Team-number like following: 1-2-0-1-2
 							int TeamId = 1;			//TeamId init here so it resets for ever time teams are assigned
 							for (i=1; i<=ClientCol.size(); i++) {
+									//TODO better if statement to check if CleintId is still active
 								if (!ClientCol.isEmpty()) {
-									//change ClientId from Object to Int and send Team-Info to Client
+									//send Team-Info to Clients
 									TeamAssignment TeamAssignment = new TeamAssignment();
 									TeamAssignment.id = TeamId;
 									server.sendToTCP(i, TeamAssignment);
@@ -150,6 +153,12 @@ public class GameServer {
 		        	   response.positions = positions;
 		        	   connection.sendUDP(response);
 			       }
+
+					if (object instanceof MaxClients) {
+						System.out.println("MaxClients eingegangen");
+						MaxClients response = new MaxClients();
+						response.count = maxClients;
+					}
 		           
 		           if (object instanceof FullGameStateRequest) {
 		        	   System.out.println("FullGameStateRequest eingegangen");
@@ -175,7 +184,6 @@ public class GameServer {
 		        	connection.sendTCP(idAssignment);
 			        updateLastAccess(maxId);
 		        	maxId++;
-
 		        }
 		        
 				public void disconnected (Connection connection) {
