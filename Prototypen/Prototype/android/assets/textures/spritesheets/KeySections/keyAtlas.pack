@@ -1,0 +1,26 @@
+
+keyAtlas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+PartTwo
+  rotate: false
+  xy: 1, 39
+  size: 50, 10
+  orig: 50, 10
+  offset: 0, 0
+  index: -1
+PartThree
+  rotate: false
+  xy: 1, 1
+  size: 22, 36
+  orig: 22, 36
+  offset: 0, 0
+  index: -1
+PartOne
+  rotate: false
+  xy: 25, 14
+  size: 24, 23
+  orig: 24, 23
+  offset: 0, 0
+  index: -1

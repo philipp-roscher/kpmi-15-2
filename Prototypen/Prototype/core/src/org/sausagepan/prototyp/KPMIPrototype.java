@@ -47,13 +47,15 @@ public class KPMIPrototype extends Game {
 			}
 		});
 		client.addListener(new Listener() {
-			public void received(Connection connection, Object object) {
-				if(object instanceof GameClientCount) {
+			public void received(Connection connection, Object object)
+			{
+				if(object instanceof GameClientCount)
+				{
 					GameClientCount result = (GameClientCount) object;
 					clientCount = result.count;
 				}
 			}
-		});
+	});
 
 
 
