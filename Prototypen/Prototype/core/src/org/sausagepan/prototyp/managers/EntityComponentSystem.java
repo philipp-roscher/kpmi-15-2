@@ -84,10 +84,10 @@ public class EntityComponentSystem {
 
         setUpEntities();
         setUpLocalCharacterEntity();
-        setUpWeaponInInventory();
         setUpMazeLights();
         setUpMonsters();
         setUpEntitySystems();
+        setUpWeaponInInventory();
     }
 
     /* ............................................................................... METHODS .. */

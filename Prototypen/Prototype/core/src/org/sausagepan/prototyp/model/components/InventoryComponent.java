@@ -18,18 +18,20 @@ import java.util.LinkedList;
  */
 public class InventoryComponent implements Component {
 
+    /*..................................................................................Attributes*/
     public Map<Item, Integer> backpack;
     public List<Key> keyBag;
     public boolean isKeyHolder;
     public WeaponItem weapon;
     //public Map map;
 
+    /*................................................................................Constructors*/
     public InventoryComponent()
     {
         backpack = new HashMap<Item, Integer>();
     }
 
-    //backpack functions
+    /*..........................................................................Backpack functions*/
     public void addItemToBackpack(Item item, Integer value)
     {
         if(this.backpack.containsKey(item))
@@ -51,13 +53,13 @@ public class InventoryComponent implements Component {
         this.backpack.put(item, number);
     }
 
-    //keyBag functions
+    /*............................................................................KeyBag functions*/
     public void createKeyBag(boolean isKeyHolder)
     {
+        this.isKeyHolder = isKeyHolder;
         if(!isKeyHolder)
             return;
 
-        this.isKeyHolder = isKeyHolder;
         this.keyBag = new LinkedList<Key>();
         for(int x = 0; x < 3; x++)
         {

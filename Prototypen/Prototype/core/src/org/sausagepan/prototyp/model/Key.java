@@ -14,10 +14,12 @@ import org.sausagepan.prototyp.graphics.EntitySprite;
  */
 public class Key {
 
+    /*..................................................................................Attributes*/
     private KeySection keySection;
     private EntitySprite sprite;
     private Rectangle collider;
 
+    /*.................................................................................Constructor*/
     public Key(KeySection keySection, TextureAtlas.AtlasRegion region)
     {
         this.keySection = keySection;
@@ -27,6 +29,7 @@ public class Key {
         this.collider = new Rectangle(0, 0, this.sprite.getWidth(), this.sprite.getHeight());
     }
 
+    /*...........................................................................Getters & Setters*/
     public KeySection getKeySection() { return this.keySection; }
 
     public EntitySprite getSprite() { return this.sprite; }

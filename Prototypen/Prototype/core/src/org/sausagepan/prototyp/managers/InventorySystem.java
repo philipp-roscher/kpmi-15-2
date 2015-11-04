@@ -19,11 +19,13 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
  */
 public class InventorySystem extends EntitySystem {
 
+    /*...................................................................................Atributes*/
     private ImmutableArray<Entity> characters;
 
     private ComponentMapper<InventoryComponent> im = ComponentMapper.getFor(InventoryComponent.class);
     private ComponentMapper<WeaponComponent> wm = ComponentMapper.getFor(WeaponComponent.class);
 
+    /*...................................................................................Functions*/
     public void addedToEngine(Engine engine)
     {
         characters = engine.getEntitiesFor(Family.all(WeaponComponent.class, InventoryComponent.class).get());
