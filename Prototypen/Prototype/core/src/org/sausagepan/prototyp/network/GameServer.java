@@ -32,6 +32,7 @@ import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
+import org.sausagepan.prototyp.network.Network.TeamAssignment;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
@@ -161,14 +162,24 @@ public class GameServer {
 					System.out.println("clientCount at: "+clientCount);
 					GameClientCount GameClientCount = new GameClientCount();
 					GameClientCount.count = clientCount;
-					server.sendToAllTCP(clientCount);
-					//TODO: if reached maxClients: random choose GM + Teams and send to Client(s) (Sara)
-					Collection<Integer> ClientCol = clientIds.values();
-					Object[] ClientColArray = ClientCol.toArray();
-					for (int i=0; i < ClientCol.size(); i++) {
-						//Object currentClient = ClientColArray[i];
-
-
+					server.sendToAllTCP(GameClientCount);
+					updateLastAccess(clientCount);
+					//if reached maxClients: random choose GM + Teams and send to Client(s) (Sara)
+					if (clientCount == 3) {
+						Collection<Integer> ClientCol = clientIds.values();
+						//Sets Team-number like following: 1-2-0-1-2
+						int TeamId = 1;			//TeamId init here so it resets for ever time teams are assigned
+						for (i=1; i<=ClientCol.size(); i++) {
+							if (!ClientCol.isEmpty()) {
+								//change ClientId from Object to Int and send Team-Info to Client
+								TeamAssignment TeamAssignment = new TeamAssignment();
+								TeamAssignment.id = TeamId;
+								server.sendToTCP(i, TeamAssignment);
+								updateLastAccess(TeamId);
+								System.out.println("Team Id "+TeamId+" assigned to ClientId "+i);
+								TeamId = (TeamId + 1) % 3;
+							}
+						}
 					}
 
 		        }
@@ -180,7 +191,7 @@ public class GameServer {
 					clientIds.remove(ip);
 					System.out.println(ip + " has disconnected");
 
-					//decrease clientCount and send to all cleints via TCP
+					//decrease clientCount and send to all clients via TCP
 					clientCount--;
 					System.out.println("clientCount at: "+clientCount);
 					GameClientCount GameClientCount = new GameClientCount();

@@ -100,7 +100,8 @@ public class InMaze implements Screen, PlayerObserver {
                   final World world,
                   final RayHandler rayHandler,
                   final MapInformation mapInformation,
-				  String clientClass) {
+				  String clientClass,
+				  int TeamId) {
 
         Box2D.init();   // initialize Box2D
 
@@ -151,7 +152,7 @@ public class InMaze implements Screen, PlayerObserver {
 			maze.addPlayer(p);
 
         // Entity-Component-System ........................................................... START
-        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass);
+        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass, TeamId);
         // Entity-Component-System ............................................................. END
 
 		// Set Up Client for Communication .........................................................

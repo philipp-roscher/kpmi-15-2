@@ -125,7 +125,8 @@ public class MainMenuScreen implements Screen {
 
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
 		//TODO: Ask player about wanted character class (Sara)
-		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation, clientClass));
+		System.out.println("Assigned teamId is: "+game.TeamId);
+		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation, clientClass, game.TeamId));
 	}
 
 
@@ -205,6 +206,7 @@ public class MainMenuScreen implements Screen {
 		
 		// Update camera
 		camera.update();
+
 	}
 
 	@Override

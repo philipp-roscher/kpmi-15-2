@@ -26,6 +26,7 @@ import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
@@ -56,11 +57,12 @@ public class EntityComponentSystem {
     private CharacterEntity localCharacter;
 
     private String clientClass;
+    private int TeamId;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
             KPMIPrototype game, World world, Viewport viewport,
-            RayHandler rayHandler, Maze maze, OrthographicCamera camera, String clientClass) {
+            RayHandler rayHandler, Maze maze, OrthographicCamera camera, String clientClass, int TeamId) {
         this.mediaManager = game.mediaManager;
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = world;
@@ -70,6 +72,7 @@ public class EntityComponentSystem {
         this.maze = maze;
         this.shpRend = new ShapeRenderer();
         this.clientClass = clientClass;
+        this.TeamId = TeamId;
 
         this.engine = new Engine(); // Create Engine
         this.characterFamily = Family.all(
@@ -179,6 +182,7 @@ public class EntityComponentSystem {
         localCharacter.add(new InputComponent());
         localCharacter.add(new LightComponent(rayHandler));
         localCharacter.add(new NetworkTransmissionComponent());
+        localCharacter.add(new TeamComponent(TeamId));
 
         if (clientClass == "knight") {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
