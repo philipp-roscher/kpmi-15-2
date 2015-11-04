@@ -103,7 +103,8 @@ public class InMaze implements Screen, PlayerObserver {
                   final RayHandler rayHandler,
                   final MapInformation mapInformation,
                   final HashMap<Integer,HeroInformation> otherCharacters,
-				  String clientClass) {
+				  String clientClass,
+				  int TeamId) {
 
         Box2D.init();   // initialize Box2D
 
@@ -149,7 +150,7 @@ public class InMaze implements Screen, PlayerObserver {
 
 
         // Entity-Component-System ........................................................... START
-        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass);
+        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass, TeamId);
         // Entity-Component-System ............................................................. END
 
 		for(Entry<Integer, HeroInformation> e : otherCharacters.entrySet()) {

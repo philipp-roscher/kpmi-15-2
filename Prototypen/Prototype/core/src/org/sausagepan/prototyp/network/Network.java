@@ -37,6 +37,7 @@ public class Network {
 		kryo.register(FullGameStateResponse.class);		
 		kryo.register(IDAssignment.class);
 		kryo.register(GameClientCount.class);
+		kryo.register(TeamAssignment.class);
 		kryo.register(MapInformation.class);
 
         kryo.register(NetworkPosition.class);
@@ -167,7 +168,13 @@ public class Network {
 
 		public GameClientCount() { }
 	}
-	
+
+	public static class TeamAssignment {
+		public int id;
+
+		public TeamAssignment() { }
+	}
+
 	public static class MapInformation {
 		public int height, width;
 		public HashMap<Vector2,Integer> entries;

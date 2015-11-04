@@ -10,6 +10,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 
 /**
  * Created by georg on 28.10.15.
@@ -35,7 +36,8 @@ public class CharacterEntity extends Entity {
                 InputComponent.class,
                 HealthComponent.class,
                 MagicComponent.class,
-                InventoryComponent.class
+                InventoryComponent.class,
+                TeamComponent.class
         ).get();
     }
 }
