@@ -10,7 +10,7 @@
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1kkKwCAMBVCv3clrWFsP2wgGsjAEBJsW/oOAQ8SFi28I/naqg2oT49WYR3F+aftar7bOLqqbKovxacyLOJ/avtarrX9BtFumqe9WzK55kuPdAAB/w1nby9c3soSztpevnlkCMAL/LwDw8gBweytZ
+   eJzlVgsOgyAM7bVx02ynAD/ZrjpIaPbCQMRZcNlLmijUtrxKW6L2uFrprVzgucu8D/C98vsp3dQ6Y7IyWxnh2WTeF/he+/3JxxLqpmxIQBfq9yAdpTkqgYqssd3Q/gxi6JMjBbFthQ5iGMBuaQ40xKZ87CUxON9LRncrnM2R4vym9I/yHdrlvDg+hnV1EXBeHB8SZ2wNvpMS3Ob+H+eT76Tk/xOCz1sjn1gn2a/UeXNo5XcPuNfG+muNOsC9NtZfz8Bhi1qIaMlB7bPj3FirbhD4w7lxr+81znju4V7Afo/qeWrFDtdDQ+9e8K3fcGZPzapSuQxn9i16Zwf20ZuVO8XneKm7iTw+rDwpPsf/Eqf/hBdQjXFO
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
@@ -20,28 +20,10 @@
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztllcKgEAMRHMUG/aGeBDL/e/iCIKLWEDUWTAD7yeEPPKxZRSRFGQg35Du1PKl15c13s0ZAyiEl8ACv3/Z9V48oltjR1yi2wEV0R8K9/zPfvb+TP98/5VEP3v/O/4atAc0H/ifDPv9Ze+vfvWrX/1/9Qdkvw379yACMUgM9mom5r/dOek7m9uBCch2FFw=
+   eJy9lm1uAkEIhtmTOG5trR+paS/Q//5SmzTtRdrrC+mSpYQZlnFWEhI1Lg/MwsssAGBR4QcYrUffou/RL5XxbuFL6++Uw0uGT/YUiLMXvh18J37L1ZKr3zqDDxFXx/esF7nJmCW+zIHYDxM4U4xi7oa4Z/TN4MvC/1uxdVx5FqVemMv4vdB53FLjBvxznMPSwJQ9Ld/pnDkR+wT5maSe5fm4R/9o9hxMLweu2WO/NszhMcBle4d2PUE67elY5JkEsdxq+PTejuhr9Gf4PyunYDzi12hXab9F+dH6S/zo7FAc0pxoP+X4kVoSjBrEujc1D4tfU7uOofVX55Ng7DOpkd4OSkasKXeks/rO3OjOs/rM43N9fK+t3bUJ7Lks8VvuAOZ8or+hf3UA311+B7VkJxh7nOv/QfZv9/d5ZfCjekAMfWeQeliKa/GjeijvuaV7vHWmLeona6mjtXpYw7fqr8mh9R7RWujl0rp+T5d1TlxHbg5yTs9cAdGeRjo=
   </data>
  </layer>
- <objectgroup name="colliderWalls" width="0" height="0">
-  <object x="0" y="288" width="32" height="736"/>
-  <object x="992" y="288" width="32" height="736"/>
-  <object x="384" y="512" width="256" height="64"/>
-  <object x="0" y="0" width="480" height="96"/>
-  <object x="544" y="0" width="480" height="96"/>
-  <object x="0" y="96" width="32" height="96"/>
-  <object x="992" y="96" width="32" height="96"/>
- </objectgroup>
- <objectgroup name="gameMasterColliderWalls" width="0" height="0">
-  <object x="0" y="288" width="32" height="736"/>
-  <object x="992" y="288" width="32" height="736"/>
-  <object x="0" y="0" width="480" height="96"/>
-  <object x="544" y="0" width="480" height="96"/>
-  <object x="0" y="96" width="32" height="96"/>
-  <object x="992" y="96" width="32" height="96"/>
-  <object x="384" y="512" width="96" height="64"/>
-  <object x="544" y="512" width="96" height="64"/>
- </objectgroup>
+ <objectgroup name="colliderWalls" width="0" height="0"/>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="992" y="128" width="32" height="32"/>
   <object name="light" x="0" y="128" width="32" height="32"/>
