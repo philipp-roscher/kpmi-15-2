@@ -37,6 +37,7 @@ public class Network {
 		kryo.register(IDAssignment.class);
 		kryo.register(GameClientCount.class);
 		kryo.register(TeamAssignment.class);
+		kryo.register(MaxClients.class);
 		kryo.register(MapInformation.class);
 
         kryo.register(NetworkPosition.class);
@@ -171,6 +172,12 @@ public class Network {
 		public int id;
 
 		public TeamAssignment() { }
+	}
+
+	public static class MaxClients {
+		public int count;
+
+		public MaxClients() { }
 	}
 
 	public static class MapInformation {
