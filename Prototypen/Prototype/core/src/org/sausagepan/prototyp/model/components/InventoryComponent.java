@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 
 import org.sausagepan.prototyp.model.Item;
 import org.sausagepan.prototyp.model.Key;
+import org.sausagepan.prototyp.model.Weapon;
 import org.sausagepan.prototyp.model.items.WeaponItem;
 
 import java.util.Map;
@@ -82,22 +83,6 @@ public class InventoryComponent implements Component {
             case PartOne: keyBag.add(0, key); break;
             case PartTwo: keyBag.add(1, key); break;
             case PartThree: keyBag.add(2, key); break;
-        }
-    }
-
-    public void removeKey(Key key)
-    {
-        if(!this.isKeyHolder)
-            return;
-
-        if(!(this.keyBag.contains(key)))
-            return;
-
-        switch(key.getKeySection())
-        {
-            case PartOne: keyBag.remove(0); break;
-            case PartTwo: keyBag.remove(1); break;
-            case PartThree: keyBag.remove(2); break;
         }
     }
 

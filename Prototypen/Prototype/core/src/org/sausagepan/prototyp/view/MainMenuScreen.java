@@ -45,7 +45,7 @@ public class MainMenuScreen implements Screen {
 	String serverIp;
 
 	//choosen Player Class
-	private String clientClass = "shaman";
+	private String clientClass = "knight";
 
 	
 	/* ...................................................... CONSTRUCTORS .. */

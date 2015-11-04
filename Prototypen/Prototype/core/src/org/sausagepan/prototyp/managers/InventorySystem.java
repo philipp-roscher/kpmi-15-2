@@ -6,7 +6,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
+import org.sausagepan.prototyp.enums.KeySection;
+import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
@@ -34,5 +38,18 @@ public class InventorySystem extends EntitySystem {
 
             ic.weapon = wc.weapon;
         }
+    }
+
+    public void createKeys()
+    {
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("textures/spritesheets/KeySections/keyAtlas.pack"));
+        Key keyPartOne = new Key(KeySection.PartOne, atlas.findRegion("PartOne"));
+        Key keyPartTwo = new Key(KeySection.PartTwo, atlas.findRegion("PartTwo"));
+        Key keyPartThree = new Key (KeySection.PartThree, atlas.findRegion("PartThree"));
+    }
+
+    public void setUpKeyBags()
+    {
+
     }
 }

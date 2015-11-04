@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.managers;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.ashley.core.EntitySystem;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.Damagetype;
@@ -82,6 +84,7 @@ public class EntityComponentSystem {
 
         setUpEntities();
         setUpLocalCharacterEntity();
+        setUpWeaponInInventory();
         setUpMazeLights();
         setUpMonsters();
         setUpEntitySystems();
@@ -149,7 +152,6 @@ public class EntityComponentSystem {
         //Inventory System
         InventorySystem inventorySystem = new InventorySystem();
         inventorySystem.addedToEngine(engine);
-        inventorySystem.setWeaponInInventory();
 
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
@@ -241,9 +243,16 @@ public class EntityComponentSystem {
         engine.addSystem(lightSystem);
     }
 
+    public void setUpWeaponInInventory()
+    {
+        InventorySystem is = engine.getSystem(InventorySystem.class);
+        is.setWeaponInInventory();
+    }
+
     public void update(float delta) {
         engine.update(delta);
     }
+
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;
