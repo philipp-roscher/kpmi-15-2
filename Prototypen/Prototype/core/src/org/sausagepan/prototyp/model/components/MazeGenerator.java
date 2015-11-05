@@ -78,11 +78,13 @@ public class MazeGenerator {
 		
 		// for each maze cell do
 		for(int i = mazeHeight; i > 0; i--)
-			for(int j = mazeWidth; j > 0; j--)
-				addNewMazeCell("tilemaps/maze" + entries.get(new Vector2(i, j)) + ".tmx", i, j);
+			for(int j = mazeWidth; j > 0; j--){
+				if (i == (int) Math.ceil(mazeHeight / 2) && j == (int) Math.ceil(mazeWidth / 2))
+					addTreasure();	// treasure cave
+				else addNewMazeCell("tilemaps/maze" + entries.get(new Vector2(i, j)) + ".tmx", i, j);
+			}				
 
-		addSafeZone();  // safe spawning zone
-		addTreasure();	// treasure cave
+		addSafeZone();  // safe spawning zone	
 		addWall(); //wall around the whole maze
 
         // combine layers to a new tiled map
@@ -119,7 +121,7 @@ public class MazeGenerator {
 	 * Adds the treasury
 	 */
 	private void addTreasure(){
-		//addNewMazeCell("treasure.tmx", (int) Math.ceil(mazeWidth / 2) + 1, (int) Math.ceil(mazeHeight / 2) + 1);
+		addNewMazeCell("tilemaps/treasureRoom.tmx", (int) Math.ceil(mazeWidth / 2), (int) Math.ceil(mazeHeight / 2));
 	}
 	
 	/**
@@ -153,7 +155,7 @@ public class MazeGenerator {
 		
 		Rectangle downLeft = new Rectangle(
 				32 * 31,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 2 * 32 * 32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 32 * 32,
 				32,
 				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
 				);
@@ -161,7 +163,7 @@ public class MazeGenerator {
 		
 		Rectangle downRight = new Rectangle(
 				(mazeWidth + 1) * 32 * 32,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 2 * 32 * 32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 32 * 32,
 				32,
 				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
 				);
