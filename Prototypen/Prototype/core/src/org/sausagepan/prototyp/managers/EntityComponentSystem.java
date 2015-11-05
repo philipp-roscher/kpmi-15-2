@@ -99,7 +99,7 @@ public class EntityComponentSystem {
         setUpMazeLights();
         setUpMonsters();
         setUpEntitySystems();
-        setUpWeaponInInventory();
+        setUpInventory();
     }
 
     /* ............................................................................... METHODS .. */
@@ -257,10 +257,14 @@ public class EntityComponentSystem {
         engine.addSystem(lightSystem);
     }
 
-    public void setUpWeaponInInventory()
+    //InventorySystem functions
+    public void setUpInventory()
     {
         InventorySystem is = engine.getSystem(InventorySystem.class);
+        //Zuerst wird die Waffe ins Inventar hinzugefügt
         is.setWeaponInInventory();
+        //Dann werden die Schlüsselträger ausgewählt und ein Schlüsselteil zugewiesen
+        is.setUpKeyBags();
     }
 
     public void update(float delta) {
