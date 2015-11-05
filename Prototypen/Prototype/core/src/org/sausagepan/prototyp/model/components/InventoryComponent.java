@@ -57,8 +57,6 @@ public class InventoryComponent implements Component {
     public void createKeyBag(boolean isKeyHolder)
     {
         this.isKeyHolder = isKeyHolder;
-        if(!isKeyHolder)
-            return;
 
         this.keyBag = new LinkedList<Key>();
         for(int x = 0; x < 3; x++)
@@ -90,6 +88,9 @@ public class InventoryComponent implements Component {
 
     public List<Key> loseKey()
     {
+        if(!isKeyHolder)
+            return null;
+
         List<Key> keys = this.keyBag;
         this.keyBag.clear();
         return keys;

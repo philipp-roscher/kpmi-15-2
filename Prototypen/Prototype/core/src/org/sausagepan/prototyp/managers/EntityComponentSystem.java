@@ -24,6 +24,7 @@ import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.KeyViewerComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -203,6 +204,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             localCharacter.add(new InventoryComponent());
+            localCharacter.add(new KeyViewerComponent());
         }
 
         if (clientClass.equals("archer")) {
@@ -215,6 +217,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             localCharacter.add(new InventoryComponent());
+            localCharacter.add(new KeyViewerComponent());
         }
 
         if (clientClass.equals("shaman")) {
@@ -227,6 +230,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             localCharacter.add(new InventoryComponent());
+            localCharacter.add(new KeyViewerComponent());
         }
 
         if (clientClass.equals("dragon")) {
@@ -239,6 +243,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
             localCharacter.add(new InventoryComponent());
+            localCharacter.add(new KeyViewerComponent());
         }
 
         characters.put(localCharacterId, localCharacter);
@@ -261,9 +266,9 @@ public class EntityComponentSystem {
     public void setUpInventory()
     {
         InventorySystem is = engine.getSystem(InventorySystem.class);
-        //Zuerst wird die Waffe ins Inventar hinzugefügt
+        //Zuerst wird die Waffe ins Inventar hinzugefuegt
         is.setWeaponInInventory();
-        //Dann werden die Schlüsselträger ausgewählt und ein Schlüsselteil zugewiesen
+        //Dann werden die Schluesseltraeger ausgewaehlt und ein Schluesselteil zugewiesen
         is.setUpKeyBags();
     }
 
@@ -295,6 +300,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             newCharacter.add(new InventoryComponent());
+            newCharacter.add(new KeyViewerComponent());
         }
 
         if (newHero.clientClass.equals("archer")) {
@@ -307,6 +313,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             newCharacter.add(new InventoryComponent());
+            newCharacter.add(new KeyViewerComponent());
         }
 
         if (newHero.clientClass.equals("shaman")) {
@@ -319,6 +326,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             newCharacter.add(new InventoryComponent());
+            newCharacter.add(new KeyViewerComponent());
         }
 
         if (newHero.clientClass.equals("dragon")) {
@@ -331,6 +339,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
             newCharacter.add(new InventoryComponent());
+            newCharacter.add(new KeyViewerComponent());
         }
 
         characters.put(newCharacterId, newCharacter);
