@@ -355,6 +355,7 @@ public class EntityComponentSystem {
 	public void updatePosition(int id, NetworkTransmissionComponent position) {
 		if(characters.get(id) != null) {
 			this.characters.get(id).getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(position.position, 0f);
+			this.characters.get(id).getComponent(DynamicBodyComponent.class).dynamicBody.setLinearVelocity(position.linearVelocity);
 		}
 	}
 

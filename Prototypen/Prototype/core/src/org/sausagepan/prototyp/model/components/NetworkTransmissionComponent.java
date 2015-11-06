@@ -11,7 +11,7 @@ import org.sausagepan.prototyp.enums.Direction;
 public class NetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Vector2 position = new Vector2(0,0);
-    public Direction direction = Direction.SOUTH;
+    public Vector2 linearVelocity = new Vector2(0,0);
     public boolean moving = false;
 
     /* ........................................................................... CONSTRUCTOR .. */

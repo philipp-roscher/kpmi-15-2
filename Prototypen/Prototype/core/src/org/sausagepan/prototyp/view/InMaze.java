@@ -233,10 +233,7 @@ public class InMaze implements Screen, PlayerObserver {
 		elapsedTimeSec = (int) elapsedTime;
 
         // Update Player
-        DynamicBodyComponent temp = ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class);
-        NetworkTransmissionComponent ntc = new NetworkTransmissionComponent();
-        ntc.position = temp.dynamicBody.getPosition();
-        posUpdate.position = ntc;
+        posUpdate.position = ECS.getLocalCharacterEntity().getComponent(NetworkTransmissionComponent.class);
         game.client.sendUDP(posUpdate);
 
         // ............................................................................... RENDERING

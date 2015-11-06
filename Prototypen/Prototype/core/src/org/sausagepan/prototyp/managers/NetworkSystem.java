@@ -45,8 +45,8 @@ public class NetworkSystem extends ObservingEntitySystem{
             DynamicBodyComponent body = dm.get(entity);
             NetworkTransmissionComponent networkTransmissionComponent = nm.get(entity);
             InputComponent input = im.get(entity);
-            networkTransmissionComponent.direction  = input.direction;
             networkTransmissionComponent.moving     = input.moving;
+            networkTransmissionComponent.linearVelocity = body.dynamicBody.getLinearVelocity();
             networkTransmissionComponent.position   = body.dynamicBody.getPosition();
         }
     }
