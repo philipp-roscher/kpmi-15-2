@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Array;
 
 import org.sausagepan.prototyp.enums.ObjectGroup;
 import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.MazeGenerator;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.network.Network;
@@ -76,11 +77,8 @@ public class Maze extends EntitySystem {
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */
-    public void addPlayer(Player player) {
-        this.tiledMapRenderer.addPlayer(player);
-    }
-    public void removePlayer(Player player) {
-        this.tiledMapRenderer.removePlayer(player);
+    public void addCharacterSpriteComponent(CharacterSpriteComponent spriteComponent) {
+        this.tiledMapRenderer.addCharacterSpriteComponent(spriteComponent);
     }
 
     public OrthogonalTiledMapRendererWithPlayers getTiledMapRenderer() {

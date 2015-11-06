@@ -7,6 +7,7 @@ import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.enums.Weapontype;
 import org.sausagepan.prototyp.model.Status;
 import org.sausagepan.prototyp.model.Weapon;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -36,9 +37,12 @@ public class Network {
 		kryo.register(FullGameStateResponse.class);		
 		kryo.register(IDAssignment.class);
 		kryo.register(GameClientCount.class);
+		kryo.register(TeamAssignment.class);
+		kryo.register(MaxClients.class);
 		kryo.register(MapInformation.class);
 
         kryo.register(NetworkPosition.class);
+        kryo.register(NetworkTransmissionComponent.class);
         kryo.register(Direction.class);
         kryo.register(HeroInformation.class);
         kryo.register(Status.class);
@@ -91,7 +95,7 @@ public class Network {
 	
 	public static class PositionUpdate {
 		public int playerId;
-		public NetworkPosition position;
+		public NetworkTransmissionComponent position;
 		
 		public PositionUpdate() { }
 	}	
@@ -134,7 +138,7 @@ public class Network {
 	}
 	
 	public static class GameStateResponse {
-		public HashMap<Integer, NetworkPosition> positions;
+		public HashMap<Integer, NetworkTransmissionComponent> positions;
 		
 		public GameStateResponse() { }
 	}
@@ -165,7 +169,19 @@ public class Network {
 
 		public GameClientCount() { }
 	}
-	
+
+	public static class TeamAssignment {
+		public int id;
+
+		public TeamAssignment() { }
+	}
+
+	public static class MaxClients {
+		public int count;
+
+		public MaxClients() { }
+	}
+
 	public static class MapInformation {
 		public int height, width;
 		public HashMap<Vector2,Integer> entries;

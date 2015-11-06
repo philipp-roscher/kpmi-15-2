@@ -1,7 +1,10 @@
-package org.sausagepan.prototyp.User_Interface;
+package org.sausagepan.prototyp.model.components;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 import org.sausagepan.prototyp.User_Interface.Actors.KeyBackground;
 import org.sausagepan.prototyp.User_Interface.Actors.KeyActor;
@@ -13,37 +16,20 @@ import java.util.List;
 /**
  * Created by Bettina on 02.11.2015.
  */
-public class KeyViewer implements ApplicationListener {
+public class KeyViewerComponent implements ApplicationListener, Component {
 
-    private boolean isKeyHolder;
     private Stage stage;
-    private List<Key> keyBag;
     private KeyBackground keyBackground;
 
-    public KeyViewer(boolean isKeyHolder, List<Key> keyBag)
+    public KeyViewerComponent()
     {
-        if(!isKeyHolder)
-            return;
-
-        this.isKeyHolder = isKeyHolder;
-        this.keyBag = keyBag;
+        keyBackground = new KeyBackground();
     }
 
     @Override
     public void create() {
-
         stage = new Stage();
-        keyBackground = new KeyBackground();
         stage.addActor(keyBackground);
-
-        for(Key key: keyBag)
-        {
-            if(key != null)
-            {
-                KeyActor keyActor = new KeyActor(key);
-                stage.addActor(keyActor);
-            }
-        }
     }
 
     @Override
@@ -78,8 +64,11 @@ public class KeyViewer implements ApplicationListener {
         stage.addActor(key);
     }
 
-    public void removeKey(KeyActor key)
+    public Array<Actor> removeKeys()
     {
-
+        Array<Actor> actors = stage.getActors();
+        stage.clear();
+        stage.addActor(keyBackground);
+        return actors;
     }
 }

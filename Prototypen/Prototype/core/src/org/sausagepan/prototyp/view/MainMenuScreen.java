@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.view;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
@@ -38,12 +39,16 @@ public class MainMenuScreen implements Screen {
 	public Viewport viewport;
 	private Texture bgImg;
 	private int connectionStatus;
-	private PlayerManager cm;
 	private final World world;
     private final RayHandler rayHandler;
     private MapInformation mapInformation;
+    private HashMap<Integer,HeroInformation> otherCharacters;
 	String serverIp;
 
+	private boolean heroRequestSent = false;
+	private boolean FGSRequestSent = false;
+	private boolean FGSResponseReceived = false;
+	
 	//choosen Player Class
 	private String clientClass = "knight";
 
@@ -64,28 +69,15 @@ public class MainMenuScreen implements Screen {
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
 				if (object instanceof FullGameStateResponse) {
+					System.out.println("FullGameStaterRESPONSE");
 					FullGameStateResponse response = (FullGameStateResponse) object;
 					MainMenuScreen.this.mapInformation = response.mapInformation;
-
-					cm = new PlayerManager();
-					for(Entry<Integer, HeroInformation> e : response.heroes.entrySet()) {
-						HeroInformation hero = e.getValue();
-						cm.addCharacter(e.getKey(),
-								new Player(
-                                        hero.name,
-                                        hero.sex,
-                                        e.getKey(),
-                                        hero.spriteSheet,
-                                        hero.status,
-                                        hero.weapon,
-                                        e.getKey().equals(game.clientId),
-                                        game.mediaManager,
-                                        world,
-                                        rayHandler,
-										new Vector2(32*2.5f, 32*.5f)));
-					}
-
-					game.connected = true;
+					otherCharacters = response.heroes;
+					
+					if (otherCharacters.containsKey(game.clientId))
+						otherCharacters.remove(game.clientId);
+					
+					FGSResponseReceived = true;
 				}
 			}
 
@@ -98,34 +90,11 @@ public class MainMenuScreen implements Screen {
 
 	public void setUpGame() {
 		BattleSystem bs = new BattleSystem();
-
-		// Player 1
-		cm.addCharacter(
-				game.clientId,
-				new Player("hero" + game.clientId,
-						"m",
-						game.clientId,
-						"knight_m.pack",
-						new Status(),
-						new Weapon(),
-						true,
-						game.mediaManager, world, rayHandler,
-						new Vector2(32 * 2.5f, 32 * .5f))
-		);
-
-		game.client.sendTCP(
-			new NewHeroRequest(
-				game.clientId,
-				new HeroInformation("hero" + game.clientId, "m", "knight_m.pack",
-						new Status(),
-						new Weapon()
-				)
-			)
-		);
-
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
 		//TODO: Ask player about wanted character class (Sara)
-		game.setScreen(new InMaze(game, bs, cm, world, rayHandler, mapInformation, clientClass));
+		System.out.println("Assigned teamId is: "+game.TeamId);
+		System.out.println("Other players: " + otherCharacters.size());
+		game.setScreen(new InMaze(game, bs, world, rayHandler, mapInformation, otherCharacters, clientClass, game.TeamId));
 	}
 
 
@@ -167,7 +136,8 @@ public class MainMenuScreen implements Screen {
 						connectionStatus = 1;
 						game.client.connect(2000, text, Network.TCPPort, Network.UDPPort);
 						System.out.println("Established connection to "+text);
-						game.client.sendTCP(new FullGameStateRequest());
+
+						game.connected = true;
 					} catch (Exception e) {
 						System.out.println("Couldn't find running server at "+text);
 						e.printStackTrace();
@@ -184,6 +154,17 @@ public class MainMenuScreen implements Screen {
 		}
 
 		if(game.connected == true && game.clientId != 0) {
+			
+			if(!heroRequestSent) {
+				game.client.sendTCP(
+						new NewHeroRequest(
+							game.clientId,
+							new HeroInformation(clientClass)
+						)
+					);
+				heroRequestSent = true;
+			}
+			
 			//waiting for full group of players
 			game.batch.begin();
 			if(game.clientCount < game.maxClients) {
@@ -196,15 +177,23 @@ public class MainMenuScreen implements Screen {
 				game.font.setColor(0, 1, 0, 1);
 				game.font.draw(game.batch, "Starting... " + game.clientCount + "/" + game.maxClients, 340, 380);
 				game.font.setColor(1, 1, 1, 1);
-				setUpGame();
+				if(!FGSRequestSent) {
+					game.client.sendTCP(new FullGameStateRequest());
+					FGSRequestSent = true;
+				}
+				
 			}
 			game.batch.end();
 
 			dispose();
 		}
 		
+		if (FGSResponseReceived)
+			setUpGame();
+		
 		// Update camera
 		camera.update();
+
 	}
 
 	@Override

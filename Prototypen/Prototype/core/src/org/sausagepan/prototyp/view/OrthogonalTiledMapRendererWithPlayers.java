@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.Bullet;
 import org.sausagepan.prototyp.model.Player;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.items.Bow;
@@ -26,9 +27,9 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
 
     /* ................................................................................................ ATTRIBUTES .. */
 
-    private Array<Player> players;
     private Array<Sprite> sprites;
     private Array<SpriteComponent> spriteComponents;
+    private Array<CharacterSpriteComponent> characterSpriteComponents;
     private Array<WeaponComponent> weaponComponents;
     private Array<EntitySprite> entitySprites;
     private int drawSpritesAfterLayer = 3;
@@ -40,9 +41,9 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
 
     public OrthogonalTiledMapRendererWithPlayers(TiledMap map, float pixelsPerMeter, MediaManager media) {
         super(map, 1/pixelsPerMeter);
-        players = new Array<Player>();
         sprites = new Array<Sprite>();
         spriteComponents = new Array<SpriteComponent>();
+        characterSpriteComponents = new Array<CharacterSpriteComponent>();
         weaponComponents = new Array<WeaponComponent>();
         entitySprites = new Array<EntitySprite>();
         this.media = media;
@@ -52,12 +53,12 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
 
     /* ................................................................................................... METHODS .. */
 
-    public void addPlayer(Player newPlayer) {
-        players.add(newPlayer);
-    }
-
     public void addSpriteComponent(SpriteComponent spriteComponent) {
         spriteComponents.add(spriteComponent);
+    }
+    
+    public void addCharacterSpriteComponent(CharacterSpriteComponent spriteComponent) {
+        characterSpriteComponents.add(spriteComponent);
     }
 
     public void addWeaponComponent(WeaponComponent weaponComponent) {
@@ -83,6 +84,8 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                 if(currentLayer == drawSpritesAfterLayer) {
                     /* Draw players here */
                     for(SpriteComponent spriteComponent : spriteComponents)
+                        spriteComponent.sprite.draw(this.getBatch());
+                    for(CharacterSpriteComponent spriteComponent : characterSpriteComponents)
                         spriteComponent.sprite.draw(this.getBatch());
                     for(WeaponComponent w : weaponComponents) {
                         if(w.weapon.sprite.visible)
@@ -110,10 +113,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
             }
         endRender();
     }
-
-	public void removePlayer(Player player) {
-		players.removeValue(player, false);
-	}
 
     
     /* ......................................................................................... GETTERS & SETTERS .. */

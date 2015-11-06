@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.view;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import box2dLight.RayHandler;
@@ -17,7 +18,11 @@ import org.sausagepan.prototyp.managers.PlayerManager;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.PositionComponent;
+import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
@@ -61,7 +66,6 @@ public class InMaze implements Screen, PlayerObserver {
 	private BitmapFont         font;
 
     // Managers
-	public  PlayerManager playerMan;        // manages players
 	public  BattleSystem  battleSys;        // manages battle
 	public EntityComponentSystem ECS;		// entity component system
 
@@ -73,7 +77,6 @@ public class InMaze implements Screen, PlayerObserver {
 	private float   timeOut        = 5;
 
     // Containers
-	private Player localPlayer;
 	private PositionUpdate posUpdate;
 	private KeepAliveRequest keepAliveRequest;
 	private Array<Object> networkMessages;
@@ -86,21 +89,21 @@ public class InMaze implements Screen, PlayerObserver {
     // Light
     RayHandler rayHandler;  // handles rays of light
 	
-	/* .............................................................................................. CONSTRUCTORS .. */
+	/* .......................................................................... CONSTRUCTORS .. */
 
     /**
      * Creates an ingame object for rendering ingame action
      * @param game              the game main class itself
      * @param battleSystem
-     * @param playerManager
      */
 	public InMaze(final KPMIPrototype game,
                   BattleSystem battleSystem,
-                  PlayerManager playerManager,
                   final World world,
                   final RayHandler rayHandler,
                   final MapInformation mapInformation,
-				  String clientClass) {
+                  final HashMap<Integer,HeroInformation> otherCharacters,
+				  String clientClass,
+				  int TeamId) {
 
         Box2D.init();   // initialize Box2D
 
@@ -140,20 +143,22 @@ public class InMaze implements Screen, PlayerObserver {
 
         // set up managers
 		this.battleSys = battleSystem;
-		this.playerMan = playerManager;
-		
-		// register own player
-		this.localPlayer = playerMan.players.get(game.clientId);
 
         // Tiled Map ...............................................................................
         this.maze = new Maze(mapInformation, world, game.mediaManager);
-		for(Player p : playerMan.getPlayers())
-			maze.addPlayer(p);
+
 
         // Entity-Component-System ........................................................... START
-        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass);
+        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass, TeamId);
         // Entity-Component-System ............................................................. END
 
+		for(Entry<Integer, HeroInformation> e : otherCharacters.entrySet()) {
+			Integer heroId = e.getKey();
+			HeroInformation hero = e.getValue();
+			CharacterEntity newCharacter = ECS.addNewCharacter(heroId, hero);
+    		maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+		}
+        
 		// Set Up Client for Communication .........................................................
 		posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
@@ -234,11 +239,11 @@ public class InMaze implements Screen, PlayerObserver {
 		elapsedTimeSec = (int) elapsedTime;
 
         // Update Player
-        posUpdate.position = localPlayer.getPos();
+        DynamicBodyComponent temp = ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class);
+        NetworkTransmissionComponent ntc = new NetworkTransmissionComponent();
+        ntc.position = temp.dynamicBody.getPosition();
+        posUpdate.position = ntc;
         game.client.sendUDP(posUpdate);
-
-		// Move character
-        for(Player p : playerMan.getPlayers()) p.update(elapsedTime);
 
         // ............................................................................... RENDERING
         // Tiled Map
@@ -298,8 +303,10 @@ public class InMaze implements Screen, PlayerObserver {
 		for(Object object : networkMessages) {
 			if (object instanceof NewHeroResponse) {
 				NewHeroResponse request = (NewHeroResponse) object;
-        		HeroInformation hero = request.hero;
-				playerMan.addCharacter(
+        		CharacterEntity newCharacter = ECS.addNewCharacter(request);
+        		maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+        		
+				/*playerMan.addCharacter(
 						request.playerId,
 
 						new Player(
@@ -315,7 +322,7 @@ public class InMaze implements Screen, PlayerObserver {
                                 rayHandler,
                                 new Vector2(32*2.5f, 32*.5f)));
 
-				maze.addPlayer(playerMan.players.get(request.playerId));
+				maze.addSpriteComponent(); */
 			}
 			
 			if (object instanceof DeleteHeroResponse) {
@@ -325,32 +332,30 @@ public class InMaze implements Screen, PlayerObserver {
 				if( playerId == game.clientId )
 					game.connected = false;
 					
-					world.destroyBody(playerMan.players.get(playerId).getBody());
-					maze.removePlayer(playerMan.players.get(playerId));
-					playerMan.removeCharacter(playerId);
+				//	ECS.deleteCharacter(playerId);
 			}
 			
 			if (object instanceof GameStateResponse) {
 				GameStateResponse result = (GameStateResponse) object;
 				
-				for(Entry<Integer, NetworkPosition> e : result.positions.entrySet()) {
+				for(Entry<Integer, NetworkTransmissionComponent> e : result.positions.entrySet()) {
 					if(e.getKey() != game.clientId)
-						playerMan.updatePosition(e.getKey(), e.getValue(), elapsedTime);
+						ECS.updatePosition(e.getKey(), e.getValue());
 				}
 			}	
 			
 			if (object instanceof AttackResponse) {
 				AttackResponse result = (AttackResponse) object;
-				if(result.stop == false)
-					playerMan.players.get(result.playerId).getBattle().attack();
-				else 
-					playerMan.players.get(result.playerId).getBattle().stopAttacking();
+//				if(result.stop == false)
+//					playerMan.players.get(result.playerId).getBattle().attack();
+//				else 
+//					playerMan.players.get(result.playerId).getBattle().stopAttacking();
 			}	
 			
 			if (object instanceof HPUpdate) {
 				HPUpdate result = (HPUpdate) object;
 				
-				playerMan.players.get(result.playerId).getStatus_().setHP(result.HP);
+//				playerMan.players.get(result.playerId).getStatus_().setHP(result.HP);
 			}	
 		}
 		networkMessages.clear();

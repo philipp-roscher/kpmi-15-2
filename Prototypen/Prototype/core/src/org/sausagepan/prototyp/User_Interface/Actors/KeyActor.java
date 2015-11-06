@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import org.sausagepan.prototyp.enums.KeySection;
 import org.sausagepan.prototyp.model.Key;
 
 /**
@@ -12,18 +13,13 @@ import org.sausagepan.prototyp.model.Key;
  */
 public class KeyActor extends Actor {
 
-    private Key key;
     private Texture texture;
+    private KeySection keySection;
 
-    public KeyActor(Key key)
+    public KeyActor(Texture texture, KeySection keySection)
     {
-        this.key = key;
-        switch(key.getKeySection())
-        {
-            case PartOne: texture = new Texture(Gdx.files.internal("textures/User Interface/KeyPartOne.png")); break;
-            case PartTwo: texture = new Texture(Gdx.files.internal("textures/User Interface/KeyPartTwo.png")); break;
-            case PartThree: texture = new Texture(Gdx.files.internal("textures/User Interface/KeyPartThree.png")); break;
-        }
+        this.texture = texture;
+        this.keySection = keySection;
     }
 
     @Override
