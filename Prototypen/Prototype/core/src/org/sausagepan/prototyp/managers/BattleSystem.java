@@ -29,7 +29,7 @@ import org.sausagepan.prototyp.model.items.Sword;
  * other.
  * Created by Georg on 26.06.2015.
  */
-public class BattleSystem extends EntitySystem {
+public class BattleSystem extends ObservingEntitySystem {
 
 
     /* ............................................................................ ATTRIBUTES .. */
@@ -75,7 +75,7 @@ public class BattleSystem extends EntitySystem {
 //                            + attacker.getStatus_().getAttPhys());
 //        }
 //    }
-public void addedToEngine(Engine engine) {
+public void addedToEngine(ObservableEngine engine) {
     attackers = engine.getEntitiesFor(Family.all(
             HealthComponent.class,
             DynamicBodyComponent.class,

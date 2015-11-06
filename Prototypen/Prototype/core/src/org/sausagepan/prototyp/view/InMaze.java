@@ -89,13 +89,12 @@ public class InMaze implements Screen, PlayerObserver {
     // Light
     RayHandler rayHandler;  // handles rays of light
 	
-	/* .............................................................................................. CONSTRUCTORS .. */
+	/* .......................................................................... CONSTRUCTORS .. */
 
     /**
      * Creates an ingame object for rendering ingame action
      * @param game              the game main class itself
      * @param battleSystem
-     * @param playerManager
      */
 	public InMaze(final KPMIPrototype game,
                   BattleSystem battleSystem,
@@ -214,7 +213,7 @@ public class InMaze implements Screen, PlayerObserver {
         // ................................................................................. NETWORK
 
         // Clear screen
-        Gdx.gl.glClearColor(.2f, .2f, .2f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

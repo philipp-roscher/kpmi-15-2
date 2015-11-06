@@ -17,7 +17,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 /**
  * Created by georg on 29.10.15.
  */
-public class NetworkSystem extends EntitySystem{
+public class NetworkSystem extends ObservingEntitySystem{
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime=0;
@@ -31,7 +31,7 @@ public class NetworkSystem extends EntitySystem{
     /* ........................................................................... CONSTRUCTOR .. */
     public NetworkSystem() {}
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,
                 InputComponent.class,

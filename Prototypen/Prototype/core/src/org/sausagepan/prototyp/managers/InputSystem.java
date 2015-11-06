@@ -22,7 +22,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 /**
  * Created by georg on 28.10.15.
  */
-public class InputSystem extends EntitySystem implements InputProcessor {
+public class InputSystem extends ObservingEntitySystem implements InputProcessor {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime = 0;
@@ -49,7 +49,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     }
     
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,
                 InputComponent.class,

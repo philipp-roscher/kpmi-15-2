@@ -18,7 +18,7 @@ import org.sausagepan.prototyp.model.entities.MonsterEntity;
  * Processes all {@link org.sausagepan.prototyp.model.entities.MonsterEntity}s.
  * Created by georg on 30.10.15.
  */
-public class MonsterSystem extends EntitySystem {
+public class MonsterSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
 
@@ -38,7 +38,7 @@ public class MonsterSystem extends EntitySystem {
      * {@link Engine}.
      * @param engine
      */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(MonsterEntity.getFamiliy());
     }
 

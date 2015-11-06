@@ -48,7 +48,7 @@ import box2dLight.RayHandler;
  */
 public class EntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
-    private Engine engine;
+    private ObservableEngine engine;
     private Family characterFamily;
     private Family monsterFamily;
     private World world;
@@ -82,7 +82,7 @@ public class EntityComponentSystem {
         this.clientClass = clientClass;
         this.TeamId = TeamId;
 
-        this.engine = new Engine(); // Create Engine
+        this.engine = new ObservableEngine(); // Create Engine
         this.characterFamily = Family.all(
                 DynamicBodyComponent.class,
                 InputComponent.class,
@@ -358,7 +358,7 @@ public class EntityComponentSystem {
 	}
 
 	public void deleteCharacter(int playerId) {
-		//TODO Spieler löschen (Philipp)
+		//TODO Spieler lï¿½schen (Philipp)
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */

@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by Bettina on 03.11.2015.
  */
-public class InventorySystem extends EntitySystem {
+public class InventorySystem extends ObservingEntitySystem {
 
     /*...................................................................................Atributes*/
     private ImmutableArray<Entity> characters;
@@ -37,7 +37,7 @@ public class InventorySystem extends EntitySystem {
     private ComponentMapper<KeyViewerComponent> kvm = ComponentMapper.getFor(KeyViewerComponent.class);
 
     /*...................................................................................Functions*/
-    public void addedToEngine(Engine engine)
+    public void addedToEngine(ObservableEngine engine)
     {
         characters = engine.getEntitiesFor(Family.all(WeaponComponent.class, InventoryComponent.class, TeamComponent.class).get());
     }

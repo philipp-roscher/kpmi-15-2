@@ -11,22 +11,22 @@
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJy9VstuhDAMDNIu3Cgb4P9/qnvYQ0+r/kdBwqo1mjEklB5GgcTxOH7EGZqUhgo8FrQLuu37UamnFivfK6X0Tuf5PxcdXxW4LXvvDV/r3fwHkXmmX/6X+x4DO2f4j2RXu3qi3/Am/KNDqQ/ZHuPw+vf4B2IDnnvFtCAX8rM1iyPjYryIvIH57k70j7BmOq6oEa93CvzUwllyc96mUegx/s7NsfigTITWfbOYzYSf5Z/3E8pEUPZHUPxK5j/4MX9Nht1fdsfV5gfys/rB+p3FeglawR/ZeDY+LFbIf6Te8uYDy1G7QywO34mPa/ywF6jzq5prA7v8XaZG9KXiVz7FHrlX51EsR8Jve30/7wm/6o9zAT87P9uvfKH6s7KrxP8RP+ZAVzBfwx/lAOrMAddf8K81dIM51t+zmMe5Un6UmYSc7/PRW+4svz+vHwfCz+zw76+ot1jvQd/XAu9OJcdieBWiu/UqjiPvL5VnR99lLH8sF2rqH3OHQb1VLI57778SfsaF+aLqtObtoHx6Bj+C2cDH
+   eJzdl02OwyAMhROpTWaVRPm5/6W66aKrqDeYAwxIteb1zTMh0NVUeqKh4M/YhtCmKf/cg/aK+bWf/8K/BT0ONLTvz2N4vgRd2+O5yk5scR1TeF5AEylyhtf3UfyuZAzs25vfVvEn4cMGPkTf47rXoBnGKJ93Yd/WYb+ZPWbx9yMhvxf8jmJp+ZhoHWc1v4S5sxhjvFSM0Qbamts6nyJ/ITspfufY6TN5OH9r32s16gY5XoRt8y1qpXXk8O9iHOb4IuagbTW/lp+TI57P+87GjK1/ltTUCPI74vcwxvzbHP/OqHP4KobML82PylUOnzW/YmA1ajVmeXg2fjtk8r095+1R9OPLab+bv7H0+F5MMT5Lq89m77zeib8Qx96luBaub2+PIDuXr9av5nuxUHyvf8vk59Q310Cf2V/KT9UA2oj9s9NvOT2q/yM21gjXPfbPTj/3neXzmNUZZ/2pu9wn+LhebCfBV34Yn98pT2gt7t47tEQr8B+wJuPw2fUpbir+qrZSyr0XoXiP5uZf1VkJn8/Pkv2vfGfhXQX/M/H9U/FT7zhcd+pepPa8qqOSu4MX0xr9AHQLy/g=
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztVwEKgzAMzLfVzcE+oW4Ke+oaaGgJTcOm6arzIKRtqoI5rycAwMXF1UUXjVtl3kNA4+vSXmmd8HDxdDFF41GZz9H1g6/zvY2fS/ewxlDgGWvR61tW4ZapYX/mTH0LLJnaHvpz4vfguhVHCXDdiuPfgRpCfWhZ7ny27BVqCPYBdW5kefK5RK8WJX8Ceqel+M1B7/Tkdz2QfIJ0vqfWc15Ag+QTJH6n1r/5FqyROlu4b7byaPidp84WGpN2WXk0zX/V2K/agXxCvtwh6LgVf7gXwucgn5AvLwg6bsUf7oWs/yWOiDdNr1Xd
+   eJztVgEOgzAI5NvVTZN9ojpn4lNXEoiMFE21rcm2Swgt1l0HCAAA3ILcg7Ri3ezsO1jh6Ll11rIzruZ/BpmCjGI9RPaO9sj9Eu97eq7fnUis30wF8vSK+wicWHfmqTjmxPN9xObpDhiDs//lCD/f4UgMUpHqr1w4E+Mc4Bjrb6X2HXJw67ohpQZ03ZDy6+A6gmiUbkmXjBXXEawzg9Ij6Rqxmnf0FnR9YJ/Wym/9jbJP//mdD27/yCasHmL1V233EVsKrDpu5XfMflUv3kKst+i5tVT/xpzg3sI8XMukLtW/PWnmZZ6U2pUDV80nJYD5hP58wFrHS+WPnoWQB/MJ/bnA5wxYAnoWisUx1wz4rXgDs1lxsw==
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF9kwQ7MA0fO0/yYjffnzylACPAQrTUTAKRgF1gDMTBI8C3ABWzuGiYSCZRuUssaCRSPuHa7lNTPiD6mFrKKY2IDb88dkfTac0hJznkdMDsv2xONyCTZzSNOXPCMGVSGZXI7FP4hAfBeSB4VoGDHfggSPf0tKuwZJWaNWPGa4AAEKfEAs=
+   eJxjYBgFAw3smSDYgYl2dpxkHBj7PYgwE2Q3PveNglEwCgYOODNB8CjADWDlHC4aBpIHuJxrJNJ+YsrtoQiICX9QPWgNxdQGxIY/Pvuj6ZSGkPM8cnpAtj8Wh1uwiVOapvwZIbgSyexqJPZJHOKjgDwwXMuA4Q48cORbWto1WNLKaD+CNAAA+QEQCw==
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlusOgjAMhfcmIirgFRHvt/gAJmJi9IF8cdsIcVnYWnDDP57kZJOOfdbYbrFwJx98NMQD8NghH7U0xLoN8FcEv+OYnxpivmP2X7TaFdZ64H7Fd6j9YiYTnYFb4Kv07JvvEjD4B/AAPASPSmzqL5R6gq5/U/1y4iZx8ufyE2J0xd+B5+ALMaK3yrvY/ybE/qb+LSslRpSaCyd/Lp8jdS8dfyo+v9lZ2Kt3Ll9dY+uMVPmc85dTo3X5Tedf5/+Ha+7gmSa+rvBcvQtw+C7vSMiXz5IyZ475ZWdK4Uc+urqjUfcv093tLzuy1VtRG/Hp2wtprqtdT9D1x2EV3kvxJ2MPTv3rZONc7P6YX5Z/wpjb4mP+2P9CcCTe/e6Wj6E07ytz9EnaxxP6/hkpn2UW9tYXAIElQA==
+   eJzFVlFOwzAM9U0WRmEMOrGxIZAQCCG+9kPHBjsQF8dWYxGiOHabFp705DZp/eokdr0HgBp5ibzy18zwnubfkRPkHnkKP5j6+TrjKxxnP8QF2EE6x0i7D8576hPWhdoEioPXoDSWkm+oR9ZwyJORNXLaDXI38DesjM/xHse5UgIH7ZmxxjM1aGu+SHPu2Xj9XTBWsrbk+1p55hHkekJ8KtA/Az3/7wrnc6A6pMVv1V8pVtLP5YdDPiv6D8gN8k2xrwmdCtrzJK2BZX0Ya8WmfPF/IKXhoD3vVn0NlaCfqg9L5Au053sLw9QvKX4tPnqm6z8yhVT8lcG3JUct+O/4qRbHtcqq/4m8EebvO4zHvYtF37JHfcH1Z55hM7L+JCDlIuXcMbJj9Wisz7qsE9eusSDVn79Cl/ouwUG+F3HCeKk+63JPRKQ83XjeevuR0SjRp74o7oXCffzyNtcDav9/CQ70vsACPv9dvoG0h6oJYf7zPoT9Uuqa3ynVd/D77HAdPHg7C67DcX5nEfmS6udFdD/zY+znG3j+NZg=
   </data>
  </layer>
  <objectgroup name="colliderWalls" width="0" height="0">
@@ -36,12 +36,10 @@
   <object x="0" y="128" width="64" height="32"/>
   <object x="0" y="160" width="32" height="32"/>
   <object x="736" y="64" width="64" height="32"/>
-  <object x="768" y="96" width="32" height="96"/>
   <object x="992" y="64" width="32" height="128"/>
-  <object x="992" y="256" width="32" height="544"/>
-  <object x="0" y="256" width="32" height="416"/>
+  <object x="992" y="288" width="32" height="576"/>
+  <object x="0" y="288" width="32" height="416"/>
   <object x="0" y="704" width="320" height="96"/>
-  <object x="0" y="672" width="32" height="32"/>
   <object x="224" y="800" width="32" height="32"/>
   <object x="160" y="512" width="160" height="96"/>
   <object x="192" y="608" width="128" height="32"/>
@@ -74,6 +72,34 @@
   <object x="544" y="992" width="480" height="32"/>
   <object x="992" y="864" width="32" height="128"/>
   <object x="444" y="608" width="3" height="64"/>
+  <object x="64" y="128" width="64" height="32"/>
+  <object x="32" y="160" width="32" height="32"/>
+  <object x="128" y="64" width="352" height="32"/>
+  <object x="352" y="96" width="96" height="32"/>
+  <object x="384" y="128" width="32" height="32"/>
+  <object x="544" y="64" width="192" height="32"/>
+  <object x="800" y="64" width="128" height="32"/>
+  <object x="928" y="64" width="64" height="96"/>
+  <object x="960" y="160" width="32" height="32"/>
+  <object x="384" y="224" width="32" height="32"/>
+  <object x="832" y="480" width="32" height="192"/>
+  <object x="448" y="864" width="160" height="32"/>
+  <object x="512" y="832" width="128" height="32"/>
+  <object x="768" y="832" width="64" height="32"/>
+  <object x="0" y="800" width="32" height="32"/>
+  <object x="32" y="800" width="32" height="64"/>
+  <object x="64" y="800" width="64" height="32"/>
+  <object x="160" y="800" width="32" height="32"/>
+  <object x="32" y="928" width="32" height="64"/>
+  <object x="64" y="960" width="32" height="32"/>
+  <object x="384" y="960" width="32" height="32"/>
+  <object x="416" y="928" width="32" height="64"/>
+  <object x="32" y="416" width="32" height="160"/>
+  <object x="192" y="480" width="64" height="32"/>
+  <object x="224" y="416" width="32" height="64"/>
+  <object x="736" y="160" width="64" height="32"/>
+  <object x="704" y="192" width="128" height="96"/>
+  <object x="736" y="288" width="64" height="32"/>
  </objectgroup>
  <objectgroup name="gameMasterColliderWalls" width="0" height="0">
   <object x="0" y="0" width="480" height="64"/>
@@ -82,12 +108,10 @@
   <object x="0" y="128" width="64" height="32"/>
   <object x="0" y="160" width="32" height="32"/>
   <object x="736" y="64" width="64" height="32"/>
-  <object x="768" y="96" width="32" height="96"/>
   <object x="992" y="64" width="32" height="128"/>
-  <object x="992" y="256" width="32" height="544"/>
-  <object x="0" y="256" width="32" height="416"/>
+  <object x="992" y="288" width="32" height="576"/>
+  <object x="0" y="288" width="32" height="416"/>
   <object x="0" y="704" width="320" height="96"/>
-  <object x="0" y="672" width="32" height="32"/>
   <object x="224" y="800" width="32" height="32"/>
   <object x="160" y="512" width="160" height="96"/>
   <object x="192" y="608" width="128" height="32"/>
@@ -120,6 +144,34 @@
   <object x="544" y="992" width="480" height="32"/>
   <object x="992" y="864" width="32" height="128"/>
   <object x="444" y="608" width="3" height="64"/>
+  <object x="64" y="128" width="64" height="32"/>
+  <object x="32" y="160" width="32" height="32"/>
+  <object x="128" y="64" width="352" height="32"/>
+  <object x="352" y="96" width="96" height="32"/>
+  <object x="384" y="128" width="32" height="32"/>
+  <object x="544" y="64" width="192" height="32"/>
+  <object x="800" y="64" width="128" height="32"/>
+  <object x="928" y="64" width="64" height="96"/>
+  <object x="960" y="160" width="32" height="32"/>
+  <object x="384" y="224" width="32" height="32"/>
+  <object x="832" y="480" width="32" height="192"/>
+  <object x="448" y="864" width="160" height="32"/>
+  <object x="512" y="832" width="128" height="32"/>
+  <object x="768" y="832" width="64" height="32"/>
+  <object x="0" y="800" width="32" height="32"/>
+  <object x="32" y="800" width="32" height="64"/>
+  <object x="64" y="800" width="64" height="32"/>
+  <object x="160" y="800" width="32" height="32"/>
+  <object x="32" y="928" width="32" height="64"/>
+  <object x="64" y="960" width="32" height="32"/>
+  <object x="384" y="960" width="32" height="32"/>
+  <object x="416" y="928" width="32" height="64"/>
+  <object x="32" y="416" width="32" height="160"/>
+  <object x="192" y="480" width="64" height="32"/>
+  <object x="224" y="416" width="32" height="64"/>
+  <object x="736" y="160" width="64" height="32"/>
+  <object x="704" y="192" width="128" height="96"/>
+  <object x="736" y="288" width="64" height="32"/>
  </objectgroup>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="224" y="768" width="32" height="32"/>
@@ -134,6 +186,5 @@
   <object name="light" x="640" y="448" width="32" height="32"/>
   <object name="light" x="576" y="448" width="32" height="32"/>
   <object name="light" x="192" y="512" width="32" height="32"/>
-  <object name="light" x="768" y="128" width="32" height="32"/>
  </objectgroup>
 </map>

@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.model.components;
 
+import java.util.LinkedList;
 import java.util.Map;
 
 import com.badlogic.gdx.maps.MapLayer;
@@ -37,7 +38,7 @@ public class MazeGenerator {
     Array<Vector2> lightPositions;
     Array<Vector2> monsterPositions;
 
-	int[][] positions;
+	float[][] positions;
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
@@ -60,7 +61,7 @@ public class MazeGenerator {
         this.lightPositions = new Array<Vector2>();
         this.monsterPositions = new Array<Vector2>();
 
-        this.positions = new int[5][2];
+        this.positions = new float[5][2]; //[Player][0 - x, 1 - y], GM is Player 0, Team 1 1+2, Team 2 3+4
 
     }
 
@@ -77,11 +78,14 @@ public class MazeGenerator {
 		
 		// for each maze cell do
 		for(int i = mazeHeight; i > 0; i--)
-			for(int j = mazeWidth; j > 0; j--)
-				addNewMazeCell("tilemaps/maze" + entries.get(new Vector2(i, j)) + ".tmx", i, j);
+			for(int j = mazeWidth; j > 0; j--){
+				if (i == (int) Math.ceil(mazeHeight / 2) && j == (int) Math.ceil(mazeWidth / 2))
+					addTreasure();	// treasure cave
+				else addNewMazeCell("tilemaps/maze" + entries.get(new Vector2(i, j)) + ".tmx", i, j);
+			}				
 
-		addSafeZone();  // safe spawning zone
-		addTreasure();	// treasure cave
+		addSafeZone();  // safe spawning zone	
+		addWall(); //wall around the whole maze
 
         // combine layers to a new tiled map
 		map.getLayers().add(ground);        // ground layer
@@ -97,25 +101,104 @@ public class MazeGenerator {
      * Calculates safe zones for spawning players
      */
 	private void addSafeZone(){
-		addNewMazeCell("tilemaps/spawnRoom1.tmx", (int) Math.ceil(mazeWidth / 2), 0);
-		positions[0][0] =  (int) Math.ceil(mazeWidth / 2) * 32 + 16;
-		positions[0][1] =  -16;
-		addNewMazeCell("tilemaps/room2.tmx", 0, (int) Math.ceil(mazeHeight / 2) + 1);
-		positions[1][0] =  16;
-		positions[1][1] =  (int) Math.ceil(mazeHeight / 2) * 32 + 16;
-		positions[2][0] =  16;
-		positions[2][1] =  (int) Math.ceil(mazeHeight / 2) * 32 + 17;
-		addNewMazeCell("tilemaps/room3.tmx", mazeWidth + 1, (int) Math.ceil(mazeHeight / 2) + 1);
-		positions[3][0] =  mazeWidth * 32 + 16;
-		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 + 16;
-		positions[4][0] =  mazeWidth * 32 + 16;
-		positions[4][1] =  (int) Math.ceil(mazeHeight / 2) *32 + 17;
+		// Game Masters Spawn Room
+		addNewMazeCell("tilemaps/spawnRoomDragon.tmx", (int) Math.ceil(mazeWidth / 2), 0);
+		positions[0][0] =  (int) Math.ceil(mazeWidth / 2) * 32 * 32 + 16 * 32;
+		positions[0][1] =  16 * 32;
+
+		// Team Reds Spawn Room
+		addNewMazeCell("tilemaps/spawnRoomTeamRed.tmx", 0, (int) Math.ceil(mazeHeight / 2) + 1);
+		positions[1][0] =  16 * 32;
+		positions[1][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
+		positions[2][0] =  16 * 32;
+		positions[2][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 17 * 32;
+
+		// Team Blues Spawn Room
+		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx",
+                mazeWidth + 1, (int) Math.ceil(mazeHeight/ 2) + 1);
+		positions[3][0] =  mazeWidth * 32 * 32 + 16 * 32;
+		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
+		positions[4][0] =  mazeWidth * 32 * 32 + 16 * 32;
+		positions[4][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 17 * 32;
 		
 	}
 	
-	//Platzierung der Schatzkammer
+	/**
+	 * Adds the treasury
+	 */
 	private void addTreasure(){
-		//addNewMazeCell("treasure.tmx", (int) Math.ceil(mazeWidth / 2) + 1, (int) Math.ceil(mazeHeight / 2) + 1);
+		addNewMazeCell("tilemaps/treasureRoom.tmx", (int) Math.ceil(mazeWidth / 2), (int) Math.ceil(mazeHeight / 2));
+	}
+	
+	/**
+	 * Adds a wall around the whole maze in order to keep the players inside of it.
+	 */
+	private void addWall(){
+		LinkedList<Rectangle> listOfWalls = new LinkedList<Rectangle>();
+		Rectangle above = new Rectangle(
+				32 * 32,
+				(mazeHeight + 1) * 32 * 32,
+				mazeWidth * 32 * 32,
+				32
+				);
+		listOfWalls.add(above);
+		
+		Rectangle topLeft = new Rectangle(
+				32 * 31,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 2 * 32 * 32,
+				32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
+				);
+		listOfWalls.add(topLeft);
+		
+		Rectangle topRight = new Rectangle(
+				(mazeWidth + 1) * 32 * 32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 2 * 32 * 32,
+				32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
+				);
+		listOfWalls.add(topRight);
+		
+		Rectangle downLeft = new Rectangle(
+				32 * 31,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 32 * 32,
+				32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
+				);
+		listOfWalls.add(downLeft);
+		
+		Rectangle downRight = new Rectangle(
+				(mazeWidth + 1) * 32 * 32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 32 * 32,
+				32,
+				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
+				);
+		listOfWalls.add(downRight);
+		
+		Rectangle underneathLeft = new Rectangle(
+				32 * 32,
+				32 * 31,
+				(int) Math.ceil (mazeWidth / 2) * 32 * 32 - 32 * 32,
+				32
+				);
+		listOfWalls.add(underneathLeft);
+		
+		Rectangle underneathRight = new Rectangle(
+				(int) Math.ceil (mazeWidth / 2) * 32 * 32 + 32 * 32,
+				32 * 31,
+				(int) Math.ceil (mazeWidth / 2) * 32 * 32,
+				32
+				);
+		listOfWalls.add(underneathRight);
+		
+		for(Rectangle x : listOfWalls){
+			RectangleMapObject help = new RectangleMapObject();
+		
+			help.getRectangle().set(x);
+			colliderWalls.getObjects().add(help);
+		}
+		
+		
 	}
 
     /**
@@ -269,7 +352,7 @@ public class MazeGenerator {
     }
 
     //übergibt Startpsotionen der Spieler
-	public int[][] getStartPositions(){
+	public float[][] getStartPositions(){
 		return positions;
 	}
 }
