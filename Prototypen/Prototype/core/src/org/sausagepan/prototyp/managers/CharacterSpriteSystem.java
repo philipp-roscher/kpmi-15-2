@@ -16,7 +16,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
  * Turns and refreshes characters sprite.
  * Created by georg on 28.10.15.
  */
-public class CharacterSpriteSystem extends EntitySystem {
+public class CharacterSpriteSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime=0;
@@ -28,7 +28,7 @@ public class CharacterSpriteSystem extends EntitySystem {
     /* ........................................................................... CONSTRUCTOR .. */
     public CharacterSpriteSystem() {};
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 CharacterSpriteComponent.class,
                 DynamicBodyComponent.class).get());

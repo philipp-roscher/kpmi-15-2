@@ -20,7 +20,7 @@ import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 /**
  * Created by georg on 21.10.15.
  */
-public class SpriteSystem extends EntitySystem {
+public class SpriteSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private ComponentMapper<SpriteComponent> sm
@@ -31,7 +31,7 @@ public class SpriteSystem extends EntitySystem {
         this.tmr = maze.getTiledMapRenderer();
     }
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.one(
                 SpriteComponent.class,
                 WeaponComponent.class,

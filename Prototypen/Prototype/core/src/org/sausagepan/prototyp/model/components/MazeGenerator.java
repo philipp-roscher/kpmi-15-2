@@ -114,9 +114,8 @@ public class MazeGenerator {
 		positions[2][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 17 * 32;
 
 		// Team Blues Spawn Room
-		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx", mazeWidth + 1, (int) Math.ceil(mazeHeight
-				/ 2)
-				+ 1);
+		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx",
+                mazeWidth + 1, (int) Math.ceil(mazeHeight/ 2) + 1);
 		positions[3][0] =  mazeWidth * 32 * 32 + 16 * 32;
 		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
 		positions[4][0] =  mazeWidth * 32 * 32 + 16 * 32;
