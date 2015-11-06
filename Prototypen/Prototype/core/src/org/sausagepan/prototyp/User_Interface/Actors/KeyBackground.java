@@ -15,6 +15,6 @@ public class KeyBackground extends Actor {
     @Override
     public void draw(Batch batch, float alpha)
     {
-      batch.draw(texture, Gdx.graphics.getWidth() - texture.getWidth()*2, Gdx.graphics.getHeight() - texture.getHeight()*2, texture.getWidth()*2, texture.getHeight()*2 );
+      batch.draw(texture, Gdx.graphics.getWidth() - texture.getWidth(), Gdx.graphics.getHeight() - texture.getHeight(), texture.getWidth(), texture.getHeight());
     }
 }

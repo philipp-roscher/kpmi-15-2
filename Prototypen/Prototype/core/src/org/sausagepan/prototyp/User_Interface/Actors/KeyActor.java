@@ -25,6 +25,6 @@ public class KeyActor extends Actor {
     @Override
     public void draw(Batch batch, float alpha)
     {
-        batch.draw(texture, Gdx.graphics.getWidth() - texture.getWidth()*2 -2, Gdx.graphics.getHeight() - texture.getHeight()*2 -2, texture.getWidth()*2, texture.getHeight()*2);
+        batch.draw(texture, Gdx.graphics.getWidth() - texture.getWidth() -1, Gdx.graphics.getHeight() - texture.getHeight() -1, texture.getWidth(), texture.getHeight());
     }
 }
