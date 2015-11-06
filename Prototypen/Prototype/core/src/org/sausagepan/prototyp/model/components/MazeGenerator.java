@@ -245,7 +245,7 @@ public class MazeGenerator {
      * @param y     y offset of colliders
      */
     private void addNewColliderLayer(TiledMap map, int x, int y) {
-        MapLayer colliderLayer = map.getLayers().get(4); // get collider layer
+        MapLayer colliderLayer = map.getLayers().get("colliderWalls"); // get collider layer
 
         for (MapObject mo : colliderLayer.getObjects()) {    // for every object in the original collider layer
             RectangleMapObject nmo = new RectangleMapObject();  // create new rectangle map object
