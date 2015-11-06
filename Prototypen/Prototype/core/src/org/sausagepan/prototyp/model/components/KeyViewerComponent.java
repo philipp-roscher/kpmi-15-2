@@ -54,7 +54,9 @@ public class KeyViewerComponent implements ApplicationListener, Component {
     @Override
     public void render() {
 
+        stage.getBatch().begin();
         stage.draw();
+        stage.getBatch().end();
     }
 
     @Override
@@ -70,13 +72,13 @@ public class KeyViewerComponent implements ApplicationListener, Component {
     @Override
     public void dispose() {
         stage.dispose();
+        batch.dispose();
     }
 
     //Own Methods
     public void addKey(KeyActor key)
     {
         stage.addActor(key);
-        this.batch.dispose();
     }
 
     public Array<Actor> removeKeys()
