@@ -27,6 +27,7 @@ import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.KeyViewerComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -194,6 +195,7 @@ public class EntityComponentSystem {
         localCharacter.add(new LightComponent(rayHandler));
         localCharacter.add(new NetworkTransmissionComponent());
         localCharacter.add(new TeamComponent(TeamId));
+        localCharacter.add(new NetworkComponent());
 
         if (clientClass.equals("knight")) {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));

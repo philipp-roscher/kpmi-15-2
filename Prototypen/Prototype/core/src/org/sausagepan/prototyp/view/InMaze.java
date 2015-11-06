@@ -20,6 +20,7 @@ import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.PositionComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
@@ -154,8 +155,13 @@ public class InMaze implements Screen, PlayerObserver {
 		}
         
 		// Set Up Client for Communication .........................................................
-		posUpdate = new PositionUpdate();
+		// add client to NetworkComponent
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).client = game.client;
+        
+        posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).posUpdate = posUpdate;
+        
 		networkMessages = new Array<Object>();
 
 		this.keepAliveRequest = new KeepAliveRequest(game.clientId);
