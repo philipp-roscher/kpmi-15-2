@@ -124,8 +124,7 @@ public void addedToEngine(ObservableEngine engine) {
                         if(((Bow)weapon.weapon).checkHit(area.area))
                             caluclateDamage(weapon, health);
                 }
-                if(v.getClass().equals(MonsterEntity.class))
-                    System.out.println(hm.get(v).HP);
+
                 if(v.getClass().equals(MonsterEntity.class) && hm.get(v).HP == 0) {
                     sm.get(v).sprite.rotate(90);
                     sm.get(v).sprite.setOriginCenter();
