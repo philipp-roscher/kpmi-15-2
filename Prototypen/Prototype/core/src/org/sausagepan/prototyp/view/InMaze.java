@@ -129,7 +129,7 @@ public class InMaze implements Screen, PlayerObserver {
         // Light ...................................................................................
         RayHandler.useDiffuseLight(true);
         this.rayHandler = rayHandler;
-        this.rayHandler.setAmbientLight(1f, 1f, 1f, 1);
+        this.rayHandler.setAmbientLight(.3f, .3f, .3f, 1);
         this.rayHandler.setBlurNum(3);
 
         // load media
