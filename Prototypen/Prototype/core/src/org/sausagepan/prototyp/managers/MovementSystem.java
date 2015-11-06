@@ -18,7 +18,7 @@ import org.sausagepan.prototyp.model.components.VelocityComponent;
 /**
  * Created by georg on 21.10.15.
  */
-public class MovementSystem extends EntitySystem {
+public class MovementSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime=0;
@@ -31,7 +31,7 @@ public class MovementSystem extends EntitySystem {
     public MovementSystem() {}
 
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family
                 .all(DynamicBodyComponent.class)
                 .exclude(InventoryComponent.class).get());

@@ -16,7 +16,7 @@ import org.sausagepan.prototyp.model.items.Bow;
 /**
  * Created by georg on 22.10.15.
  */
-public class WeaponSystem extends EntitySystem {
+public class WeaponSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     /* ........................................................................... CONSTRUCTOR .. */
@@ -32,7 +32,7 @@ public class WeaponSystem extends EntitySystem {
     public WeaponSystem() {}
 
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 WeaponComponent.class,
                 InputComponent.class,

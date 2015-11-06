@@ -23,7 +23,7 @@ import org.sausagepan.prototyp.model.items.Sword;
 /**
  * Created by georg on 31.10.15.
  */
-public class VisualDebuggingSystem extends EntitySystem {
+public class VisualDebuggingSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private ShapeRenderer shapeRenderer;
@@ -46,7 +46,7 @@ public class VisualDebuggingSystem extends EntitySystem {
         this.camera = camera;
     }
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 HealthComponent.class,
                 DynamicBodyComponent.class,

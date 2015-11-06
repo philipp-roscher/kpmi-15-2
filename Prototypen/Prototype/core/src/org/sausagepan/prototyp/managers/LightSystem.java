@@ -13,7 +13,7 @@ import box2dLight.RayHandler;
 /**
  * Created by georg on 30.10.15.
  */
-public class LightSystem extends EntitySystem {
+public class LightSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private ComponentMapper<LightComponent> lights = ComponentMapper.getFor(LightComponent.class);
@@ -25,7 +25,7 @@ public class LightSystem extends EntitySystem {
         this.rayHandler = rayHandler;
     }
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(LightComponent.class).get());
         for(Entity e : entities) {
             LightComponent light = e.getComponent(LightComponent.class);

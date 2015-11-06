@@ -21,7 +21,7 @@ import org.sausagepan.prototyp.model.items.Sword;
 /**
  * Created by georg on 28.10.15.
  */
-public class PositionSynchroSystem extends EntitySystem {
+public class PositionSynchroSystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
 
@@ -45,7 +45,7 @@ public class PositionSynchroSystem extends EntitySystem {
     Update method should synchronize positions of components
 
      */
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class).one(
                 LightComponent.class,

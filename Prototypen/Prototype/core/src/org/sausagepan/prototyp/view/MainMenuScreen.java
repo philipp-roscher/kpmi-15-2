@@ -89,12 +89,12 @@ public class MainMenuScreen implements Screen {
 	/* ................................................................................................... METHODS .. */
 
 	public void setUpGame() {
-		BattleSystem bs = new BattleSystem();
+//		BattleSystem bs = new BattleSystem();
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
 		//TODO: Ask player about wanted character class (Sara)
 		System.out.println("Assigned teamId is: "+game.TeamId);
 		System.out.println("Other players: " + otherCharacters.size());
-		game.setScreen(new InMaze(game, bs, world, rayHandler, mapInformation, otherCharacters, clientClass, game.TeamId));
+		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, otherCharacters, clientClass, game.TeamId));
 	}
 
 
