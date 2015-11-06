@@ -101,15 +101,21 @@ public class MazeGenerator {
      * Calculates safe zones for spawning players
      */
 	private void addSafeZone(){
-		addNewMazeCell("tilemaps/spawnRoom1.tmx", (int) Math.ceil(mazeWidth / 2), 0);
+		// Game Masters Spawn Room
+		addNewMazeCell("tilemaps/spawnRoomDragon.tmx", (int) Math.ceil(mazeWidth / 2), 0);
 		positions[0][0] =  (int) Math.ceil(mazeWidth / 2) * 32 * 32 + 16 * 32;
 		positions[0][1] =  16 * 32;
-		addNewMazeCell("tilemaps/spawnRoom2.tmx", 0, (int) Math.ceil(mazeHeight / 2) + 1);
+
+		// Team Reds Spawn Room
+		addNewMazeCell("tilemaps/spawnRoomTeamRed.tmx", 0, (int) Math.ceil(mazeHeight / 2) + 1);
 		positions[1][0] =  16 * 32;
 		positions[1][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
 		positions[2][0] =  16 * 32;
 		positions[2][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 17 * 32;
-		addNewMazeCell("tilemaps/spawnRoom4.tmx", mazeWidth + 1, (int) Math.ceil(mazeHeight / 2)
+
+		// Team Blues Spawn Room
+		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx", mazeWidth + 1, (int) Math.ceil(mazeHeight
+				/ 2)
 				+ 1);
 		positions[3][0] =  mazeWidth * 32 * 32 + 16 * 32;
 		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
