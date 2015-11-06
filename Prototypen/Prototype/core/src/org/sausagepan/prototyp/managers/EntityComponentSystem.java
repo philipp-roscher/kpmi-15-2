@@ -32,6 +32,7 @@ import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.network.HeroInformation;
@@ -111,7 +112,7 @@ public class EntityComponentSystem {
     private void setUpMonsters() {
         // Get Objects from Maps Monster Layer and add monster entities there
         for(Vector2 pos : maze.getMonsterPositions()) {
-            Entity monster = new Entity();
+            MonsterEntity monster = new MonsterEntity();
             monster.add(new DynamicBodyComponent(world, new Vector2(pos.x, pos.y), "monster"));
             monster.add(new HealthComponent(20));
             monster.add(new CharacterSpriteComponent(
@@ -159,7 +160,7 @@ public class EntityComponentSystem {
         visualDebuggingSystem.addedToEngine(engine);
 
         // Battle System
-        BattleSystem battleSystem = new BattleSystem();
+        BattleSystem battleSystem = new BattleSystem(engine);
         battleSystem.addedToEngine(engine);
 
         //Inventory System

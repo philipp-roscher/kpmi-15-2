@@ -20,7 +20,7 @@
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlm0KwjAMQHOTVQcTQVCGE9Q/HmE69f5HMYGV1dJmabsP/Ag8UKx5XdukawBgI+CGNMb3HLoohDlsMmQLsiiYsQdhjpCcU/nz3lHj+ZcBY31+hVwi/SHh80v2UCGLGf20zpJ9PiKVQTmQnwtzXbhzZHsUskZq5Np+1kjXWlk5Q/y0pr4+FVvTnF+6hyk9JbaOQ/w7ZN/ymMHPjf0WP9XDysBXD2P4XXXhO7d6rrpu7/Bex30M0VPNd4pQpHcn50/pnanxK34F7vNTT+Sn58w8xPqpj1Ye7Lrg/E/o+rHJKXJeFHYfiXn+c8IchvC78kztpzVw7Y2m9PxvKH9s/P2f4ydC7lyNDuX4zb7Ha8b9AjMnN1M=
+   eJztlm0KwjAMQHOTVQcTQVCGE9Q/HmE69f5HMYGN1dJm6cc2/Ag8UKx5XdukawBgI+CGNNr3HPoohDlMMmQLsiiYsQdhDp+cU/nzwVHj+ZceY11+hVwC/T7h8kv2UCGLGf20zpJ9PiKVRpnIz4W+Ltw5Mj0KWSM1cm0/d0jXWhk5ffy0pq4+FVrTnF+6hzE9JbSOffw7ZN/ymMHPjf0WP9XDSsNVD2P4bXXhOrfdXLu6vcN7HQ+Roqfq7xS+SO9Ozh/TO2PjV/wK7OennshPz5k5CPVTH60cmHXB+Z/Q92OdU+C8KMw+EvL854g5pPDb8kztpzWw7U1H6fhfKn9o/P2f4yd87lzb3auM38x7vGbcLzJTN0s=
   </data>
  </layer>
  <objectgroup name="colliderWalls" width="0" height="0">

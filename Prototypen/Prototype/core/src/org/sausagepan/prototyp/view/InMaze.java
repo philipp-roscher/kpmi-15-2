@@ -66,7 +66,6 @@ public class InMaze implements Screen, PlayerObserver {
 	private BitmapFont         font;
 
     // Managers
-	public  BattleSystem  battleSys;        // manages battle
 	public EntityComponentSystem ECS;		// entity component system
 
 	// Media
@@ -94,10 +93,8 @@ public class InMaze implements Screen, PlayerObserver {
     /**
      * Creates an ingame object for rendering ingame action
      * @param game              the game main class itself
-     * @param battleSystem
      */
 	public InMaze(final KPMIPrototype game,
-                  BattleSystem battleSystem,
                   final World world,
                   final RayHandler rayHandler,
                   final MapInformation mapInformation,
@@ -140,9 +137,6 @@ public class InMaze implements Screen, PlayerObserver {
 		this.bgMusic.setLooping(true);  // always repeat background music
 		this.bgMusic.play();
 		this.bgMusic.setVolume(0.3f);
-
-        // set up managers
-		this.battleSys = battleSystem;
 
         // Tiled Map ...............................................................................
         this.maze = new Maze(mapInformation, world, game.mediaManager);
