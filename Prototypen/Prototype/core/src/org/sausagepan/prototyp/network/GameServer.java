@@ -74,7 +74,7 @@ public class GameServer {
 	//to count active Clients in Session
 	public static int clientCount;
 	//maximal Number of Clients per Session
-	private int maxClients = 3;
+	private int maxClients = 2;
 
 
 	public GameServer() {
@@ -107,6 +107,7 @@ public class GameServer {
 		        		NewHeroRequest request = (NewHeroRequest) object;
 		        		HeroInformation hero = request.hero;
 		        		System.out.println("New Hero (ID "+ request.playerId +"): "+ request.hero.clientClass);
+		        		connection.sendTCP(map);
 		        		
 		        		cm.put(request.playerId, hero);
                         serverCharacterSystem.addCharacter(request.playerId, new
@@ -114,33 +115,6 @@ public class GameServer {
 		        		NewHeroResponse response = new NewHeroResponse(request.playerId, request.hero);
 		        		server.sendToAllUDP(response);
 		        		updateLastAccess(request.playerId);
-		        		
-						//increase ClientCount and send to all clients via TCP
-						clientCount++;
-						System.out.println("clientCount at: "+clientCount);
-						GameClientCount GameClientCount = new GameClientCount();
-						GameClientCount.count = clientCount;
-						server.sendToAllTCP(GameClientCount);
-						
-						//if reached maxClients: random choose GM + Teams and send to Clients
-
-						if (clientCount == maxClients) {
-							Collection<Integer> ClientCol = clientIds.values();
-							//Sets Team-number like following: 1-2-0-1-2
-							int TeamId = 1;			//TeamId init here so it resets for ever time teams are assigned
-							for (int i=1; i<=ClientCol.size(); i++) {
-									//TODO better if statement to check if CleintId is still active
-								if (!ClientCol.isEmpty()) {
-									//send Team-Info to Clients
-									TeamAssignment TeamAssignment = new TeamAssignment();
-									TeamAssignment.id = TeamId;
-									server.sendToTCP(i, TeamAssignment);
-									updateLastAccess(TeamId);
-									System.out.println("Team Id "+TeamId+" assigned to ClientId "+i);
-									TeamId = (TeamId + 1) % 3;
-								}
-							}
-						}
 		        	}
 		        	
 		        	if (object instanceof PositionUpdate) {
@@ -161,17 +135,11 @@ public class GameServer {
 		        	   response.positions = positions;
 		        	   connection.sendUDP(response);
 			       }
-
-					if (object instanceof MaxClients) {
-						System.out.println("MaxClients eingegangen");
-						MaxClients response = new MaxClients();
-						response.count = maxClients;
-					}
 		           
 		           if (object instanceof FullGameStateRequest) {
 		        	   System.out.println("FullGameStateRequest eingegangen");
 
-		        	   FullGameStateResponse response = new FullGameStateResponse(cm, map);
+		        	   FullGameStateResponse response = new FullGameStateResponse(cm);
 		        	   connection.sendTCP(response);
 			       }
 		           
@@ -192,6 +160,38 @@ public class GameServer {
 		        	connection.sendTCP(idAssignment);
 			        updateLastAccess(maxId);
 		        	maxId++;
+					//send maxClients to Client(s)
+					MaxClients MaxClients = new MaxClients();
+					MaxClients.count = maxClients;
+					connection.sendTCP(MaxClients);
+
+					//MUSS HIER PASSIEREN!!! nicht in NewHeroRequest verschieben!!!
+					//increase ClientCount and send to all clients via TCP
+					clientCount++;
+					System.out.println("clientCount at: "+clientCount);
+					GameClientCount GameClientCount = new GameClientCount();
+					GameClientCount.count = clientCount;
+					server.sendToAllTCP(GameClientCount);
+
+					//if reached maxClients: random choose GM + Teams and send to Clients
+
+					if (clientCount == maxClients) {
+						Collection<Integer> ClientCol = clientIds.values();
+						//Sets Team-number like following: 1-2-0-1-2
+						int TeamId = 1;			//TeamId init here so it resets for ever time teams are assigned
+						for (int i=1; i<=ClientCol.size(); i++) {
+							//TODO better if statement to check if ClientId is still active
+							if (!ClientCol.isEmpty()) {
+								//send Team-Info to Clients
+								TeamAssignment TeamAssignment = new TeamAssignment();
+								TeamAssignment.id = TeamId;
+								server.sendToTCP(i, TeamAssignment);
+								updateLastAccess(TeamId);
+								System.out.println("Team Id "+TeamId+" assigned to ClientId "+i);
+								TeamId = (TeamId + 1) % 3;
+							}
+						}
+					}
 		        }
 		        
 				public void disconnected (Connection connection) {
@@ -245,7 +245,7 @@ public class GameServer {
 	        		cm.remove(id);
 	        		server.sendToAllUDP(new DeleteHeroResponse(id));
 	        		System.out.println("Automatically deleted Player "+ltime.getKey());
-	        		clientCount--;
+					//hier kein clientCount--, sonst geht das auf -1 usw.!!!
 	        	}
 	        }
 	    }

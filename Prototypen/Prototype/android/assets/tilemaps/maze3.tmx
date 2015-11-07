@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="100">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="102">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
@@ -23,7 +23,7 @@
    eJzNVttOwzAMtfol47LBHtgQal+4iG5FQrzBA/z/p2Crs+R5ju2UasLSUZvGiWsfx84WRnlvwJVoPqOrv68Qd/ltZ5frf2D/WYwXiAHRHfCGeHTW3yNaoUtrH5z9OjX/ZPzPVowz/DCnlq6Ob5RDpL9R9n9g9JFAPl4U1lr2l3DsTySXiKvD+9Acj9nG5mRVeW5VaZ9Ex0iOtY/EP3FKsdkjdmJMz28Y4ye/Sf4h+X+vzQidH95/k0T818SH7NfGcwl+/kbzUvqmvl6x/ksh7zm/NS/yXMunxXFXGHeGvtah/MjG08vLSLc0p8/7uYX56St629z2dX0bwOa+xHULp9xGtVLaL9X7v/KbOSu6Psx5H8js5fk/VahvDMlaEdmX9b013i2O92h71+TuNhn/La4zHJ8j/p4++S/PFkH3Pr1e9/tIvP6h97biGPnLfaB0nr3/zcY/e7/zer8lmdpec/+u7RWZ3k7+fyHWENfKKf5H9kv3U+Zd5itxvYO4tnPNkL1f5z2Ld5/yzn3km1zr9YramLJ49/Dafaban6NPkf+UfzeIWxjzkGF9Y3wgerHPoqC3Dvb9RPwCY+1CAQ==
   </data>
  </layer>
- <objectgroup name="colliderWalls" visible="0">
+ <objectgroup name="colliderWalls">
   <object id="1" x="0" y="0" width="480" height="64"/>
   <object id="2" x="544" y="0" width="480" height="64"/>
   <object id="3" x="0" y="64" width="32" height="129"/>
@@ -60,6 +60,7 @@
   <object id="34" x="320" y="832" width="64" height="64"/>
   <object id="35" x="544" y="992" width="480" height="32"/>
   <object id="37" x="992" y="64" width="32" height="127"/>
+  <object id="101" x="162" y="893" width="92" height="65"/>
  </objectgroup>
  <objectgroup name="gameMasterColliderWalls">
   <object id="38" x="0" y="0" width="480" height="64"/>
@@ -98,6 +99,7 @@
   <object id="71" x="320" y="832" width="64" height="64"/>
   <object id="72" x="544" y="992" width="480" height="32"/>
   <object id="74" x="992" y="64" width="32" height="128"/>
+  <object id="100" x="162" y="894" width="93" height="66"/>
  </objectgroup>
  <objectgroup name="lights">
   <object id="75" name="light" x="512" y="128" width="32" height="32"/>

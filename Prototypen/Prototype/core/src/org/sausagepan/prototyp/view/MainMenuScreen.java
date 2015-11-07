@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.view;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import box2dLight.RayHandler;
 
@@ -38,19 +39,24 @@ public class MainMenuScreen implements Screen {
 	public OrthographicCamera camera;
 	public Viewport viewport;
 	private Texture bgImg;
+	private Texture SelArcherF;
+	private Texture SelKnightM;
+	private Texture SelFighterM;
+	private Texture SelShamanM;
+	private Texture SelDragonRed;
+
 	private int connectionStatus;
 	private final World world;
     private final RayHandler rayHandler;
     private MapInformation mapInformation;
-    private HashMap<Integer,HeroInformation> otherCharacters;
 	String serverIp;
 
 	private boolean heroRequestSent = false;
-	private boolean FGSRequestSent = false;
-	private boolean FGSResponseReceived = false;
+	private boolean mapInformationReceived = false;
 	
-	//choosen Player Class
-	private String clientClass = "knight";
+	//chosen Player Class
+	private String clientClass;
+	private boolean clientSel = false;
 
 	
 	/* ...................................................... CONSTRUCTORS .. */
@@ -65,19 +71,18 @@ public class MainMenuScreen implements Screen {
 		connectionStatus = 0;
 		
 		this.bgImg = game.mediaManager.getMainMenuBackgroundImg();
+		this.SelArcherF = game.mediaManager.getSelectionArcherFBig();
+		this.SelDragonRed = game.mediaManager.getSelectionDragonRedBig();
+		this.SelFighterM = game.mediaManager.getSelectionFighterMBig();
+		this.SelKnightM = game.mediaManager.getSelectionKnightMBig();
+		this.SelShamanM = game.mediaManager.getSelectionShamanMBig();
 
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
-				if (object instanceof FullGameStateResponse) {
-					System.out.println("FullGameStaterRESPONSE");
-					FullGameStateResponse response = (FullGameStateResponse) object;
-					MainMenuScreen.this.mapInformation = response.mapInformation;
-					otherCharacters = response.heroes;
-					
-					if (otherCharacters.containsKey(game.clientId))
-						otherCharacters.remove(game.clientId);
-					
-					FGSResponseReceived = true;
+				if (object instanceof MapInformation) {
+					System.out.println("Received MapInformation");
+					MainMenuScreen.this.mapInformation = (MapInformation)object;
+					mapInformationReceived = true;
 				}
 			}
 
@@ -91,10 +96,67 @@ public class MainMenuScreen implements Screen {
 	public void setUpGame() {
 //		BattleSystem bs = new BattleSystem();
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
-		//TODO: Ask player about wanted character class (Sara)
+
 		System.out.println("Assigned teamId is: "+game.TeamId);
-		System.out.println("Other players: " + otherCharacters.size());
-		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, otherCharacters, clientClass, game.TeamId));
+
+		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, clientClass, game.TeamId));
+	}
+
+	//random chose Class for clients according to their TeamId
+	public void randomClassSel() {
+
+		game.batch.begin();
+		//GameMaster
+		if (game.TeamId == 0) {
+			game.batch.draw(SelDragonRed, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+			clientClass = "dragon_red";
+		}
+		//Teams
+		else {
+			Random ran = new Random();
+			int x = ran.nextInt(4);                                        //TODO: raise number according to available character sheets!!!!
+
+			//System.out.println("random number = "+x);
+
+			switch (x) {
+				case 0: {
+					clientClass = "knight_m";
+					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+					break;
+				}
+				case 1: {
+					clientClass = "archer_f";
+					game.batch.draw(SelArcherF, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+					break;
+				}
+				case 2: {
+					clientClass = "shaman_m";
+					game.batch.draw(SelShamanM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+					break;
+				}
+				case 3: {
+					clientClass = "fighter_m";
+					game.batch.draw(SelFighterM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+					break;
+				}
+				default: {
+					clientClass = "knight_m";
+					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+					break;
+				}
+			}
+		}
+		game.batch.end();
+		System.out.println("Chosen Client Class is: " + clientClass);
+
+		//wait for 2 seconds
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		clientSel = true;
+
 	}
 
 
@@ -125,7 +187,7 @@ public class MainMenuScreen implements Screen {
 		game.batch.end();
 		
 		// If screen is touched
-		if(Gdx.input.justTouched()) {
+		if(Gdx.input.justTouched() && connectionStatus != 1) {
 			Gdx.input.getTextInput(new TextInputListener() {
 				
 				@Override
@@ -155,41 +217,56 @@ public class MainMenuScreen implements Screen {
 
 		if(game.connected == true && game.clientId != 0) {
 			
-			if(!heroRequestSent) {
-				game.client.sendTCP(
-						new NewHeroRequest(
-							game.clientId,
-							new HeroInformation(clientClass)
-						)
-					);
-				heroRequestSent = true;
-			}
-			
 			//waiting for full group of players
 			game.batch.begin();
+
+			//too less clients
 			if(game.clientCount < game.maxClients) {
 				game.font.setColor(1, 0, 0, 1);
-				game.font.draw(game.batch, "Waiting for players... "+game.clientCount+"/"+game.maxClients, 320, 380);
+				game.font.draw(game.batch, "Waiting for players... " + game.clientCount + "/" + game.maxClients, 320, 380);
 				game.font.setColor(1, 1, 1, 1);
+				game.batch.end();
 			}
 
+			//right amount of players: set up game
 			if(game.clientCount == game.maxClients) {
 				game.font.setColor(0, 1, 0, 1);
 				game.font.draw(game.batch, "Starting... " + game.clientCount + "/" + game.maxClients, 340, 380);
 				game.font.setColor(1, 1, 1, 1);
-				if(!FGSRequestSent) {
-					game.client.sendTCP(new FullGameStateRequest());
-					FGSRequestSent = true;
+				game.batch.end();
+
+				//character selection
+				randomClassSel();
+
+				//send Hero/Client info to server after class Selection
+				if(!heroRequestSent) {
+					game.client.sendTCP(
+							new NewHeroRequest(
+									game.clientId,
+									new HeroInformation(clientClass)
+							)
+					);
+					heroRequestSent = true;
 				}
-				
+
+				//too many players
+				if(game.clientCount > game.maxClients) {
+					game.font.setColor(1, 0, 0, 1);
+					game.font.draw(game.batch, "Sorry, server is already full!"+game.clientCount+"/"+game.maxClients, 320, 380);
+					game.font.setColor(1, 1, 1, 1);
+					game.batch.end();
+				}
 			}
-			game.batch.end();
 
 			dispose();
 		}
-		
-		if (FGSResponseReceived)
+
+		//after sending infos was successful: start game
+		if (mapInformationReceived && clientSel) {
 			setUpGame();
+		}
+
+
 		
 		// Update camera
 		camera.update();

@@ -149,12 +149,10 @@ public class Network {
 	
 	public static class FullGameStateResponse {
 		public HashMap<Integer,HeroInformation> heroes;
-		public MapInformation mapInformation;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes, MapInformation mapInformation) {
+		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes) {
 			this.heroes = heroes;
-			this.mapInformation = mapInformation;
 		}
 	}
 	

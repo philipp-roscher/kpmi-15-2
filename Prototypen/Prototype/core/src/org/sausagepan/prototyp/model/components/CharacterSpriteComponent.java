@@ -34,7 +34,7 @@ public class CharacterSpriteComponent implements Component {
         recentIdleImg = playerAnims.get("s").getKeyFrames()[0];
         this.sprite = new Sprite(recentIdleImg);
         //bigger size for dragon/GM
-        if (playerClass == "dragon") {
+        if (playerClass == "dragon_red") {
             this.sprite.setSize(.8f*2, 1*2);
         }
         else {
