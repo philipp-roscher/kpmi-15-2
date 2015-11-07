@@ -25,8 +25,8 @@ public class KPMIPrototype extends Game {
 	public boolean connected = false;
 	public int clientId;
 
-	//Numer of Players needed to start game:
-	public int maxClients = 2;
+	//Number of Players needed to start game -> set on Server!
+	public int maxClients;
 	//counts players on server
 	public int clientCount;
 
@@ -43,14 +43,9 @@ public class KPMIPrototype extends Game {
 		client = new Client();
 		new Thread(client).start();
 		Network.register(client);
-		//send maxClient to server
-		//TODO: doesn't work yet... :/ (Sara)
-		MaxClients MaxClients = new MaxClients();
-		MaxClients.count = maxClients;
-		client.sendTCP(MaxClients);
 
 		//Listeners to receive data from server
-		client.addListener(new Listener() {
+		client.addListener(new Listener() {									//receives Client ID
 			public void received(Connection connection, Object object) {
 				if (object instanceof IDAssignment) {
 					IDAssignment result = (IDAssignment) object;
@@ -58,7 +53,7 @@ public class KPMIPrototype extends Game {
 				}
 			}
 		});
-		client.addListener(new Listener() {
+		client.addListener(new Listener() {									//receives current number of clients
 			public void received(Connection connection, Object object) {
 				if (object instanceof GameClientCount) {
 					GameClientCount result = (GameClientCount) object;
@@ -66,11 +61,19 @@ public class KPMIPrototype extends Game {
 				}
 			}
 		});
-		client.addListener(new Listener() {
+		client.addListener(new Listener() {									//receives Team ID
 			public void received(Connection connection, Object object) {
 				if(object instanceof TeamAssignment) {
 					TeamAssignment result = (TeamAssignment) object;
 					TeamId = result.id;
+				}
+			}
+		});
+		client.addListener(new Listener() {									//receives max. number of clients
+			public void received(Connection connection, Object object) {
+				if(object instanceof MaxClients) {
+					MaxClients result = (MaxClients) object;
+					maxClients = result.count;
 				}
 			}
 		});

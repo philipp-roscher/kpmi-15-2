@@ -117,7 +117,7 @@ public class EntityComponentSystem {
             monster.add(new DynamicBodyComponent(world, new Vector2(pos.x, pos.y), "monster"));
             monster.add(new HealthComponent(20));
             monster.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/zombie_01.pack"), "monster"
+                    mediaManager.getTextureAtlas("textures/spritesheets/monsters/zombie_01.pack"), "monster"
             ));
             monster.add(new InjurableAreaComponent(pos.x, pos.y, .8f, 1f));
 
@@ -197,10 +197,10 @@ public class EntityComponentSystem {
         localCharacter.add(new TeamComponent(TeamId));
         localCharacter.add(new NetworkComponent());
 
-        if (clientClass.equals("knight")) {
+        if (clientClass.equals("knight_m")) {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/knight_m.pack"), clientClass
             ));
             localCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
             localCharacter.add(new HealthComponent(100));
@@ -210,10 +210,23 @@ public class EntityComponentSystem {
             //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
-        if (clientClass.equals("archer")) {
+        if (clientClass.equals("fighter_m")) {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/fighter_m.pack"), clientClass
+            ));
+            localCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
+            localCharacter.add(new HealthComponent(100));
+            localCharacter.add(new MagicComponent(80));
+            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            localCharacter.add(new InventoryComponent());
+            //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+        }
+
+        if (clientClass.equals("archer_f")) {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
+            localCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/archer_f.pack"), clientClass
             ));
             localCharacter.add(new WeaponComponent(itemFactory.createBow()));
             localCharacter.add(new HealthComponent(100));
@@ -223,10 +236,10 @@ public class EntityComponentSystem {
             //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
-        if (clientClass.equals("shaman")) {
+        if (clientClass.equals("shaman_m")) {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/shaman_m.pack"), clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/shaman_m.pack"), clientClass
             ));
             localCharacter.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
             localCharacter.add(new HealthComponent(100));
@@ -236,15 +249,15 @@ public class EntityComponentSystem {
            // localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
-        if (clientClass.equals("dragon")) {
+        if (clientClass.equals("dragon_red")) {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), clientClass
             ));
             localCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
             localCharacter.add(new HealthComponent(100));
             localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
+            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));   //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
             localCharacter.add(new InventoryComponent());
             //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
@@ -296,10 +309,10 @@ public class EntityComponentSystem {
         newCharacter.add(new NetworkTransmissionComponent());
         newCharacter.add(new TeamComponent(TeamId));
 
-        if (newHero.clientClass.equals("knight")) {
+        if (newHero.clientClass.equals("knight_m")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
             newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/knight_m.pack"), newHero.clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/knight_m.pack"), newHero.clientClass
             ));
             newCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
             newCharacter.add(new HealthComponent(100));
@@ -309,10 +322,23 @@ public class EntityComponentSystem {
             //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
-        if (newHero.clientClass.equals("archer")) {
+        if (newHero.clientClass.equals("fighter_m")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
             newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/archer_f.pack"), newHero.clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/fighter_m.pack"), newHero.clientClass
+            ));
+            newCharacter.add(new WeaponComponent(itemFactory.createSmallSword())); //TODO: weapon
+            newCharacter.add(new HealthComponent(100));
+            newCharacter.add(new MagicComponent(80));
+            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+            newCharacter.add(new InventoryComponent());
+            //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+        }
+
+        if (newHero.clientClass.equals("archer_f")) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
+            newCharacter.add(new CharacterSpriteComponent(
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/archer_f.pack"), newHero.clientClass
             ));
             newCharacter.add(new WeaponComponent(itemFactory.createBow()));
             newCharacter.add(new HealthComponent(100));
@@ -322,10 +348,10 @@ public class EntityComponentSystem {
             //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
-        if (newHero.clientClass.equals("shaman")) {
+        if (newHero.clientClass.equals("shaman_m")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
             newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/shaman_m.pack"), newHero.clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/shaman_m.pack"), newHero.clientClass
             ));
             newCharacter.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
             newCharacter.add(new HealthComponent(100));
@@ -335,15 +361,15 @@ public class EntityComponentSystem {
             //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
-        if (newHero.clientClass.equals("dragon")) {
+        if (newHero.clientClass.equals("dragon_red")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
             newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/dragon.pack"), newHero.clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), newHero.clientClass
             ));
             newCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
             newCharacter.add(new HealthComponent(100));
             newCharacter.add(new MagicComponent(80));
-            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
+            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));     //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
             newCharacter.add(new InventoryComponent());
             //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }

@@ -30,7 +30,7 @@ public class DynamicBodyComponent implements Component {
         dynamicBody = world.createBody(bodyDef);        // add body to the world
         CircleShape circle = new CircleShape();         // give body a shape
         //bigger size for dragon/GM
-        if (playerClass == "dragon") {
+        if (playerClass == "dragon_red") {
             circle.setRadius(.4f*2);                    // set the shapes radius
         }
         else {
