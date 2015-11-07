@@ -160,7 +160,7 @@ public class MainMenuScreen implements Screen {
 
 		//wait for 2 seconds
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -225,6 +225,30 @@ public class MainMenuScreen implements Screen {
 		}
 
 		if(game.connected == true && game.clientId != 0) {
+
+
+			if (FGSResponseReceived && game.TeamAssignmentReceived) {
+
+				//class selection
+				randomClassSel();
+
+				//send Hero/Client info to server after class Selection
+				if(!heroRequestSent && clientSel) {
+					game.client.sendTCP(
+							new NewHeroRequest(
+									game.clientId,
+									new HeroInformation(clientClass)
+							)
+					);
+					heroRequestSent = true;
+				}
+			}
+
+			//sends data about Map and Clients
+			if(!FGSRequestSent) {
+				game.client.sendTCP(new FullGameStateRequest());
+				FGSRequestSent = true;
+			}
 			
 			//waiting for full group of players
 			game.batch.begin();
@@ -244,46 +268,21 @@ public class MainMenuScreen implements Screen {
 				game.font.setColor(1, 1, 1, 1);
 				game.batch.end();
 
-				if (FGSResponseReceived) {
-
-					//character selection
-					randomClassSel();
-
-					//send Hero/Client info to server after class Selection
-					if(!heroRequestSent) {
-						game.client.sendTCP(
-								new NewHeroRequest(
-										game.clientId,
-										new HeroInformation(clientClass)
-								)
-						);
-						heroRequestSent = true;
-					}
-				}
-
-				//sends data about Map and Clients
-				if(!FGSRequestSent) {
-					game.client.sendTCP(new FullGameStateRequest());
-					FGSRequestSent = true;
-				}
-
-				//too many players
-				if(game.clientCount > game.maxClients) {
-					game.font.setColor(1, 0, 0, 1);
-					game.font.draw(game.batch, "Sorry, server is already full!"+game.clientCount+"/"+game.maxClients, 320, 380);
-					game.font.setColor(1, 1, 1, 1);
-					game.batch.end();
+				//after sending infos was successful: start game
+				if (FGSResponseReceived && heroRequestSent &&clientSel) {
+					setUpGame();
 				}
 			}
 
+			//many players
+			if(game.clientCount > game.maxClients) {
+				game.font.setColor(1, 0, 0, 1);
+				game.font.draw(game.batch, "Sorry, server is already full!"+game.clientCount+"/"+game.maxClients, 320, 380);
+				game.font.setColor(1, 1, 1, 1);
+				game.batch.end();
+			}
 			dispose();
 		}
-
-		//after sending infos was successful: start game
-		if (FGSResponseReceived && clientSel) {
-			setUpGame();
-		}
-
 
 		
 		// Update camera

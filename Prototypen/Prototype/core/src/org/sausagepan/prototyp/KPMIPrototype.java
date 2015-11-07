@@ -31,6 +31,8 @@ public class KPMIPrototype extends Game {
 	public int clientCount;
 
 	public int TeamId;
+	public boolean TeamAssignmentReceived = false;
+
 	/* .................................................... LibGDX METHODS .. */
 	@Override
 	public void create () {
@@ -66,6 +68,7 @@ public class KPMIPrototype extends Game {
 				if(object instanceof TeamAssignment) {
 					TeamAssignment result = (TeamAssignment) object;
 					TeamId = result.id;
+					TeamAssignmentReceived = true;
 				}
 			}
 		});

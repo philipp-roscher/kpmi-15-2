@@ -54,7 +54,9 @@ public class GameServer {
 	public static HashMap<Integer,Long> lastAccess;
 	public static HashMap<Integer,HeroInformation> cm;
 	public static MapInformation map;
-	
+	//HashMap to save ClientIds,TeamIds
+	public static HashMap<Integer,Integer> TeamAssignments;
+
 	private static ServerPlayerManager playerMan = new ServerPlayerManager();
 	private static ServerCharacterSystem serverCharacterSystem = new ServerCharacterSystem();
 	private ServerBattleSystem bs;
@@ -73,6 +75,7 @@ public class GameServer {
 		this.clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
 		positions = new HashMap<Integer,NetworkTransmissionComponent>();
+		TeamAssignments = new HashMap<Integer, Integer>();
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,HeroInformation>();
 		bs = new ServerBattleSystem(this);
@@ -102,7 +105,7 @@ public class GameServer {
 		        		
 		        		cm.put(request.playerId, hero);
                         serverCharacterSystem.addCharacter(request.playerId, new
-                                ServerCharacterEntity(request.playerId));
+								ServerCharacterEntity(request.playerId));
 		        		NewHeroResponse response = new NewHeroResponse(request.playerId, request.hero);
 		        		server.sendToAllUDP(response);
 		        		updateLastAccess(request.playerId);
@@ -119,21 +122,21 @@ public class GameServer {
 					   updateLastAccess(request.playerId);
 		        	}
 			           
-		           if (object instanceof GameStateRequest) {
-		        	   // System.out.println("GameStateRequest eingegangen");
+				    if (object instanceof GameStateRequest) {
+					   // System.out.println("GameStateRequest eingegangen");
 
-		        	   GameStateResponse response = new GameStateResponse();
-		        	   response.positions = positions;
-		        	   connection.sendUDP(response);
-			       }
-		           
-		           if (object instanceof FullGameStateRequest) {
-		        	   System.out.println("FullGameStateRequest eingegangen");
+					   GameStateResponse response = new GameStateResponse();
+					   response.positions = positions;
+					   connection.sendUDP(response);
+				    }
 
-		        	   FullGameStateResponse response = new FullGameStateResponse(cm, map);
-		        	   connection.sendTCP(response);
-			       }
-		           
+				    if (object instanceof FullGameStateRequest) {
+					   System.out.println("FullGameStateRequest eingegangen");
+
+					   FullGameStateResponse response = new FullGameStateResponse(cm, map);
+					   connection.sendTCP(response);
+				    }
+
 		           if (object instanceof AttackRequest) {
 					   AttackRequest request = (AttackRequest)object;
 					   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
@@ -163,34 +166,25 @@ public class GameServer {
 					GameClientCount GameClientCount = new GameClientCount();
 					GameClientCount.count = clientCount;
 					server.sendToAllTCP(GameClientCount);
-
-					//if reached maxClients: random choose GM + Teams and send to Clients
-
-					if (clientCount == maxClients) {
-						Collection<Integer> ClientCol = clientIds.values();
-						//Sets Team-number like following: 1-2-0-1-2
-						int TeamId = 1;			//TeamId init here so it resets for ever time teams are assigned
-						for (i=1; i<=ClientCol.size(); i++) {
-							//TODO better if statement to check if ClientId is still active
-							if (!ClientCol.isEmpty()) {
-								//send Team-Info to Clients
-								TeamAssignment TeamAssignment = new TeamAssignment();
-								TeamAssignment.id = TeamId;
-								server.sendToTCP(i, TeamAssignment);
-								updateLastAccess(TeamId);
-								System.out.println("Team Id "+TeamId+" assigned to ClientId "+i);
-								TeamId = (TeamId + 1) % 3;
-							}
-						}
-					}
+					//assignTeamId
+					assignTeam(idAssignment.id);
 		        }
 		        
 				public void disconnected (Connection connection) {
-					InetSocketAddress ip = connection.getRemoteAddressTCP();
-					if(ip == null) ip = connection.getRemoteAddressUDP();
-					positions.remove(clientIds.get(ip));
-					clientIds.remove(ip);
-					System.out.println(ip + " has disconnected");
+					//kann die getrennte IP nicht ausgeben, weil sie ja schon getrennt ist
+					//InetSocketAddress ip = connection.getRemoteAddressTCP();
+					//if(ip == null) ip = connection.getRemoteAddressUDP();
+
+					//connection.id is (at the moment) identical to the ID in ClientIds
+					int id = connection.getID();
+					positions.remove(id);
+					TeamAssignments.remove(id);
+					//Would need ipadress / key to remove this too: How??
+					//clientIds.remove(ip);
+					System.out.println(id + " has disconnected");
+					//System.out.println(clientIds);
+					//System.out.println(TeamAssignments);
+
 
 					//decrease clientCount and send to all clients via TCP
 					clientCount--;
@@ -198,6 +192,7 @@ public class GameServer {
 					GameClientCount GameClientCount = new GameClientCount();
 					GameClientCount.count = clientCount;
 					server.sendToAllTCP(clientCount);
+
 				}
 		     });
 		    
@@ -268,6 +263,46 @@ public class GameServer {
 	
 	public void stop() {
 		server.stop();
+	}
+
+	//"random" Team-assignment
+	public void assignTeam(int ClientId) {
+		int Team0 = 0;
+		int Team1 = 0;
+		int Team2 = 0;
+
+		Collection<Integer> ClientCol = clientIds.values();
+		for (i=1; i<=ClientCol.size(); i++) {
+			System.out.println("Checking TeamId with ClientId: "+ i + " Result: "+ TeamAssignments.get(i));
+			//read TeamIds and count them
+			if (TeamAssignments.get(i) != null) {
+				if (TeamAssignments.get(i) == 0){ Team0++; }
+				if (TeamAssignments.get(i) == 1){ Team1++; }
+				if (TeamAssignments.get(i) == 2){ Team2++; }
+			}
+		}
+		System.out.println("Team0: "+Team0+" - Team1: "+Team1+" - Team2: "+Team2);
+
+		TeamAssignment TeamAssignment = new TeamAssignment();
+		//check for free space in Teams
+		if (Team0 < 1) {
+			TeamAssignment.id = 0;
+			TeamAssignments.put(ClientId, 0);
+		}
+		else if (Team1 < 2) {
+			TeamAssignment.id = 1;
+			TeamAssignments.put(ClientId, 1);
+		}
+		else if (Team2 < 2) {
+			TeamAssignment.id = 2;
+			TeamAssignments.put(ClientId, 2);
+		}
+		else { System.out.println("all Teams are full");
+		}
+
+		server.sendToTCP(ClientId, TeamAssignment);
+		System.out.println("Team Id "+TeamAssignment.id+" assigned to ClientId "+ClientId);
+
 	}
 	
 }
