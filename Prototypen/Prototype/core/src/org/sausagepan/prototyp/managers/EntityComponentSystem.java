@@ -207,7 +207,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             localCharacter.add(new InventoryComponent());
-            //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (clientClass.equals("fighter_m")) {
@@ -220,7 +220,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             localCharacter.add(new InventoryComponent());
-            //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (clientClass.equals("archer_f")) {
@@ -233,7 +233,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             localCharacter.add(new InventoryComponent());
-            //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (clientClass.equals("shaman_m")) {
@@ -246,7 +246,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             localCharacter.add(new InventoryComponent());
-           // localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (clientClass.equals("dragon_red")) {
@@ -259,7 +259,7 @@ public class EntityComponentSystem {
             localCharacter.add(new MagicComponent(80));
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));   //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
             localCharacter.add(new InventoryComponent());
-            //localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         characters.put(localCharacterId, localCharacter);
@@ -291,8 +291,7 @@ public class EntityComponentSystem {
     public void update(float delta) {
 
         engine.update(delta);
-        //InventorySystem is = engine.getSystem(InventorySystem.class);
-        //is.drawKeys();
+        engine.getSystem(InventorySystem.class).drawKeys();
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
@@ -319,7 +318,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             newCharacter.add(new InventoryComponent());
-            //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (newHero.clientClass.equals("fighter_m")) {
@@ -332,7 +331,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             newCharacter.add(new InventoryComponent());
-            //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (newHero.clientClass.equals("archer_f")) {
@@ -345,7 +344,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             newCharacter.add(new InventoryComponent());
-            //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (newHero.clientClass.equals("shaman_m")) {
@@ -358,7 +357,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
             newCharacter.add(new InventoryComponent());
-            //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         if (newHero.clientClass.equals("dragon_red")) {
@@ -371,7 +370,7 @@ public class EntityComponentSystem {
             newCharacter.add(new MagicComponent(80));
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));     //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
             newCharacter.add(new InventoryComponent());
-            //newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
         characters.put(newCharacterId, newCharacter);
