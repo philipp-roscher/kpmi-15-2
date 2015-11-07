@@ -19,8 +19,10 @@ import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
+import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
 
@@ -29,10 +31,12 @@ import org.sausagepan.prototyp.model.items.Sword;
  * other.
  * Created by Georg on 26.06.2015.
  */
-public class BattleSystem extends EntitySystem {
+public class BattleSystem extends ObservingEntitySystem {
 
 
     /* ............................................................................ ATTRIBUTES .. */
+    private ObservableEngine engine;
+
     private ImmutableArray<Entity> attackers;
     private ImmutableArray<Entity> victims;
 
@@ -46,9 +50,11 @@ public class BattleSystem extends EntitySystem {
             = ComponentMapper.getFor(DynamicBodyComponent.class);
     private ComponentMapper<InjurableAreaComponent> jm
             = ComponentMapper.getFor(InjurableAreaComponent.class);
+    private ComponentMapper<CharacterSpriteComponent> sm
+            = ComponentMapper.getFor(CharacterSpriteComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
-    public BattleSystem() {}
+    public BattleSystem(ObservableEngine engine) {this.engine = engine;}
 
     /* ............................................................................... METHODS .. */
 
@@ -75,7 +81,7 @@ public class BattleSystem extends EntitySystem {
 //                            + attacker.getStatus_().getAttPhys());
 //        }
 //    }
-public void addedToEngine(Engine engine) {
+public void addedToEngine(ObservableEngine engine) {
     attackers = engine.getEntitiesFor(Family.all(
             HealthComponent.class,
             DynamicBodyComponent.class,
@@ -83,7 +89,8 @@ public void addedToEngine(Engine engine) {
             InjurableAreaComponent.class).get());
     victims = engine.getEntitiesFor(Family.all(
             HealthComponent.class,
-            InjurableAreaComponent.class).get());
+            InjurableAreaComponent.class,
+            CharacterSpriteComponent.class).get());
 }
 
     public void update(float deltaTime) {
@@ -117,12 +124,17 @@ public void addedToEngine(Engine engine) {
                         if(((Bow)weapon.weapon).checkHit(area.area))
                             caluclateDamage(weapon, health);
                 }
+
+                if(v.getClass().equals(MonsterEntity.class) && hm.get(v).HP == 0) {
+                    sm.get(v).sprite.rotate(90);
+                    sm.get(v).sprite.setOriginCenter();
+                    engine.removeEntity(v);
+                    System.out.println("Monster killed");
+                }
+
             }
             weapon.weapon.justUsed = false; // usage over, waiting for next attack
         }
-        // Remove Entity from the system, wenn killed
-        // TODO
-        // remember to implement EntityListener, so Systems can react to deletion
     }
 
     public void caluclateDamage(WeaponComponent weapon, HealthComponent health) {

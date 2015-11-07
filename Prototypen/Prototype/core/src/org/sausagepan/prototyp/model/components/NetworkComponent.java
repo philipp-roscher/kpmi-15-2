@@ -1,22 +1,23 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.math.Vector2;
-
-import org.sausagepan.prototyp.enums.Direction;
+import com.esotericsoftware.kryonet.Client;
+import org.sausagepan.prototyp.network.Network.PositionUpdate;
 
 /**
- * Created by georg on 29.10.15.
+ * Created by philipp on 06.11.15.
  */
-public class NetworkTransmissionComponent implements Component {
+public class NetworkComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public Vector2 position = new Vector2(0,0);
-    public Vector2 linearVelocity = new Vector2(0,0);
-    public boolean moving = false;
+    public Client client;
+    public PositionUpdate posUpdate;
 
     /* ........................................................................... CONSTRUCTOR .. */
     
     /* ............................................................................... METHODS .. */
+    public void sendPositionUpdate() {
+    	client.sendUDP(posUpdate);
+    }
     
     /* ..................................................................... GETTERS & SETTERS .. */
 }

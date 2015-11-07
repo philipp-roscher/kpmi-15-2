@@ -26,7 +26,7 @@ public class KPMIPrototype extends Game {
 	public int clientId;
 
 	//Numer of Players needed to start game:
-	public int maxClients = 1;
+	public int maxClients = 2;
 	//counts players on server
 	public int clientCount;
 

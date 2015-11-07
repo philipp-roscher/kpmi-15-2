@@ -8,6 +8,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import org.sausagepan.prototyp.enums.KeySection;
@@ -24,7 +26,7 @@ import java.util.List;
 /**
  * Created by Bettina on 03.11.2015.
  */
-public class InventorySystem extends EntitySystem {
+public class InventorySystem extends ObservingEntitySystem {
 
     /*...................................................................................Atributes*/
     private ImmutableArray<Entity> characters;
@@ -35,7 +37,7 @@ public class InventorySystem extends EntitySystem {
     private ComponentMapper<KeyViewerComponent> kvm = ComponentMapper.getFor(KeyViewerComponent.class);
 
     /*...................................................................................Functions*/
-    public void addedToEngine(Engine engine)
+    public void addedToEngine(ObservableEngine engine)
     {
         characters = engine.getEntitiesFor(Family.all(WeaponComponent.class, InventoryComponent.class, TeamComponent.class).get());
     }
@@ -59,7 +61,7 @@ public class InventorySystem extends EntitySystem {
         int number;
 
         List<Key> keys = createKeys();
-        List<KeyActor> keyActors = createKeyActors();
+        //List<KeyActor> keyActors = createKeyActors();
 
         for(Entity character : characters)
         {
@@ -70,8 +72,8 @@ public class InventorySystem extends EntitySystem {
                 im.get(character).createKeyBag(true);
                 im.get(character).getKeyBag().add(keys.get(0));
 
-                kvm.get(character).create();
-                kvm.get(character).addKey(keyActors.get(0));
+                //kvm.get(character).create();
+                //kvm.get(character).addKey(keyActors.get(0));
             }
 
             if(tc.TeamId == 1)
@@ -89,43 +91,51 @@ public class InventorySystem extends EntitySystem {
 
         //2 - 1 - 1 = 0
         //2 - 0 - 1 = 1
-        number = getRandomNumber()%2;
+        number = getRandomNumber();
         if(teamOne[number] !=  null) {
             im.get(teamOne[number]).createKeyBag(true);
             im.get(teamOne[number]).addKeyPart(keys.get(1));
 
-            kvm.get(teamOne[number]).create();
-            kvm.get(teamOne[number]).addKey(keyActors.get(1));
+            //kvm.get(teamOne[number]).create();
+            //kvm.get(teamOne[number]).addKey(keyActors.get(1));
         }
 
         if(teamOne[2 - number - 1] !=  null) {
             im.get(teamOne[2 - number - 1]).createKeyBag(false);
             im.get(teamOne[2 - number - 1]).keyBag = im.get(teamOne[number]).keyBag;
 
-            kvm.get(teamOne[2 - number - 1]).create();
-            kvm.get(teamOne[2 - number - 1]).addKey(keyActors.get(1));
+            //kvm.get(teamOne[2 - number - 1]).create();
+            //kvm.get(teamOne[2 - number - 1]).addKey(keyActors.get(1));
         }
 
-        number = getRandomNumber()%2;
+        number = getRandomNumber();
         if(teamTwo[number] !=  null) {
             im.get(teamTwo[number]).createKeyBag(true);
             im.get(teamTwo[number]).addKeyPart(keys.get(2));
 
-            kvm.get(teamTwo[number]).create();
-            kvm.get(teamTwo[number]).addKey(keyActors.get(2));
+            //kvm.get(teamTwo[number]).create();
+            //kvm.get(teamTwo[number]).addKey(keyActors.get(2));
         }
 
         if(teamTwo[2 - number - 1] !=  null) {
             im.get(teamTwo[2 - number - 1]).createKeyBag(false);
             im.get(teamTwo[2 - number - 1]).keyBag = im.get(teamTwo[number]).keyBag;
 
-            kvm.get(teamTwo[2 - number - 1]).create();
-            kvm.get(teamTwo[2 - number - 1]).addKey(keyActors.get(2));
+            //kvm.get(teamTwo[2 - number - 1]).create();
+            //kvm.get(teamTwo[2 - number - 1]).addKey(keyActors.get(2));
         }
 
         keys.clear();
-        keyActors.clear();
+        //keyActors.clear();
     }
+
+    /*public void drawKeys()
+    {
+        for(Entity character : characters)
+        {
+            kvm.get(character).render();
+        }
+    }*/
 
     public List<Key> createKeys()
     {
@@ -160,9 +170,9 @@ public class InventorySystem extends EntitySystem {
     public int getRandomNumber()
     {
         double number = Math.random();
-        number = number%2;
         Long l = Math.round(number);
         int i = Integer.valueOf(l.intValue());
+        i = i%2;
         return i;
     }
 }

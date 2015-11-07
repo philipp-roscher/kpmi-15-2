@@ -20,6 +20,7 @@ import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.PositionComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
@@ -66,7 +67,6 @@ public class InMaze implements Screen, PlayerObserver {
 	private BitmapFont         font;
 
     // Managers
-	public  BattleSystem  battleSys;        // manages battle
 	public EntityComponentSystem ECS;		// entity component system
 
 	// Media
@@ -94,10 +94,8 @@ public class InMaze implements Screen, PlayerObserver {
     /**
      * Creates an ingame object for rendering ingame action
      * @param game              the game main class itself
-     * @param battleSystem
      */
 	public InMaze(final KPMIPrototype game,
-                  BattleSystem battleSystem,
                   final World world,
                   final RayHandler rayHandler,
                   final MapInformation mapInformation,
@@ -132,7 +130,7 @@ public class InMaze implements Screen, PlayerObserver {
         // Light ...................................................................................
         RayHandler.useDiffuseLight(true);
         this.rayHandler = rayHandler;
-        this.rayHandler.setAmbientLight(.2f, .2f, .2f, 1);
+        this.rayHandler.setAmbientLight(.3f, .3f, .3f, 1);
         this.rayHandler.setBlurNum(3);
 
         // load media
@@ -140,9 +138,6 @@ public class InMaze implements Screen, PlayerObserver {
 		this.bgMusic.setLooping(true);  // always repeat background music
 		this.bgMusic.play();
 		this.bgMusic.setVolume(0.3f);
-
-        // set up managers
-		this.battleSys = battleSystem;
 
         // Tiled Map ...............................................................................
         this.maze = new Maze(mapInformation, world, game.mediaManager);
@@ -160,8 +155,13 @@ public class InMaze implements Screen, PlayerObserver {
 		}
         
 		// Set Up Client for Communication .........................................................
-		posUpdate = new PositionUpdate();
+		// add client to NetworkComponent
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).client = game.client;
+        
+        posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).posUpdate = posUpdate;
+        
 		networkMessages = new Array<Object>();
 
 		this.keepAliveRequest = new KeepAliveRequest(game.clientId);
@@ -239,10 +239,7 @@ public class InMaze implements Screen, PlayerObserver {
 		elapsedTimeSec = (int) elapsedTime;
 
         // Update Player
-        DynamicBodyComponent temp = ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class);
-        NetworkTransmissionComponent ntc = new NetworkTransmissionComponent();
-        ntc.position = temp.dynamicBody.getPosition();
-        posUpdate.position = ntc;
+        posUpdate.position = ECS.getLocalCharacterEntity().getComponent(NetworkTransmissionComponent.class);
         game.client.sendUDP(posUpdate);
 
         // ............................................................................... RENDERING
