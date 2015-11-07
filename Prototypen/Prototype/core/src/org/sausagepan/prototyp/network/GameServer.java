@@ -49,17 +49,25 @@ public class GameServer {
 	
 	public static Server server;
 	public static int maxId = 1;
+	
+	// contains client ids
 	public static HashMap<InetSocketAddress,Integer> clientIds;
+	// contains current positions of all characters sent by positionupdates
 	public static HashMap<Integer,NetworkTransmissionComponent> positions;
+	// saves the last time each client was active, used for kicking inactive clients
 	public static HashMap<Integer,Long> lastAccess;
+	// contains the classes of all characters
 	public static HashMap<Integer,HeroInformation> cm;
+	// contains the constellation of the individual tiles
 	public static MapInformation map;
 	
 	private static ServerPlayerManager playerMan = new ServerPlayerManager();
+	// manages the characters
 	private static ServerCharacterSystem serverCharacterSystem = new ServerCharacterSystem();
 	private ServerBattleSystem bs;
 	
 	public static void main (String[] args) {
+		// starts new server
 		GameServer gs = new GameServer();
 	}
 
@@ -120,7 +128,7 @@ public class GameServer {
 							Collection<Integer> ClientCol = clientIds.values();
 							//Sets Team-number like following: 1-2-0-1-2
 							int TeamId = 1;			//TeamId init here so it resets for ever time teams are assigned
-							for (i=1; i<=ClientCol.size(); i++) {
+							for (int i=1; i<=ClientCol.size(); i++) {
 									//TODO better if statement to check if CleintId is still active
 								if (!ClientCol.isEmpty()) {
 									//send Team-Info to Clients
@@ -208,12 +216,12 @@ public class GameServer {
 		}
 	}
 	
+	// saves current timestamp for a players last activity
 	public static void updateLastAccess(int clientId) {
 		lastAccess.put(clientId, System.nanoTime());
 	}
 	
-	public static int i;
-	
+	// sends current positions of all characters to all clients, is executed a defined amount of times per second
 	static Runnable updateGameState = new Runnable() {
 		public void run() {
 			if(clientIds.size() > 0) {
@@ -225,6 +233,7 @@ public class GameServer {
 		}	
 	};
 	
+	// deletes all characters that haven't been active in the last x seconds
 	static Runnable deleteOldClients = new Runnable() {
 	    public void run() {
 	        for(Map.Entry<Integer,Long> ltime : lastAccess.entrySet())
@@ -242,6 +251,9 @@ public class GameServer {
 	    }
 	};
 	
+	// inflicts damage to a certain character
+	// TODO: update to new system
+	@Deprecated
 	public void inflictDamage(int playerId, int damage) {
 		ServerPlayer player = playerMan.players.get(playerId);
 		player.getStatus_().doPhysicalHarm(damage);
@@ -256,6 +268,7 @@ public class GameServer {
 		server.sendToAllTCP(new HPUpdate(playerId, player.getStatus_().getHP()));
 	}
 	
+	// generates random map with given width and height
 	public void setupMap(int width, int height) {
 		this.map = new MapInformation();
 		map.height = height;
@@ -267,6 +280,7 @@ public class GameServer {
 				map.entries.put(new Vector2(i,j), MathUtils.random(1,11));
 	}
 	
+	// stops the server
 	public void stop() {
 		server.stop();
 	}
