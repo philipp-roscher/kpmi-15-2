@@ -40,6 +40,7 @@ public class SpriteSystem extends ObservingEntitySystem {
             if(e.getComponent(SpriteComponent.class) != null)
                 tmr.addSprite(e.getComponent(SpriteComponent.class).sprite);
             if(e.getComponent(WeaponComponent.class) != null) {
+                System.out.println("WeaponComponent hinzugefügt");
                 tmr.addWeaponComponent(e.getComponent(WeaponComponent.class));
             }
             if(e.getComponent(CharacterSpriteComponent.class) != null)

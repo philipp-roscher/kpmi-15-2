@@ -23,6 +23,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.PositionComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
@@ -147,16 +148,19 @@ public class InMaze implements Screen, PlayerObserver {
         this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass, TeamId);
         // Entity-Component-System ............................................................. END
 
+        // adds all the player of the FullGameStateResponse
 		for(Entry<Integer, HeroInformation> e : otherCharacters.entrySet()) {
 			Integer heroId = e.getKey();
 			HeroInformation hero = e.getValue();
 			CharacterEntity newCharacter = ECS.addNewCharacter(heroId, hero);
     		maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+    		maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
 		}
         
 		// Set Up Client for Communication .........................................................
 		// add client to NetworkComponent
         ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).client = game.client;
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).id = game.clientId;
         
         posUpdate = new PositionUpdate();
 		posUpdate.playerId = game.clientId;
@@ -302,6 +306,7 @@ public class InMaze implements Screen, PlayerObserver {
 				NewHeroResponse request = (NewHeroResponse) object;
         		CharacterEntity newCharacter = ECS.addNewCharacter(request);
         		maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+        		maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
         		
 				/*playerMan.addCharacter(
 						request.playerId,
@@ -343,6 +348,12 @@ public class InMaze implements Screen, PlayerObserver {
 			
 			if (object instanceof AttackResponse) {
 				AttackResponse result = (AttackResponse) object;
+				if(result.playerId != game.clientId) {
+					if(result.stop == false)
+						ECS.attack(result.playerId);
+					else
+						ECS.stopAttacking(result.playerId);
+				}
 //				if(result.stop == false)
 //					playerMan.players.get(result.playerId).getBattle().attack();
 //				else 

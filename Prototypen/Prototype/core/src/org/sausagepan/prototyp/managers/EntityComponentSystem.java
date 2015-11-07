@@ -295,6 +295,7 @@ public class EntityComponentSystem {
         newCharacter.add(new LightComponent(rayHandler));
         newCharacter.add(new NetworkTransmissionComponent());
         newCharacter.add(new TeamComponent(TeamId));
+        newCharacter.add(new InputComponent());
 
         if (newHero.clientClass.equals("knight")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
@@ -363,6 +364,22 @@ public class EntityComponentSystem {
 
 	public void deleteCharacter(int playerId) {
 		//TODO Spieler l�schen (Philipp)
+	}
+	
+	public void attack(int id) {
+		if(characters.get(id) != null) {
+			System.out.println("Character greift an: "+id);
+			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = true;
+//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
+		}
+	}
+
+	public void stopAttacking(int id) {
+		if(characters.get(id) != null) {
+			System.out.println("Character bricht Angriff ab: "+id);
+			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = false;
+//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
+		}
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */
