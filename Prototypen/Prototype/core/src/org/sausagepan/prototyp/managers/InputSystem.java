@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
@@ -33,6 +34,9 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
             = ComponentMapper.getFor(InputComponent.class);
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
+    private ComponentMapper<NetworkComponent> nm
+    		= ComponentMapper.getFor(NetworkComponent.class);
+
 
     private float ax, ay;
     private Vector2 directionVector;
@@ -53,7 +57,8 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,
                 InputComponent.class,
-                WeaponComponent.class).get());
+                WeaponComponent.class,
+                NetworkComponent.class).get());
     }
 
     public void update(float deltaTime) {
@@ -124,14 +129,17 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
             WeaponComponent weapon = wm.get(entity);
+            NetworkComponent network = nm.get(entity);
             switch(keycode) {
                 case Input.Keys.UP:     input.direction = Direction.NORTH;break;
                 case Input.Keys.LEFT:   input.direction = Direction.WEST;break;
                 case Input.Keys.RIGHT:  input.direction = Direction.EAST;break;
                 case Input.Keys.DOWN:   input.direction = Direction.SOUTH;break;
                 case Input.Keys.A:
-                    input.weaponDrawn = true;System.out.println("Attacking!");
+                    input.weaponDrawn = true;
+                    System.out.println("Attacking!");
                     weapon.weapon.justUsed = true;
+                    network.attack();                    
                     break;
                 default:break;
             }
@@ -144,7 +152,11 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     public boolean keyUp(int keycode) {
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
-            if (keycode == Input.Keys.A) input.weaponDrawn = false;
+            NetworkComponent network = nm.get(entity);
+            if (keycode == Input.Keys.A) {
+            	input.weaponDrawn = false;
+            	network.stopAttacking();
+            }
         }
         return true;
     }

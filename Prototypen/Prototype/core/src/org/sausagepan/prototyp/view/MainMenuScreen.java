@@ -49,12 +49,10 @@ public class MainMenuScreen implements Screen {
 	private final World world;
     private final RayHandler rayHandler;
     private MapInformation mapInformation;
-    private HashMap<Integer,HeroInformation> otherCharacters;
 	String serverIp;
 
 	private boolean heroRequestSent = false;
-	private boolean FGSRequestSent = false;
-	private boolean FGSResponseReceived = false;
+	private boolean mapInformationReceived = false;
 	
 	//chosen Player Class
 	private String clientClass;
@@ -81,16 +79,10 @@ public class MainMenuScreen implements Screen {
 
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
-				if (object instanceof FullGameStateResponse) {
-					System.out.println("FullGameStaterRESPONSE");
-					FullGameStateResponse response = (FullGameStateResponse) object;
-					MainMenuScreen.this.mapInformation = response.mapInformation;
-					otherCharacters = response.heroes;
-					
-					if (otherCharacters.containsKey(game.clientId))
-						otherCharacters.remove(game.clientId);
-					
-					FGSResponseReceived = true;
+				if (object instanceof MapInformation) {
+					System.out.println("Received MapInformation");
+					MainMenuScreen.this.mapInformation = (MapInformation)object;
+					mapInformationReceived = true;
 				}
 			}
 
@@ -106,9 +98,8 @@ public class MainMenuScreen implements Screen {
  	   	System.out.println(mapInformation.height + " " + mapInformation.width);
 
 		System.out.println("Assigned teamId is: "+game.TeamId);
-		System.out.println("Other players: " + otherCharacters.size());
 
-		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, otherCharacters, clientClass, game.TeamId));
+		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, clientClass, game.TeamId));
 	}
 
 	//random chose Class for clients according to their TeamId
@@ -158,12 +149,6 @@ public class MainMenuScreen implements Screen {
 		game.batch.end();
 		System.out.println("Chosen Client Class is: " + clientClass);
 
-		//wait for 2 seconds
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		clientSel = true;
 
 	}
@@ -227,10 +212,12 @@ public class MainMenuScreen implements Screen {
 		if(game.connected == true && game.clientId != 0) {
 
 
-			if (FGSResponseReceived && game.TeamAssignmentReceived) {
+			if (game.TeamAssignmentReceived) {
 
 				//class selection
-				randomClassSel();
+				if (!clientSel) {
+					randomClassSel();
+				}
 
 				//send Hero/Client info to server after class Selection
 				if(!heroRequestSent && clientSel) {
@@ -242,12 +229,6 @@ public class MainMenuScreen implements Screen {
 					);
 					heroRequestSent = true;
 				}
-			}
-
-			//sends data about Map and Clients
-			if(!FGSRequestSent) {
-				game.client.sendTCP(new FullGameStateRequest());
-				FGSRequestSent = true;
 			}
 			
 			//waiting for full group of players
@@ -269,12 +250,12 @@ public class MainMenuScreen implements Screen {
 				game.batch.end();
 
 				//after sending infos was successful: start game
-				if (FGSResponseReceived && heroRequestSent &&clientSel) {
+				if (mapInformationReceived) {
 					setUpGame();
 				}
 			}
 
-			//many players
+			//too many players
 			if(game.clientCount > game.maxClients) {
 				game.font.setColor(1, 0, 0, 1);
 				game.font.draw(game.batch, "Sorry, server is already full!"+game.clientCount+"/"+game.maxClients, 320, 380);
@@ -283,7 +264,6 @@ public class MainMenuScreen implements Screen {
 			}
 			dispose();
 		}
-
 		
 		// Update camera
 		camera.update();

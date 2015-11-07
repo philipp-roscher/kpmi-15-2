@@ -22,6 +22,7 @@ import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.MazeGenerator;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
@@ -79,6 +80,10 @@ public class Maze extends EntitySystem {
     /* ..................................................................... GETTERS & SETTERS .. */
     public void addCharacterSpriteComponent(CharacterSpriteComponent spriteComponent) {
         this.tiledMapRenderer.addCharacterSpriteComponent(spriteComponent);
+    }
+    
+    public void addWeaponComponent(WeaponComponent weaponComponent) {
+    	this.tiledMapRenderer.addWeaponComponent(weaponComponent);
     }
 
     public OrthogonalTiledMapRendererWithPlayers getTiledMapRenderer() {

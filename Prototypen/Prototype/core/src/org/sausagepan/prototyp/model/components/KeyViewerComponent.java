@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -54,9 +55,11 @@ public class KeyViewerComponent implements ApplicationListener, Component {
     @Override
     public void render() {
 
-        stage.getBatch().begin();
+        if(stage == null)
+            return;
+
+        stage.act();
         stage.draw();
-        stage.getBatch().end();
     }
 
     @Override
@@ -84,6 +87,7 @@ public class KeyViewerComponent implements ApplicationListener, Component {
     public Array<Actor> removeKeys()
     {
         Array<Actor> actors = stage.getActors();
+        actors.removeIndex(0);
         stage.clear();
         stage.addActor(keyBackground);
         return actors;

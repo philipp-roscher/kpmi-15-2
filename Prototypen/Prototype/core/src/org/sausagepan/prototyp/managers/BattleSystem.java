@@ -19,6 +19,7 @@ import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
@@ -86,6 +87,7 @@ public void addedToEngine(ObservableEngine engine) {
             HealthComponent.class,
             DynamicBodyComponent.class,
             WeaponComponent.class,
+            NetworkComponent.class,
             InjurableAreaComponent.class).get());
     victims = engine.getEntitiesFor(Family.all(
             HealthComponent.class,

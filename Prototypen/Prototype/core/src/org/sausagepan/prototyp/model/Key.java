@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import org.sausagepan.prototyp.User_Interface.Actors.KeyActor;
 import org.sausagepan.prototyp.enums.KeySection;
 import org.sausagepan.prototyp.graphics.EntitySprite;
 
@@ -16,13 +17,15 @@ public class Key {
 
     /*..................................................................................Attributes*/
     private KeySection keySection;
+    private KeyActor keyActor;
     private EntitySprite sprite;
     private Rectangle collider;
 
     /*.................................................................................Constructor*/
-    public Key(KeySection keySection, TextureAtlas.AtlasRegion region)
+    public Key(KeySection keySection, TextureAtlas.AtlasRegion region, KeyActor keyActor)
     {
         this.keySection = keySection;
+        this.keyActor = keyActor;
         this.sprite = new EntitySprite(region);
         this.sprite.setSize(this.sprite.getWidth()*2, this.sprite.getHeight()*2);
         this.sprite.visible = false;
@@ -35,6 +38,8 @@ public class Key {
     public EntitySprite getSprite() { return this.sprite; }
 
     public Rectangle getCollider() { return this.collider; }
+
+    public KeyActor getKeyActor() { return this.keyActor;}
 
 
 }
