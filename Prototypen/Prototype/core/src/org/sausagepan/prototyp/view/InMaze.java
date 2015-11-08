@@ -37,6 +37,7 @@ import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.HeroInformation;
+import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.NetworkPosition;
 
 import com.badlogic.gdx.Gdx;
@@ -171,6 +172,7 @@ public class InMaze implements Screen, PlayerObserver {
 						(object instanceof DeleteHeroResponse) ||
 						(object instanceof GameStateResponse) ||
 						(object instanceof AttackResponse) ||
+						(object instanceof ShootResponse) ||
 						(object instanceof HPUpdate) ||
 						(object instanceof FullGameStateResponse)) {
 					// System.out.println( object.getClass() +" empfangen");
@@ -354,10 +356,13 @@ public class InMaze implements Screen, PlayerObserver {
 						else
 							ECS.stopAttacking(result.playerId);
 					}
-	//				if(result.stop == false)
-	//					playerMan.players.get(result.playerId).getBattle().attack();
-	//				else 
-	//					playerMan.players.get(result.playerId).getBattle().stopAttacking();
+				}	
+				
+				if (object instanceof ShootResponse) {
+					ShootResponse result = (ShootResponse) object;
+					if(result.playerId != game.clientId) {
+						ECS.shoot(result);
+					}
 				}	
 				
 				if (object instanceof HPUpdate) {

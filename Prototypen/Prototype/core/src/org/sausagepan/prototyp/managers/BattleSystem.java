@@ -53,6 +53,8 @@ public class BattleSystem extends ObservingEntitySystem {
             = ComponentMapper.getFor(InjurableAreaComponent.class);
     private ComponentMapper<CharacterSpriteComponent> sm
             = ComponentMapper.getFor(CharacterSpriteComponent.class);
+    private ComponentMapper<NetworkComponent> nm
+    		= ComponentMapper.getFor(NetworkComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
     public BattleSystem(ObservableEngine engine) {this.engine = engine;}
@@ -99,6 +101,7 @@ public void addedToEngine(ObservableEngine engine) {
         for (Entity attacker : attackers) {
             WeaponComponent weapon = wm.get(attacker);
             DynamicBodyComponent body = dm.get(attacker);
+            NetworkComponent network = nm.get(attacker);
 
             // Check victims for damage
             for(Entity v : victims) {
@@ -117,6 +120,7 @@ public void addedToEngine(ObservableEngine engine) {
                         if(weapon.weapon.getClass().equals(Bow.class)) {
                             Bow bow = (Bow)weapon.weapon;
                             bow.shoot(body.dynamicBody.getPosition(),body.direction);
+                            network.shoot(body.dynamicBody.getPosition(),body.direction);
                             weapon.weapon.justUsed = false; // usage over, waiting for next attack
                         }
                     }

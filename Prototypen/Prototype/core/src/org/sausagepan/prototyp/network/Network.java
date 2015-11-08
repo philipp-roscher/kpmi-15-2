@@ -30,6 +30,8 @@ public class Network {
 		kryo.register(PositionUpdate.class);
 		kryo.register(AttackRequest.class);
 		kryo.register(AttackResponse.class);
+		kryo.register(ShootRequest.class);
+		kryo.register(ShootResponse.class);
 		kryo.register(HPUpdate.class);
 		kryo.register(GameStateRequest.class);
 		kryo.register(GameStateResponse.class);
@@ -119,6 +121,32 @@ public class Network {
 		public AttackResponse(int playerId, boolean stop) {
 			this.playerId = playerId;
 			this.stop = stop;
+		}
+	}
+	
+	public static class ShootRequest {
+		public int playerId;
+		public Vector2 position;
+		public Vector2 direction;
+
+		public ShootRequest() { }
+		public ShootRequest(int playerId, Vector2 position, Vector2 direction) {
+			this.playerId = playerId;
+			this.position = position;
+			this.direction = direction;
+		}
+	}
+	
+	public static class ShootResponse {
+		public int playerId;
+		public Vector2 position;
+		public Vector2 direction;
+
+		public ShootResponse() { }
+		public ShootResponse(int playerId, Vector2 position, Vector2 direction) {
+			this.playerId = playerId;
+			this.position = position;
+			this.direction = direction;
 		}
 	}
 	

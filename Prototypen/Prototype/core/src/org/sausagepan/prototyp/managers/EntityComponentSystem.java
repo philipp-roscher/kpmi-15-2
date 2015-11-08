@@ -37,6 +37,7 @@ import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.network.HeroInformation;
+import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
@@ -404,6 +405,13 @@ public class EntityComponentSystem {
 			System.out.println("Character bricht Angriff ab: "+id);
 			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = false;
 //			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
+		}
+	}
+	
+	public void shoot(ShootResponse sr) {
+		if(characters.get(sr.playerId) != null) {
+			System.out.println("Character schießt: "+sr.playerId);
+			((Bow)this.characters.get(sr.playerId).getComponent(WeaponComponent.class).weapon).shoot(sr.position, sr.direction);
 		}
 	}
 	

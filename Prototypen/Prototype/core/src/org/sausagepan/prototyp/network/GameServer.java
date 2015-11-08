@@ -33,6 +33,8 @@ import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.HPUpdate;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
+import org.sausagepan.prototyp.network.Network.ShootRequest;
+import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 
@@ -152,6 +154,11 @@ public class GameServer {
 					   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
 					   if(request.stop == false)
 						   bs.attack(playerMan.players.get(request.playerId), playerMan.getPlayers());
+		           }
+		           
+		           if (object instanceof ShootRequest) {
+		        	   ShootRequest request = (ShootRequest) object;
+		        	   server.sendToAllUDP(new ShootResponse(request.playerId, request.position, request.direction));
 		           }
 		        }
 		        

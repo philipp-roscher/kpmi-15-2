@@ -168,10 +168,10 @@ public class InventorySystem extends ObservingEntitySystem {
 
     public void drawKeys()
     {
-        for(int x= 0; x < characters.size(); x++)
+        /*for(int x= 0; x < characters.size(); x++)
             System.out.println("TeamId: " + characters.get(x).getComponent(TeamComponent.class).TeamId);
 
-        System.out.println("Size: " + characters.size());
+        System.out.println("Size: " + characters.size());*/
 
         for(Entity character : characters)
         {
