@@ -21,6 +21,7 @@ import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
@@ -39,6 +40,7 @@ import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.NetworkPosition;
+import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
 import box2dLight.RayHandler;
@@ -197,6 +199,7 @@ public class EntityComponentSystem {
         localCharacter.add(new NetworkTransmissionComponent());
         localCharacter.add(new TeamComponent(TeamId));
         localCharacter.add(new NetworkComponent());
+        localCharacter.add(new IdComponent(localCharacterId));
 
         if (clientClass.equals("knight_m")) {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
@@ -309,6 +312,7 @@ public class EntityComponentSystem {
         newCharacter.add(new NetworkTransmissionComponent());
         newCharacter.add(new TeamComponent(TeamId));
         newCharacter.add(new InputComponent());
+        newCharacter.add(new IdComponent(newCharacterId));
 
         if (newHero.clientClass.equals("knight_m")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
@@ -415,6 +419,11 @@ public class EntityComponentSystem {
 			System.out.println("Character schießt: "+sr.playerId);
 			((Bow)this.characters.get(sr.playerId).getComponent(WeaponComponent.class).weapon).shoot(sr.position, sr.direction);
 		}
+	}
+
+	public void updateHP(HPUpdateResponse result) {
+		if(characters.get(result.playerId) != null)
+			this.characters.get(result.playerId).getComponent(HealthComponent.class).HP = result.HP;		
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */

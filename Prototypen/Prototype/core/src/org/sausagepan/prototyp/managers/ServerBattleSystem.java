@@ -27,10 +27,11 @@ public class ServerBattleSystem {
             	System.out.println(attacker.getWeaponCollider());
             	System.out.println(c.getDamageCollider());
                 if (attacker.getWeaponCollider().overlaps(c.getDamageCollider()))
-                    gameServer.inflictDamage(
+                	break;
+                    /*gameServer.inflictDamage(
                     		c.getId(),
                             attacker.getWeapon().getDamage()
-                                    + attacker.getStatus_().getAttPhys());
+                                    + attacker.getStatus_().getAttPhys());*/
             }
         }
     }

@@ -15,6 +15,7 @@ import org.sausagepan.prototyp.model.*;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
@@ -26,6 +27,7 @@ import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
+import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each
@@ -114,7 +116,7 @@ public void addedToEngine(ObservableEngine engine) {
                         // Handle Sword
                         if(weapon.weapon.getClass().equals(Sword.class))
                             if (((Sword)weapon.weapon).checkHit(area.area))
-                                caluclateDamage(weapon, health);
+                                calculateDamage(weapon, health, v, network);
 
                         // Handle Bow
                         if(weapon.weapon.getClass().equals(Bow.class)) {
@@ -128,7 +130,7 @@ public void addedToEngine(ObservableEngine engine) {
                     // If weapon is a bow
                     if(weapon.weapon.getClass().equals(Bow.class))
                         if(((Bow)weapon.weapon).checkHit(area.area))
-                            caluclateDamage(weapon, health);
+                            calculateDamage(weapon, health, v, network);
                 }
 
                 if(v.getClass().equals(MonsterEntity.class) && hm.get(v).HP == 0) {
@@ -143,9 +145,12 @@ public void addedToEngine(ObservableEngine engine) {
         }
     }
 
-    public void caluclateDamage(WeaponComponent weapon, HealthComponent health) {
+    public void calculateDamage(WeaponComponent weapon, HealthComponent health, Entity victim, NetworkComponent network) {
         if(health.HP - weapon.weapon.strength > 0) health.HP -= weapon.weapon.strength;
         else health.HP = 0;
+        
+        if(victim.getClass().equals(CharacterEntity.class))
+        	network.sendHPUpdate(new HPUpdateRequest(victim.getComponent(IdComponent.class).id, health.HP));
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */

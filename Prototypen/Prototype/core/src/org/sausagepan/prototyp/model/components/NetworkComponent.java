@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Client;
 
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
+import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 
 /**
@@ -34,6 +35,10 @@ public class NetworkComponent implements Component {
 
 	public void shoot(Vector2 position, Vector2 direction) {
 		client.sendUDP(new ShootRequest(id,position,direction));		
+	}
+	
+	public void sendHPUpdate(HPUpdateRequest hpupdate) {
+		client.sendTCP(hpupdate);
 	}
     
     /* ..................................................................... GETTERS & SETTERS .. */

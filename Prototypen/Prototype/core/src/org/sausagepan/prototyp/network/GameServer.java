@@ -30,7 +30,8 @@ import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
-import org.sausagepan.prototyp.network.Network.HPUpdate;
+import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
+import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
@@ -152,13 +153,18 @@ public class GameServer {
 		           if (object instanceof AttackRequest) {
 					   AttackRequest request = (AttackRequest)object;
 					   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
-					   if(request.stop == false)
-						   bs.attack(playerMan.players.get(request.playerId), playerMan.getPlayers());
+					   /* if(request.stop == false)
+						   bs.attack(playerMan.players.get(request.playerId), playerMan.getPlayers()); */
 		           }
 		           
 		           if (object instanceof ShootRequest) {
 		        	   ShootRequest request = (ShootRequest) object;
 		        	   server.sendToAllUDP(new ShootResponse(request.playerId, request.position, request.direction));
+		           }
+		           
+		           if (object instanceof HPUpdateRequest) {
+		        	   HPUpdateRequest request = (HPUpdateRequest) object;
+		        	   server.sendToAllTCP(new HPUpdateResponse(request.playerId, request.HP));
 		           }
 		        }
 		        
@@ -257,7 +263,8 @@ public class GameServer {
 	
 	// inflicts damage to a certain character
 	// TODO: update to new system
-	@Deprecated
+	/*
+	 * @Deprecated
 	public void inflictDamage(int playerId, int damage) {
 		ServerPlayer player = playerMan.players.get(playerId);
 		player.getStatus_().doPhysicalHarm(damage);
@@ -270,7 +277,7 @@ public class GameServer {
 		System.out.println(damage + " Schaden an Spieler Nr. "+playerId+", hat jetzt noch "+ player.getStatus_().getHP() +" HP.");
 		
 		server.sendToAllTCP(new HPUpdate(playerId, player.getStatus_().getHP()));
-	}
+	}*/
 	
 	// generates random map with given width and height
 	public void setupMap(int width, int height) {

@@ -30,7 +30,7 @@ import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
-import org.sausagepan.prototyp.network.Network.HPUpdate;
+import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
@@ -173,7 +173,7 @@ public class InMaze implements Screen, PlayerObserver {
 						(object instanceof GameStateResponse) ||
 						(object instanceof AttackResponse) ||
 						(object instanceof ShootResponse) ||
-						(object instanceof HPUpdate) ||
+						(object instanceof HPUpdateResponse) ||
 						(object instanceof FullGameStateResponse)) {
 					// System.out.println( object.getClass() +" empfangen");
 					networkMessages.add(object);
@@ -365,9 +365,9 @@ public class InMaze implements Screen, PlayerObserver {
 					}
 				}	
 				
-				if (object instanceof HPUpdate) {
-					HPUpdate result = (HPUpdate) object;
-					
+				if (object instanceof HPUpdateResponse) {
+					HPUpdateResponse result = (HPUpdateResponse) object;
+					ECS.updateHP(result);
 	//				playerMan.players.get(result.playerId).getStatus_().setHP(result.HP);
 				}
 			}
