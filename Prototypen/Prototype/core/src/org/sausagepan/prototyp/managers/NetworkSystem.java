@@ -28,7 +28,7 @@ public class NetworkSystem extends ObservingEntitySystem{
     private ComponentMapper<NetworkTransmissionComponent> ntm
             = ComponentMapper.getFor(NetworkTransmissionComponent.class);
     private ComponentMapper<NetworkComponent> nm
-    = ComponentMapper.getFor(NetworkComponent.class);
+    		= ComponentMapper.getFor(NetworkComponent.class);
     private ComponentMapper<InputComponent> im
             = ComponentMapper.getFor(InputComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
@@ -51,6 +51,7 @@ public class NetworkSystem extends ObservingEntitySystem{
             NetworkComponent network = nm.get(entity);
             InputComponent input = im.get(entity);
             networkTransmissionComponent.moving     = input.moving;
+            networkTransmissionComponent.direction  = input.direction;
             networkTransmissionComponent.linearVelocity = body.dynamicBody.getLinearVelocity();
             networkTransmissionComponent.position   = body.dynamicBody.getPosition();
             network.posUpdate.position = networkTransmissionComponent;

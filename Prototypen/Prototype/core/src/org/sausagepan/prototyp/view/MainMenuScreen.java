@@ -230,12 +230,10 @@ public class MainMenuScreen implements Screen {
 					heroRequestSent = true;
 				}
 			}
-			
-			//waiting for full group of players
-			game.batch.begin();
 
-			//too less clients
+			//too few clients
 			if(game.clientCount < game.maxClients) {
+				game.batch.begin();
 				game.font.setColor(1, 0, 0, 1);
 				game.font.draw(game.batch, "Waiting for players... " + game.clientCount + "/" + game.maxClients, 320, 380);
 				game.font.setColor(1, 1, 1, 1);
@@ -244,6 +242,7 @@ public class MainMenuScreen implements Screen {
 
 			//right amount of players: set up game
 			if(game.clientCount == game.maxClients) {
+				game.batch.begin();
 				game.font.setColor(0, 1, 0, 1);
 				game.font.draw(game.batch, "Starting... " + game.clientCount + "/" + game.maxClients, 340, 380);
 				game.font.setColor(1, 1, 1, 1);
@@ -257,6 +256,7 @@ public class MainMenuScreen implements Screen {
 
 			//too many players
 			if(game.clientCount > game.maxClients) {
+				game.batch.begin();
 				game.font.setColor(1, 0, 0, 1);
 				game.font.draw(game.batch, "Sorry, server is already full!"+game.clientCount+"/"+game.maxClients, 320, 380);
 				game.font.setColor(1, 1, 1, 1);

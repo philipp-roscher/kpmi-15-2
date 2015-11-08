@@ -12,6 +12,7 @@ public class NetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Vector2 position = new Vector2(0,0);
     public Vector2 linearVelocity = new Vector2(0,0);
+    public Direction direction;
     public boolean moving = false;
 
     /* ........................................................................... CONSTRUCTOR .. */

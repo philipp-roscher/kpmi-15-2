@@ -385,6 +385,8 @@ public class EntityComponentSystem {
 		if(characters.get(id) != null) {
 			this.characters.get(id).getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(position.position, 0f);
 			this.characters.get(id).getComponent(DynamicBodyComponent.class).dynamicBody.setLinearVelocity(position.linearVelocity);
+			if(position.direction != null)
+				this.characters.get(id).getComponent(InputComponent.class).direction = position.direction;
 		}
 	}
 
