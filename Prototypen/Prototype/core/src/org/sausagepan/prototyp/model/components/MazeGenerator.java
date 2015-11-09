@@ -270,7 +270,10 @@ public class MazeGenerator {
             nmo.getRectangle().set(pos);
 
             // ad recently created new collider object to layer
-            colliderWalls.getObjects().add(nmo);
+            if (layer.equals("colliderWalls"))
+            	colliderWalls.getObjects().add(nmo);
+            else if (layer.equals("gameMasterColliderWalls"))
+            	gameMasterColliderWalls.getObjects().add(nmo);
 
             colliderWalls.setName("colliderWalls");
             gameMasterColliderWalls.setName("gameMasterColliderWalls");
