@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+  <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
+ </tileset>
+ <layer name="ground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzdVk1PwzAMzaR1u67dxi6wQSX4/z+mSGvZDqi/A4lEa8STZTuJVzhweKqTJn7Pdr42C+c2BtQevXNudDe7Nvqx4j/xd97HNYF30g5zln5utUjPlfxF/n7yd/H4IP+6yQ482D+AvS2INY4dCccSxmBMX4LmyL8j/g+ZOiL/lXBL46Ida0XnSDlowN4zMWo5ovwV9Gua78GetEdBIzfWipWQg3qK+TWRo9Ra42qxBruHGLm93Ho8CTokBB/P0D4pee1JjumapjokLQ/AHb6P8O+Ywc/VQUILGmi+3iaNL/APtVP9NH4NDdGAvpA3R38Jv3autAwvNx7rKq2/Elj2QM76K6mBFdq50pGz/t68NEy/Fn+810vykDoLac40/rNvfwr8YY/uFL+W/FP+QYl/EPqlM+sv+NeF3Cl+DWdmbM5amYs/xt9k8FvvHw3cuwN94R7LuX/CGyjyc+/gC9jSm6cibe4eoHfF6H7eX/GNi/5z1vNW0EDvH6zVEfgt+Q/IfXdxMdA6WPgtOPwSf8itZf/PGb9l/8+B1QyxfwO4HKeW
+  </data>
+ </layer>
+ <layer name="walls" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztVtsOgjAMnT/iV0pEBH9AnzCigI/64C2RyAfaE7fYLBsSsmQQPEkDOe3oodm6CjEcLMlisoRsxfgFWcR8kRZr4ufat0OLL9S4gqw05D9Inyn/2sDv2PoZWUaWy2/AFzC+0OJd4CWf0JWS1Zpvq/EqPnSoAXVDLZ8GX2XhM4f59x3W1L9DnCPwkJMDeyH2qAN7oZA6cH4iT1qgA2f0ILVEljjUam3gwW3kOr3/dNECHThDqhboF+hLqNWF7MbiH5K7ynWu+gnOEGqBf0O/OLZc9/od0hqoBf7N1C+GCOzxxGN+7PHSY/4//ugTTmRn8emvrsHnSDXD8rl1ybi04Tv8PoRO2/3D43B3HMV3nlYzrJpx8cwZ19Rft+wdOm33D49T81cp2t8bNlTsvUln1eAbA+6+BfQE08m48yu8ASbzWrE=
+  </data>
+ </layer>
+ <layer name="objects" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJxjYBiaIJERle3GxMBQDWR3A3EtEFcxQPgg8VqoeDUU11DB/npGVPYMID0TiFcC8WwGBH8WlL8SyoeJEQIgd9MKnAS615kJ1R57JlQMA9ZMCExNADLPDc0eB6g9TmjitAA2OMw9zYhdfKQDdxqmR1LAYHEHCCC75SQjdnF8ekYB7UAulnDGJkYrkI/FLmxio4A8cHK0nB4FwwzA2rEwAGInUpDOI4B6IxkRNCFQj0UNNjFsAN3dIFAG1FvOiKDR1dEbOA9w+TsVrW09EGAg7R8sZbYAIwQPtBsGAwAAumwiSQ==
+  </data>
+ </layer>
+ <layer name="tops" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzFVlFOwzAMtbjIoMAGg7Ef+OEHAX/8sNJTAGPsBNwAuACHxRax5ho3TeZQLD1VtRM/x4mdjABglIkGsQ8bqRCniJPwJUzVP9tZ92D4tGyNoTsDvzwrn0tlY+6l0hFmBfhJxvCzthfDtlL6R7Bz75Eqcdwa2vl4K8SfKmNo7/vXwPwHgb9GPA3MTUJnQdfAayHfOX4oDq7RO8QEcYQ4Fl/GxNBZ2LaWrJzwGbV6j+xLUzHPu6eV8KVr8x3xEfCp5sn+QzHsOWLgXFh9JCZcVyV7Gsv9Tr/uUPB7c6ClNvi1Tq6fY7hFnCMuEJcF47FE8zNYrqBsTlL4Z8peel/6+OeGff576qD8NZTtuTF+nf+u2P6DP9Yj1mJcLE9y3MLgl2+7nPXLsbRf+u7hf4tTvjOvYVP/N9C+R2L9VfI3YN87XfcV6b1vulXw3Yg4rfuHx/1F36d+nnJGZa5KvOWl31x+Oit0Lkr0uG34dRwaOT3Hw9+F1PxQXS/C+L7676pBTxze+s+Jw4ohJ6de6Bh2Hev6BkC4VCU=
+  </data>
+ </layer>
+ <objectgroup name="colliderWalls" width="0" height="0">
+  <object x="352" y="320" width="32" height="16"/>
+  <object x="288" y="288" width="32" height="16"/>
+  <object x="448" y="352" width="32" height="16"/>
+  <object x="544" y="416" width="32" height="16"/>
+  <object x="608" y="416" width="32" height="16"/>
+  <object x="576" y="800" width="32" height="16"/>
+  <object x="672" y="800" width="32" height="16"/>
+  <object x="896" y="800" width="32" height="16"/>
+  <object x="352" y="768" width="32" height="16"/>
+  <object x="192" y="160" width="32" height="16"/>
+  <object x="224" y="160" width="32" height="16"/>
+  <object x="32" y="160" width="32" height="16"/>
+  <object x="0" y="0" width="480" height="96"/>
+  <object x="0" y="96" width="448" height="32"/>
+  <object x="0" y="128" width="448" height="32"/>
+  <object x="0" y="160" width="192" height="32"/>
+  <object x="256" y="160" width="192" height="32"/>
+  <object x="288" y="192" width="96" height="128"/>
+  <object x="384" y="256" width="96" height="96"/>
+  <object x="480" y="288" width="256" height="96"/>
+  <object x="512" y="384" width="160" height="32"/>
+  <object x="576" y="416" width="32" height="32"/>
+  <object x="704" y="416" width="32" height="64"/>
+  <object x="864" y="416" width="32" height="64"/>
+  <object x="864" y="288" width="160" height="96"/>
+  <object x="544" y="0" width="480" height="96"/>
+  <object x="960" y="96" width="64" height="96"/>
+  <object x="992" y="384" width="32" height="288"/>
+  <object x="576" y="672" width="128" height="32"/>
+  <object x="896" y="672" width="128" height="32"/>
+  <object x="576" y="704" width="160" height="96"/>
+  <object x="864" y="704" width="160" height="96"/>
+  <object x="608" y="800" width="64" height="32"/>
+  <object x="928" y="800" width="96" height="224"/>
+  <object x="864" y="800" width="32" height="32"/>
+  <object x="896" y="832" width="32" height="64"/>
+  <object x="672" y="928" width="32" height="32"/>
+  <object x="896" y="928" width="32" height="32"/>
+  <object x="576" y="960" width="352" height="32"/>
+  <object x="608" y="896" width="64" height="64"/>
+  <object x="576" y="928" width="32" height="32"/>
+  <object x="736" y="768" width="128" height="32"/>
+  <object x="0" y="288" width="32" height="96"/>
+  <object x="0" y="384" width="96" height="64"/>
+  <object x="0" y="448" width="128" height="32"/>
+  <object x="0" y="480" width="256" height="32"/>
+  <object x="0" y="512" width="288" height="64"/>
+  <object x="0" y="576" width="320" height="32"/>
+  <object x="0" y="608" width="384" height="160"/>
+  <object x="0" y="768" width="352" height="32"/>
+  <object x="0" y="800" width="96" height="32"/>
+  <object x="0" y="832" width="32" height="32"/>
+  <object x="0" y="864" width="96" height="32"/>
+  <object x="0" y="896" width="288" height="32"/>
+  <object x="0" y="928" width="352" height="32"/>
+  <object x="0" y="960" width="416" height="32"/>
+  <object x="0" y="992" width="448" height="32"/>
+  <object x="576" y="992" width="352" height="32"/>
+ </objectgroup>
+ <objectgroup name="gameMasterColliderWalls" width="0" height="0">
+  <object x="352" y="320" width="32" height="16"/>
+  <object x="288" y="288" width="32" height="16"/>
+  <object x="448" y="352" width="32" height="16"/>
+  <object x="544" y="416" width="32" height="16"/>
+  <object x="608" y="416" width="32" height="16"/>
+  <object x="576" y="800" width="32" height="16"/>
+  <object x="672" y="800" width="32" height="16"/>
+  <object x="896" y="800" width="32" height="16"/>
+  <object x="352" y="768" width="32" height="16"/>
+  <object x="192" y="160" width="32" height="16"/>
+  <object x="224" y="160" width="32" height="16"/>
+  <object x="32" y="160" width="32" height="16"/>
+  <object x="0" y="0" width="480" height="96"/>
+  <object x="0" y="96" width="448" height="32"/>
+  <object x="0" y="128" width="448" height="32"/>
+  <object x="0" y="160" width="192" height="32"/>
+  <object x="256" y="160" width="192" height="32"/>
+  <object x="288" y="192" width="96" height="128"/>
+  <object x="384" y="256" width="96" height="96"/>
+  <object x="480" y="288" width="256" height="96"/>
+  <object x="512" y="384" width="160" height="32"/>
+  <object x="576" y="416" width="32" height="32"/>
+  <object x="704" y="416" width="32" height="64"/>
+  <object x="864" y="416" width="32" height="64"/>
+  <object x="864" y="288" width="160" height="96"/>
+  <object x="544" y="0" width="480" height="96"/>
+  <object x="960" y="96" width="64" height="96"/>
+  <object x="992" y="384" width="32" height="288"/>
+  <object x="576" y="672" width="128" height="32"/>
+  <object x="896" y="672" width="128" height="32"/>
+  <object x="576" y="704" width="160" height="96"/>
+  <object x="864" y="704" width="160" height="96"/>
+  <object x="608" y="800" width="64" height="32"/>
+  <object x="928" y="800" width="96" height="224"/>
+  <object x="864" y="800" width="32" height="32"/>
+  <object x="896" y="832" width="32" height="64"/>
+  <object x="672" y="928" width="32" height="32"/>
+  <object x="896" y="928" width="32" height="32"/>
+  <object x="576" y="960" width="352" height="32"/>
+  <object x="608" y="896" width="64" height="64"/>
+  <object x="576" y="928" width="32" height="32"/>
+  <object x="736" y="768" width="128" height="32"/>
+  <object x="0" y="288" width="32" height="96"/>
+  <object x="0" y="384" width="96" height="64"/>
+  <object x="0" y="448" width="128" height="32"/>
+  <object x="0" y="800" width="96" height="32"/>
+  <object x="0" y="832" width="32" height="32"/>
+  <object x="0" y="864" width="96" height="32"/>
+  <object x="0" y="896" width="288" height="32"/>
+  <object x="0" y="928" width="352" height="32"/>
+  <object x="0" y="960" width="416" height="32"/>
+  <object x="0" y="992" width="448" height="32"/>
+  <object x="576" y="992" width="352" height="32"/>
+  <object x="0" y="480" width="160" height="320"/>
+  <object x="224" y="480" width="32" height="320"/>
+  <object x="256" y="512" width="32" height="288"/>
+  <object x="288" y="576" width="32" height="224"/>
+  <object x="320" y="608" width="64" height="160"/>
+  <object x="320" y="768" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="lights" width="32" height="32">
+  <object name="light" x="992" y="128" width="32" height="32"/>
+  <object name="light" x="0" y="128" width="32" height="32"/>
+  <object name="light" x="128" y="736" width="32" height="32"/>
+  <object name="light" x="768" y="32" width="32" height="32"/>
+  <object name="light" x="576" y="32" width="32" height="32"/>
+  <object name="light" x="896" y="320" width="32" height="32"/>
+  <object name="light" x="672" y="320" width="32" height="32"/>
+  <object name="light" x="480" y="320" width="32" height="32"/>
+  <object name="light" x="384" y="288" width="32" height="32"/>
+  <object name="light" x="576" y="768" width="32" height="32"/>
+  <object name="light" x="224" y="736" width="32" height="32"/>
+  <object name="light" x="320" y="256" width="32" height="32"/>
+  <object name="light" x="672" y="768" width="32" height="32"/>
+  <object name="light" x="896" y="768" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="monsters" width="32" height="32">
+  <object name="zombie" x="224" y="224" width="32" height="32"/>
+  <object name="zombie" x="768" y="128" width="32" height="32"/>
+  <object name="zombie" x="736" y="576" width="32" height="32"/>
+  <object name="zombie" x="448" y="832" width="32" height="32"/>
+  <object name="zombie" x="896" y="512" width="32" height="32"/>
+ </objectgroup>
+</map>
