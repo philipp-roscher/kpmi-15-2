@@ -33,6 +33,7 @@ public class MazeGenerator {
 	TiledMapTileLayer objects;
 	TiledMapTileLayer tops;
     MapLayer          colliderWalls;
+    MapLayer		  gameMasterColliderWalls;
     MapLayer          lights;
 
     Array<Vector2> lightPositions;
@@ -56,6 +57,7 @@ public class MazeGenerator {
         this.objects = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.tops    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.colliderWalls = new MapLayer();
+        this.gameMasterColliderWalls = new MapLayer();
         this.lights        = new MapLayer();
 
         this.lightPositions = new Array<Vector2>();
@@ -88,11 +90,12 @@ public class MazeGenerator {
 		addWall(); //wall around the whole maze
 
         // combine layers to a new tiled map
-		map.getLayers().add(ground);        // ground layer
-		map.getLayers().add(walls);         // walls layer
-		map.getLayers().add(objects);       // objects layer
-		map.getLayers().add(tops);          // layer rendered above character
-		map.getLayers().add(colliderWalls); // layer containing collider rectangles
+		map.getLayers().add(ground);        			// ground layer
+		map.getLayers().add(walls);         			// walls layer
+		map.getLayers().add(objects);       			// objects layer
+		map.getLayers().add(tops);          			// layer rendered above character
+		map.getLayers().add(colliderWalls); 			// layer containing collider rectangles
+		map.getLayers().add(gameMasterColliderWalls);	// layer containing collider rectangles for GM
         map.getLayers().add(lights);
 	}
 
@@ -212,9 +215,14 @@ public class MazeGenerator {
 		calculateLightPositions(tiledMap, x, y);
         calculateMonsterPositions(tiledMap, x, y);
 		
-		for(int layer_nr = 0; layer_nr < 5; layer_nr++){ 	//für alle Layer
-			if(layer_nr==4){								//solange kein ObjectLayer
-				addNewColliderLayer(tiledMap, x, y);
+		for(int layer_nr = 0; layer_nr < 6; layer_nr++){ 	//für alle Layer
+			if(layer_nr == 4){								
+				addNewColliderLayer(tiledMap, x, y, "colliderWalls");
+				return;
+			}
+			
+			if(layer_nr == 5){								
+				addNewColliderLayer(tiledMap, x, y, "gameMasterColliderWalls");
 				return;
 			}
 
@@ -244,8 +252,8 @@ public class MazeGenerator {
      * @param x     x offset of colliders
      * @param y     y offset of colliders
      */
-    private void addNewColliderLayer(TiledMap map, int x, int y) {
-        MapLayer colliderLayer = map.getLayers().get("colliderWalls"); // get collider layer
+    private void addNewColliderLayer(TiledMap map, int x, int y, String layer) {
+        MapLayer colliderLayer = map.getLayers().get(layer); // get collider layer
 
         for (MapObject mo : colliderLayer.getObjects()) {    // for every object in the original collider layer
             RectangleMapObject nmo = new RectangleMapObject();  // create new rectangle map object
@@ -265,6 +273,7 @@ public class MazeGenerator {
             colliderWalls.getObjects().add(nmo);
 
             colliderWalls.setName("colliderWalls");
+            gameMasterColliderWalls.setName("gameMasterColliderWalls");
         }
     }
 
