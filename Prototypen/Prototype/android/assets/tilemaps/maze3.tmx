@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="102">
- <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
  <layer name="ground" width="32" height="32">
@@ -128,4 +128,5 @@
   <object id="98" name="light" x="672" y="896" width="32" height="32"/>
   <object id="99" name="light" x="768" y="896" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="monsters"/>
 </map>
