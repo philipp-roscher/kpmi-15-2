@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.network;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +64,8 @@ public class GameServer {
 	public static HashMap<Integer,NetworkTransmissionComponent> positions;
 	// saves the last time each client was active, used for kicking inactive clients
 	public static HashMap<Integer,Long> lastAccess;
+	// container for deleted clients
+	public static ArrayList<Integer> toDelete = new ArrayList<Integer>();
 	// contains the classes of all characters
 	public static HashMap<Integer,HeroInformation> cm;
 	// contains the constellation of the individual tiles
@@ -83,7 +86,7 @@ public class GameServer {
 	//to count active Clients in Session
 	public static int clientCount;
 	//maximal Number of Clients per Session
-	private int maxClients = 5;
+	private int maxClients = 2;
 
 
 	public GameServer() {
@@ -96,7 +99,7 @@ public class GameServer {
 		bs = new ServerBattleSystem(this);
 		setupMap(5,5);
 
-		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
 		executor.scheduleAtFixedRate(updateGameState, 0, 1000000L/updateRate, TimeUnit.MICROSECONDS);
 
@@ -259,6 +262,7 @@ public class GameServer {
 	// deletes all characters that haven't been active in the last x seconds
 	static Runnable deleteOldClients = new Runnable() {
 	    public void run() {
+	    	//System.out.println("Trying to remove old clients...");
 	        for(Map.Entry<Integer,Long> ltime : lastAccess.entrySet())
 	        {
 	        	if( (System.nanoTime() - ltime.getValue())/1e6 > timeoutMs ) {
@@ -266,20 +270,26 @@ public class GameServer {
 					//only happens if it wasn't deleted with "disconnected" beforehand
 					if (positions.containsKey(id)) {
 						positions.remove(id);
-						lastAccess.remove(id);
 						TeamAssignments.remove(id);
+						toDelete.add(id);
 						cm.remove(id);
 						server.sendToAllUDP(new DeleteHeroResponse(id));
 						System.out.println("Automatically deleted Player "+ltime.getKey());
+
 						//decrease clientCount and send to all clients via TCP
 						clientCount--;
-						System.out.println("clientCount at: " + clientCount);
+						System.out.println("clientCount at: "+clientCount);
 						GameClientCount GameClientCount = new GameClientCount();
 						GameClientCount.count = clientCount;
 						server.sendToAllTCP(clientCount);
 					}
 	        	}
 	        }
+	        
+	        for(int id : toDelete)
+	        	lastAccess.remove(id);
+	        
+	        toDelete.clear();
 	    }
 	};
 	
