@@ -68,7 +68,14 @@ public class InventoryComponent implements Component {
 
     public List<Key> getKeyBag()
     {
-        return this.keyBag;
+        List<Key> keys = new LinkedList<Key>();
+        for(Key key : this.keyBag)
+        {
+            if(key != null)
+                keys.add(key);
+        }
+
+        return keys;
     }
 
     public void addKeyPart(Key key)
