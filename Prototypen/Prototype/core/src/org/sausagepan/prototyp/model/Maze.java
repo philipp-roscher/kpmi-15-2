@@ -43,6 +43,7 @@ public class Maze extends EntitySystem {
     private Array<Body> doorLockerBodies;
     private Array<BodyDef> doorLockerBodyDefs;
     private Array<Rectangle> doorLockerRectangles;
+    private Array<Body> secretWalls;
 
     /* ........................................................................... CONSTRUCTOR .. */
 
@@ -51,6 +52,7 @@ public class Maze extends EntitySystem {
         this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
         this.doorLockerRectangles = new Array<Rectangle>();
+        this.secretWalls = new Array<Body>();
         setUpTiledMap(world);
         this.world = world;
         // set up map renderer and scale
@@ -88,6 +90,9 @@ public class Maze extends EntitySystem {
                 doorLockerBodies.add(groundBody);
                 doorLockerBodyDefs.add(groundBodyDef);
             }
+            // List Game Masters secret passages
+            if(mo.getName() != null && mo.getName().equals("secretWall"))
+                secretWalls.add(groundBody);
 
             PolygonShape groundBox = new PolygonShape();
             groundBox.setAsBox(r.width/64f, r.height/64f);
@@ -101,6 +106,14 @@ public class Maze extends EntitySystem {
      */
     public void openTreasureRoom() {
         for(Body b : doorLockerBodies)
+            world.destroyBody(b);
+    }
+
+    /**
+     * Destroys bodies blocking secret passages
+     */
+    public void openSecretPassages() {
+        for(Body b : secretWalls)
             world.destroyBody(b);
     }
 

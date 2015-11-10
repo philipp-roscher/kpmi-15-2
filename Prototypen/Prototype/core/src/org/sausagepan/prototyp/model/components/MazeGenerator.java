@@ -33,7 +33,6 @@ public class MazeGenerator {
 	TiledMapTileLayer objects;
 	TiledMapTileLayer tops;
     MapLayer          colliderWalls;
-    MapLayer		  gameMasterColliderWalls;
     MapLayer          lights;
 
     Array<Vector2> lightPositions;
@@ -58,7 +57,6 @@ public class MazeGenerator {
         this.objects = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.tops    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.colliderWalls = new MapLayer();
-        this.gameMasterColliderWalls = new MapLayer();
         this.lights        = new MapLayer();
 
         this.lightPositions = new Array<Vector2>();
@@ -97,7 +95,6 @@ public class MazeGenerator {
 		map.getLayers().add(objects);       			// objects layer
 		map.getLayers().add(tops);          			// layer rendered above character
 		map.getLayers().add(colliderWalls); 			// layer containing collider rectangles
-		map.getLayers().add(gameMasterColliderWalls);	// layer containing collider rectangles for GM
         map.getLayers().add(lights);
 	}
 
@@ -271,17 +268,17 @@ public class MazeGenerator {
             if(mo.getName() != null && mo.getName().equals("lockedDoor"))
                 nmo.setName("lockedDoor");
 
+            if(mo.getName() != null && mo.getName().equals("secretWall"))
+                nmo.setName("secretWall");
+
             // set rectangle objects rectangle properties to the new position and original width and height
             nmo.getRectangle().set(pos);
 
             // ad recently created new collider object to layer
             if (layer.equals("colliderWalls"))
             	colliderWalls.getObjects().add(nmo);
-            else if (layer.equals("gameMasterColliderWalls"))
-            	gameMasterColliderWalls.getObjects().add(nmo);
 
             colliderWalls.setName("colliderWalls");
-            gameMasterColliderWalls.setName("gameMasterColliderWalls");
         }
     }
 
