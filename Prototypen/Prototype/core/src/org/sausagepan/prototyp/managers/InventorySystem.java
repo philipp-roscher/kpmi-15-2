@@ -240,92 +240,69 @@ public class InventorySystem extends ObservingEntitySystem {
                }
            }
 
-           /*for(Key key : renderer.getKeys())
-           {
-               if(iam.get(character).area.overlaps(key.getCollider()))
-               {
-                   im.get(character).addKeyPart(key);
-                   updateKeyBags(tm.get(character).TeamId);
-                   renderer.removeKey(key);
-               }
-           }*/
+           updateKeyBags();
        }
     }
 
-    //the keyholder who has gained keys renews the keybag
-    public void updateKeyBags(int id)
+    //die schlüssel vom schlüsselträger werden auf dem Partner übertragen
+    //es werden dann auch die schlüssel zum keyviewercomponent hinzugefügt,
+    //damit man es auf der Ui sehen kann
+    public void updateKeyBags()
     {
-        if(id == 0)
+        Entity gameMaster = new Entity();
+        Entity[] teamOne = new Entity[2];
+        Entity[] teamTwo = new Entity[2];
+
+        int x = 0;
+        int y = 0;
+
+        for(Entity character : characters)
         {
-            Entity gameMaster = new Entity();
-            for(Entity character : characters)
+            switch(tm.get(character).TeamId)
             {
-                if(character.getComponent(TeamComponent.class).TeamId == 0)
-                {
-                    gameMaster = character;
-                    break;
-                }
-            }
-
-            if(gameMaster == null)
-                return;
-
-            if(im.get(gameMaster).getKeyBag().size() != 0)
-            {
-                for(Key key : im.get(gameMaster).getKeyBag())
-                {
-                    if(key != null)
-                        kvm.get(gameMaster).addKey(key.getKeyActor());
-                }
+                case 0: gameMaster = character; break;
+                case 1: teamOne[x] = character; x++; break;
+                case 2: teamTwo[y] = character; y++; break;
             }
         }
 
-        if(id == 1 || id == 2)
+        for(Key key : im.get(gameMaster).getKeyBag())
         {
-            Entity[] team = new Entity[2];
-            int count = 0;
+            kvm.get(gameMaster).addKey(key.getKeyActor());
+        }
 
-            for(Entity character : characters)
+        if(im.get(teamOne[0]).isKeyHolder)
+        {
+            im.get(teamOne[1]).keyBag = im.get(teamOne[0]).getKeyBag();
+            for(Key key : im.get(teamOne[1]).getKeyBag())
             {
-                if(tm.get(character).TeamId == id)
-                {
-                    team[count] = character;
-                    count++;
-                }
+                //hier wird es dann zur ui hinzugefügt
+                kvm.get(teamOne[1]).addKey(key.getKeyActor());
             }
-
-            if(im.get(team[0]).isKeyHolder)
+        }
+        else if(im.get(teamOne[1]).isKeyHolder)
+        {
+            im.get(teamOne[0]).keyBag = im.get(teamOne[1]).getKeyBag();
+            for(Key key : im.get(teamOne[0]).getKeyBag())
             {
-                if(team[1] != null)
-                {
-                    im.get(team[1]).keyBag = im.get(team[0]).getKeyBag();
-                }
-
-                if(im.get(team[0]).getKeyBag().size() != 0)
-                {
-                    for(Key key : im.get(team[0]).getKeyBag())
-                    {
-                        kvm.get(team[0]).addKey(key.getKeyActor());
-                        kvm.get(team[1]).addKey(key.getKeyActor());
-                    }
-                }
+                kvm.get(teamOne[0]).addKey(key.getKeyActor());
             }
+        }
 
-            if(im.get(team[1]).isKeyHolder)
+        if(im.get(teamTwo[0]).isKeyHolder)
+        {
+            im.get(teamTwo[1]).keyBag = im.get(teamTwo[0]).getKeyBag();
+            for(Key key : im.get(teamTwo[1]).getKeyBag())
             {
-                if(team[0] != null)
-                {
-                    im.get(team[0]).keyBag = im.get(team[1]).getKeyBag();
-                }
-
-                if(im.get(team[1]).getKeyBag().size() != 0)
-                {
-                    for(Key key : im.get(team[1]).getKeyBag())
-                    {
-                        kvm.get(team[1]).addKey(key.getKeyActor());
-                        kvm.get(team[0]).addKey(key.getKeyActor());
-                    }
-                }
+                kvm.get(teamTwo[1]).addKey(key.getKeyActor());
+            }
+        }
+        else if(im.get(teamTwo[1]).isKeyHolder)
+        {
+            im.get(teamTwo[0]).keyBag = im.get(teamTwo[1]).getKeyBag();
+            for(Key key : im.get(teamOne[0]).getKeyBag())
+            {
+                kvm.get(teamTwo[0]).addKey(key.getKeyActor());
             }
         }
 
@@ -363,6 +340,20 @@ public class InventorySystem extends ObservingEntitySystem {
                             renderer.getKeys().add(key);*/
                             nm.get(character).loseKey(key.getKeySection(), dbm.get(character).dynamicBody.getPosition().x + 1f, dbm.get(character).dynamicBody.getPosition().y);
                             //System.out.println(renderer.getKeys().size());
+                        }
+                        //nicht die schönste Art, aber hier wird nach dem Partner gesucht
+                        //-falls es einen gibt- damit auch bei ihm die schlüsseln gelöscht werden
+                        //jedoch müssen diese schlüssel nicht angezeigt werden, da der
+                        //partner nicht der schhlüsselträger ist
+                        if(tm.get(character).TeamId == 1 || tm.get(character).TeamId == 2)
+                        {
+                            for(Entity c : characters)
+                            {
+                                if(tm.get(c).TeamId == tm.get(character).TeamId &&(!im.get(c).isKeyHolder))
+                                {
+                                    kvm.get(c).removeKeys();
+                                }
+                            }
                         }
 
                     }
