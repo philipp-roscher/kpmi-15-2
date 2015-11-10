@@ -123,6 +123,8 @@ public class EntityComponentSystem {
                     mediaManager.getTextureAtlas("textures/spritesheets/monsters/zombie_01.pack"), "monster"
             ));
             monster.add(new InjurableAreaComponent(pos.x, pos.y, .8f, 1f));
+            //same Team as GM -> no friendly fire
+            monster.add(new TeamComponent(0));
 
             this.engine.addEntity(monster);
             System.out.println("Added monster at (" + pos.x + "|" + pos.y + ")");
@@ -406,7 +408,7 @@ public class EntityComponentSystem {
 	
 	public void attack(int id) {
 		if(characters.get(id) != null) {
-			System.out.println("Character greift an: "+id);
+			System.out.println("Character greift an: " + id);
 			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = true;
 //			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
 		}
