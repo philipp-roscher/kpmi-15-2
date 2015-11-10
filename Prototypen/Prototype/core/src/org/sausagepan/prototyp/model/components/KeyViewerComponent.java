@@ -84,12 +84,12 @@ public class KeyViewerComponent implements ApplicationListener, Component {
         stage.addActor(key);
     }
 
-    public Array<Actor> removeKeys()
+    public void removeKeys()
     {
-        Array<Actor> actors = stage.getActors();
-        actors.removeIndex(0);
+        if(stage == null)
+            return;
+
         stage.clear();
         stage.addActor(keyBackground);
-        return actors;
     }
 }

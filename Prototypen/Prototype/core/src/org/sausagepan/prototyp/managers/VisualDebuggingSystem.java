@@ -73,9 +73,26 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
-
 //        drawMazeColliders();
+//        drawWeaponDebugger();
+        shapeRenderer.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.GREEN);
+        drawBattleDebugger();
+        shapeRenderer.end();
+    }
 
+    public void drawMazeColliders() {
+        // Colliders
+        MapObjects mo = maze.getColliders();
+        Rectangle r;
+        for(MapObject m : mo) {
+            r = ((RectangleMapObject) m).getRectangle();
+            shapeRenderer.rect(r.x/32f, r.y/32f, r.width/32f, r.height/32f);
+        }
+    }
+
+    public void drawWeaponDebugger() {
         for (Entity entity : entities) {
             if(entity.getComponent(WeaponComponent.class) != null) {
                 WeaponComponent weapon = wm.get(entity);
@@ -96,9 +113,9 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
                 shapeRenderer.rect(area.area.x,area.area.y, area.area.width, area.area.height);
             }
         }
-        shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.end();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    }
+
+    public void drawBattleDebugger() {
         for (Entity entity : entities) {
             if(entity.getComponent(HealthComponent.class) != null) {
                 HealthComponent health = hm.get(entity);
@@ -110,17 +127,6 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
                         .05f
                 );
             }
-        }
-        shapeRenderer.end();
-    }
-
-    public void drawMazeColliders() {
-        // Colliders
-        MapObjects mo = maze.getColliders();
-        Rectangle r;
-        for(MapObject m : mo) {
-            r = ((RectangleMapObject) m).getRectangle();
-            shapeRenderer.rect(r.x/32f, r.y/32f, r.width/32f, r.height/32f);
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */
