@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Intersector;
 import org.sausagepan.prototyp.enums.KeySection;
 import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.model.Key;
+import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
@@ -36,6 +37,7 @@ public class InventorySystem extends ObservingEntitySystem {
 
     /*...................................................................................Atributes*/
     private ImmutableArray<Entity> characters;
+    private Maze maze;
 
     private ComponentMapper<InventoryComponent> im = ComponentMapper.getFor(InventoryComponent.class);
     private ComponentMapper<WeaponComponent> wm = ComponentMapper.getFor(WeaponComponent.class);
@@ -44,6 +46,10 @@ public class InventorySystem extends ObservingEntitySystem {
     private ComponentMapper<DynamicBodyComponent> dbm = ComponentMapper.getFor(DynamicBodyComponent.class);
     private ComponentMapper<HealthComponent> hm = ComponentMapper.getFor(HealthComponent.class);
     private ComponentMapper<InjurableAreaComponent> iam = ComponentMapper.getFor(InjurableAreaComponent.class);
+
+    public InventorySystem(Maze maze) {
+        this.maze = maze;
+    }
 
     /*...................................................................................Functions*/
     public void addedToEngine(ObservableEngine engine)
@@ -204,8 +210,8 @@ public class InventorySystem extends ObservingEntitySystem {
     }
 
     /*
-    hier werden die rectangles von schüssel und charakteren geprüft.
-    Ich muss es so erweitern, dass nur der Schlüsselträger sie aufnehmen kann
+    hier werden die rectangles von schÃ¼ssel und charakteren geprÃ¼ft.
+    Ich muss es so erweitern, dass nur der SchlÃ¼sseltrÃ¤ger sie aufnehmen kann
     intersector.overlaps(rect 1, rect2) deutet die Kollision an
      */
     public void addKey(OrthogonalTiledMapRendererWithPlayers renderer)
@@ -218,6 +224,10 @@ public class InventorySystem extends ObservingEntitySystem {
                if(intersector.overlaps(key.getCollider(), iam.get(character).area))
                {
                    im.get(character).addKeyPart(key);
+                   // Open treasure room, when character gains all three key parts
+                   if(im.get(character).getKeyBag().size() == 3)
+                       maze.openTreasureRoom();
+
                    //updateKeyBags(tm.get(character).TeamId);
                    renderer.getKeys().remove(key);
                }
@@ -316,11 +326,11 @@ public class InventorySystem extends ObservingEntitySystem {
     }
 
     /*
-    ein sehr banaler Ausweg für die letzte Minute war, ein Liste im OrthoganlTiledMapRendererWithPlayers
-    einzufügen, für die beta werde ich mir eine neue klasse dafür ausdenken, um die items zu rendern
-    hier werden die charaktere nach ihren hp´s gefragt, ob diese 0 ist. dann sieht man nach, ob der spieler
-    der schlüsselträger ist. Falls der Träger Schlüsselteile hat, verliert er diese und werden zum der liste
-    im Renderer übertragen
+    ein sehr banaler Ausweg fï¿½r die letzte Minute war, ein Liste im OrthoganlTiledMapRendererWithPlayers
+    einzufï¿½gen, fï¿½r die beta werde ich mir eine neue klasse dafï¿½r ausdenken, um die items zu rendern
+    hier werden die charaktere nach ihren hpï¿½s gefragt, ob diese 0 ist. dann sieht man nach, ob der spieler
+    der schlï¿½sseltrï¿½ger ist. Falls der Trï¿½ger Schlï¿½sselteile hat, verliert er diese und werden zum der liste
+    im Renderer ï¿½bertragen
     */
     public void loseKeys(OrthogonalTiledMapRendererWithPlayers renderer)
     {
@@ -331,11 +341,12 @@ public class InventorySystem extends ObservingEntitySystem {
             {
                 if(im.get(character).isKeyHolder)
                 {
+                    maze.lockTreasureRoom();    // lock treasure room again
                     if(im.get(character).getKeyBag().size() != 0)
                     {
                         keys = im.get(character).loseKeys();
                         kvm.get(character).removeKeys();
-                        //System.out.println("Anzahl Schlüssel: " + keys.size());
+                        //System.out.println("Anzahl SchlÃ¼ssel: " + keys.size());
                         for(Key key : keys)
                         {
                             key.getSprite().visible = true;

@@ -33,10 +33,10 @@ public class MazeGenerator {
 	TiledMapTileLayer objects;
 	TiledMapTileLayer tops;
     MapLayer          colliderWalls;
-    MapLayer		  gameMasterColliderWalls;
     MapLayer          lights;
 
     Array<Vector2> lightPositions;
+    Array<Vector2> gameMasterSecretPositions;
     Array<Vector2> monsterPositions;
 
 	float[][] positions;
@@ -57,11 +57,11 @@ public class MazeGenerator {
         this.objects = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.tops    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.colliderWalls = new MapLayer();
-        this.gameMasterColliderWalls = new MapLayer();
         this.lights        = new MapLayer();
 
         this.lightPositions = new Array<Vector2>();
         this.monsterPositions = new Array<Vector2>();
+        this.gameMasterSecretPositions = new Array<Vector2>();
 
         this.positions = new float[5][2]; //[Player][0 - x, 1 - y], GM is Player 0, Team 1 1+2, Team 2 3+4
 
@@ -95,7 +95,6 @@ public class MazeGenerator {
 		map.getLayers().add(objects);       			// objects layer
 		map.getLayers().add(tops);          			// layer rendered above character
 		map.getLayers().add(colliderWalls); 			// layer containing collider rectangles
-		map.getLayers().add(gameMasterColliderWalls);	// layer containing collider rectangles for GM
         map.getLayers().add(lights);
 	}
 
@@ -266,60 +265,69 @@ public class MazeGenerator {
                     mo.getProperties().get("height", Float.class)
             );
 
+            if(mo.getName() != null && mo.getName().equals("lockedDoor"))
+                nmo.setName("lockedDoor");
+
+            if(mo.getName() != null && mo.getName().equals("secretWall"))
+                nmo.setName("secretWall");
+
             // set rectangle objects rectangle properties to the new position and original width and height
             nmo.getRectangle().set(pos);
 
             // ad recently created new collider object to layer
             if (layer.equals("colliderWalls"))
             	colliderWalls.getObjects().add(nmo);
-            else if (layer.equals("gameMasterColliderWalls"))
-            	gameMasterColliderWalls.getObjects().add(nmo);
 
             colliderWalls.setName("colliderWalls");
-            gameMasterColliderWalls.setName("gameMasterColliderWalls");
         }
     }
 
+    /**
+     * Adds orange lights where objects called "light" exist in the layer "lights". For "secretGM"
+     * it adds green lights, so GameMaster can see secret passages
+     * @param map
+     * @param x
+     * @param y
+     */
     private void calculateLightPositions(TiledMap map, int x, int y) {
-        System.out.println("Map contains following layers:");
-        for(MapLayer m : map.getLayers())
-            System.out.println(m.getName());
         MapLayer lightsLayer;
         if(map.getLayers().get("lights") != null) {
-            System.out.println("Found Lights Layer");
-            System.out.println("Adding light sources for Tile [" + x + "," + y + "]");
             try {
                 lightsLayer = map.getLayers().get("lights");   // get lights layer
 
                 for (MapObject mo : lightsLayer.getObjects()) {
-                    System.out.println("Position: ("
-                            + mo.getProperties().get("x", Float.class)/32 + "|"
-                            + mo.getProperties().get("y", Float.class)/32 + ")");
-                    lightPositions.add(new Vector2(
-                            mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
-                            mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
-                    ));
+                    if(mo.getName() != null && mo.getName().equals("secretGM")) {
+                        gameMasterSecretPositions.add(new Vector2(
+                                mo.getProperties().get("x", Float.class) / 32 + x * 32 + .5f,
+                                mo.getProperties().get("y", Float.class) / 32 + y * 32 + .5f
+                        ));
+                    }else{
+                        lightPositions.add(new Vector2(
+                                mo.getProperties().get("x", Float.class) / 32 + x * 32 + .5f,
+                                mo.getProperties().get("y", Float.class) / 32 + y * 32 + .5f
+                        ));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            System.err.println("TMX does not contain a lights layer");
+//            System.err.println("TMX does not contain a lights layer");
         }
     }
 
 	private void calculateMonsterPositions(TiledMap map, int x, int y) {
 		MapLayer monstersLayer;
 		if(map.getLayers().get("monsters") != null) {
-			System.out.println("Found Monsters Layer");
-			System.out.println("Adding monsters for Tile [" + x + "," + y + "]");
+//			System.out.println("Found Monsters Layer");
+//			System.out.println("Adding monsters for Tile [" + x + "," + y + "]");
 			try {
 				monstersLayer = map.getLayers().get("monsters");   // get lights layer
 
 				for (MapObject mo : monstersLayer.getObjects()) {
-					System.out.println("Position: ("
-							+ mo.getProperties().get("x", Float.class)/32 + "|"
-							+ mo.getProperties().get("y", Float.class)/32 + ")");
+//					System.out.println("Position: ("
+//							+ mo.getProperties().get("x", Float.class)/32 + "|"
+//							+ mo.getProperties().get("y", Float.class)/32 + ")");
 					monsterPositions.add(new Vector2(
 							mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
 							mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
@@ -329,7 +337,8 @@ public class MazeGenerator {
 				e.printStackTrace();
 			}
 		} else {
-			System.err.println("TMX does not contain a monster layer");
+//			System.err.println("TMX does not contain a monster layer");
+			;
 		}
 	}
 
@@ -361,6 +370,10 @@ public class MazeGenerator {
 
     public Array<Vector2> getMonsterPositions() {
         return monsterPositions;
+    }
+
+    public Array<Vector2> getGameMasterSecretPositions() {
+        return gameMasterSecretPositions;
     }
 
     //übergibt Startpsotionen der Spieler
