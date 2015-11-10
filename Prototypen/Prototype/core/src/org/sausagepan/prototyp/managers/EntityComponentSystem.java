@@ -369,7 +369,7 @@ public class EntityComponentSystem {
         if (newHero.clientClass.equals("dragon_red")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
             newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), newHero.clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), "dragon_red"
             ));
             newCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
             newCharacter.add(new HealthComponent(100));
