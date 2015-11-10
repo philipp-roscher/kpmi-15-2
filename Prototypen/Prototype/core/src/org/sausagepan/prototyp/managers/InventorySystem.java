@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Intersector;
 import org.sausagepan.prototyp.enums.KeySection;
 import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.model.Key;
+import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
@@ -39,6 +40,7 @@ public class InventorySystem extends ObservingEntitySystem {
 
     /*...................................................................................Atributes*/
     private ImmutableArray<Entity> characters;
+    private Maze maze;
 
     private ComponentMapper<InventoryComponent> im = ComponentMapper.getFor(InventoryComponent.class);
     private ComponentMapper<WeaponComponent> wm = ComponentMapper.getFor(WeaponComponent.class);
@@ -49,6 +51,10 @@ public class InventorySystem extends ObservingEntitySystem {
     private ComponentMapper<NetworkComponent> nm = ComponentMapper.getFor(NetworkComponent.class);
     private ComponentMapper<InjurableAreaComponent> iam = ComponentMapper.getFor(InjurableAreaComponent.class);
     private ComponentMapper<IdComponent> idm = ComponentMapper.getFor(IdComponent.class);
+
+    public InventorySystem(Maze maze) {
+        this.maze = maze;
+    }
 
     /*...................................................................................Functions*/
     public void addedToEngine(ObservableEngine engine)
@@ -209,8 +215,8 @@ public class InventorySystem extends ObservingEntitySystem {
     }
 
     /*
-    hier werden die rectangles von sch�ssel und charakteren gepr�ft.
-    Ich muss es so erweitern, dass nur der Schl�sseltr�ger sie aufnehmen kann
+    hier werden die rectangles von schüssel und charakteren geprüft.
+    Ich muss es so erweitern, dass nur der Schlüsselträger sie aufnehmen kann
     intersector.overlaps(rect 1, rect2) deutet die Kollision an
      */
     public void addKey(OrthogonalTiledMapRendererWithPlayers renderer)
@@ -223,6 +229,10 @@ public class InventorySystem extends ObservingEntitySystem {
                if(intersector.overlaps(key.getCollider(), iam.get(character).area))
                {
                    im.get(character).addKeyPart(key);
+                   // Open treasure room, when character gains all three key parts
+                   if(im.get(character).getKeyBag().size() == 3)
+                       maze.openTreasureRoom();
+
                    //updateKeyBags(tm.get(character).TeamId);
                    renderer.getKeys().remove(key);
                    //send to server
@@ -338,11 +348,12 @@ public class InventorySystem extends ObservingEntitySystem {
             {
                 if(im.get(character).isKeyHolder)
                 {
+                    maze.lockTreasureRoom();    // lock treasure room again
                     if(im.get(character).getKeyBag().size() != 0)
                     {
                         keys = im.get(character).loseKeys();
                         kvm.get(character).removeKeys();
-                        //System.out.println("Anzahl Schl�ssel: " + keys.size());
+                        //System.out.println("Anzahl Schlüssel: " + keys.size());
                         for(Key key : keys)
                         {
                             /* key wird jetzt bei netzwerkbenachrichtigung erst sichtbar

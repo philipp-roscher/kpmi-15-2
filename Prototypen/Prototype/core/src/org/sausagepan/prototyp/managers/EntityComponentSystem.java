@@ -130,7 +130,7 @@ public class EntityComponentSystem {
             monster.add(new TeamComponent(0));
 
             this.engine.addEntity(monster);
-            System.out.println("Added monster at (" + pos.x + "|" + pos.y + ")");
+//            System.out.println("Added monster at (" + pos.x + "|" + pos.y + ")");
         }
         // TODO
     }
@@ -174,7 +174,7 @@ public class EntityComponentSystem {
         battleSystem.addedToEngine(engine);
 
         //Inventory System
-        InventorySystem inventorySystem = new InventorySystem();
+        InventorySystem inventorySystem = new InventorySystem(maze);
         inventorySystem.addedToEngine(engine);
 
         // Bullet System
@@ -288,6 +288,11 @@ public class EntityComponentSystem {
                     new LightComponent(rayHandler,pos.x, pos.y ,new Color(1,.8f,.5f, 1),20,2));
             engine.addEntity(torch);
         }
+        for(Vector2 pos : maze.getGameMasterSecretPositions()) {
+            Entity torch = new Entity().add(
+                    new LightComponent(rayHandler,pos.x, pos.y ,new Color(0,1,0,1),20,2));
+            engine.addEntity(torch);
+        }
         LightSystem lightSystem = new LightSystem(rayHandler);
         lightSystem.addedToEngine(engine);
         engine.addSystem(lightSystem);
@@ -377,6 +382,7 @@ public class EntityComponentSystem {
             newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
         }
 
+        // GameMaster - The Dragon
         if (newHero.clientClass.equals("dragon_red")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
             newCharacter.add(new CharacterSpriteComponent(
@@ -388,11 +394,12 @@ public class EntityComponentSystem {
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));     //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
             newCharacter.add(new InventoryComponent());
             newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            maze.openSecretPassages();  // opens passages for game master
         }
 
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);
-        System.out.println("created new hero: " + newHero.clientClass + "(" + newCharacterId + ")");
+//        System.out.println("created new hero: " + newHero.clientClass + "(" + newCharacterId + ")");
         return newCharacter;
 	}
 	
@@ -407,7 +414,7 @@ public class EntityComponentSystem {
 
 	public void deleteCharacter(int id) {
 		if(characters.get(id) != null) {
-			System.out.println("Character wird gelöscht: " +id);
+//			System.out.println("Character wird gelöscht: " +id);
 			engine.removeEntity(this.characters.get(id));
 			this.characters.remove(id);
 		}
@@ -415,7 +422,7 @@ public class EntityComponentSystem {
 	
 	public void attack(int id) {
 		if(characters.get(id) != null) {
-			System.out.println("Character greift an: " + id);
+//			System.out.println("Character greift an: " + id);
 			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = true;
 //			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
 		}
@@ -423,7 +430,7 @@ public class EntityComponentSystem {
 
 	public void stopAttacking(int id) {
 		if(characters.get(id) != null) {
-			System.out.println("Character bricht Angriff ab: "+id);
+//			System.out.println("Character bricht Angriff ab: "+id);
 			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = false;
 //			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
 		}
@@ -431,7 +438,7 @@ public class EntityComponentSystem {
 	
 	public void shoot(ShootResponse sr) {
 		if(characters.get(sr.playerId) != null) {
-			System.out.println("Character schießt: "+sr.playerId);
+//			System.out.println("Character schießt: "+sr.playerId);
 			((Bow)this.characters.get(sr.playerId).getComponent(WeaponComponent.class).weapon).shoot(sr.position, sr.direction);
 		}
 	}

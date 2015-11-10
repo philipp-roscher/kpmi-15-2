@@ -38,12 +38,23 @@ public class Maze extends EntitySystem {
     private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
     private Array<Vector2> lightPositions;
     private Array<Vector2> monsterPositions;
+    private Array<Vector2> gameMasterSecretPositions;
+    private World world;
+    private Array<Body> doorLockerBodies;
+    private Array<BodyDef> doorLockerBodyDefs;
+    private Array<Rectangle> doorLockerRectangles;
+    private Array<Body> secretWalls;
 
     /* ........................................................................... CONSTRUCTOR .. */
 
     public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager) {
         this.mapInformation = mapInformation;
+        this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
+        this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
+        this.doorLockerRectangles = new Array<Rectangle>();
+        this.secretWalls = new Array<Body>();
         setUpTiledMap(world);
+        this.world = world;
         // set up map renderer and scale
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
     }
@@ -63,18 +74,64 @@ public class Maze extends EntitySystem {
         tiledMap = generator.createNewMapFromGrid(mapInformation.entries);
         lightPositions = generator.getLightPositions();
         monsterPositions = generator.getMonsterPositions();
+        gameMasterSecretPositions = generator.getGameMasterSecretPositions();
         // create static bodies from colliders
         Rectangle r;
         for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
             r = ((RectangleMapObject) mo).getRectangle();
             BodyDef groundBodyDef  = new BodyDef();
             groundBodyDef.type     = BodyDef.BodyType.StaticBody;
-            groundBodyDef.position.set(new Vector2(r.x/32f+r.width/64f, r.y/32f + r.height/64f));
+            groundBodyDef.position.set(new Vector2(r.x / 32f + r.width / 64f, r.y / 32f + r.height / 64f));
             Body groundBody        = world.createBody(groundBodyDef);
+
+            // Look for door objects
+            if(mo.getName().equals("lockedDoor")) {
+                doorLockerRectangles.add(r);
+                doorLockerBodies.add(groundBody);
+                doorLockerBodyDefs.add(groundBodyDef);
+            }
+            // List Game Masters secret passages
+            if(mo.getName() != null && mo.getName().equals("secretWall"))
+                secretWalls.add(groundBody);
+
             PolygonShape groundBox = new PolygonShape();
             groundBox.setAsBox(r.width/64f, r.height/64f);
             groundBody.createFixture(groundBox, 0.0f);
             groundBox.dispose();
+        }
+    }
+
+    /**
+     * Destroys bodies blocking the way into the treasure room
+     */
+    public void openTreasureRoom() {
+        for(Body b : doorLockerBodies)
+            world.destroyBody(b);
+    }
+
+    /**
+     * Destroys bodies blocking secret passages
+     */
+    public void openSecretPassages() {
+        for(Body b : secretWalls)
+            world.destroyBody(b);
+    }
+
+    /**
+     * Recreate bodies blocking way into treasure room, when character loses key parts
+     */
+    public void lockTreasureRoom() {
+        int i=0;
+        Body body;
+        for(BodyDef bd : doorLockerBodyDefs) {
+            body = world.createBody(bd);
+            PolygonShape box = new PolygonShape();
+            box.setAsBox(
+                    doorLockerRectangles.get(i).width/64f,
+                    doorLockerRectangles.get(i).height/64f);
+            body.createFixture(box, 0.0f);
+            box.dispose();
+            i++;
         }
     }
 
@@ -105,6 +162,10 @@ public class Maze extends EntitySystem {
 
     public Array<Vector2> getMonsterPositions() {
         return monsterPositions;
+    }
+
+    public Array<Vector2> getGameMasterSecretPositions() {
+        return gameMasterSecretPositions;
     }
 
     public MapObjects getColliders() {

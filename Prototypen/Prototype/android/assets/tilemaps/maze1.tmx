@@ -48,31 +48,6 @@
   <object x="800" y="672" width="224" height="352"/>
   <object x="992" y="288" width="32" height="384"/>
  </objectgroup>
- <objectgroup name="gameMasterColliderWalls" width="0" height="0">
-  <object x="0" y="0" width="480" height="96"/>
-  <object x="544" y="0" width="480" height="96"/>
-  <object x="992" y="96" width="32" height="96"/>
-  <object x="0" y="96" width="32" height="96"/>
-  <object x="320" y="96" width="64" height="320"/>
-  <object x="544" y="96" width="32" height="64"/>
-  <object x="512" y="160" width="64" height="128"/>
-  <object x="448" y="288" width="256" height="96"/>
-  <object x="640" y="384" width="64" height="96"/>
-  <object x="640" y="480" width="192" height="96"/>
-  <object x="896" y="384" width="96" height="64"/>
-  <object x="800" y="192" width="64" height="96"/>
-  <object x="96" y="256" width="160" height="64"/>
-  <object x="32" y="544" width="480" height="96"/>
-  <object x="96" y="320" width="32" height="224"/>
-  <object x="448" y="736" width="256" height="64"/>
-  <object x="32" y="768" width="160" height="64"/>
-  <object x="192" y="800" width="64" height="64"/>
-  <object x="224" y="864" width="288" height="64"/>
-  <object x="672" y="800" width="32" height="224"/>
-  <object x="0" y="288" width="32" height="736"/>
-  <object x="800" y="672" width="224" height="352"/>
-  <object x="992" y="288" width="32" height="384"/>
- </objectgroup>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="64" y="32" width="32" height="32"/>
   <object name="light" x="192" y="32" width="32" height="32"/>
