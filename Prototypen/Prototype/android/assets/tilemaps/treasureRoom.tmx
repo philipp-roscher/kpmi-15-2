@@ -23,7 +23,7 @@
    eJzVV8lOAzEMdfmRhgJlm0KFQEJikVjuM+300P7/j5CosRpCnMSuc8DSu0wSPzu2Y88UAKZMjBZncJCZxVqgR8LbRdyhDV1jO+4TvLHMmTpvPG69/aEPY/DN4b2C/y06E+qKeTpCB8Yz9vfF4tHiIXFm6ddeo+9z+JsvNTIrnOknAFuLncUwkev5j/Jc+a1Gri1Oj7BFKsZzp+pqCGKLgv4NJ7ROXAvvgsqRc/hdh86WL0jntpa4GvmGg98x7hpyo8R+h1gk9kvzijp7keGn3tfRxnWTiTtnf+59rnnfjxXu/WsL13+MYc+4/z5Rh1J+bSn155ZvoSlw5+6AU4fU3prZpGUMamejFjEwldylOnQ9huq/ud6Uq/vWd2CY3Jo2SLkRlxZXTFuMP0P1WS7c/PoB+/n2CfYzQjx/LoP1T9D9D5H0BW6+ab8JmvzcXDTK3IjSrGxAL+corBJ2IO8g0PcD9KNIZQ==
   </data>
  </layer>
- <objectgroup name="colliderWalls" width="32" height="32" visible="0">
+ <objectgroup name="colliderWalls" width="32" height="32">
   <object x="0" y="0" width="480" height="96"/>
   <object x="0" y="96" width="384" height="96"/>
   <object x="384" y="96" width="64" height="32"/>
@@ -36,8 +36,12 @@
   <object x="576" y="160" width="64" height="32"/>
   <object x="768" y="192" width="96" height="32"/>
   <object x="768" y="224" width="64" height="32"/>
-  <object type="lockedDoor" x="160" y="320" width="96" height="32"/>
-  <object type="lockedDoor" x="768" y="320" width="96" height="32"/>
+  <object name="lockedDoor" type="lockedDoor" x="160" y="320" width="96" height="32">
+   <properties>
+    <property name="door" value="1"/>
+   </properties>
+  </object>
+  <object name="lockedDoor" type="lockedDoor" x="768" y="320" width="96" height="32"/>
   <object x="250" y="256" width="6" height="64"/>
   <object x="768" y="256" width="6" height="64"/>
   <object x="416" y="256" width="32" height="64"/>
@@ -68,7 +72,11 @@
   <object x="128" y="800" width="128" height="224"/>
   <object x="256" y="832" width="96" height="32"/>
   <object x="256" y="864" width="192" height="64"/>
-  <object type="lockedDoor" x="448" y="864" width="128" height="32"/>
+  <object name="lockedDoor" type="lockedDoor" x="448" y="864" width="128" height="32">
+   <properties>
+    <property name="door" value="1"/>
+   </properties>
+  </object>
   <object x="576" y="864" width="192" height="64"/>
   <object x="256" y="928" width="64" height="32"/>
   <object x="256" y="960" width="96" height="64"/>
@@ -93,7 +101,7 @@
   <object x="128" y="448" width="32" height="96"/>
   <object x="864" y="352" width="32" height="64"/>
   <object x="128" y="352" width="32" height="64"/>
-  <object type="lockedDoor" x="448" y="192" width="128" height="32"/>
+  <object name="lockedDoor" type="lockedDoor" x="448" y="192" width="128" height="32"/>
   <object x="352" y="192" width="96" height="32"/>
   <object x="576" y="192" width="96" height="32"/>
  </objectgroup>
@@ -110,8 +118,12 @@
   <object x="576" y="160" width="64" height="32"/>
   <object x="768" y="192" width="96" height="32"/>
   <object x="768" y="224" width="64" height="32"/>
-  <object type="lockedDoor" x="160" y="320" width="96" height="32"/>
-  <object type="lockedDoor" x="768" y="320" width="96" height="32"/>
+  <object name="lockedDoor" type="lockedDoor" x="160" y="320" width="96" height="32">
+   <properties>
+    <property name="door" value="1"/>
+   </properties>
+  </object>
+  <object name="lockedDoor" type="lockedDoor" x="768" y="320" width="96" height="32"/>
   <object x="250" y="256" width="6" height="64"/>
   <object x="768" y="256" width="6" height="64"/>
   <object x="416" y="256" width="32" height="64"/>
@@ -142,7 +154,11 @@
   <object x="128" y="800" width="128" height="224"/>
   <object x="256" y="832" width="96" height="32"/>
   <object x="256" y="864" width="192" height="64"/>
-  <object type="lockedDoor" x="448" y="864" width="128" height="32"/>
+  <object name="lockedDoor" type="lockedDoor" x="448" y="864" width="128" height="32">
+   <properties>
+    <property name="door" value="1"/>
+   </properties>
+  </object>
   <object x="576" y="864" width="192" height="64"/>
   <object x="256" y="928" width="64" height="32"/>
   <object x="256" y="960" width="96" height="64"/>
@@ -167,9 +183,9 @@
   <object x="128" y="448" width="32" height="96"/>
   <object x="864" y="352" width="32" height="64"/>
   <object x="128" y="352" width="32" height="64"/>
+  <object name="lockedDoor" type="lockedDoor" x="448" y="192" width="128" height="32"/>
   <object x="352" y="192" width="96" height="32"/>
   <object x="576" y="192" width="96" height="32"/>
-  <object type="lockedDoor" x="448" y="192" width="128" height="32"/>
  </objectgroup>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="32" y="128" width="32" height="32"/>

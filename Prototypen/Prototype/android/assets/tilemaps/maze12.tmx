@@ -20,7 +20,7 @@
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzFVlFOwzAMtbjIoMAGg7Ef+OEHAX/8sNJTAGPsBNwAuACHxRax5ho3TeZQLD1VtRM/x4mdjABglIkGsQ8bqRCniJPwJUzVP9tZ92D4tGyNoTsDvzwrn0tlY+6l0hFmBfhJxvCzthfDtlL6R7Bz75Eqcdwa2vl4K8SfKmNo7/vXwPwHgb9GPA3MTUJnQdfAayHfOX4oDq7RO8QEcYQ4Fl/GxNBZ2LaWrJzwGbV6j+xLUzHPu6eV8KVr8x3xEfCp5sn+QzHsOWLgXFh9JCZcVyV7Gsv9Tr/uUPB7c6ClNvi1Tq6fY7hFnCMuEJcF47FE8zNYrqBsTlL4Z8peel/6+OeGff576qD8NZTtuTF+nf+u2P6DP9Yj1mJcLE9y3MLgl2+7nPXLsbRf+u7hf4tTvjOvYVP/N9C+R2L9VfI3YN87XfcV6b1vulXw3Yg4rfuHx/1F36d+nnJGZa5KvOWl31x+Oit0Lkr0uG34dRwaOT3Hw9+F1PxQXS/C+L7676pBTxze+s+Jw4ohJ6de6Bh2Hev6BkC4VCU=
+   eJzFVlFOwzAMtbjIoIwNBqM/8MMPAv74YaWnALaxE3AD4AIcFlvEmmvctJlDsfRU1U78HCd2MgKAUSJqxCFspUCcIU7DlzBT/2xn3aPh07LVhu4c/PKifC6VjbmXSkeYZ+AnmcDP2laGba30T2Dn3iNFz3EbaObjLRN/X5lAc9+/BuYfB/4K8TwwNwmdBV0Dr5l8p/ihOLhG7xFTxDHiRHwZU0NnYddasnLCZ9TqPbIvzcQ8754WwpeuzXfER8Cnmif7D8Vw4IiBc2H1kZhwXeXsaSwPe926I8HvzYGWyuDXOrl+juEOcYG4RFxljMcSzU8ohf0a8uakD/9c2XPvSxd/adjL31MH5a8gb8+N8ev8t8X2H/yxHrER42J5kuMWBr9826WsX46l/dJ3D/9bnPKdeQPb+r+F5j0S66+Svwb73mm7r0jvfdOtg+9axGndPzzuL/o+9fM+Z1TmKsdbXvpN5aezQuciR4/bhV/HoZHSczz8beibH6rrRRjfVf9tNeiJw1v/KXFYMaTk1Asdw75jXd/HuFQ1
   </data>
  </layer>
  <objectgroup name="colliderWalls" width="0" height="0">
@@ -159,8 +159,8 @@
   <object name="light" x="320" y="256" width="32" height="32"/>
   <object name="light" x="672" y="768" width="32" height="32"/>
   <object name="light" x="896" y="768" width="32" height="32"/>
-  <object type="secretGM" x="192" y="768"/>
-  <object type="secretGM" x="194" y="449"/>
+  <object name="secretGM" type="secretGM" x="192" y="768"/>
+  <object name="secretGM" type="secretGM" x="194" y="449"/>
  </objectgroup>
  <objectgroup name="monsters" width="32" height="32">
   <object name="zombie" x="224" y="224" width="32" height="32"/>
