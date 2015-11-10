@@ -229,7 +229,6 @@ public class GameServer {
 						GameClientCount GameClientCount = new GameClientCount();
 						GameClientCount.count = clientCount;
 						server.sendToAllTCP(clientCount);
-						System.out.println("ENDE");
 					}
 				}
 		     });
