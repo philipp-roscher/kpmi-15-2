@@ -218,7 +218,8 @@ public class InventorySystem extends ObservingEntitySystem {
                if(intersector.overlaps(key.getCollider(), iam.get(character).area))
                {
                    im.get(character).addKeyPart(key);
-                   if(im.get(character).getKeyBag())
+                   if(im.get(character).getKeyBag().size() == 3)
+
                    //updateKeyBags(tm.get(character).TeamId);
                    renderer.getKeys().remove(key);
                }

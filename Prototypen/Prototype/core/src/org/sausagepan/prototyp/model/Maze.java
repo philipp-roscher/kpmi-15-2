@@ -78,6 +78,18 @@ public class Maze extends EntitySystem {
         }
     }
 
+    /**
+     * Moves treasure room door colliders 1000m southwards opening the gates
+     */
+    public void openTreasureRoom() {
+        // TODO remove colliders with id "lockedDoor"
+        MapObjects mo = getColliders();
+        for(MapObject m : mo)
+            if(m.getName().equals("lockedDoor")) {
+                ((RectangleMapObject) m).getRectangle().y -= 960;
+            }
+    }
+
     /* ..................................................................... GETTERS & SETTERS .. */
     public void addCharacterSpriteComponent(CharacterSpriteComponent spriteComponent) {
         this.tiledMapRenderer.addCharacterSpriteComponent(spriteComponent);
