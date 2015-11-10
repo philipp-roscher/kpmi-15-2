@@ -39,6 +39,7 @@ import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.NetworkPosition;
+import org.sausagepan.prototyp.network.MonsterListener;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -94,6 +95,9 @@ public class InMaze implements Screen, PlayerObserver {
 
     // Light
     RayHandler rayHandler;  // handles rays of light
+
+	//Listener
+	private MonsterListener monsterLis;
 	
 	/* .......................................................................... CONSTRUCTORS .. */
 
@@ -198,6 +202,9 @@ public class InMaze implements Screen, PlayerObserver {
 //        Gdx.input.setInputProcessor(new PlayerInputProcessor(localPlayer, this.camera));
 //        Gdx.input.setInputProcessor(ECS.getLocalCharacterEntity().getComponent(InputComponent.class));
         Gdx.input.setInputProcessor(ECS.getInputProcessor());
+
+		//Listener for Monsters to see clients
+		world.setContactListener(monsterLis);
 	}
 
 	@Override

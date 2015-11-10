@@ -28,8 +28,10 @@ import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.KeyViewerComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
+import org.sausagepan.prototyp.model.components.MazeGenerator;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SensorBodyComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -65,12 +67,15 @@ public class EntityComponentSystem {
     private Maze maze;
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
+    private MazeGenerator mazeGen;
 
     private int localCharacterId;
     private CharacterEntity localCharacter;
 
     private String clientClass;
     private int TeamId;
+
+    private float [] [] startPos;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
@@ -125,6 +130,7 @@ public class EntityComponentSystem {
             monster.add(new InjurableAreaComponent(pos.x, pos.y, .8f, 1f));
             //same Team as GM -> no friendly fire
             monster.add(new TeamComponent(0));
+            monster.add(new SensorBodyComponent(world, new Vector2(pos.x, pos.y)));
 
             this.engine.addEntity(monster);
             System.out.println("Added monster at (" + pos.x + "|" + pos.y + ")");
