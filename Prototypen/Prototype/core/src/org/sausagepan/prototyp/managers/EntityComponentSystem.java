@@ -303,7 +303,7 @@ public class EntityComponentSystem {
     public void update(float delta) {
 
         engine.update(delta);
-        engine.getSystem(InventorySystem.class).drawKeys();
+        engine.getSystem(InventorySystem.class).update(maze.getTiledMapRenderer());
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {

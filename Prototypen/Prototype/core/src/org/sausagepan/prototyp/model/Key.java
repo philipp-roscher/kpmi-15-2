@@ -27,9 +27,9 @@ public class Key {
         this.keySection = keySection;
         this.keyActor = keyActor;
         this.sprite = new EntitySprite(region);
-        this.sprite.setSize(this.sprite.getWidth()*2, this.sprite.getHeight()*2);
+        this.sprite.setSize(this.sprite.getWidth() * 0.02f, this.sprite.getHeight() * 0.02f);
         this.sprite.visible = false;
-        this.collider = new Rectangle(0, 0, this.sprite.getWidth(), this.sprite.getHeight());
+        this.collider = new Rectangle(this.sprite.getX(), this.sprite.getY(), this.sprite.getWidth() *2, this.sprite.getHeight() *2);
     }
 
     /*...........................................................................Getters & Setters*/
@@ -40,6 +40,7 @@ public class Key {
     public Rectangle getCollider() { return this.collider; }
 
     public KeyActor getKeyActor() { return this.keyActor;}
+
 
 
 }
