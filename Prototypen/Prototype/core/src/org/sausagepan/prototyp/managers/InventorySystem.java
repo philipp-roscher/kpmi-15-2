@@ -204,8 +204,8 @@ public class InventorySystem extends ObservingEntitySystem {
     }
 
     /*
-    hier werden die rectangles von schüssel und charakteren geprüft.
-    Ich muss es so erweitern, dass nur der Schlüsselträger sie aufnehmen kann
+    hier werden die rectangles von schï¿½ssel und charakteren geprï¿½ft.
+    Ich muss es so erweitern, dass nur der Schlï¿½sseltrï¿½ger sie aufnehmen kann
     intersector.overlaps(rect 1, rect2) deutet die Kollision an
      */
     public void addKey(OrthogonalTiledMapRendererWithPlayers renderer)
@@ -218,6 +218,7 @@ public class InventorySystem extends ObservingEntitySystem {
                if(intersector.overlaps(key.getCollider(), iam.get(character).area))
                {
                    im.get(character).addKeyPart(key);
+                   if(im.get(character).getKeyBag())
                    //updateKeyBags(tm.get(character).TeamId);
                    renderer.getKeys().remove(key);
                }
@@ -316,11 +317,11 @@ public class InventorySystem extends ObservingEntitySystem {
     }
 
     /*
-    ein sehr banaler Ausweg für die letzte Minute war, ein Liste im OrthoganlTiledMapRendererWithPlayers
-    einzufügen, für die beta werde ich mir eine neue klasse dafür ausdenken, um die items zu rendern
-    hier werden die charaktere nach ihren hp´s gefragt, ob diese 0 ist. dann sieht man nach, ob der spieler
-    der schlüsselträger ist. Falls der Träger Schlüsselteile hat, verliert er diese und werden zum der liste
-    im Renderer übertragen
+    ein sehr banaler Ausweg fï¿½r die letzte Minute war, ein Liste im OrthoganlTiledMapRendererWithPlayers
+    einzufï¿½gen, fï¿½r die beta werde ich mir eine neue klasse dafï¿½r ausdenken, um die items zu rendern
+    hier werden die charaktere nach ihren hpï¿½s gefragt, ob diese 0 ist. dann sieht man nach, ob der spieler
+    der schlï¿½sseltrï¿½ger ist. Falls der Trï¿½ger Schlï¿½sselteile hat, verliert er diese und werden zum der liste
+    im Renderer ï¿½bertragen
     */
     public void loseKeys(OrthogonalTiledMapRendererWithPlayers renderer)
     {
@@ -335,7 +336,7 @@ public class InventorySystem extends ObservingEntitySystem {
                     {
                         keys = im.get(character).loseKeys();
                         kvm.get(character).removeKeys();
-                        //System.out.println("Anzahl Schlüssel: " + keys.size());
+                        //System.out.println("Anzahl Schlï¿½ssel: " + keys.size());
                         for(Key key : keys)
                         {
                             key.getSprite().visible = true;
