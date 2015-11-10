@@ -186,7 +186,9 @@ public class MainMenuScreen implements Screen {
 				
 				@Override
 				public void input(String text) {
-					// TODO Auto-generated method stub
+					// trim IP to remove unnecessary whitepaces (sometimes created by android auto-correct)
+					text = text.trim();
+					
 					Gdx.app.log("ServerConnector", "Attempting Connection to: "+ text);
 					try {
 						connectionStatus = 1;
