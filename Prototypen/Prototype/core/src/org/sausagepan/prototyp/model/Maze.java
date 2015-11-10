@@ -55,7 +55,6 @@ public class Maze extends EntitySystem {
         this.world = world;
         // set up map renderer and scale
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
-        openTreasureRoom();
     }
     /* ............................................................................... METHODS .. */
     public void render(OrthographicCamera camera) {
