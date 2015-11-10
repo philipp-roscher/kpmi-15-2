@@ -5,9 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
+import org.sausagepan.prototyp.enums.KeySection;
+import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
+import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
+import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
 
 /**
  * Created by philipp on 06.11.15.
@@ -39,6 +43,15 @@ public class NetworkComponent implements Component {
 	
 	public void sendHPUpdate(HPUpdateRequest hpupdate) {
 		client.sendTCP(hpupdate);
+	}
+
+	public void loseKey(KeySection keySection, float x, float y) {
+		System.out.println("LOSEKEY");
+		client.sendTCP(new LoseKeyRequest(id,keySection,x,y));
+	}
+
+	public void takeKey(KeySection keySection) {
+		client.sendTCP(new TakeKeyRequest(id,keySection));
 	}
     
     /* ..................................................................... GETTERS & SETTERS .. */

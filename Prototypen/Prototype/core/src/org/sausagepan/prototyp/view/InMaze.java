@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.PlayerAction;
+import org.sausagepan.prototyp.enums.KeySection;
 import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.managers.PlayerManager;
@@ -32,12 +33,14 @@ import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
+import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.NetworkPosition;
 
 import com.badlogic.gdx.Gdx;
@@ -174,7 +177,9 @@ public class InMaze implements Screen, PlayerObserver {
 						(object instanceof AttackResponse) ||
 						(object instanceof ShootResponse) ||
 						(object instanceof HPUpdateResponse) ||
-						(object instanceof FullGameStateResponse)) {
+						(object instanceof FullGameStateResponse) ||
+						(object instanceof LoseKeyResponse) ||
+						(object instanceof TakeKeyResponse)) {
 					// System.out.println( object.getClass() +" empfangen");
 					networkMessages.add(object);
 				}
@@ -373,7 +378,21 @@ public class InMaze implements Screen, PlayerObserver {
 				if (object instanceof HPUpdateResponse) {
 					HPUpdateResponse result = (HPUpdateResponse) object;
 					ECS.updateHP(result);
-	//				playerMan.players.get(result.playerId).getStatus_().setHP(result.HP);
+				}
+
+				if (object instanceof LoseKeyResponse) {
+					System.out.println("LoseKeyResponse");
+					LoseKeyResponse result = (LoseKeyResponse) object;
+					switch(result.keySection) {
+						case PartOne: break; 
+					}
+					ECS.loseKey(result);
+				}
+				
+				if (object instanceof TakeKeyResponse) {
+					System.out.println("TakeKeyResponse");
+					TakeKeyResponse result = (TakeKeyResponse) object;
+					ECS.takeKey(result);
 				}
 			}
 		}

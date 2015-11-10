@@ -21,6 +21,7 @@ public class DynamicBodyComponent implements Component {
     public Fixture fixture;
     public Rectangle injurableArea;
     public Vector2 direction;
+    public Vector2 startPosition;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public DynamicBodyComponent(World world, Vector2 startPosition, String playerClass) {
@@ -44,10 +45,15 @@ public class DynamicBodyComponent implements Component {
         fixture = dynamicBody.createFixture(fixDef);    // add fixture to body
         circle.dispose();
         direction = new Vector2(0,-1);
+        this.startPosition = startPosition;
     }
 
 
     /* ............................................................................... METHODS .. */
+    
+    public void resetToStartPosition() {
+    	dynamicBody.setTransform(startPosition, 0f);
+    }
     
     /* ..................................................................... GETTERS & SETTERS .. */
 }

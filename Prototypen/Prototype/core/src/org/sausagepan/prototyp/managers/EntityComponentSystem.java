@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.Damagetype;
+import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -39,8 +40,10 @@ import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
+import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
 import box2dLight.RayHandler;
@@ -443,6 +446,27 @@ public class EntityComponentSystem {
 			return characters.get(playerId);
 		
 		return null;
+	}
+
+	public void loseKey(LoseKeyResponse result) {
+		if(characters.get(result.id) != null) {
+			Key key = itemFactory.createKey(result.keySection);
+			key.getSprite().visible = true;
+            key.getSprite().setPosition(result.x, result.y);
+            key.getCollider().setPosition(key.getSprite().getX(), key.getSprite().getY());
+			maze.getTiledMapRenderer().getKeys().add(key);
+			characters.get(result.id).getComponent(InventoryComponent.class).loseKeys();
+		}
+	}
+
+	public void takeKey(TakeKeyResponse result) {
+		if(characters.get(result.id) != null) {
+			characters.get(result.id).getComponent(InventoryComponent.class).addKeyPart(itemFactory.createKey(result.keySection));
+			for(Key key : maze.getTiledMapRenderer().getKeys()) {
+				if(key.getKeySection().equals(result.keySection))
+					maze.getTiledMapRenderer().getKeys().remove(key);
+			}
+		}
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */
