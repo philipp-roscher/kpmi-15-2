@@ -275,7 +275,7 @@ public class InventorySystem extends ObservingEntitySystem {
             }
         }*/
 
-        System.out.println(teamOne[0]);
+        //System.out.println(teamOne[0]);
         if(teamOne[0] != null)
         {
             if(im.get(teamOne[0]).isKeyHolder) {
