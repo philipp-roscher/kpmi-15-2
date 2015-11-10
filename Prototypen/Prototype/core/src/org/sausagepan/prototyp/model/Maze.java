@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -96,5 +97,9 @@ public class Maze extends EntitySystem {
 
     public Array<Vector2> getMonsterPositions() {
         return monsterPositions;
+    }
+
+    public MapObjects getColliders() {
+        return tiledMap.getLayers().get("colliderWalls").getObjects();
     }
 }

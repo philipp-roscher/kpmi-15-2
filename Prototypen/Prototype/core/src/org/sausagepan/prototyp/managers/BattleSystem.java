@@ -62,31 +62,7 @@ public class BattleSystem extends ObservingEntitySystem {
     public BattleSystem(ObservableEngine engine) {this.engine = engine;}
 
     /* ............................................................................... METHODS .. */
-
-
-
-//    public void updateAttack(Player attacker, ArrayList<Player> characters) {
-//        for(Player c : characters) {
-//            if(!attacker.equals(c)) {
-//                if (attacker.getWeapon().getCollider().overlaps(c.getDamageCollider()))
-//                    c.getStatus_().doPhysicalHarm(
-//                            attacker.getWeapon().getDamage()
-//                                    + attacker.getStatus_().getAttPhys());
-//
-//            }
-//        }
-//    }
-
-//    public void updateBullets(Player attacker, ArrayList<Player> characters) {
-//        for(Player c : characters) {
-//            if(!attacker.equals(c))
-//                for(Bullet b : attacker.getBullets())
-//                    if(b.overlaps(c.getDamageCollider())) c.getStatus_().
-//                            doPhysicalHarm(attacker.getWeapon().getDamage()
-//                            + attacker.getStatus_().getAttPhys());
-//        }
-//    }
-public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(ObservableEngine engine) {
     attackers = engine.getEntitiesFor(Family.all(
             HealthComponent.class,
             DynamicBodyComponent.class,

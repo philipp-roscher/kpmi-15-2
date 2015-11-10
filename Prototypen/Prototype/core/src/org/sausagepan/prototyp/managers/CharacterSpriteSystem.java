@@ -40,6 +40,7 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
             CharacterSpriteComponent sprite = cm.get(entity);
             DynamicBodyComponent body = dm.get(entity);
 
+            if(body.dynamicBody.getLinearVelocity().len() > 0.1)
             if(Math.abs(body.dynamicBody.getLinearVelocity().x)
              > Math.abs(body.dynamicBody.getLinearVelocity().y)) {
                 // Character horizontally
