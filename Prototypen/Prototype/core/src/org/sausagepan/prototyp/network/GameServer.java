@@ -79,7 +79,7 @@ public class GameServer {
 	//to count active Clients in Session
 	public static int clientCount;
 	//maximal Number of Clients per Session
-	private int maxClients = 2;
+	private int maxClients = 5;
 
 
 	public GameServer() {
@@ -112,7 +112,7 @@ public class GameServer {
 		        	if (object instanceof NewHeroRequest) {
 		        		NewHeroRequest request = (NewHeroRequest) object;
 		        		HeroInformation hero = request.hero;
-		        		System.out.println("New Hero (ID "+ request.playerId +"): "+ request.hero.clientClass);
+		        		System.out.println("New Hero (ID " + request.playerId + "): " + request.hero.clientClass);
 		        		connection.sendTCP(map);
 		        		
 		        		cm.put(request.playerId, hero);
@@ -200,23 +200,24 @@ public class GameServer {
 					//if(ip == null) ip = connection.getRemoteAddressUDP();
 
 					//connection.id is (at the moment) identical to the ID in ClientIds
-//					int id = connection.getID();
-//					positions.remove(id);
-//					TeamAssignments.remove(id);
-//					//Would need ipadress / key to remove this too: How??
-//					//clientIds.remove(ip);
-//					System.out.println(id + " has disconnected");
-//					//System.out.println(clientIds);
-//					//System.out.println(TeamAssignments);
-//
-//
-//					//decrease clientCount and send to all clients via TCP
-//					clientCount--;
-//					System.out.println("clientCount at: "+clientCount);
-//					GameClientCount GameClientCount = new GameClientCount();
-//					GameClientCount.count = clientCount;
-//					server.sendToAllTCP(clientCount);
+					int id = connection.getID();
+					//only happens if it wasn't deleted with "deleteOldClients" beforehand
+					if (positions.containsKey(id)) {
+						positions.remove(id);
+						lastAccess.remove(id);
+						TeamAssignments.remove(id);
+						cm.remove(id);
+						server.sendToAllUDP(new DeleteHeroResponse(id));
+						System.out.println("Automatically deleted Player "+connection);
 
+						//decrease clientCount and send to all clients via TCP
+						clientCount--;
+						System.out.println("clientCount at: " + clientCount);
+						GameClientCount GameClientCount = new GameClientCount();
+						GameClientCount.count = clientCount;
+						server.sendToAllTCP(clientCount);
+						System.out.println("ENDE");
+					}
 				}
 		     });
 		    
@@ -249,21 +250,24 @@ public class GameServer {
 	        for(Map.Entry<Integer,Long> ltime : lastAccess.entrySet())
 	        {
 	        	if( (System.nanoTime() - ltime.getValue())/1e6 > timeoutMs ) {
-	        		int id = ltime.getKey();	   	
-	        		positions.remove(id);
-	        		lastAccess.remove(id);
-					TeamAssignments.remove(id);
-	        		cm.remove(id);
-	        		server.sendToAllUDP(new DeleteHeroResponse(id));
-	        		System.out.println("Automatically deleted Player "+ltime.getKey());
+	        		int id = ltime.getKey();
+					//only happens if it wasn't deleted with "disconnected" beforehand
+					if (positions.containsKey(id)) {
+						positions.remove(id);
+						lastAccess.remove(id);
+						TeamAssignments.remove(id);
+						cm.remove(id);
+						server.sendToAllUDP(new DeleteHeroResponse(id));
+						System.out.println("Automatically deleted Player "+ltime.getKey());
 
-					//decrease clientCount and send to all clients via TCP
-					clientCount--;
-					System.out.println("clientCount at: "+clientCount);
-					GameClientCount GameClientCount = new GameClientCount();
-					GameClientCount.count = clientCount;
-					server.sendToAllTCP(clientCount);
-					System.out.println("ENDE");
+						//decrease clientCount and send to all clients via TCP
+						clientCount--;
+						System.out.println("clientCount at: " + clientCount);
+						GameClientCount GameClientCount = new GameClientCount();
+						GameClientCount.count = clientCount;
+						server.sendToAllTCP(clientCount);
+						System.out.println("ENDE");
+					}
 	        	}
 	        }
 	    }

@@ -287,6 +287,7 @@ public class EntityComponentSystem {
             localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));   //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
             localCharacter.add(new InventoryComponent());
             localCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
+            maze.openSecretPassages();  // opens passages for game master
         }
 
         characters.put(localCharacterId, localCharacter);
@@ -406,7 +407,6 @@ public class EntityComponentSystem {
             newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));     //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
             newCharacter.add(new InventoryComponent());
             newCharacter.add(new KeyViewerComponent(maze.getTiledMapRenderer().getBatch()));
-            maze.openSecretPassages();  // opens passages for game master
         }
 
         characters.put(newCharacterId, newCharacter);
