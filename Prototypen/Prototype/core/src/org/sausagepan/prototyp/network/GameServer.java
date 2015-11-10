@@ -148,8 +148,7 @@ public class GameServer {
 
 				    if (object instanceof FullGameStateRequest) {
 					   System.out.println("FullGameStateRequest eingegangen");
-
-	        	   FullGameStateResponse response = new FullGameStateResponse(cm);
+					   FullGameStateResponse response = new FullGameStateResponse(cm);
 		        	   connection.sendTCP(response);
 			       }
 		           
@@ -157,8 +156,6 @@ public class GameServer {
 		           if (object instanceof AttackRequest) {
 					   AttackRequest request = (AttackRequest)object;
 					   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
-					   /* if(request.stop == false)
-						   bs.attack(playerMan.players.get(request.playerId), playerMan.getPlayers()); */
 		           }
 		           
 		           if (object instanceof ShootRequest) {

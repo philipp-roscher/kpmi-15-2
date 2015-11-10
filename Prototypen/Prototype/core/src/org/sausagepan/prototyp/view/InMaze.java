@@ -383,9 +383,6 @@ public class InMaze implements Screen, PlayerObserver {
 				if (object instanceof LoseKeyResponse) {
 					System.out.println("LoseKeyResponse");
 					LoseKeyResponse result = (LoseKeyResponse) object;
-					switch(result.keySection) {
-						case PartOne: break; 
-					}
 					ECS.loseKey(result);
 				}
 				
