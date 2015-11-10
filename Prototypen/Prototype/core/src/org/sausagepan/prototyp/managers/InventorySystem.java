@@ -67,6 +67,7 @@ public class InventorySystem extends ObservingEntitySystem {
         drawKeys();
         loseKeys(renderer);
         addKey(renderer);
+        updateKeyBags();
     }
 
     public void setWeaponInInventory()
@@ -229,6 +230,7 @@ public class InventorySystem extends ObservingEntitySystem {
                if(intersector.overlaps(key.getCollider(), iam.get(character).area))
                {
                    im.get(character).addKeyPart(key);
+                   kvm.get(character).addKey(key.getKeyActor());
                    // Open treasure room, when character gains all three key parts
                    if(im.get(character).getKeyBag().size() == 3)
                        maze.openTreasureRoom();
@@ -239,9 +241,8 @@ public class InventorySystem extends ObservingEntitySystem {
                    nm.get(character).takeKey(key.getKeySection());
                }
            }
-
-           updateKeyBags();
        }
+
     }
 
     //die schlüssel vom schlüsselträger werden auf dem Partner übertragen
@@ -266,43 +267,59 @@ public class InventorySystem extends ObservingEntitySystem {
             }
         }
 
-        for(Key key : im.get(gameMaster).getKeyBag())
+        /*if(!(gameMaster.equals(null))) {
+            if(!im.get(gameMaster).getKeyBag().isEmpty()) {
+                for (Key key : im.get(gameMaster).getKeyBag()) {
+                    kvm.get(gameMaster).addKey(key.getKeyActor());
+                }
+            }
+        }*/
+
+        System.out.println(teamOne[0]);
+        if(teamOne[0] != null)
         {
-            kvm.get(gameMaster).addKey(key.getKeyActor());
+            if(im.get(teamOne[0]).isKeyHolder) {
+                if (teamOne[1] != null) {
+                    im.get(teamOne[1]).keyBag = im.get(teamOne[0]).getKeyBag();
+                    for (Key key : im.get(teamOne[1]).getKeyBag()) {
+                        //hier wird es dann zur ui hinzugefügt
+                        kvm.get(teamOne[1]).addKey(key.getKeyActor());
+                    }
+                }
+            }
+        }
+        else if(teamOne[1] != null)
+        {
+            if(im.get(teamOne[1]).isKeyHolder) {
+                if (teamOne[0] != null) {
+                    im.get(teamOne[0]).keyBag = im.get(teamOne[1]).getKeyBag();
+                    for (Key key : im.get(teamOne[0]).getKeyBag()) {
+                        kvm.get(teamOne[0]).addKey(key.getKeyActor());
+                    }
+                }
+            }
         }
 
-        if(im.get(teamOne[0]).isKeyHolder)
+        if(teamTwo[0] != null)
         {
-            im.get(teamOne[1]).keyBag = im.get(teamOne[0]).getKeyBag();
-            for(Key key : im.get(teamOne[1]).getKeyBag())
-            {
-                //hier wird es dann zur ui hinzugefügt
-                kvm.get(teamOne[1]).addKey(key.getKeyActor());
+            if(im.get(teamTwo[0]).isKeyHolder) {
+                if (teamTwo[1] != null) {
+                    im.get(teamTwo[1]).keyBag = im.get(teamTwo[0]).getKeyBag();
+                    for (Key key : im.get(teamTwo[1]).getKeyBag()) {
+                        kvm.get(teamTwo[1]).addKey(key.getKeyActor());
+                    }
+                }
             }
         }
-        else if(im.get(teamOne[1]).isKeyHolder)
+        else if(teamTwo[1] != null)
         {
-            im.get(teamOne[0]).keyBag = im.get(teamOne[1]).getKeyBag();
-            for(Key key : im.get(teamOne[0]).getKeyBag())
-            {
-                kvm.get(teamOne[0]).addKey(key.getKeyActor());
-            }
-        }
-
-        if(im.get(teamTwo[0]).isKeyHolder)
-        {
-            im.get(teamTwo[1]).keyBag = im.get(teamTwo[0]).getKeyBag();
-            for(Key key : im.get(teamTwo[1]).getKeyBag())
-            {
-                kvm.get(teamTwo[1]).addKey(key.getKeyActor());
-            }
-        }
-        else if(im.get(teamTwo[1]).isKeyHolder)
-        {
-            im.get(teamTwo[0]).keyBag = im.get(teamTwo[1]).getKeyBag();
-            for(Key key : im.get(teamOne[0]).getKeyBag())
-            {
-                kvm.get(teamTwo[0]).addKey(key.getKeyActor());
+            if(im.get(teamTwo[1]).isKeyHolder) {
+                if (teamTwo[0] != null) {
+                    im.get(teamTwo[0]).keyBag = im.get(teamTwo[1]).getKeyBag();
+                    for (Key key : im.get(teamOne[0]).getKeyBag()) {
+                        kvm.get(teamTwo[0]).addKey(key.getKeyActor());
+                    }
+                }
             }
         }
 
