@@ -123,6 +123,8 @@ public class EntityComponentSystem {
                     mediaManager.getTextureAtlas("textures/spritesheets/monsters/zombie_01.pack"), "monster"
             ));
             monster.add(new InjurableAreaComponent(pos.x, pos.y, .8f, 1f));
+            //same Team as GM -> no friendly fire
+            monster.add(new TeamComponent(0));
 
             this.engine.addEntity(monster);
             System.out.println("Added monster at (" + pos.x + "|" + pos.y + ")");
@@ -301,7 +303,7 @@ public class EntityComponentSystem {
     public void update(float delta) {
 
         engine.update(delta);
-        engine.getSystem(InventorySystem.class).drawKeys();
+        engine.getSystem(InventorySystem.class).update(maze.getTiledMapRenderer());
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
@@ -375,7 +377,7 @@ public class EntityComponentSystem {
         if (newHero.clientClass.equals("dragon_red")) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
             newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), newHero.clientClass
+                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), "dragon_red"
             ));
             newCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
             newCharacter.add(new HealthComponent(100));
@@ -406,7 +408,7 @@ public class EntityComponentSystem {
 	
 	public void attack(int id) {
 		if(characters.get(id) != null) {
-			System.out.println("Character greift an: "+id);
+			System.out.println("Character greift an: " + id);
 			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = true;
 //			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
 		}

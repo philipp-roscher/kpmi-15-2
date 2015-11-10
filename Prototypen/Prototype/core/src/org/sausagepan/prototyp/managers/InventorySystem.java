@@ -11,14 +11,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Intersector;
 
 import org.sausagepan.prototyp.enums.KeySection;
+import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.model.Key;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.KeyViewerComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.User_Interface.Actors.KeyActor;
+import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,11 +41,21 @@ public class InventorySystem extends ObservingEntitySystem {
     private ComponentMapper<WeaponComponent> wm = ComponentMapper.getFor(WeaponComponent.class);
     private ComponentMapper<TeamComponent> tm = ComponentMapper.getFor(TeamComponent.class);
     private ComponentMapper<KeyViewerComponent> kvm = ComponentMapper.getFor(KeyViewerComponent.class);
+    private ComponentMapper<DynamicBodyComponent> dbm = ComponentMapper.getFor(DynamicBodyComponent.class);
+    private ComponentMapper<HealthComponent> hm = ComponentMapper.getFor(HealthComponent.class);
+    private ComponentMapper<InjurableAreaComponent> iam = ComponentMapper.getFor(InjurableAreaComponent.class);
 
     /*...................................................................................Functions*/
     public void addedToEngine(ObservableEngine engine)
     {
-        characters = engine.getEntitiesFor(Family.all(WeaponComponent.class, InventoryComponent.class, TeamComponent.class, KeyViewerComponent.class).get());
+        characters = engine.getEntitiesFor(Family.all(WeaponComponent.class, InventoryComponent.class, TeamComponent.class, KeyViewerComponent.class, DynamicBodyComponent.class, HealthComponent.class, InjurableAreaComponent.class).get());
+    }
+
+    public void update(OrthogonalTiledMapRendererWithPlayers renderer)
+    {
+        drawKeys();
+        loseKeys(renderer);
+        addKey(renderer);
     }
 
     public void setWeaponInInventory()
@@ -50,7 +66,7 @@ public class InventorySystem extends ObservingEntitySystem {
         }
     }
 
-    //Hier wird bei beiden Teams der Schluesseltraeger durch Zufall ausgewaehlt und einen Schluesselteil uebergeben
+    //the keyholder is chosen by chance and the keybags are created for all the players
     public void setUpKeyBags()
     {
         Entity[] teamOne;
@@ -69,6 +85,7 @@ public class InventorySystem extends ObservingEntitySystem {
                 if(tm.get(character).TeamId == 0)
                 {
                     im.get(character).createKeyBag(true);
+                    im.get(character).isKeyHolder = true;
                     im.get(character).getKeyBag().add(keys.get(0));
 
                     kvm.get(character).create();
@@ -78,6 +95,7 @@ public class InventorySystem extends ObservingEntitySystem {
                 if(tm.get(character).TeamId == 1)
                 {
                     im.get(character).createKeyBag(true);
+                    im.get(character).isKeyHolder = true;
                     im.get(character).addKeyPart(keys.get(1));
 
                     kvm.get(character).create();
@@ -87,6 +105,7 @@ public class InventorySystem extends ObservingEntitySystem {
                 if(tm.get(character).TeamId == 2)
                 {
                     im.get(character).createKeyBag(true);
+                    im.get(character).isKeyHolder = true;
                     im.get(character).addKeyPart(keys.get(2));
 
                     kvm.get(character).create();
@@ -107,6 +126,7 @@ public class InventorySystem extends ObservingEntitySystem {
                 if(tc.TeamId == 0)
                 {
                     im.get(character).createKeyBag(true);
+                    im.get(character).isKeyHolder = true;
                     im.get(character).getKeyBag().add(keys.get(0));
 
                     kvm.get(character).create();
@@ -131,6 +151,7 @@ public class InventorySystem extends ObservingEntitySystem {
             number = getRandomNumber();
             if(teamOne[number] !=  null) {
                 im.get(teamOne[number]).createKeyBag(true);
+                im.get(teamOne[number]).isKeyHolder = true;
                 im.get(teamOne[number]).addKeyPart(keys.get(1));
 
                 kvm.get(teamOne[number]).create();
@@ -148,6 +169,7 @@ public class InventorySystem extends ObservingEntitySystem {
             number = getRandomNumber();
             if(teamTwo[number] !=  null) {
                 im.get(teamTwo[number]).createKeyBag(true);
+                im.get(teamTwo[number]).isKeyHolder = true;
                 im.get(teamTwo[number]).addKeyPart(keys.get(2));
 
                 kvm.get(teamTwo[number]).create();
@@ -166,6 +188,7 @@ public class InventorySystem extends ObservingEntitySystem {
         keys.clear();
     }
 
+    //the keys are shown as part of the ui
     public void drawKeys()
     {
         /*for(int x= 0; x < characters.size(); x++)
@@ -180,55 +203,139 @@ public class InventorySystem extends ObservingEntitySystem {
         }
     }
 
-    public void updateKeyBags()
+    public void addKey(OrthogonalTiledMapRendererWithPlayers renderer)
     {
-        Entity[] teamOne;
-        Entity[] teamTwo;
-        int countOne;
-        int countTwo;
+        Intersector intersector = new Intersector();
+       for(Entity character : characters)
+       {
+           for(Key key : renderer.getKeys())
+           {
+               if(intersector.overlaps(key.getCollider(), iam.get(character).area))
+               {
+                   im.get(character).addKeyPart(key);
+                   //updateKeyBags(tm.get(character).TeamId);
+                   renderer.getKeys().remove(key);
+               }
+           }
 
-        if(characters.size() <= 3)
-            return;
+           /*for(Key key : renderer.getKeys())
+           {
+               if(iam.get(character).area.overlaps(key.getCollider()))
+               {
+                   im.get(character).addKeyPart(key);
+                   updateKeyBags(tm.get(character).TeamId);
+                   renderer.removeKey(key);
+               }
+           }*/
+       }
+    }
 
-        if(characters.size() == 5)
+    //the keyholder who has gained keys renews the keybag
+    public void updateKeyBags(int id)
+    {
+        if(id == 0)
         {
-            teamOne = new Entity[2];
-            teamTwo = new Entity[2];
+            Entity gameMaster = new Entity();
+            for(Entity character : characters)
+            {
+                if(character.getComponent(TeamComponent.class).TeamId == 0)
+                {
+                    gameMaster = character;
+                    break;
+                }
+            }
 
-            countOne = 0;
-            countTwo = 0;
+            if(gameMaster == null)
+                return;
+
+            if(im.get(gameMaster).getKeyBag().size() != 0)
+            {
+                for(Key key : im.get(gameMaster).getKeyBag())
+                {
+                    if(key != null)
+                        kvm.get(gameMaster).addKey(key.getKeyActor());
+                }
+            }
+        }
+
+        if(id == 1 || id == 2)
+        {
+            Entity[] team = new Entity[2];
+            int count = 0;
 
             for(Entity character : characters)
             {
-                if(tm.get(character).TeamId == 1)
+                if(tm.get(character).TeamId == id)
                 {
-                    teamOne[countOne] = character;
-                    countOne++;
-                }
-
-                if(tm.get(character).TeamId == 2)
-                {
-                    teamTwo[countTwo] = character;
-                    countTwo++;
+                    team[count] = character;
+                    count++;
                 }
             }
 
-            if(im.get(teamOne[0]).isKeyHolder)
+            if(im.get(team[0]).isKeyHolder)
             {
-                im.get(teamOne[1]).keyBag = im.get(teamOne[0]).getKeyBag();
-            }
-            else if(im.get(teamOne[1]).isKeyHolder)
-            {
-                im.get(teamOne[0]).keyBag = im.get(teamOne[1]).getKeyBag();
+                if(team[1] != null)
+                {
+                    im.get(team[1]).keyBag = im.get(team[0]).getKeyBag();
+                }
+
+                if(im.get(team[0]).getKeyBag().size() != 0)
+                {
+                    for(Key key : im.get(team[0]).getKeyBag())
+                    {
+                        kvm.get(team[0]).addKey(key.getKeyActor());
+                        kvm.get(team[1]).addKey(key.getKeyActor());
+                    }
+                }
             }
 
-            if(im.get(teamTwo[0]).isKeyHolder)
+            if(im.get(team[1]).isKeyHolder)
             {
-                im.get(teamTwo[1]).keyBag = im.get(teamTwo[0]).getKeyBag();
+                if(team[0] != null)
+                {
+                    im.get(team[0]).keyBag = im.get(team[1]).getKeyBag();
+                }
+
+                if(im.get(team[1]).getKeyBag().size() != 0)
+                {
+                    for(Key key : im.get(team[1]).getKeyBag())
+                    {
+                        kvm.get(team[1]).addKey(key.getKeyActor());
+                        kvm.get(team[0]).addKey(key.getKeyActor());
+                    }
+                }
             }
-            else if(im.get(teamTwo[1]).isKeyHolder)
+        }
+
+
+    }
+
+    public void loseKeys(OrthogonalTiledMapRendererWithPlayers renderer)
+    {
+        List<Key> keys;
+        for(Entity character : characters)
+        {
+            if(hm.get(character).HP == 0)
             {
-                im.get(teamTwo[0]).keyBag = im.get(teamTwo[1]).getKeyBag();
+                if(im.get(character).isKeyHolder)
+                {
+                    if(im.get(character).getKeyBag().size() != 0)
+                    {
+                        keys = im.get(character).loseKeys();
+                        kvm.get(character).removeKeys();
+                        //System.out.println("Anzahl Schlüssel: " + keys.size());
+                        for(Key key : keys)
+                        {
+                            key.getSprite().visible = true;
+                            key.getSprite().setPosition(dbm.get(character).dynamicBody.getPosition().x, dbm.get(character).dynamicBody.getPosition().y + 2f);
+                            key.getCollider().setPosition(key.getSprite().getX(), key.getSprite().getY());
+                            renderer.getKeys().add(key);
+                            System.out.println(renderer.getKeys().size());
+                        }
+
+                    }
+                }
+
             }
         }
     }
