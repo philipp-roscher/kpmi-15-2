@@ -29,6 +29,7 @@ public class InventoryComponent implements Component {
     public InventoryComponent()
     {
         backpack = new HashMap<Item, Integer>();
+        isKeyHolder = false;
     }
 
     /*..........................................................................Backpack functions*/
@@ -67,7 +68,14 @@ public class InventoryComponent implements Component {
 
     public List<Key> getKeyBag()
     {
-        return this.keyBag;
+        List<Key> keys = new LinkedList<Key>();
+        for(Key key : this.keyBag)
+        {
+            if(key != null)
+                keys.add(key);
+        }
+
+        return keys;
     }
 
     public void addKeyPart(Key key)
@@ -75,24 +83,30 @@ public class InventoryComponent implements Component {
         if(!this.isKeyHolder)
             return;
 
-        if(this.keyBag.contains(key))
-            return;
-
         switch(key.getKeySection())
         {
-            case PartOne: keyBag.add(0, key); break;
-            case PartTwo: keyBag.add(1, key); break;
-            case PartThree: keyBag.add(2, key); break;
+            case PartOne: this.keyBag.remove(0); this.keyBag.add(0, key); break;
+            case PartTwo: this.keyBag.remove(1); this.keyBag.add(1, key); break;
+            case PartThree: this.keyBag.remove(2); this.keyBag.add(2, key); break;
         }
     }
 
-    public List<Key> loseKey()
+    public List<Key> loseKeys()
     {
         if(!isKeyHolder)
             return null;
 
-        List<Key> keys = this.keyBag;
+        List<Key> keys = new LinkedList<Key>();
+        for(Key key : this.keyBag)
+        {
+            if(key != null)
+                keys.add(key);
+        }
         this.keyBag.clear();
+        for(int x=0; x<3; x++)
+        {
+            this.keyBag.add(x, null);
+        }
         return keys;
     }
 

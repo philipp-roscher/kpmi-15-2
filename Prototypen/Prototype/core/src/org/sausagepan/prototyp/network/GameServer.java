@@ -46,7 +46,7 @@ import com.esotericsoftware.kryonet.Server;
 
 public class GameServer {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
-	public static final int timeoutMs = 50000;
+	public static final int timeoutMs = 5000;
 	// Anzahl der GameStateUpdates pro Sekunde
 	public static final int updateRate = 32;
 	
@@ -120,7 +120,7 @@ public class GameServer {
 								ServerCharacterEntity(request.playerId));
 		        		NewHeroResponse response = new NewHeroResponse(request.playerId, request.hero);
 		        		server.sendToAllUDP(response);
-		        		updateLastAccess(request.playerId);
+		        		//updateLastAccess(request.playerId);
 		        	}
 		        	
 		        	if (object instanceof PositionUpdate) {
@@ -175,7 +175,7 @@ public class GameServer {
 		        	IDAssignment idAssignment = new IDAssignment();
 		        	idAssignment.id = maxId;
 		        	connection.sendTCP(idAssignment);
-			        updateLastAccess(maxId);
+			        //updateLastAccess(maxId);
 		        	maxId++;
 					//send maxClients to Client(s)
 					MaxClients MaxClients = new MaxClients();
@@ -200,22 +200,22 @@ public class GameServer {
 					//if(ip == null) ip = connection.getRemoteAddressUDP();
 
 					//connection.id is (at the moment) identical to the ID in ClientIds
-					int id = connection.getID();
-					positions.remove(id);
-					TeamAssignments.remove(id);
-					//Would need ipadress / key to remove this too: How??
-					//clientIds.remove(ip);
-					System.out.println(id + " has disconnected");
-					//System.out.println(clientIds);
-					//System.out.println(TeamAssignments);
-
-
-					//decrease clientCount and send to all clients via TCP
-					clientCount--;
-					System.out.println("clientCount at: "+clientCount);
-					GameClientCount GameClientCount = new GameClientCount();
-					GameClientCount.count = clientCount;
-					server.sendToAllTCP(clientCount);
+//					int id = connection.getID();
+//					positions.remove(id);
+//					TeamAssignments.remove(id);
+//					//Would need ipadress / key to remove this too: How??
+//					//clientIds.remove(ip);
+//					System.out.println(id + " has disconnected");
+//					//System.out.println(clientIds);
+//					//System.out.println(TeamAssignments);
+//
+//
+//					//decrease clientCount and send to all clients via TCP
+//					clientCount--;
+//					System.out.println("clientCount at: "+clientCount);
+//					GameClientCount GameClientCount = new GameClientCount();
+//					GameClientCount.count = clientCount;
+//					server.sendToAllTCP(clientCount);
 
 				}
 		     });
@@ -249,13 +249,21 @@ public class GameServer {
 	        for(Map.Entry<Integer,Long> ltime : lastAccess.entrySet())
 	        {
 	        	if( (System.nanoTime() - ltime.getValue())/1e6 > timeoutMs ) {
-	        		int id = ltime.getKey();
+	        		int id = ltime.getKey();	   	
 	        		positions.remove(id);
 	        		lastAccess.remove(id);
+					TeamAssignments.remove(id);
 	        		cm.remove(id);
 	        		server.sendToAllUDP(new DeleteHeroResponse(id));
 	        		System.out.println("Automatically deleted Player "+ltime.getKey());
-					//hier kein clientCount--, sonst geht das auf -1 usw.!!!
+
+					//decrease clientCount and send to all clients via TCP
+					clientCount--;
+					System.out.println("clientCount at: "+clientCount);
+					GameClientCount GameClientCount = new GameClientCount();
+					GameClientCount.count = clientCount;
+					server.sendToAllTCP(clientCount);
+					System.out.println("ENDE");
 	        	}
 	        }
 	    }
