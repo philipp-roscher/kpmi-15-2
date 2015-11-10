@@ -67,15 +67,23 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         characterSpriteComponents.add(spriteComponent);
     }
 
+	public void removeCharacterSpriteComponent(
+			CharacterSpriteComponent component) {
+		characterSpriteComponents.removeValue(component, true);
+	}
+
     public void addWeaponComponent(WeaponComponent weaponComponent) {
         weaponComponents.add(weaponComponent);
     }
 
+    public void removeWeaponComponent(WeaponComponent weaponComponent) {
+        weaponComponents.removeValue(weaponComponent, true);
+    }
+    
     public List<Key> getKeys()
     {
         return this.keys;
     }
-
 
     public void addSprite(Sprite newSprite) {
         sprites.add(newSprite);

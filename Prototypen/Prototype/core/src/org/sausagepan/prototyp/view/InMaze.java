@@ -335,8 +335,13 @@ public class InMaze implements Screen, PlayerObserver {
 					
 					if( playerId == game.clientId )
 						game.connected = false;
-						
-					//	ECS.deleteCharacter(playerId);
+
+					CharacterEntity removedCharacter = ECS.getCharacter(playerId);
+					if(removedCharacter != null) {
+						maze.removeCharacterSpriteComponent(removedCharacter.getComponent(CharacterSpriteComponent.class));
+						maze.removeWeaponComponent(removedCharacter.getComponent(WeaponComponent.class));
+						ECS.deleteCharacter(playerId);
+					}
 				}
 				
 				if (object instanceof GameStateResponse) {

@@ -86,6 +86,14 @@ public class Maze extends EntitySystem {
     public void addWeaponComponent(WeaponComponent weaponComponent) {
     	this.tiledMapRenderer.addWeaponComponent(weaponComponent);
     }
+	public void removeCharacterSpriteComponent(
+			CharacterSpriteComponent component) {
+		this.tiledMapRenderer.removeCharacterSpriteComponent(component);
+		
+	}
+	public void removeWeaponComponent(WeaponComponent component) {
+		this.tiledMapRenderer.removeWeaponComponent(component);		
+	}
 
     public OrthogonalTiledMapRendererWithPlayers getTiledMapRenderer() {
         return tiledMapRenderer;

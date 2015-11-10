@@ -402,8 +402,12 @@ public class EntityComponentSystem {
 		}
 	}
 
-	public void deleteCharacter(int playerId) {
-		//TODO Spieler l�schen (Philipp)
+	public void deleteCharacter(int id) {
+		if(characters.get(id) != null) {
+			System.out.println("Character wird gelöscht: " +id);
+			engine.removeEntity(this.characters.get(id));
+			this.characters.remove(id);
+		}
 	}
 	
 	public void attack(int id) {
@@ -432,6 +436,13 @@ public class EntityComponentSystem {
 	public void updateHP(HPUpdateResponse result) {
 		if(characters.get(result.playerId) != null)
 			this.characters.get(result.playerId).getComponent(HealthComponent.class).HP = result.HP;		
+	}
+
+	public CharacterEntity getCharacter(int playerId) {
+		if(characters.get(playerId) != null)
+			return characters.get(playerId);
+		
+		return null;
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */
