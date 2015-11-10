@@ -203,6 +203,11 @@ public class InventorySystem extends ObservingEntitySystem {
         }
     }
 
+    /*
+    hier werden die rectangles von schüssel und charakteren geprüft.
+    Ich muss es so erweitern, dass nur der Schlüsselträger sie aufnehmen kann
+    intersector.overlaps(rect 1, rect2) deutet die Kollision an
+     */
     public void addKey(OrthogonalTiledMapRendererWithPlayers renderer)
     {
         Intersector intersector = new Intersector();
@@ -310,6 +315,13 @@ public class InventorySystem extends ObservingEntitySystem {
 
     }
 
+    /*
+    ein sehr banaler Ausweg für die letzte Minute war, ein Liste im OrthoganlTiledMapRendererWithPlayers
+    einzufügen, für die beta werde ich mir eine neue klasse dafür ausdenken, um die items zu rendern
+    hier werden die charaktere nach ihren hp´s gefragt, ob diese 0 ist. dann sieht man nach, ob der spieler
+    der schlüsselträger ist. Falls der Träger Schlüsselteile hat, verliert er diese und werden zum der liste
+    im Renderer übertragen
+    */
     public void loseKeys(OrthogonalTiledMapRendererWithPlayers renderer)
     {
         List<Key> keys;
@@ -327,10 +339,10 @@ public class InventorySystem extends ObservingEntitySystem {
                         for(Key key : keys)
                         {
                             key.getSprite().visible = true;
-                            key.getSprite().setPosition(dbm.get(character).dynamicBody.getPosition().x, dbm.get(character).dynamicBody.getPosition().y + 2f);
+                            key.getSprite().setPosition(dbm.get(character).dynamicBody.getPosition().x + 1f, dbm.get(character).dynamicBody.getPosition().y);
                             key.getCollider().setPosition(key.getSprite().getX(), key.getSprite().getY());
                             renderer.getKeys().add(key);
-                            System.out.println(renderer.getKeys().size());
+                            //System.out.println(renderer.getKeys().size());
                         }
 
                     }
