@@ -312,7 +312,7 @@ public class GameServer {
 
 		Collection<Integer> ClientCol = clientIds.values();
 		for (int i=1; i<=ClientCol.size(); i++) {
-			System.out.println("Checking TeamId with ClientId: "+ i + " Result: "+ TeamAssignments.get(i));
+			//System.out.println("Checking TeamId with ClientId: "+ i + " Result: "+ TeamAssignments.get(i));
 			//read TeamIds and count them
 			if (TeamAssignments.get(i) != null) {
 				if (TeamAssignments.get(i) == 0){ Team0++; }
