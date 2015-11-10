@@ -88,6 +88,8 @@ public class Bow extends WeaponItem {
         while (i.hasNext()) {
             Bullet arrow = i.next();
             if(hittableArea.overlaps(arrow)) {
+                System.out.println("Arrow hit something");
+                arrow.reset();
                 i.remove();
                 return true;
             }

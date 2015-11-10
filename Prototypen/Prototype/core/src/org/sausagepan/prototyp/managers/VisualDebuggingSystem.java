@@ -11,8 +11,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
 
 import org.sausagepan.prototyp.model.Bullet;
+import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
@@ -29,6 +34,7 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private boolean debug = true;
+    private Maze maze;
 
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
@@ -41,9 +47,11 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
     /* ........................................................................... CONSTRUCTOR .. */
     public VisualDebuggingSystem(
             ShapeRenderer shapeRenderer,
-            OrthographicCamera camera) {
+            OrthographicCamera camera,
+            Maze maze) {
         this.shapeRenderer = shapeRenderer;
         this.camera = camera;
+        this.maze = maze;
     }
     /* ............................................................................... METHODS .. */
     public void addedToEngine(ObservableEngine engine) {
@@ -65,6 +73,9 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
+
+//        drawMazeColliders();
+
         for (Entity entity : entities) {
             if(entity.getComponent(WeaponComponent.class) != null) {
                 WeaponComponent weapon = wm.get(entity);
@@ -101,6 +112,16 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
             }
         }
         shapeRenderer.end();
+    }
+
+    public void drawMazeColliders() {
+        // Colliders
+        MapObjects mo = maze.getColliders();
+        Rectangle r;
+        for(MapObject m : mo) {
+            r = ((RectangleMapObject) m).getRectangle();
+            shapeRenderer.rect(r.x/32f, r.y/32f, r.width/32f, r.height/32f);
+        }
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

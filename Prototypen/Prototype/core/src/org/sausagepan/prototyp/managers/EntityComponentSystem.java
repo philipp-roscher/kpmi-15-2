@@ -160,7 +160,8 @@ public class EntityComponentSystem {
         networkSystem.addedToEngine(engine);
 
         // Debugging System
-        VisualDebuggingSystem visualDebuggingSystem = new VisualDebuggingSystem(shpRend, camera);
+        VisualDebuggingSystem visualDebuggingSystem
+                = new VisualDebuggingSystem(shpRend, camera, maze);
         visualDebuggingSystem.addedToEngine(engine);
 
         // Battle System
@@ -170,6 +171,10 @@ public class EntityComponentSystem {
         //Inventory System
         InventorySystem inventorySystem = new InventorySystem();
         inventorySystem.addedToEngine(engine);
+
+        // Bullet System
+        BulletSystem bulletSystem = new BulletSystem(engine, maze);
+        bulletSystem.addedToEngine(engine);
 
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
@@ -182,6 +187,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(visualDebuggingSystem);
         this.engine.addSystem(battleSystem);
         this.engine.addSystem(inventorySystem);
+        this.engine.addSystem(bulletSystem);
     }
 
     /**
