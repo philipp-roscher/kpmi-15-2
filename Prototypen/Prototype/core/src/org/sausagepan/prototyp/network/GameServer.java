@@ -25,6 +25,8 @@ import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateRequest;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
+import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
+import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
@@ -36,6 +38,8 @@ import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
+import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 
@@ -144,8 +148,7 @@ public class GameServer {
 
 				    if (object instanceof FullGameStateRequest) {
 					   System.out.println("FullGameStateRequest eingegangen");
-
-	        	   FullGameStateResponse response = new FullGameStateResponse(cm);
+					   FullGameStateResponse response = new FullGameStateResponse(cm);
 		        	   connection.sendTCP(response);
 			       }
 		           
@@ -153,8 +156,6 @@ public class GameServer {
 		           if (object instanceof AttackRequest) {
 					   AttackRequest request = (AttackRequest)object;
 					   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
-					   /* if(request.stop == false)
-						   bs.attack(playerMan.players.get(request.playerId), playerMan.getPlayers()); */
 		           }
 		           
 		           if (object instanceof ShootRequest) {
@@ -165,6 +166,18 @@ public class GameServer {
 		           if (object instanceof HPUpdateRequest) {
 		        	   HPUpdateRequest request = (HPUpdateRequest) object;
 		        	   server.sendToAllTCP(new HPUpdateResponse(request.playerId, request.HP));
+		           }
+
+		           if (object instanceof TakeKeyRequest) {
+		        	   	System.out.println("TakeKeyResponse");
+		        	   	TakeKeyRequest request = (TakeKeyRequest) object;
+		        	   	server.sendToAllTCP(new TakeKeyResponse(request.id, request.keySection));
+		           }
+		           
+		           if (object instanceof LoseKeyRequest) {
+						System.out.println("LoseKeyResponse");
+						LoseKeyRequest request = (LoseKeyRequest) object;
+						server.sendToAllTCP(new LoseKeyResponse(request.id, request.keySection, request.x, request.y));
 		           }
 		        }
 		        
@@ -259,14 +272,12 @@ public class GameServer {
 						cm.remove(id);
 						server.sendToAllUDP(new DeleteHeroResponse(id));
 						System.out.println("Automatically deleted Player "+ltime.getKey());
-
 						//decrease clientCount and send to all clients via TCP
 						clientCount--;
 						System.out.println("clientCount at: " + clientCount);
 						GameClientCount GameClientCount = new GameClientCount();
 						GameClientCount.count = clientCount;
 						server.sendToAllTCP(clientCount);
-						System.out.println("ENDE");
 					}
 	        	}
 	        }
@@ -293,7 +304,7 @@ public class GameServer {
 	
 	// generates random map with given width and height
 	public void setupMap(int width, int height) {
-		this.map = new MapInformation();
+		map = new MapInformation();
 		map.height = height;
 		map.width = width;
 		map.entries = new HashMap<Vector2, Integer>();

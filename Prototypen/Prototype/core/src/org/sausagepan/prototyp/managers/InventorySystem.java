@@ -19,11 +19,14 @@ import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.KeyViewerComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.User_Interface.Actors.KeyActor;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
@@ -45,7 +48,9 @@ public class InventorySystem extends ObservingEntitySystem {
     private ComponentMapper<KeyViewerComponent> kvm = ComponentMapper.getFor(KeyViewerComponent.class);
     private ComponentMapper<DynamicBodyComponent> dbm = ComponentMapper.getFor(DynamicBodyComponent.class);
     private ComponentMapper<HealthComponent> hm = ComponentMapper.getFor(HealthComponent.class);
+    private ComponentMapper<NetworkComponent> nm = ComponentMapper.getFor(NetworkComponent.class);
     private ComponentMapper<InjurableAreaComponent> iam = ComponentMapper.getFor(InjurableAreaComponent.class);
+    private ComponentMapper<IdComponent> idm = ComponentMapper.getFor(IdComponent.class);
 
     public InventorySystem(Maze maze) {
         this.maze = maze;
@@ -54,7 +59,7 @@ public class InventorySystem extends ObservingEntitySystem {
     /*...................................................................................Functions*/
     public void addedToEngine(ObservableEngine engine)
     {
-        characters = engine.getEntitiesFor(Family.all(WeaponComponent.class, InventoryComponent.class, TeamComponent.class, KeyViewerComponent.class, DynamicBodyComponent.class, HealthComponent.class, InjurableAreaComponent.class).get());
+        characters = engine.getEntitiesFor(Family.all(WeaponComponent.class, InventoryComponent.class, TeamComponent.class, KeyViewerComponent.class, DynamicBodyComponent.class, NetworkComponent.class, HealthComponent.class, InjurableAreaComponent.class).get());
     }
 
     public void update(OrthogonalTiledMapRendererWithPlayers renderer)
@@ -230,6 +235,8 @@ public class InventorySystem extends ObservingEntitySystem {
 
                    //updateKeyBags(tm.get(character).TeamId);
                    renderer.getKeys().remove(key);
+                   //send to server
+                   nm.get(character).takeKey(key.getKeySection());
                }
            }
 
@@ -349,16 +356,21 @@ public class InventorySystem extends ObservingEntitySystem {
                         //System.out.println("Anzahl Schlüssel: " + keys.size());
                         for(Key key : keys)
                         {
+                            /* key wird jetzt bei netzwerkbenachrichtigung erst sichtbar
                             key.getSprite().visible = true;
                             key.getSprite().setPosition(dbm.get(character).dynamicBody.getPosition().x + 1f, dbm.get(character).dynamicBody.getPosition().y);
                             key.getCollider().setPosition(key.getSprite().getX(), key.getSprite().getY());
-                            renderer.getKeys().add(key);
+                            renderer.getKeys().add(key);*/
+                            nm.get(character).loseKey(key.getKeySection(), dbm.get(character).dynamicBody.getPosition().x + 1f, dbm.get(character).dynamicBody.getPosition().y);
                             //System.out.println(renderer.getKeys().size());
                         }
 
                     }
                 }
-
+            
+            nm.get(character).sendHPUpdate(new HPUpdateRequest(idm.get(character).id, hm.get(character).initialHP));
+            hm.get(character).HP = hm.get(character).initialHP;
+            dbm.get(character).resetToStartPosition();
             }
         }
     }

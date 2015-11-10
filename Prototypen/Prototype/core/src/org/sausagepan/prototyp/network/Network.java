@@ -2,9 +2,13 @@ package org.sausagepan.prototyp.network;
 
 import java.util.HashMap;
 
+import org.sausagepan.prototyp.User_Interface.Actors.KeyActor;
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.enums.KeySection;
 import org.sausagepan.prototyp.enums.Weapontype;
+import org.sausagepan.prototyp.graphics.EntitySprite;
+import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.model.Status;
 import org.sausagepan.prototyp.model.Weapon;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -12,6 +16,9 @@ import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.DelayedRemovalArray;
+import com.badlogic.gdx.utils.IntArray;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
@@ -21,7 +28,7 @@ public class Network {
 	
 	public static void register(EndPoint endPoint) {
 		Kryo kryo = endPoint.getKryo();
-//		kryo.setRegistrationRequired(false);
+		//kryo.setRegistrationRequired(false);
 		
 		kryo.register(KeepAliveRequest.class);
 		kryo.register(NewHeroRequest.class);
@@ -37,7 +44,11 @@ public class Network {
 		kryo.register(GameStateRequest.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(FullGameStateRequest.class);
-		kryo.register(FullGameStateResponse.class);		
+		kryo.register(FullGameStateResponse.class);
+		kryo.register(TakeKeyRequest.class);
+		kryo.register(TakeKeyResponse.class);
+		kryo.register(LoseKeyRequest.class);
+		kryo.register(LoseKeyResponse.class);
 		kryo.register(IDAssignment.class);
 		kryo.register(GameClientCount.class);
 		kryo.register(TeamAssignment.class);
@@ -56,6 +67,7 @@ public class Network {
 		kryo.register(Vector2.class);
 		kryo.register(Vector3.class);
         kryo.register(HashMap.class);
+        kryo.register(KeySection.class);
 	}
 
 	public static class KeepAliveRequest {
@@ -193,6 +205,58 @@ public class Network {
 		public FullGameStateResponse() { }
 		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes) {
 			this.heroes = heroes;
+		}
+	}
+	
+	public static class TakeKeyRequest {
+		public int id;
+		public KeySection keySection;
+		
+		public TakeKeyRequest() { }
+		public TakeKeyRequest(int id, KeySection keySection) {
+			this.id = id;
+			this.keySection = keySection;
+		}
+	}
+	
+	public static class TakeKeyResponse {
+		public int id;
+		public KeySection keySection;
+		
+		public TakeKeyResponse() { }
+		public TakeKeyResponse(int id, KeySection keySection) {
+			this.id = id;
+			this.keySection = keySection;
+		}
+	}
+	
+	public static class LoseKeyRequest {
+		public int id;
+		public KeySection keySection;
+		public float x;
+		public float y;
+		
+		public LoseKeyRequest() { }
+		public LoseKeyRequest(int id, KeySection keySection, float x, float y) {
+			this.id = id;
+			this.keySection = keySection;
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	public static class LoseKeyResponse {
+		public int id;
+		public KeySection keySection;
+		public float x;
+		public float y;
+		
+		public LoseKeyResponse() { }
+		public LoseKeyResponse(int id, KeySection keySection, float x, float y) {
+			this.id = id;
+			this.keySection = keySection;
+			this.x = x;
+			this.y = y;
 		}
 	}
 	
