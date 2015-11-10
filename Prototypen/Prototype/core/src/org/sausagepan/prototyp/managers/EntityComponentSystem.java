@@ -207,7 +207,7 @@ public class EntityComponentSystem {
         this.localCharacter = new CharacterEntity();
 
         // Add Components
-        //TODO: add further if-circle(s) to choose character class (Sara)
+
         localCharacter.add(new InputComponent());
         localCharacter.add(new LightComponent(rayHandler));
         localCharacter.add(new NetworkTransmissionComponent());
@@ -215,8 +215,21 @@ public class EntityComponentSystem {
         localCharacter.add(new NetworkComponent());
         localCharacter.add(new IdComponent(localCharacterId));
 
+        //Set Spawn locations: Game master
+        if (TeamId == 0) {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
+        }
+        if (TeamId == 1) {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), clientClass));
+        }
+
+        if (TeamId == 2) {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), clientClass));
+        }
+
+
+        //TODO: add further if-circle(s) to choose character class (Sara)
         if (clientClass.equals("knight_m")) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/characters/knight_m.pack"), clientClass
             ));
@@ -229,7 +242,6 @@ public class EntityComponentSystem {
         }
 
         if (clientClass.equals("fighter_m")) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/characters/fighter_m.pack"), clientClass
             ));
@@ -242,7 +254,6 @@ public class EntityComponentSystem {
         }
 
         if (clientClass.equals("archer_f")) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/characters/archer_f.pack"), clientClass
             ));
@@ -255,7 +266,6 @@ public class EntityComponentSystem {
         }
 
         if (clientClass.equals("shaman_m")) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/characters/shaman_m.pack"), clientClass
             ));
@@ -268,7 +278,6 @@ public class EntityComponentSystem {
         }
 
         if (clientClass.equals("dragon_red")) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), clientClass));
             localCharacter.add(new CharacterSpriteComponent(
                     mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), clientClass
             ));
