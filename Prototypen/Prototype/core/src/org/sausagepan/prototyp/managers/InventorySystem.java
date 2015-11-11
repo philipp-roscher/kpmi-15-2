@@ -390,29 +390,29 @@ public class InventorySystem extends ObservingEntitySystem {
 
         if(teamOne[0] != null) {
             if (im.get(teamOne[0]).isKeyHolder && im.get(teamOne[0]).getKeyBag().size() == 0) {
-                im.get(teamOne[1]).loseKeys();
-                kvm.get(teamOne[1]).removeKeys();
+                //im.get(teamOne[1]).loseKeys();
+                //kvm.get(teamOne[1]).removeKeys();
             }
         }
 
         if(teamOne[1] != null) {
             if (im.get(teamOne[1]).isKeyHolder && im.get(teamOne[1]).getKeyBag().size() == 0) {
-                im.get(teamOne[0]).loseKeys();
-                kvm.get(teamOne[0]).removeKeys();
+                //im.get(teamOne[0]).loseKeys();
+                //kvm.get(teamOne[0]).removeKeys();
             }
         }
 
         if(teamTwo[0] != null) {
             if (im.get(teamTwo[0]).isKeyHolder && im.get(teamTwo[0]).getKeyBag().size() == 0) {
-                im.get(teamTwo[1]).loseKeys();
-                kvm.get(teamTwo[1]).removeKeys();
+                //im.get(teamTwo[1]).loseKeys();
+                //kvm.get(teamTwo[1]).removeKeys();
             }
         }
 
         if(teamTwo[1] != null) {
             if (im.get(teamTwo[1]).isKeyHolder && im.get(teamTwo[1]).getKeyBag().size() == 0) {
-                im.get(teamTwo[0]).loseKeys();
-                kvm.get(teamTwo[0]).removeKeys();
+                //im.get(teamTwo[0]).loseKeys();
+                //kvm.get(teamTwo[0]).removeKeys();
             }
         }
 
