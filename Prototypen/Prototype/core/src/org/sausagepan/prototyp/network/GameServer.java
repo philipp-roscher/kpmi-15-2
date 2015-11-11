@@ -86,7 +86,7 @@ public class GameServer {
 	//to count active Clients in Session
 	public static int clientCount;
 	//maximal Number of Clients per Session
-	private int maxClients = 2;
+	private int maxClients = 5;
 
 
 	public GameServer() {
