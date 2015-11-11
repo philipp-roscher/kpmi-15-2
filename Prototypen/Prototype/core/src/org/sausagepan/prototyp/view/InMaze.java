@@ -43,6 +43,7 @@ import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.NetworkPosition;
 import org.sausagepan.prototyp.network.MonsterListener;
+import org.sausagepan.prototyp.renderers.InGameUIRenderer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -73,6 +74,7 @@ public class InMaze implements Screen, PlayerObserver {
 	private SpriteBatch        batch;
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
+	private InGameUIRenderer   uiRenderer;
 
     // Managers
 	public EntityComponentSystem ECS;		// entity component system
@@ -197,6 +199,8 @@ public class InMaze implements Screen, PlayerObserver {
 		});
 
 		game.client.sendTCP(new FullGameStateRequest());
+
+        this.uiRenderer = new InGameUIRenderer(game.mediaManager, batch);
 	}
 
 	

@@ -22,6 +22,7 @@ public class MediaManager {
     private String SelectionFighterMBig         = "textures/characterSelection/Fighter_m_big.png";
     private String SelectionShamanMBig          = "textures/characterSelection/Shaman_m_big.png";
     private String SelectionDragonRedBig        = "textures/characterSelection/Dragon_red_big.png";
+    private String IngameUISheetFile            = "textures/spritesheets/ingame_UI.pack";
 
     //character sheets
     private String knightMSpriteSheetFile        = "textures/spritesheets/characters/knight_m.pack";
@@ -41,6 +42,7 @@ public class MediaManager {
     public MediaManager () {
         this.assets = new AssetManager();
 
+        assets.load(this.IngameUISheetFile, TextureAtlas.class);
         // load music
         assets.load(this.mazeBackgroundMusicFile, Music.class);
         //load Images
