@@ -27,7 +27,7 @@ public class Key {
         this.keySection = keySection;
         this.keyActor = keyActor;
         this.sprite = new EntitySprite(region);
-        this.sprite.setSize(this.sprite.getWidth() * 0.02f, this.sprite.getHeight() * 0.02f);
+        this.sprite.setSize(this.sprite.getWidth() * 0.015f, this.sprite.getHeight() * 0.015f);
         this.sprite.visible = false;
         this.collider = new Rectangle(this.sprite.getX(), this.sprite.getY(), this.sprite.getWidth() *2, this.sprite.getHeight() *2);
     }

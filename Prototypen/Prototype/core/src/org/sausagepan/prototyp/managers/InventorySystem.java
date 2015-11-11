@@ -98,8 +98,8 @@ public class InventorySystem extends ObservingEntitySystem {
                 {
                     im.get(character).createKeyBag(true);
                     im.get(character).isKeyHolder = true;
-                    im.get(character).getKeyBag().add(keys.get(0));
-
+                    im.get(character).addKeyPart(keys.get(0));
+                    System.out.println(im.get(character).getKeyBag().size());
                     kvm.get(character).create();
                     kvm.get(character).addKey(keys.get(0).getKeyActor());
                 }
@@ -139,7 +139,7 @@ public class InventorySystem extends ObservingEntitySystem {
                 {
                     im.get(character).createKeyBag(true);
                     im.get(character).isKeyHolder = true;
-                    im.get(character).getKeyBag().add(keys.get(0));
+                    im.get(character).addKeyPart(keys.get(0));
 
                     kvm.get(character).create();
                     kvm.get(character).addKey(keys.get(0).getKeyActor());
@@ -229,16 +229,18 @@ public class InventorySystem extends ObservingEntitySystem {
            {
                if(intersector.overlaps(key.getCollider(), iam.get(character).area))
                {
-                   im.get(character).addKeyPart(key);
-                   kvm.get(character).addKey(key.getKeyActor());
-                   // Open treasure room, when character gains all three key parts
-                   if(im.get(character).getKeyBag().size() == 3)
-                       maze.openTreasureRoom();
+                   if(hm.get(character).HP != 0) {
+                       im.get(character).addKeyPart(key);
+                       kvm.get(character).addKey(key.getKeyActor());
+                       // Open treasure room, when character gains all three key parts
+                       if (im.get(character).getKeyBag().size() == 3)
+                           maze.openTreasureRoom();
 
-                   //updateKeyBags(tm.get(character).TeamId);
-                   renderer.getKeys().remove(key);
-                   //send to server
-                   nm.get(character).takeKey(key.getKeySection());
+                       //updateKeyBags(tm.get(character).TeamId);
+                       renderer.getKeys().remove(key);
+                       //send to server
+                       nm.get(character).takeKey(key.getKeySection());
+                   }
                }
            }
        }
@@ -250,7 +252,7 @@ public class InventorySystem extends ObservingEntitySystem {
     //damit man es auf der Ui sehen kann
     public void updateKeyBags()
     {
-        Entity gameMaster = new Entity();
+        //Entity gameMaster = new Entity();
         Entity[] teamOne = new Entity[2];
         Entity[] teamTwo = new Entity[2];
 
@@ -261,7 +263,7 @@ public class InventorySystem extends ObservingEntitySystem {
         {
             switch(tm.get(character).TeamId)
             {
-                case 0: gameMaster = character; break;
+                //case 0: gameMaster = character; break;
                 case 1: teamOne[x] = character; x++; break;
                 case 2: teamTwo[y] = character; y++; break;
             }
@@ -275,7 +277,6 @@ public class InventorySystem extends ObservingEntitySystem {
             }
         }*/
 
-        System.out.println(teamOne[0]);
         if(teamOne[0] != null)
         {
             if(im.get(teamOne[0]).isKeyHolder) {
@@ -340,9 +341,12 @@ public class InventorySystem extends ObservingEntitySystem {
         {
             if(hm.get(character).HP == 0)
             {
+                System.out.println("Enter hp");
                 if(im.get(character).isKeyHolder)
                 {
+                    System.out.println("Enter keyholder");
                     maze.lockTreasureRoom();    // lock treasure room again
+                    System.out.println(im.get(character).getKeyBag().size());
                     if(im.get(character).getKeyBag().size() != 0)
                     {
                         keys = im.get(character).loseKeys();
@@ -358,20 +362,6 @@ public class InventorySystem extends ObservingEntitySystem {
                             nm.get(character).loseKey(key.getKeySection(), dbm.get(character).dynamicBody.getPosition().x + 1f, dbm.get(character).dynamicBody.getPosition().y);
                             //System.out.println(renderer.getKeys().size());
                         }
-                        //nicht die schönste Art, aber hier wird nach dem Partner gesucht
-                        //-falls es einen gibt- damit auch bei ihm die schlüsseln gelöscht werden
-                        //jedoch müssen diese schlüssel nicht angezeigt werden, da der
-                        //partner nicht der schhlüsselträger ist
-                        if(tm.get(character).TeamId == 1 || tm.get(character).TeamId == 2)
-                        {
-                            for(Entity c : characters)
-                            {
-                                if(tm.get(c).TeamId == tm.get(character).TeamId &&(!im.get(c).isKeyHolder))
-                                {
-                                    kvm.get(c).removeKeys();
-                                }
-                            }
-                        }
 
                     }
                 }
@@ -381,6 +371,44 @@ public class InventorySystem extends ObservingEntitySystem {
             dbm.get(character).resetToStartPosition();
             }
         }
+
+        //ab hier verlieren die partner ihre schlüssel, derzeitig nur vom client aus
+        Entity[] teamOne = new Entity[2];
+        Entity[] teamTwo = new Entity[2];
+        int x = 0, y = 0;
+
+        for(Entity character : characters)
+        {
+            switch(tm.get(character).TeamId)
+            {
+                case 1: teamOne[x] = character; x++; break;
+                case 2: teamTwo[y] = character; y++; break;
+            }
+        }
+
+        if(im.get(teamOne[0]).isKeyHolder && im.get(teamOne[0]).getKeyBag().size() == 0)
+        {
+            im.get(teamOne[1]).loseKeys();
+            kvm.get(teamOne[1]).removeKeys();
+        }
+        else if(im.get(teamOne[1]).isKeyHolder && im.get(teamOne[1]).getKeyBag().size() == 0)
+        {
+            im.get(teamOne[0]).loseKeys();
+            kvm.get(teamOne[0]).removeKeys();
+        }
+
+        if(im.get(teamTwo[0]).isKeyHolder && im.get(teamTwo[0]).getKeyBag().size() == 0)
+        {
+            im.get(teamTwo[1]).loseKeys();
+            kvm.get(teamTwo[1]).removeKeys();
+        }
+        else if(im.get(teamTwo[1]).isKeyHolder && im.get(teamTwo[1]).getKeyBag().size() == 0)
+        {
+            im.get(teamTwo[0]).loseKeys();
+            kvm.get(teamTwo[0]).removeKeys();
+        }
+
+
     }
 
 

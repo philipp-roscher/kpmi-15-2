@@ -85,9 +85,9 @@ public class InventoryComponent implements Component {
 
         switch(key.getKeySection())
         {
-            case PartOne: this.keyBag.remove(0); this.keyBag.add(0, key); break;
-            case PartTwo: this.keyBag.remove(1); this.keyBag.add(1, key); break;
-            case PartThree: this.keyBag.remove(2); this.keyBag.add(2, key); break;
+            case PartOne: this.keyBag.set(0, key); break;
+            case PartTwo: this.keyBag.set(1, key); break;
+            case PartThree:  this.keyBag.set(2, key); break;
         }
     }
 
