@@ -223,7 +223,7 @@ public class EntityComponentSystem {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
         }
         if (TeamId == 1) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), clientClass));
         }
 
         if (TeamId == 2) {
