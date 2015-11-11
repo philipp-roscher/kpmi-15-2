@@ -12,9 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 
@@ -29,10 +26,9 @@ public class InGameUISystem extends ObservingEntitySystem {
     private Array<TextureRegion> healthBarImages;
     private TextureRegion knightImg;
     private TextureRegion recentHealthBarImg;
-    private float HP;
+    private int HP;
 
     private ImmutableArray<Entity> entities;
-    private float elapsedTime=0;
 
     private ComponentMapper<HealthComponent> hm
             = ComponentMapper.getFor(HealthComponent.class);
@@ -44,7 +40,7 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.camera = new OrthographicCamera();
         TextureAtlas atlas = media.getTextureAtlasType("healthBar");
         this.healthBarImages = new Array<TextureRegion>();
-        this.healthBarImages.add(atlas.findRegion("healthbar_empty"));
+        this.healthBarImages.add(atlas.findRegion("healthbar_0tenth"));
         this.healthBarImages.add(atlas.findRegion("healthbar_1tenth"));
         this.healthBarImages.add(atlas.findRegion("healthbar_2tenth"));
         this.healthBarImages.add(atlas.findRegion("healthbar_3tenth"));
@@ -56,15 +52,14 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.healthBarImages.add(atlas.findRegion("healthbar_9tenth"));
         this.healthBarImages.add(atlas.findRegion("healthbar_10tenth"));
         this.healthBarImages.add(atlas.findRegion("healthbar_11tenth"));
-        this.healthBarImages.add(atlas.findRegion("healthbar_full"));
         this.knightImg = atlas.findRegion("face_knight");
-        this.recentHealthBarImg = healthBarImages.get(12);
+        this.recentHealthBarImg = healthBarImages.get(11);
     }
     /* ............................................................................... METHODS .. */
     public void draw() {
         this.batch.begin();
         this.batch.draw(knightImg, 16, 400, 64, 64);
-        this.batch.draw(recentHealthBarImg, 64, 424, 220, 40);
+        this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
         this.batch.end();
         this.camera.update();
     }
@@ -79,20 +74,8 @@ public class InGameUISystem extends ObservingEntitySystem {
     public void update(float deltaTime) {
         for (Entity entity : entities) {
             HealthComponent health = hm.get(entity);
-            HP = ((float)health.HP)/(health.initialHP);
-            if(HP > 0.9) recentHealthBarImg = healthBarImages.get(12);
-            if(HP < 0.9) recentHealthBarImg = healthBarImages.get(12);
-            if(HP < 0.82) recentHealthBarImg = healthBarImages.get(11);
-            if(HP < 0.76) recentHealthBarImg = healthBarImages.get(10);
-            if(HP < 0.7) recentHealthBarImg = healthBarImages.get(9);
-            if(HP < 0.64) recentHealthBarImg = healthBarImages.get(8);
-            if(HP < 0.58) recentHealthBarImg = healthBarImages.get(7);
-            if(HP < 0.52) recentHealthBarImg = healthBarImages.get(6);
-            if(HP < 0.46) recentHealthBarImg = healthBarImages.get(5);
-            if(HP < 0.4) recentHealthBarImg = healthBarImages.get(4);
-            if(HP < 0.34) recentHealthBarImg = healthBarImages.get(3);
-            if(HP < 0.28) recentHealthBarImg = healthBarImages.get(2);
-            if(HP < 0.22) recentHealthBarImg = healthBarImages.get(1);
+            HP = MathUtils.roundPositive((float) health.HP/(health.initialHP)*10)+1;
+            recentHealthBarImg = healthBarImages.get(HP);
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */

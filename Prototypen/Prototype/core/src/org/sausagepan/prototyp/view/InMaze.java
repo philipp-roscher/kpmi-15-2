@@ -235,13 +235,9 @@ public class InMaze implements Screen, PlayerObserver {
         processNetworkMessages();
         
         // project to camera
-        camera.position.set(
-				ECS.getLocalCharacterEntity()
-						.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().x,
-				ECS.getLocalCharacterEntity()
-						.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y,
-				0
-		);
+        camera.position.set(ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class)
+						.dynamicBody.getPosition().x, ECS.getLocalCharacterEntity()
+						.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y, 0);
 		batch.  setProjectionMatrix(camera.combined);
 		shpRend.setProjectionMatrix(camera.combined);
 		camera.update();
@@ -259,7 +255,6 @@ public class InMaze implements Screen, PlayerObserver {
         // ............................................................................... RENDERING
         // Tiled Map
         maze.render(camera);
-        ECS.draw();
 
         // Box2D Debugging
 //        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
@@ -267,6 +262,9 @@ public class InMaze implements Screen, PlayerObserver {
         // Light
         rayHandler.setCombinedMatrix(camera.combined);
         rayHandler.updateAndRender();
+
+        // Stuff which should not be effected by RayHandler must be drawn after rayHandler.upd...
+        ECS.draw();
 
         // ............................................................................... RENDERING
         ECS.update(delta);
