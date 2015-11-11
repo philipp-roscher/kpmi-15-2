@@ -187,6 +187,11 @@ public class EntityComponentSystem {
         BulletSystem bulletSystem = new BulletSystem(engine, maze);
         bulletSystem.addedToEngine(engine);
 
+        // Ingame UI System
+        InGameUISystem inGameUISystem
+                = new InGameUISystem(mediaManager, maze.getTiledMapRenderer().getBatch());
+        inGameUISystem.addedToEngine(engine);
+
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
@@ -199,6 +204,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(battleSystem);
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
+        this.engine.addSystem(inGameUISystem);
     }
 
     /**
@@ -328,6 +334,10 @@ public class EntityComponentSystem {
 
         engine.update(delta);
         engine.getSystem(InventorySystem.class).update(maze.getTiledMapRenderer());
+    }
+
+    public void draw() {
+        this.engine.getSystem(InGameUISystem.class).draw();
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {

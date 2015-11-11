@@ -6,16 +6,13 @@ import java.util.Map.Entry;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.PlayerAction;
-import org.sausagepan.prototyp.enums.KeySection;
-import org.sausagepan.prototyp.managers.BattleSystem;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
-import org.sausagepan.prototyp.managers.PlayerManager;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.Player;
 import org.sausagepan.prototyp.model.PlayerObserver;
@@ -23,7 +20,6 @@ import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.PositionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
@@ -41,9 +37,8 @@ import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
-import org.sausagepan.prototyp.network.NetworkPosition;
 import org.sausagepan.prototyp.network.MonsterListener;
-import org.sausagepan.prototyp.renderers.InGameUIRenderer;
+import org.sausagepan.prototyp.managers.InGameUISystem;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -74,7 +69,7 @@ public class InMaze implements Screen, PlayerObserver {
 	private SpriteBatch        batch;
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
-	private InGameUIRenderer   uiRenderer;
+	private InGameUISystem uiRenderer;
 
     // Managers
 	public EntityComponentSystem ECS;		// entity component system
@@ -123,7 +118,7 @@ public class InMaze implements Screen, PlayerObserver {
 
         // Rendering ...............................................................................
 		camera   = new OrthographicCamera();    // set up the camera and viewport
-		int zoom = 1;                           // zooms out of map
+		int zoom = GlobalSettings.GAME_ZOOM_OUT;                           // zooms out of map
 		viewport = new FitViewport(
                 UnitConverter.pixelsToMeters(800*zoom),
                 UnitConverter.pixelsToMeters(480*zoom), camera);
@@ -200,7 +195,7 @@ public class InMaze implements Screen, PlayerObserver {
 
 		game.client.sendTCP(new FullGameStateRequest());
 
-        this.uiRenderer = new InGameUIRenderer(game.mediaManager, batch);
+        this.uiRenderer = new InGameUISystem(game.mediaManager, batch);
 	}
 
 	
@@ -241,15 +236,15 @@ public class InMaze implements Screen, PlayerObserver {
         
         // project to camera
         camera.position.set(
-                ECS.getLocalCharacterEntity()
-                        .getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().x,
-                ECS.getLocalCharacterEntity()
-                        .getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y,
-                0
-        );
-        camera.update();
+				ECS.getLocalCharacterEntity()
+						.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().x,
+				ECS.getLocalCharacterEntity()
+						.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y,
+				0
+		);
 		batch.  setProjectionMatrix(camera.combined);
 		shpRend.setProjectionMatrix(camera.combined);
+		camera.update();
 		
 		// Animation time calculation
 		elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
@@ -264,6 +259,7 @@ public class InMaze implements Screen, PlayerObserver {
         // ............................................................................... RENDERING
         // Tiled Map
         maze.render(camera);
+        ECS.draw();
 
         // Box2D Debugging
 //        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes

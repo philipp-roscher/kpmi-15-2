@@ -16,6 +16,7 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.managers.ServerBattleSystem;
 import org.sausagepan.prototyp.managers.ServerCharacterSystem;
 import org.sausagepan.prototyp.managers.ServerPlayerManager;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.ServerPlayer;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
@@ -86,7 +87,7 @@ public class GameServer {
 	//to count active Clients in Session
 	public static int clientCount;
 	//maximal Number of Clients per Session
-	private int maxClients = 5;
+	private int maxClients = GlobalSettings.MANDATORY_CLIENTS;
 
 
 	public GameServer() {

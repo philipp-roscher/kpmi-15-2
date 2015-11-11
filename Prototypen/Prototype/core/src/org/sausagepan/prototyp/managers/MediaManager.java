@@ -108,11 +108,16 @@ public class MediaManager {
         return assets.get(name);
     }
 
+    /**
+     * Returns the required texture atlas. Possible values:
+     * weapons
+     * healthBar
+     * @param type
+     * @return
+     */
     public TextureAtlas getTextureAtlasType(String type) {
-        if(type.equals("weapons")) {
-            return assets.get(weaponsSpriteSheetFile);
-        }
-
+        if(type.equals("weapons")) return assets.get(weaponsSpriteSheetFile);
+        if(type.equals("healthBar")) return assets.get(IngameUISheetFile);
         return null;
     }
 
