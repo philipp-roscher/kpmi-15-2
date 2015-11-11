@@ -44,6 +44,7 @@ public class Maze extends EntitySystem {
     private Array<BodyDef> doorLockerBodyDefs;
     private Array<Rectangle> doorLockerRectangles;
     private Array<Body> secretWalls;
+    private boolean treasureRoomOpen = false;
 
     /* ........................................................................... CONSTRUCTOR .. */
 
@@ -105,8 +106,11 @@ public class Maze extends EntitySystem {
      * Destroys bodies blocking the way into the treasure room
      */
     public void openTreasureRoom() {
-        for(Body b : doorLockerBodies)
-            world.destroyBody(b);
+    	if(!treasureRoomOpen) {
+	        for(Body b : doorLockerBodies)
+	        	world.destroyBody(b);
+	        treasureRoomOpen = true;
+    	}
     }
 
     /**
