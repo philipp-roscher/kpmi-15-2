@@ -68,6 +68,7 @@ public class InventorySystem extends ObservingEntitySystem {
         loseKeys(renderer);
         addKey(renderer);
         updateKeyBags();
+        updateDoors();
     }
 
     public void setWeaponInInventory()
@@ -442,5 +443,17 @@ public class InventorySystem extends ObservingEntitySystem {
         int i = Integer.valueOf(l.intValue());
         i = i%2;
         return i;
+    }
+
+    public void updateDoors()
+    {
+        for(Entity character : characters)
+        {
+            if(im.get(character).getKeyBag().size() == 0)
+                maze.lockTreasureRoom();
+
+            if(im.get(character).getKeyBag().size() == 3)
+                maze.openTreasureRoom();
+        }
     }
 }
