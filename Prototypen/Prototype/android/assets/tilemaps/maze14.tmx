@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+  <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
+ </tileset>
+ <layer name="ground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztlsEOgjAMhrdE8Qp3QCHB938YSEDlxIu4hS0sTQusTjDEwx+X1u3ruq00lkLEDCVKnRBiEOM4Ya7D1ZH4tVqjJ2R9T6UX8J3kyKfmzqkRE78TdGxzvtjwOXseAvHPcspP7+SoWRk3zC2c1zL3Z+Oizs5qKZ8PJp+rPfjRDvwLccfcc7NvjLOmT56X7jj37Lbmc2P98/3mpuY3B+Mj8+9KmVFhbCUYZx6qJM3H/l9Iv/0tKUf4tflW+NSckPwt38Gv8Wsn7z51PBTf3fvaOn5zxlfCR9lD8FNnDN8/VRegvTfs1pOv64H7JvX7rxAfZc/l1H9pvttn6B6A6h9tHcLqQUn4MDvMP+xzqBhShBvi/mF9FnYO3+Jv/Q3G6o+vokB8rnTcn9aqNzgXqLA=
+  </data>
+ </layer>
+ <layer name="walls" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztVe0KwjAM7ENvyObcC/hvIvtwLyAqKL6gKTQQRq7FYZm6HoSll8uyFnozZnlUFDuKrcjLwLoW/YWrIy3iGQPFiaIXeRdYj6K/dXWkRfynUAT258PcPgm7f21/6Lsqkcc8F/RdQ4RZ/wS+T3VIGAl8n8aQMCFhJbBeuTd+f5Ya9lzkvxvPe7KJ1vqA9cqze14orhQ3lxuXSw17LvLfozKXZzYTbQwfeCocz7xHmPftWMrrGWv1+rnnnilcDmqIt/95dO454NlHGqV2ADXEt2AG95QKzz6i3dEHqCHeB9vTvaFPSPhFvADaUmcD
+  </data>
+ </layer>
+ <layer name="objects" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztzQENAAAMAiD3cO8fySBCARKW/W3eAAAAawrNhQCR
+  </data>
+ </layer>
+ <layer name="tops" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztlQEKgzAMRXMTFUUYyLyK7BqyuovormwFYaXY2KS2EdYPHyQlecaatgCAAnHncA0/Yfmh9tG/80Pe6yxPQpmfjl9FqEn5v3tB9l34V+4zl5+d3i3h+5uatRftr/VM0bjznwesN7EWV3b/qSXNH4T5Mc6fq/gfwOdhQnLsNVcc41Nn0s7xjXP5RzOqHGuu+AvpRYFfzyFqPOpmfjy+ef5J8BuEz5k/qij3bwy+uf8h/FL7wfB2/6zNRz8j
+  </data>
+ </layer>
+ <objectgroup name="colliderWalls" width="0" height="0">
+  <object x="0" y="0" width="480" height="96"/>
+  <object x="0" y="96" width="256" height="96"/>
+  <object x="160" y="192" width="96" height="128"/>
+  <object x="544" y="0" width="480" height="160"/>
+  <object x="736" y="160" width="288" height="32"/>
+  <object x="0" y="288" width="32" height="96"/>
+  <object x="0" y="384" width="64" height="32"/>
+  <object x="672" y="288" width="352" height="32"/>
+  <object x="640" y="320" width="384" height="96"/>
+  <object x="0" y="416" width="416" height="128"/>
+  <object x="608" y="416" width="416" height="128"/>
+  <object x="0" y="544" width="320" height="32"/>
+  <object x="0" y="576" width="160" height="32"/>
+  <object x="0" y="608" width="96" height="96"/>
+  <object x="0" y="704" width="64" height="288"/>
+  <object x="192" y="960" width="288" height="32"/>
+  <object x="0" y="992" width="480" height="32"/>
+  <object x="192" y="704" width="288" height="96"/>
+  <object x="192" y="800" width="256" height="32"/>
+  <object x="224" y="832" width="160" height="32"/>
+  <object x="256" y="864" width="128" height="96"/>
+  <object x="608" y="704" width="96" height="96"/>
+  <object x="640" y="800" width="32" height="32"/>
+  <object x="800" y="704" width="96" height="96"/>
+  <object x="832" y="800" width="32" height="32"/>
+  <object x="992" y="544" width="32" height="480"/>
+ </objectgroup>
+ <objectgroup name="lights" width="32" height="32">
+  <object name="light" x="992" y="128" width="32" height="32"/>
+  <object name="light" x="0" y="128" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="monsters" width="32" height="32">
+  <object name="zombie" x="224" y="224" width="32" height="32"/>
+ </objectgroup>
+</map>
