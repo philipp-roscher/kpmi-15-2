@@ -3,9 +3,9 @@ package org.sausagepan.prototyp.model.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
 
-import org.sausagepan.prototyp.model.Item;
 import org.sausagepan.prototyp.model.Key;
-import org.sausagepan.prototyp.model.Weapon;
+import org.sausagepan.prototyp.model.items.Item;
+import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 import org.sausagepan.prototyp.model.items.WeaponItem;
 
 import java.util.Map;
@@ -20,18 +20,19 @@ import java.util.LinkedList;
 public class InventoryComponent implements Component {
 
     /*..................................................................................Attributes*/
-    public Map<Item, Integer> backpack;
+    public Map<Item, Integer> items;
+    public Array<KeyFragmentItem> keyFragments;
     public List<Key> keyBag;
     public Array<Boolean> activeKeys;
     public boolean isKeyHolder;
     public WeaponItem weapon;
-    //public Map map;
 
     /*................................................................................Constructors*/
     public InventoryComponent()
     {
-        backpack = new HashMap<Item, Integer>();
-        isKeyHolder = false;
+        this.items = new HashMap<Item, Integer>();
+        this.keyFragments = new Array<KeyFragmentItem>();
+        this.isKeyHolder = false;
         this.activeKeys = new Array<Boolean>(3);
         this.activeKeys.add(false);
         this.activeKeys.add(false);
@@ -39,28 +40,42 @@ public class InventoryComponent implements Component {
     }
 
     /*..........................................................................Backpack functions*/
-    public void addItemToBackpack(Item item, Integer value)
+
+    /**
+     * Adds an item to the Characters inventory
+     * @param item  {@link Item} to add to the inventory
+     * @param amount
+     */
+    public void pickUpItem(Item item, int amount)
     {
-        if(this.backpack.containsKey(item))
-        {
-            value += this.backpack.get(item);
-            this.backpack.put(item, value);
-        }
-        else
-            this.backpack.put(item, value);
+        // If item to be added is a key fragment
+        if(item.getClass().equals(KeyFragmentItem.class))
+            keyFragments.add((KeyFragmentItem)item);
+
+        // Add item to inventory
+        if(this.items.containsKey(item)) {
+            amount += this.items.get(item);
+            this.items.put(item, amount);
+        } else this.items.put(item, amount);
     }
 
-    public void removeValueOfItemInBackpack(Item item, Integer value)
+    /**
+     * Removes the given amount from the number of available items of the given type
+     * @param item  {@link Item} to remove from inventory
+     * @param amount
+     */
+    public void dropItem(Item item, int amount)
     {
-        if(!(this.backpack.containsKey(item)))
-            return;
+        // If inventory does not contain given item
+        if(!(this.items.containsKey(item))) return;
 
-        Integer number = this.backpack.get(item);
-        number -= value;
-        this.backpack.put(item, number);
+        Integer number = this.items.get(item);
+        number -= amount;
+        this.items.put(item, number);
     }
 
     /*............................................................................KeyBag functions*/
+    // TODO bitte durch {@link KeyFragmentItem} ersetzen
     public void createKeyBag(boolean isKeyHolder)
     {
         this.isKeyHolder = isKeyHolder;
@@ -72,6 +87,7 @@ public class InventoryComponent implements Component {
         }
     }
 
+    // TODO bitte durch {@link KeyFragmentItem} ersetzen
     public List<Key> getKeyBag()
     {
         List<Key> keys = new LinkedList<Key>();
@@ -84,6 +100,7 @@ public class InventoryComponent implements Component {
         return keys;
     }
 
+    // TODO bitte durch {@link KeyFragmentItem} ersetzen
     public void addKeyPart(Key key)
     {
         if(!this.isKeyHolder)
@@ -97,6 +114,7 @@ public class InventoryComponent implements Component {
         }
     }
 
+    // TODO bitte durch {@link KeyFragmentItem} ersetzen
     public List<Key> loseKeys()
     {
         for(Boolean b : activeKeys) b=false;

@@ -1,16 +1,17 @@
-package org.sausagepan.prototyp.model.components;
+package org.sausagepan.prototyp.model.items;
 
-import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * Created by georg on 22.10.15.
+ * Created by georg on 12.11.15.
  */
-public class PositionComponent implements Component {
+public abstract class Item {
     /* ............................................................................ ATTRIBUTES .. */
-    public float x=0;
-    public float y=0;
+    private TextureRegion itemImg;
     /* ........................................................................... CONSTRUCTOR .. */
-    
+    public Item(TextureRegion itemImg) {
+        this.itemImg = itemImg;
+    }
     /* ............................................................................... METHODS .. */
     
     /* ..................................................................... GETTERS & SETTERS .. */

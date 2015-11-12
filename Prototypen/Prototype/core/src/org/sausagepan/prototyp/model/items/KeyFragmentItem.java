@@ -1,20 +1,19 @@
-package org.sausagepan.prototyp.model;
+package org.sausagepan.prototyp.model.items;
 
-import org.sausagepan.prototyp.enums.PlayerAction;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-@Deprecated
 /**
- * Created by georg on 18.10.15.
- *
- * Objects that observe players actions for transmitting events over network and so on
+ * Created by georg on 12.11.15.
  */
-public interface PlayerObserver {
+public class KeyFragmentItem extends Item {
     /* ............................................................................ ATTRIBUTES .. */
-    
+    public int keyFragmentNr;
     /* ........................................................................... CONSTRUCTOR .. */
-
+    public KeyFragmentItem(TextureRegion keyTexture, int nr) {
+        super(keyTexture);
+        this.keyFragmentNr = nr;
+    }
     /* ............................................................................... METHODS .. */
-    public void update(Player observedPlayer, PlayerAction action);
-
+    
     /* ..................................................................... GETTERS & SETTERS .. */
 }

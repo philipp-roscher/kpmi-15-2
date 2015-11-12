@@ -14,8 +14,6 @@ import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.Player;
-import org.sausagepan.prototyp.model.PlayerObserver;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
@@ -57,9 +55,9 @@ import com.esotericsoftware.kryonet.Listener;
 /**
  * Screen for all ingame action. Here everything is rendered to the screen
  */
-public class InMaze implements Screen, PlayerObserver {
+public class InMaze implements Screen {
 	
-	/* ................................................................................................ ATTRIBUTES .. */
+	/* ............................................................................ ATTRIBUTES .. */
 	final   KPMIPrototype game;
 
     // Renderers and Cameras
@@ -69,7 +67,6 @@ public class InMaze implements Screen, PlayerObserver {
 	private SpriteBatch        batch;
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
-	private InGameUISystem uiRenderer;
 
     // Managers
 	public EntityComponentSystem ECS;		// entity component system
@@ -82,148 +79,68 @@ public class InMaze implements Screen, PlayerObserver {
 	private float   timeOut        = 5;
 
     // Containers
-	private PositionUpdate posUpdate;
-	private KeepAliveRequest keepAliveRequest;
-	private Array<Object> networkMessages;
+	private PositionUpdate                   posUpdate;
+	private KeepAliveRequest                 keepAliveRequest;
+	private Array<Object>                    networkMessages;
 	private HashMap<Integer,HeroInformation> otherCharacters;
-	private boolean FGSreceived = false;
+	private boolean         FGSreceived = false;
+	private MonsterListener monsterLis;
 
     private Maze maze;
 
     // Physics
-    private final World world;    // create a box2d world which calculates all physics
+    private final World world;    	// create a box2d world which calculates all physics
+    public RayHandler rayHandler;   // handles rays of light
 
-    // Light
-    RayHandler rayHandler;  // handles rays of light
 
-	//Listener
-	private MonsterListener monsterLis;
-	
 	/* .......................................................................... CONSTRUCTORS .. */
-
     /**
-     * Creates an ingame object for rendering ingame action
-     * @param game              the game main class itself
+     * Creates an in game object for rendering in game action
+     * @param game the game main class itself
      */
-	public InMaze(final KPMIPrototype game,
-                  final World world,
-                  final RayHandler rayHandler,
-                  final MapInformation mapInformation,
-				  String clientClass,
-				  int TeamId) {
+	public InMaze(final KPMIPrototype game, final World world, final RayHandler rayHandler,
+                  final MapInformation mapInformation, String clientClass, int TeamId) {
 
-        Box2D.init();   // initialize Box2D
-
+        Box2D.init(); // initialize Box2D
 		this.game = game;
-
-        // Rendering ...............................................................................
-		camera   = new OrthographicCamera();    // set up the camera and viewport
-		int zoom = GlobalSettings.GAME_ZOOM_OUT;                           // zooms out of map
-		viewport = new FitViewport(
-                UnitConverter.pixelsToMeters(800*zoom),
-                UnitConverter.pixelsToMeters(480*zoom), camera);
-		viewport.apply();
-		camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0); // center camera
-
-		batch   = new SpriteBatch();
-		shpRend = new ShapeRenderer();
-		font    = new BitmapFont();
-		font.setColor(Color.WHITE);
+        this.world = world;
+        setUpRendering();
+        setUpBox2D(rayHandler);
 
 
-        // Set up World and Box2D-Renderer .........................................................
-        this.world         = world;                     // create new world with no gravity in x and y
-        this.debugRenderer = new Box2DDebugRenderer();  // set up Box2D-Debugger for drawing body shapes
-
-
-        // Light ...................................................................................
-        RayHandler.useDiffuseLight(true);
-        this.rayHandler = rayHandler;
-        this.rayHandler.setAmbientLight(.3f, .3f, .3f, 1);
-        this.rayHandler.setBlurNum(3);
-
-        // load media
+        // Media
 		this.bgMusic = game.mediaManager.getMazeBackgroundMusic();
-		this.bgMusic.setLooping(true);  // always repeat background music
-		this.bgMusic.play();
+		if(GlobalSettings.PLAY_BG_MUSIC) this.bgMusic.play();
 		this.bgMusic.setVolume(0.3f);
+
 
         // Tiled Map ...............................................................................
         this.maze = new Maze(mapInformation, world, game.mediaManager);
 
 
         // Entity-Component-System ........................................................... START
-        this.ECS = new EntityComponentSystem(game, world, viewport, rayHandler, maze, camera, clientClass, TeamId);
+        this.ECS = new EntityComponentSystem(
+                game, world, viewport, rayHandler, maze, camera, clientClass, TeamId);
         // Entity-Component-System ............................................................. END
-        
-		// Set Up Client for Communication .........................................................
-		// add client to NetworkComponent
-        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).client = game.client;
-        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).id = game.clientId;
-        
-        posUpdate = new PositionUpdate();
-		posUpdate.playerId = game.clientId;
-        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).posUpdate = posUpdate;
-        
-		networkMessages = new Array<Object>();
 
-		this.keepAliveRequest = new KeepAliveRequest(game.clientId);
+        setUpNetwork();
 
-		game.client.addListener(new Listener() {
-			public void received(Connection connection, Object object) {
-				if ((object instanceof NewHeroResponse) ||
-						(object instanceof DeleteHeroResponse) ||
-						(object instanceof DeleteHeroResponse) ||
-						(object instanceof GameStateResponse) ||
-						(object instanceof AttackResponse) ||
-						(object instanceof ShootResponse) ||
-						(object instanceof HPUpdateResponse) ||
-						(object instanceof FullGameStateResponse) ||
-						(object instanceof LoseKeyResponse) ||
-						(object instanceof TakeKeyResponse)) {
-					// System.out.println( object.getClass() +" empfangen");
-					networkMessages.add(object);
-				}
-			}
-
-			public void disconnected(Connection connection) {
-				game.connected = false;
-				Gdx.app.log("KPMIPrototype", "disconnected from server.");
-//                Gdx.app.exit();
-			}
-		});
-
-		game.client.sendTCP(new FullGameStateRequest());
-
-        this.uiRenderer = new InGameUISystem(game.mediaManager, batch);
 	}
 
 	
-	/* ............................................................................................ LibGDX METHODS .. */
+	/* ........................................................................ LibGDX METHODS .. */
 	@Override
 	public void show() {
 		this.batch = new SpriteBatch();
-//        Gdx.input.setInputProcessor(new PlayerInputProcessor(localPlayer, this.camera));
-//        Gdx.input.setInputProcessor(ECS.getLocalCharacterEntity().getComponent(InputComponent.class));
         Gdx.input.setInputProcessor(ECS.getInputProcessor());
-
 		//Listener for Monsters to see clients
 		world.setContactListener(monsterLis);
 	}
 
 	@Override
 	public void render(float delta) {
-
         // Check Server Connection ......................................................... NETWORK
-		if(!game.connected) {
-			if( disconnectTime == 0 ) disconnectTime = elapsedTime;
-			else
-				if(elapsedTime - disconnectTime > timeOut) {
-					disconnectTime = 0;
-		            game.setScreen(new MainMenuScreen(game));
-		            dispose();
-				}
-		}
+        checkServerConnection();
         // ................................................................................. NETWORK
 
         // Clear screen
@@ -233,31 +150,16 @@ public class InMaze implements Screen, PlayerObserver {
 
         // process Updates
         processNetworkMessages();
-        
-        // project to camera
-        camera.position.set(ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class)
-						.dynamicBody.getPosition().x, ECS.getLocalCharacterEntity()
-						.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y, 0);
-		batch.  setProjectionMatrix(camera.combined);
-		shpRend.setProjectionMatrix(camera.combined);
-		camera.update();
-		
-		// Animation time calculation
-		elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
-		if(elapsedTimeSec != (int) elapsedTime)
-			sendKeepAliveRequest();
-		elapsedTimeSec = (int) elapsedTime;
+        updateCamera();
+        updateNetwork();
 
-        // Update Player
-        posUpdate.position = ECS.getLocalCharacterEntity().getComponent(NetworkTransmissionComponent.class);
-        game.client.sendUDP(posUpdate);
 
         // ............................................................................... RENDERING
         // Tiled Map
         maze.render(camera);
 
         // Box2D Debugging
-//        debugRenderer.render(world, camera.combined);   // render Box2D-Shapes
+        if(GlobalSettings.DEBUGGING_ACTIVE) debugRenderer.render(world, camera.combined);
 
         // Light
         rayHandler.setCombinedMatrix(camera.combined);
@@ -265,8 +167,9 @@ public class InMaze implements Screen, PlayerObserver {
 
         // Stuff which should not be effected by RayHandler must be drawn after rayHandler.upd...
         ECS.draw();
-
         // ............................................................................... RENDERING
+
+
         ECS.update(delta);
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
 	}
@@ -303,111 +206,177 @@ public class InMaze implements Screen, PlayerObserver {
 	}
 	
 	
-	/* ........................................................... METHODS .. */
+	/* ............................................................................... METHODS .. */
+    private void setUpRendering() {
+        // Rendering ...............................................................................
+        camera   = new OrthographicCamera();    // set up the camera and viewport
+        viewport = new FitViewport(
+                UnitConverter.pixelsToMeters(800*GlobalSettings.GAME_ZOOM_OUT),
+                UnitConverter.pixelsToMeters(480*GlobalSettings.GAME_ZOOM_OUT), camera);
+        viewport.apply();
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0); // center camera
 
-	public void sendKeepAliveRequest() {
-		game.client.sendTCP(InMaze.this.keepAliveRequest);		
-	}
+        batch   = new SpriteBatch();
+        shpRend = new ShapeRenderer();
+        font    = new BitmapFont();
+        font.setColor(Color.WHITE);
+    }
 
-	public void processNetworkMessages() {
-		for(Object object : networkMessages) {
-			if (object instanceof FullGameStateResponse) {
-		        // adds all the player of the FullGameStateResponse
-
-				System.out.println("FullGameStateResponse");
-				FullGameStateResponse response = (FullGameStateResponse) object;
-				otherCharacters = response.heroes;
-				
-				if (otherCharacters.containsKey(game.clientId))
-					otherCharacters.remove(game.clientId);
-				
-				for(Entry<Integer, HeroInformation> e : otherCharacters.entrySet()) {
-					Integer heroId = e.getKey();
-					HeroInformation hero = e.getValue();
-					CharacterEntity newCharacter = ECS.addNewCharacter(heroId, hero);
-		    		maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
-		    		maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
-				}
-				
-				FGSreceived = true;
-			}
-			if(FGSreceived) {
-				if (object instanceof NewHeroResponse) {
-					NewHeroResponse request = (NewHeroResponse) object;
-	        		CharacterEntity newCharacter = ECS.addNewCharacter(request);
-	        		maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
-	        		maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
-				}
-				
-				if (object instanceof DeleteHeroResponse) {
-					int playerId = ((DeleteHeroResponse) object).playerId;
-					System.out.println(playerId + " was inactive for too long and thus removed from the session.");
-					
-					if( playerId == game.clientId )
-						game.connected = false;
-
-					CharacterEntity removedCharacter = ECS.getCharacter(playerId);
-					if(removedCharacter != null) {
-						maze.removeCharacterSpriteComponent(removedCharacter.getComponent(CharacterSpriteComponent.class));
-						maze.removeWeaponComponent(removedCharacter.getComponent(WeaponComponent.class));
-						ECS.deleteCharacter(playerId);
-					}
-				}
-				
-				if (object instanceof GameStateResponse) {
-					GameStateResponse result = (GameStateResponse) object;
-					
-					for(Entry<Integer, NetworkTransmissionComponent> e : result.positions.entrySet()) {
-						if(e.getKey() != game.clientId)
-							ECS.updatePosition(e.getKey(), e.getValue());
-					}
-				}	
-				
-				if (object instanceof AttackResponse) {
-					AttackResponse result = (AttackResponse) object;
-					if(result.playerId != game.clientId) {
-						if(result.stop == false)
-							ECS.attack(result.playerId);
-						else
-							ECS.stopAttacking(result.playerId);
-					}
-				}	
-				
-				if (object instanceof ShootResponse) {
-					ShootResponse result = (ShootResponse) object;
-					if(result.playerId != game.clientId) {
-						ECS.shoot(result);
-					}
-				}	
-				
-				if (object instanceof HPUpdateResponse) {
-					HPUpdateResponse result = (HPUpdateResponse) object;
-					ECS.updateHP(result);
-				}
-
-				if (object instanceof LoseKeyResponse) {
-					System.out.println("LoseKeyResponse");
-					LoseKeyResponse result = (LoseKeyResponse) object;
-					ECS.loseKey(result);
-				}
-				
-				if (object instanceof TakeKeyResponse) {
-					System.out.println("TakeKeyResponse");
-					TakeKeyResponse result = (TakeKeyResponse) object;
-					ECS.takeKey(result);
-				}
-			}
-		}
-		networkMessages.clear();
-	}
+    private void setUpBox2D(RayHandler rayHandler) {
+        // Set up World and Box2D-Renderer .........................................................
+        this.debugRenderer = new Box2DDebugRenderer();  // set up Box2D-Debugger, for drawing bodies
 
 
-	/**
-	 * Observes player instance for submitting stuff to the server
-	 * @param observedPlayer
-	 */
-	@Override
-	public void update(Player observedPlayer, PlayerAction action) {
+        // Light ...................................................................................
+        RayHandler.useDiffuseLight(true);
+        this.rayHandler = rayHandler;
+        this.rayHandler.setAmbientLight(.3f, .3f, .3f, 1);
+        this.rayHandler.setBlurNum(3);
+    }
+
+    private void setUpNetwork() {
+        // Set Up Client for Communication .........................................................
+        // add client to NetworkComponent
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).client = game.client;
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).id = game.clientId;
+
+        posUpdate = new PositionUpdate();
+        posUpdate.playerId = game.clientId;
+        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).posUpdate = posUpdate;
+
+        networkMessages = new Array<Object>();
+
+        this.keepAliveRequest = new KeepAliveRequest(game.clientId);
+
+        game.client.addListener(new Listener() {
+            public void received(Connection connection, Object object) {
+                if ((object instanceof NewHeroResponse) ||
+                        (object instanceof DeleteHeroResponse) ||
+                        (object instanceof DeleteHeroResponse) ||
+                        (object instanceof GameStateResponse) ||
+                        (object instanceof AttackResponse) ||
+                        (object instanceof ShootResponse) ||
+                        (object instanceof HPUpdateResponse) ||
+                        (object instanceof FullGameStateResponse) ||
+                        (object instanceof LoseKeyResponse) ||
+                        (object instanceof TakeKeyResponse)) {
+                    // System.out.println( object.getClass() +" empfangen");
+                    networkMessages.add(object);
+                }
+            }
+
+            public void disconnected(Connection connection) {
+                game.connected = false;
+                Gdx.app.log("KPMIPrototype", "disconnected from server.");
+//                Gdx.app.exit();
+            }
+        });
+
+        game.client.sendTCP(new FullGameStateRequest());
+    }
+
+    /* ..................................................................... GAME LOOP METHODS .. */
+    public void sendKeepAliveRequest() {
+        game.client.sendTCP(InMaze.this.keepAliveRequest);
+    }
+
+    public void processNetworkMessages() {
+        for(Object object : networkMessages) {
+            if (object instanceof FullGameStateResponse) {
+                // adds all the player of the FullGameStateResponse
+
+                System.out.println("FullGameStateResponse");
+                FullGameStateResponse response = (FullGameStateResponse) object;
+                otherCharacters = response.heroes;
+
+                if (otherCharacters.containsKey(game.clientId))
+                    otherCharacters.remove(game.clientId);
+
+                for(Entry<Integer, HeroInformation> e : otherCharacters.entrySet()) {
+                    Integer heroId = e.getKey();
+                    HeroInformation hero = e.getValue();
+                    CharacterEntity newCharacter = ECS.addNewCharacter(heroId, hero);
+                    maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+                    maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
+                }
+
+                FGSreceived = true;
+            }
+            if(FGSreceived) {
+                if (object instanceof NewHeroResponse) {
+                    NewHeroResponse request = (NewHeroResponse) object;
+                    CharacterEntity newCharacter = ECS.addNewCharacter(request);
+                    maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+                    maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
+                }
+
+                if (object instanceof DeleteHeroResponse) {
+                    int playerId = ((DeleteHeroResponse) object).playerId;
+                    System.out.println(playerId + " was inactive for too long and thus removed from the session.");
+
+                    if( playerId == game.clientId )
+                        game.connected = false;
+
+                    CharacterEntity removedCharacter = ECS.getCharacter(playerId);
+                    if(removedCharacter != null) {
+                        maze.removeCharacterSpriteComponent(removedCharacter.getComponent(CharacterSpriteComponent.class));
+                        maze.removeWeaponComponent(removedCharacter.getComponent(WeaponComponent.class));
+                        ECS.deleteCharacter(playerId);
+                    }
+                }
+
+                if (object instanceof GameStateResponse) {
+                    GameStateResponse result = (GameStateResponse) object;
+
+                    for(Entry<Integer, NetworkTransmissionComponent> e : result.positions.entrySet()) {
+                        if(e.getKey() != game.clientId)
+                            ECS.updatePosition(e.getKey(), e.getValue());
+                    }
+                }
+
+                if (object instanceof AttackResponse) {
+                    AttackResponse result = (AttackResponse) object;
+                    if(result.playerId != game.clientId) {
+                        if(result.stop == false)
+                            ECS.attack(result.playerId);
+                        else
+                            ECS.stopAttacking(result.playerId);
+                    }
+                }
+
+                if (object instanceof ShootResponse) {
+                    ShootResponse result = (ShootResponse) object;
+                    if(result.playerId != game.clientId) {
+                        ECS.shoot(result);
+                    }
+                }
+
+                if (object instanceof HPUpdateResponse) {
+                    HPUpdateResponse result = (HPUpdateResponse) object;
+                    ECS.updateHP(result);
+                }
+
+                if (object instanceof LoseKeyResponse) {
+                    System.out.println("LoseKeyResponse");
+                    LoseKeyResponse result = (LoseKeyResponse) object;
+                    ECS.loseKey(result);
+                }
+
+                if (object instanceof TakeKeyResponse) {
+                    System.out.println("TakeKeyResponse");
+                    TakeKeyResponse result = (TakeKeyResponse) object;
+                    ECS.takeKey(result);
+                }
+            }
+        }
+        networkMessages.clear();
+    }
+
+
+    /**
+     * Observes player instance for submitting stuff to the server
+     */
+    public void update(PlayerAction action) {
         switch(action) {
             case ATTACK:
                 game.client.sendUDP(new AttackRequest(game.clientId, false));
@@ -417,5 +386,38 @@ public class InMaze implements Screen, PlayerObserver {
                 break;
             default: break;
         }
-	}
+    }
+    private void updateNetwork() {
+        if(elapsedTimeSec != (int) elapsedTime) sendKeepAliveRequest();
+        elapsedTimeSec = (int) elapsedTime;
+
+        // Update Player
+        posUpdate.position = ECS.getLocalCharacterEntity().getComponent(NetworkTransmissionComponent.class);
+        game.client.sendUDP(posUpdate);
+    }
+
+    private void updateCamera() {
+        // project to camera
+        camera.position.set(ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class)
+                .dynamicBody.getPosition().x, ECS.getLocalCharacterEntity()
+                .getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y, 0);
+        batch.  setProjectionMatrix(camera.combined);
+        shpRend.setProjectionMatrix(camera.combined);
+        camera.update();
+
+        // Animation time calculation
+        elapsedTime += Gdx.graphics.getDeltaTime(); // add time between frames
+    }
+
+    private void checkServerConnection() {
+        if(!game.connected) {
+            if( disconnectTime == 0 ) disconnectTime = elapsedTime;
+            else
+            if(elapsedTime - disconnectTime > timeOut) {
+                disconnectTime = 0;
+                game.setScreen(new MainMenuScreen(game));
+                dispose();
+            }
+        }
+    }
 }

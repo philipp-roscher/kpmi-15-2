@@ -30,8 +30,8 @@ public class InGameUISystem extends ObservingEntitySystem {
     private TextureRegion knightImg;
     private TextureRegion recentHealthBarImg;
     private TextureRegion attackButton;
-    private Array<TextureRegion> keyPartImgs;
-    private Array<Boolean> activeKeyPartImgs;
+    private Array<TextureRegion> keyFragmentImgs;
+    private Array<Boolean> activeKeyFragmentImgs;
     private int HP;
 
     private ImmutableArray<Entity> entities;
@@ -47,10 +47,10 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         TextureAtlas atlas = media.getTextureAtlasType("IngameUI");
-        this.activeKeyPartImgs = new Array<Boolean>(3);
-        this.activeKeyPartImgs.add(false);
-        this.activeKeyPartImgs.add(false);
-        this.activeKeyPartImgs.add(false);
+        this.activeKeyFragmentImgs = new Array<Boolean>(3);
+        this.activeKeyFragmentImgs.add(false);
+        this.activeKeyFragmentImgs.add(false);
+        this.activeKeyFragmentImgs.add(false);
 
         // Get health bar Images
         this.healthBarImages = new Array<TextureRegion>();
@@ -58,9 +58,9 @@ public class InGameUISystem extends ObservingEntitySystem {
             this.healthBarImages.add(atlas.findRegion("healthbar_" + i + "tenth"));
 
         // Get Key part Images
-        this.keyPartImgs = new Array<TextureRegion>();
+        this.keyFragmentImgs = new Array<TextureRegion>();
         for(int i=0; i<4; i++)
-            this.keyPartImgs.add(atlas.findRegion("key", i));
+            this.keyFragmentImgs.add(atlas.findRegion("key", i));
 
         this.attackButton = atlas.findRegion("attackButton");
         this.knightImg = atlas.findRegion("face_knight");
@@ -76,10 +76,10 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.batch.draw(knightImg, 16, 400, 64, 64);
         this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
         this.batch.draw(attackButton, 32, 32, 48, 48);
-        batch.draw(keyPartImgs.get(0), 690, 429);
-        if(activeKeyPartImgs.get(0)) batch.draw(keyPartImgs.get(1), 691, 430);
-        if(activeKeyPartImgs.get(1)) batch.draw(keyPartImgs.get(2), 723, 430);
-        if(activeKeyPartImgs.get(2)) batch.draw(keyPartImgs.get(3), 755, 430);
+        batch.draw(keyFragmentImgs.get(0), 690, 429);
+        if(activeKeyFragmentImgs.get(0)) batch.draw(keyFragmentImgs.get(1), 691, 430);
+        if(activeKeyFragmentImgs.get(1)) batch.draw(keyFragmentImgs.get(2), 723, 430);
+        if(activeKeyFragmentImgs.get(2)) batch.draw(keyFragmentImgs.get(3), 755, 430);
         this.batch.end();
         this.camera.update();
     }
@@ -100,7 +100,7 @@ public class InGameUISystem extends ObservingEntitySystem {
             recentHealthBarImg = healthBarImages.get(HP);
 
             InventoryComponent inventory = im.get(entity);
-            this.activeKeyPartImgs = inventory.getActiveKeys();
+            this.activeKeyFragmentImgs = inventory.getActiveKeys();
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */

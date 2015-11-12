@@ -9,6 +9,7 @@ import org.sausagepan.prototyp.model.Key;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import javax.print.attribute.standard.Media;
 
@@ -18,6 +19,7 @@ import javax.print.attribute.standard.Media;
 public class ItemFactory {
     /* ............................................................................ ATTRIBUTES .. */
     private MediaManager mediaManager;
+    private int keysIssued = 0;
     /* ........................................................................... CONSTRUCTOR .. */
 
     public ItemFactory(MediaManager mediaManager) {
@@ -77,6 +79,22 @@ public class ItemFactory {
 	        default: return null;
         }
         return key;
+    }
+
+    /**
+     * Creates a key fragment {@link Item}
+     * @return
+     */
+    public KeyFragmentItem createKeyFragment() {
+        // Give only 3 keys away
+        if(keysIssued==3)  {
+            System.err.println("Already created 3 key fragments. More are not allowed.");
+            return null;
+        }
+        KeyFragmentItem keyFrag = new KeyFragmentItem(
+                mediaManager.getTextureAtlasType("IngameUI").findRegion("key", keysIssued),
+                keysIssued+=1);
+        return keyFrag;
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

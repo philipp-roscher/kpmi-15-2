@@ -1,7 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import box2dLight.RayHandler;
@@ -12,8 +10,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
-import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 
@@ -27,10 +23,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-
-import org.sausagepan.prototyp.managers.BattleSystem;
-import org.sausagepan.prototyp.managers.PlayerManager;
-import org.sausagepan.prototyp.model.*;
 
 public class MainMenuScreen implements Screen {
 	

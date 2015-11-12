@@ -1,7 +1,5 @@
 package org.sausagepan.prototyp.model;
 
-import org.sausagepan.prototyp.model.components.PlayerComponent;
-
 /**
  * Created by Georg on 26.06.2015.
  */

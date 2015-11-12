@@ -5,19 +5,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.math.MathUtils;
 
-import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.managers.ServerBattleSystem;
 import org.sausagepan.prototyp.managers.ServerCharacterSystem;
-import org.sausagepan.prototyp.managers.ServerPlayerManager;
 import org.sausagepan.prototyp.model.GlobalSettings;
-import org.sausagepan.prototyp.model.ServerPlayer;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
@@ -73,8 +69,6 @@ public class GameServer {
 	public static MapInformation map;
 	//HashMap to save ClientIds,TeamIds
 	public static HashMap<Integer,Integer> TeamAssignments;
-
-	private static ServerPlayerManager playerMan = new ServerPlayerManager();
 	// manages the characters
 	private static ServerCharacterSystem serverCharacterSystem = new ServerCharacterSystem();
 	private ServerBattleSystem bs;
