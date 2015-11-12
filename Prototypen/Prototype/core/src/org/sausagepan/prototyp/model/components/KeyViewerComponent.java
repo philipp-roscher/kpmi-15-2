@@ -24,6 +24,7 @@ import javax.swing.text.View;
 /**
  * Created by Bettina on 02.11.2015.
  */
+@Deprecated
 public class KeyViewerComponent implements ApplicationListener, Component {
 
     private Stage stage;

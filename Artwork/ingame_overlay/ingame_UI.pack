@@ -5,127 +5,162 @@ filter: Nearest,Nearest
 repeat: none
 healthbar_0tenth
   rotate: false
-  xy: 1, 23
+  xy: 1, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_10tenth
   rotate: false
-  xy: 1, 1
+  xy: 113, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_11tenth
   rotate: false
-  xy: 113, 23
+  xy: 225, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_1tenth
   rotate: false
-  xy: 113, 1
+  xy: 337, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_2tenth
   rotate: false
-  xy: 225, 23
+  xy: 449, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_3tenth
   rotate: false
-  xy: 225, 1
+  xy: 561, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_4tenth
   rotate: false
-  xy: 337, 23
+  xy: 673, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_5tenth
   rotate: false
-  xy: 337, 1
+  xy: 785, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_6tenth
   rotate: false
-  xy: 449, 23
+  xy: 897, 38
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_7tenth
   rotate: false
-  xy: 449, 1
+  xy: 1, 16
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_8tenth
   rotate: false
-  xy: 561, 23
+  xy: 113, 16
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
 healthbar_9tenth
   rotate: false
-  xy: 561, 1
+  xy: 225, 16
   size: 110, 20
   orig: 110, 20
   offset: 0, 0
   index: -1
+attackButton
+  rotate: false
+  xy: 337, 12
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
 face_archer
   rotate: false
-  xy: 673, 11
+  xy: 363, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_dragon
   rotate: false
-  xy: 707, 11
+  xy: 397, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_fighter
   rotate: false
-  xy: 741, 11
+  xy: 431, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_knight
   rotate: false
-  xy: 775, 11
+  xy: 465, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_shaman
   rotate: false
-  xy: 809, 11
+  xy: 499, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-attackButton
+key
   rotate: false
-  xy: 843, 19
-  size: 24, 24
-  orig: 24, 24
+  xy: 533, 2
+  size: 94, 34
+  orig: 94, 34
   offset: 0, 0
   index: -1
+key
+  rotate: false
+  xy: 629, 1
+  size: 94, 35
+  orig: 94, 35
+  offset: 0, 0
+  index: 0
+key
+  rotate: false
+  xy: 725, 1
+  size: 32, 35
+  orig: 32, 35
+  offset: 0, 0
+  index: 1
+key
+  rotate: false
+  xy: 759, 1
+  size: 32, 35
+  orig: 32, 35
+  offset: 0, 0
+  index: 2
+key
+  rotate: false
+  xy: 793, 1
+  size: 30, 35
+  orig: 30, 35
+  offset: 0, 0
+  index: 3

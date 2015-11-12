@@ -117,7 +117,7 @@ public class MediaManager {
      */
     public TextureAtlas getTextureAtlasType(String type) {
         if(type.equals("weapons")) return assets.get(weaponsSpriteSheetFile);
-        if(type.equals("healthBar")) return assets.get(IngameUISheetFile);
+        if(type.equals("IngameUI")) return assets.get(IngameUISheetFile);
         return null;
     }
 

@@ -202,6 +202,7 @@ public class InventorySystem extends ObservingEntitySystem {
     }
 
     //the keys are shown as part of the ui
+    @Deprecated
     public void drawKeys()
     {
         /*for(int x= 0; x < characters.size(); x++)

@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Array;
 
 import org.sausagepan.prototyp.model.Item;
 import org.sausagepan.prototyp.model.Key;
@@ -21,6 +22,7 @@ public class InventoryComponent implements Component {
     /*..................................................................................Attributes*/
     public Map<Item, Integer> backpack;
     public List<Key> keyBag;
+    public Array<Boolean> activeKeys;
     public boolean isKeyHolder;
     public WeaponItem weapon;
     //public Map map;
@@ -30,6 +32,10 @@ public class InventoryComponent implements Component {
     {
         backpack = new HashMap<Item, Integer>();
         isKeyHolder = false;
+        this.activeKeys = new Array<Boolean>(3);
+        this.activeKeys.add(false);
+        this.activeKeys.add(false);
+        this.activeKeys.add(false);
     }
 
     /*..........................................................................Backpack functions*/
@@ -85,14 +91,15 @@ public class InventoryComponent implements Component {
 
         switch(key.getKeySection())
         {
-            case PartOne: this.keyBag.set(0, key); break;
-            case PartTwo: this.keyBag.set(1, key); break;
-            case PartThree:  this.keyBag.set(2, key); break;
+            case PartOne:   this.keyBag.set(0, key); activeKeys.set(0, true); break;
+            case PartTwo:   this.keyBag.set(1, key); activeKeys.set(1, true); break;
+            case PartThree: this.keyBag.set(2, key); activeKeys.set(2, true);break;
         }
     }
 
     public List<Key> loseKeys()
     {
+        for(Boolean b : activeKeys) b=false;
         if(!isKeyHolder)
             return null;
 
@@ -109,5 +116,10 @@ public class InventoryComponent implements Component {
         }
         return keys;
     }
+
+    public Array<Boolean> getActiveKeys() {
+        return activeKeys;
+    }
+
 
 }
