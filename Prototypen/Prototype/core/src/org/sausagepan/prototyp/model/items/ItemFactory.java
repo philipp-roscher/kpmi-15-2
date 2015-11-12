@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.model.items;
 
 import org.sausagepan.prototyp.User_Interface.Actors.KeyActor;
 import org.sausagepan.prototyp.enums.Damagetype;
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.KeySection;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.Key;
@@ -95,6 +96,27 @@ public class ItemFactory {
                 mediaManager.getTextureAtlasType("IngameUI").findRegion("key", keysIssued),
                 keysIssued+=1);
         return keyFrag;
+    }
+
+    /**
+     * Creates items for the map, use it for item creation from tiled maps
+     * @param itemType
+     * @param value
+     * @return
+     */
+    public Item createMapItem(ItemType itemType, int value) {
+        Item item = null;
+        switch(itemType) {
+            case POTION_HP: item = new PotionHP(
+                    mediaManager.getTextureAtlasType("items").findRegion("potion_red"), value);
+                break;
+            case POTION_MP: item = new PotionMP(
+                    mediaManager.getTextureAtlasType("items").findRegion("potion_green"), value);
+                break;
+            default: break;
+        }
+
+        return item;
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

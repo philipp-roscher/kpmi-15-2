@@ -23,6 +23,7 @@ public class MediaManager {
     private String SelectionShamanMBig          = "textures/characterSelection/Shaman_m_big.png";
     private String SelectionDragonRedBig        = "textures/characterSelection/Dragon_red_big.png";
     private String IngameUISheetFile            = "textures/spritesheets/ingame_UI.pack";
+    private String itemsSheetFile               = "textures/spritesheets/items.pack";
 
     //character sheets
     private String knightMSpriteSheetFile        = "textures/spritesheets/characters/knight_m.pack";
@@ -43,6 +44,7 @@ public class MediaManager {
         this.assets = new AssetManager();
 
         assets.load(this.IngameUISheetFile, TextureAtlas.class);
+        assets.load(this.itemsSheetFile, TextureAtlas.class);
         // load music
         assets.load(this.mazeBackgroundMusicFile, Music.class);
         //load Images
@@ -118,6 +120,7 @@ public class MediaManager {
     public TextureAtlas getTextureAtlasType(String type) {
         if(type.equals("weapons")) return assets.get(weaponsSpriteSheetFile);
         if(type.equals("IngameUI")) return assets.get(IngameUISheetFile);
+        if(type.equals("items")) return assets.get(itemsSheetFile);
         return null;
     }
 
