@@ -12,14 +12,10 @@ import com.badlogic.gdx.utils.Array;
 import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.model.Bullet;
-import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.items.Bow;
-
-import java.util.LinkedList;
-import java.util.List;
 
 
 /**
@@ -34,7 +30,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     private Array<CharacterSpriteComponent> characterSpriteComponents;
     private Array<WeaponComponent> weaponComponents;
     private Array<EntitySprite> entitySprites;
-    private List<Key> keys;
     private int drawSpritesAfterLayer = 3;
     private MediaManager media;
     private BitmapFont font;
@@ -49,7 +44,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         characterSpriteComponents = new Array<CharacterSpriteComponent>();
         weaponComponents = new Array<WeaponComponent>();
         entitySprites = new Array<EntitySprite>();
-        keys = new LinkedList<Key>();
         this.media = media;
         this.font = new BitmapFont();
     }
@@ -77,11 +71,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     public void removeWeaponComponent(WeaponComponent weaponComponent) {
         weaponComponents.removeValue(weaponComponent, true);
     }
-    
-    public List<Key> getKeys()
-    {
-        return this.keys;
-    }
+
 
     public void addSprite(Sprite newSprite) {
         sprites.add(newSprite);
@@ -99,6 +89,8 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                 renderTileLayer((TiledMapTileLayer) layer);
                 currentLayer++;
                 if(currentLayer == drawSpritesAfterLayer) {
+                    for(Sprite s : sprites)
+                        s.draw(this.getBatch());
                     /* Draw players here */
                     for(SpriteComponent spriteComponent : spriteComponents)
                         spriteComponent.sprite.draw(this.getBatch());
@@ -116,20 +108,11 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                         }
                     }
 
-                    for(Sprite s : sprites)
-                        s.draw(this.getBatch());
-
                     // Draw entity sprites if visible
                     for(EntitySprite es : entitySprites)
                         if(es.visible)
                             es.draw(this.batch);
 
-                    if(keys.size() != 0)
-                    {
-                        for(Key key : keys)
-                            if(key.getSprite().visible)
-                                key.getSprite().draw(this.batch);
-                    }
                     }
                 } else
                     for(MapObject object : layer.getObjects())

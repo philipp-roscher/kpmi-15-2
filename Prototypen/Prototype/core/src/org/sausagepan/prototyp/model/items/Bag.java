@@ -1,16 +1,19 @@
 package org.sausagepan.prototyp.model.items;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 /**
+ * A bag can contain several other items, characters who die lose all their items at once in a bag
  * Created by georg on 12.11.15.
  */
-public abstract class Item {
+public class Bag extends Item {
     /* ............................................................................ ATTRIBUTES .. */
-    public TextureRegion itemImg;
+    public Array<Item> items;
     /* ........................................................................... CONSTRUCTOR .. */
-    public Item(TextureRegion itemImg) {
-        this.itemImg = itemImg;
+    public Bag(TextureRegion textureRegion, Array<Item> items) {
+        super(textureRegion);
+        this.items = items;
     }
     /* ............................................................................... METHODS .. */
     

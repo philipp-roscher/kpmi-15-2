@@ -8,7 +8,6 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
-import org.sausagepan.prototyp.model.components.KeyViewerComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -38,7 +37,6 @@ public class CharacterEntity extends Entity {
                 HealthComponent.class,
                 MagicComponent.class,
                 InventoryComponent.class,
-                KeyViewerComponent.class,
                 TeamComponent.class
         ).get();
     }

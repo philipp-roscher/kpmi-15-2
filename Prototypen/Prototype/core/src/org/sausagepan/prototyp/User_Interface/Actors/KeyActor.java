@@ -5,18 +5,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import org.sausagepan.prototyp.enums.KeySection;
-import org.sausagepan.prototyp.model.Key;
-
 /**
  * Created by Bettina on 02.11.2015.
  */
 public class KeyActor extends Actor {
 
     private Texture texture;
-    private KeySection keySection;
+    private int keySection;
 
-    public KeyActor(Texture texture, KeySection keySection)
+    public KeyActor(Texture texture, int keySection)
     {
         this.texture = texture;
         this.keySection = keySection;

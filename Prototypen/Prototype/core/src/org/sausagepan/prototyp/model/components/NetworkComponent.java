@@ -5,8 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
-import org.sausagepan.prototyp.enums.KeySection;
-import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
@@ -45,12 +43,12 @@ public class NetworkComponent implements Component {
 		client.sendTCP(hpupdate);
 	}
 
-	public void loseKey(KeySection keySection, float x, float y) {
+	public void loseKey(int keySection, float x, float y) {
 		System.out.println("LOSEKEY");
 		client.sendTCP(new LoseKeyRequest(id,keySection,x,y));
 	}
 
-	public void takeKey(KeySection keySection) {
+	public void takeKey(int keySection) {
 		client.sendTCP(new TakeKeyRequest(id,keySection));
 	}
     

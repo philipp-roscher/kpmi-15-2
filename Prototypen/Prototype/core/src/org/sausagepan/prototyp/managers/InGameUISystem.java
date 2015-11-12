@@ -12,11 +12,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
-import org.sausagepan.prototyp.model.Key;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 
 /**
  * Created by georg on 11.11.15.
@@ -24,14 +24,13 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 public class InGameUISystem extends ObservingEntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private OrthographicCamera camera;
-    private MediaManager media;
     private Batch batch;
     private Array<TextureRegion> healthBarImages;
     private TextureRegion knightImg;
     private TextureRegion recentHealthBarImg;
     private TextureRegion attackButton;
     private Array<TextureRegion> keyFragmentImgs;
-    private Array<Boolean> activeKeyFragmentImgs;
+    private Array<KeyFragmentItem> keyFragmentItems;
     private int HP;
 
     private ImmutableArray<Entity> entities;
@@ -43,14 +42,10 @@ public class InGameUISystem extends ObservingEntitySystem {
     /* ........................................................................... CONSTRUCTOR .. */
 
     public InGameUISystem(MediaManager media, Batch batch) {
-        this.media = media;
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         TextureAtlas atlas = media.getTextureAtlasType("IngameUI");
-        this.activeKeyFragmentImgs = new Array<Boolean>(3);
-        this.activeKeyFragmentImgs.add(false);
-        this.activeKeyFragmentImgs.add(false);
-        this.activeKeyFragmentImgs.add(false);
+        this.keyFragmentItems = new Array<KeyFragmentItem>();
 
         // Get health bar Images
         this.healthBarImages = new Array<TextureRegion>();
@@ -77,9 +72,13 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
         this.batch.draw(attackButton, 32, 32, 48, 48);
         batch.draw(keyFragmentImgs.get(0), 690, 429);
-        if(activeKeyFragmentImgs.get(0)) batch.draw(keyFragmentImgs.get(1), 691, 430);
-        if(activeKeyFragmentImgs.get(1)) batch.draw(keyFragmentImgs.get(2), 723, 430);
-        if(activeKeyFragmentImgs.get(2)) batch.draw(keyFragmentImgs.get(3), 755, 430);
+        for(KeyFragmentItem kf : keyFragmentItems) {
+            switch(kf.keyFragmentNr) {
+                case 1: batch.draw(keyFragmentImgs.get(1), 691, 430); break;
+                case 2: batch.draw(keyFragmentImgs.get(2), 723, 430); break;
+                case 3: batch.draw(keyFragmentImgs.get(3), 755, 430); break;
+            }
+        }
         this.batch.end();
         this.camera.update();
     }
@@ -98,9 +97,8 @@ public class InGameUISystem extends ObservingEntitySystem {
             HealthComponent health = hm.get(entity);
             HP = MathUtils.roundPositive((float) health.HP/(health.initialHP)*10)+1;
             recentHealthBarImg = healthBarImages.get(HP);
-
             InventoryComponent inventory = im.get(entity);
-            this.activeKeyFragmentImgs = inventory.getActiveKeys();
+            this.keyFragmentItems = inventory.keyFragments;
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */

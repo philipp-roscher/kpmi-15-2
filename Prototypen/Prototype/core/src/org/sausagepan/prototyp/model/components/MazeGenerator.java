@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.model.components;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -13,6 +14,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
+import org.sausagepan.prototyp.enums.ItemType;
+import org.sausagepan.prototyp.model.items.MapItem;
 
 
 /**
@@ -38,6 +42,7 @@ public class MazeGenerator {
     Array<Vector2> lightPositions;
     Array<Vector2> gameMasterSecretPositions;
     Array<Vector2> monsterPositions;
+    Array<MapItem> mapItems;
 
 	float[][] positions;
 
@@ -62,6 +67,7 @@ public class MazeGenerator {
         this.lightPositions = new Array<Vector2>();
         this.monsterPositions = new Array<Vector2>();
         this.gameMasterSecretPositions = new Array<Vector2>();
+        this.mapItems = new Array<MapItem>();
 
         this.positions = new float[5][2]; //[Player][0 - x, 1 - y], GM is Player 0, Team 1 1+2, Team 2 3+4
 
@@ -117,7 +123,7 @@ public class MazeGenerator {
 
 		// Team Blues Spawn Room
 		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx",
-                mazeWidth + 1, (int) Math.ceil(mazeHeight/ 2) + 1);
+				mazeWidth + 1, (int) Math.ceil(mazeHeight / 2) + 1);
 		positions[3][0] =  mazeWidth * 32 * 32 + 16 * 32;
 		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
 		positions[4][0] =  mazeWidth * 32 * 32 + 16 * 32;
@@ -213,6 +219,7 @@ public class MazeGenerator {
 		tiledMap = new TmxMapLoader().load(tile);
 		calculateLightPositions(tiledMap, x, y);
         calculateMonsterPositions(tiledMap, x, y);
+		setUpItems(tiledMap, x, y);
 		
 		for(int layer_nr = 0; layer_nr < 6; layer_nr++){ 	//für alle Layer
 			if(layer_nr == 4){								
@@ -319,15 +326,10 @@ public class MazeGenerator {
 	private void calculateMonsterPositions(TiledMap map, int x, int y) {
 		MapLayer monstersLayer;
 		if(map.getLayers().get("monsters") != null) {
-//			System.out.println("Found Monsters Layer");
-//			System.out.println("Adding monsters for Tile [" + x + "," + y + "]");
 			try {
 				monstersLayer = map.getLayers().get("monsters");   // get lights layer
 
 				for (MapObject mo : monstersLayer.getObjects()) {
-//					System.out.println("Position: ("
-//							+ mo.getProperties().get("x", Float.class)/32 + "|"
-//							+ mo.getProperties().get("y", Float.class)/32 + ")");
 					monsterPositions.add(new Vector2(
 							mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
 							mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
@@ -336,10 +338,32 @@ public class MazeGenerator {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else {
-//			System.err.println("TMX does not contain a monster layer");
-			;
 		}
+	}
+
+    /**
+     * Read item locations from map and store them in an array
+     * @param map
+     * @param x
+     * @param y
+     */
+	public void setUpItems(TiledMap map, int x, int y)  {
+        MapLayer itemsLayer;
+        if(map.getLayers().get("items") != null) {
+            try {
+                itemsLayer = map.getLayers().get("items");
+                for (MapObject mo : itemsLayer.getObjects()) {
+                    mapItems.add(new MapItem(
+                            mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
+                            mo.getProperties().get("y", Float.class)/32 + y*32 + .5f,
+                            mo.getName(),
+                            Float.parseFloat(mo.getProperties().get("value", String.class))
+                    ));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 	
@@ -374,6 +398,10 @@ public class MazeGenerator {
 
     public Array<Vector2> getGameMasterSecretPositions() {
         return gameMasterSecretPositions;
+    }
+
+    public Array<MapItem> getMapItems() {
+        return mapItems;
     }
 
     //übergibt Startpsotionen der Spieler
