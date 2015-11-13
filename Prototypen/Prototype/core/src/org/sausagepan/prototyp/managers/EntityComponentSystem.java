@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -361,7 +362,8 @@ public class EntityComponentSystem {
             case FIGHTER_M:
                 characterEntity.add(new CharacterSpriteComponent(mediaManager.getTextureAtlas(
                         "textures/spritesheets/characters/fighter_m.pack"), characterClass));
-                characterEntity.add(new WeaponComponent(itemFactory.createSmallSword()));
+                characterEntity.add(
+                        new WeaponComponent(itemFactory.createBoxerGlove(ItemType.GLOVE_RED)));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case ARCHER_F:

@@ -31,7 +31,7 @@ public class ItemFactory {
 
     public Bow createFireBreather() {
         return new Bow(
-                mediaManager.getTextureAtlasType("weapons").findRegion("bow", 1),
+                mediaManager.getTextureAtlasType("weapons").findRegion("fire_breath"),
                 5, Damagetype.MAGICAL,
                 mediaManager.getTextureAtlasType("weapons").findRegion("fireball")
         );
@@ -46,6 +46,22 @@ public class ItemFactory {
         return new Sword(
                 mediaManager.getTextureAtlasType("weapons").findRegion("sword", 2),
                 5, Damagetype.PHYSICAL);
+    }
+
+    /**
+     * Creates weapon for {@link org.sausagepan.prototyp.enums.CharacterClass} FIGHTER
+     * @param itemType allowed values: GLOVE_RED, GLOVE_SPIKE
+     * @return
+     */
+    public Sword createBoxerGlove(ItemType itemType) {
+        Sword glove;
+        switch(itemType) {
+            case GLOVE_SPIKE: glove = new Sword(mediaManager.getTextureAtlasType("weapons")
+                    .findRegion("boxer_glove_spike"), 10, Damagetype.PHYSICAL);break;
+            default: glove = new Sword(mediaManager.getTextureAtlasType("weapons")
+            .findRegion("boxer_glove"), 10, Damagetype.PHYSICAL);break;
+        }
+        return glove;
     }
 
     public Sword createBigSword() {
