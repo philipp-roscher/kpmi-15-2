@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
@@ -47,7 +48,7 @@ public class MainMenuScreen implements Screen {
 	private boolean mapInformationReceived = false;
 	
 	//chosen Player Class
-	private String clientClass;
+	private CharacterClass clientClass;
 	private boolean clientSel = false;
 
 	
@@ -101,7 +102,7 @@ public class MainMenuScreen implements Screen {
 		//GameMaster
 		if (game.TeamId == 0) {
 			game.batch.draw(SelDragonRed, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
-			clientClass = "dragon_red";
+			clientClass = CharacterClass.DRAGON;
 		}
 		//Teams
 		else {
@@ -112,27 +113,27 @@ public class MainMenuScreen implements Screen {
 
 			switch (x) {
 				case 0: {
-					clientClass = "knight_m";
+					clientClass = CharacterClass.KNIGHT_M;
 					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 1: {
-					clientClass = "archer_f";
+					clientClass = CharacterClass.ARCHER_F;
 					game.batch.draw(SelArcherF, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 2: {
-					clientClass = "shaman_m";
+					clientClass = CharacterClass.SHAMAN_M;
 					game.batch.draw(SelShamanM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 3: {
-					clientClass = "fighter_m";
+					clientClass = CharacterClass.FIGHTER_M;
 					game.batch.draw(SelFighterM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				default: {
-					clientClass = "knight_m";
+					clientClass = CharacterClass.KNIGHT_M;
 					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}

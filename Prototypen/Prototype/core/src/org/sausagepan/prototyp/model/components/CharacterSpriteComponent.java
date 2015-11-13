@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ArrayMap;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
+
 /**
  * Created by georg on 28.10.15.
  */
@@ -22,7 +24,7 @@ public class CharacterSpriteComponent implements Component {
      *
      * @param textureAtlas  representing a character sprite sheet
      */
-    public CharacterSpriteComponent (TextureAtlas textureAtlas, String playerClass) {
+    public CharacterSpriteComponent (TextureAtlas textureAtlas, CharacterClass characterClass) {
         // load animation textures
         playerAnims = new ArrayMap<String,Animation>();
         playerAnims.put("n", new Animation(.2f, textureAtlas.findRegions("n")));
@@ -34,12 +36,8 @@ public class CharacterSpriteComponent implements Component {
         recentIdleImg = playerAnims.get("s").getKeyFrames()[0];
         this.sprite = new Sprite(recentIdleImg);
         //bigger size for dragon/GM
-        if (playerClass == "dragon_red") {
-            this.sprite.setSize(.8f*2, 1*2);
-        }
-        else {
-            this.sprite.setSize(.8f, 1);
-        }
+        if(characterClass == CharacterClass.DRAGON) this.sprite.setSize(.8f*2, 1*2);
+        else this.sprite.setSize(.8f, 1);
     }
     /* ............................................................................... METHODS .. */
     

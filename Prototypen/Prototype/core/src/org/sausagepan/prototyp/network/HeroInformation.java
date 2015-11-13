@@ -1,14 +1,15 @@
 package org.sausagepan.prototyp.network;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.Status;
 import org.sausagepan.prototyp.model.Weapon;
 
 public class HeroInformation {
-	public String clientClass;
+	public CharacterClass clientClass;
 
 	public HeroInformation() { }
 	
-	public HeroInformation(String clientClass) {
+	public HeroInformation(CharacterClass clientClass) {
 		this.clientClass = clientClass;
 	}
 	

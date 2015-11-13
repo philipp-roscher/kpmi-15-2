@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -70,7 +71,7 @@ public class EntityComponentSystem {
     private int localCharacterId;
     private CharacterEntity localCharacter;
 
-    private String clientClass;
+    private CharacterClass characterClass;
     private int TeamId;
 
     private float [] [] startPos;
@@ -78,7 +79,7 @@ public class EntityComponentSystem {
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
             KPMIPrototype game, World world, Viewport viewport, RayHandler rayHandler, Maze maze,
-            OrthographicCamera camera, String clientClass, int TeamId) {
+            OrthographicCamera camera, CharacterClass characterClass, int TeamId) {
 
         this.mediaManager = game.mediaManager;
         this.itemFactory = new ItemFactory(mediaManager);
@@ -88,7 +89,7 @@ public class EntityComponentSystem {
         this.rayHandler = rayHandler;
         this.maze = maze;
         this.shpRend = new ShapeRenderer();
-        this.clientClass = clientClass;
+        this.characterClass = characterClass;
         this.TeamId = TeamId;
 
         this.engine = new ObservableEngine(); // Create Engine
@@ -123,11 +124,11 @@ public class EntityComponentSystem {
         // Get Objects from Maps Monster Layer and add monster entities there
         for(Vector2 pos : maze.getMonsterPositions()) {
             MonsterEntity monster = new MonsterEntity();
-            monster.add(new DynamicBodyComponent(world, new Vector2(pos.x, pos.y), "monster"));
+            monster.add(new DynamicBodyComponent(
+                    world, new Vector2(pos.x, pos.y), CharacterClass.MONSTER));
             monster.add(new HealthComponent(20));
-            monster.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/monsters/zombie_01.pack"), "monster"
-            ));
+            monster.add(new CharacterSpriteComponent(mediaManager.getTextureAtlas(
+                    "textures/spritesheets/monsters/zombie_01.pack"), CharacterClass.MONSTER));
             monster.add(new InjurableAreaComponent(pos.x, pos.y, .8f, 1f));
             //same Team as GM -> no friendly fire
             monster.add(new TeamComponent(0));
@@ -203,7 +204,7 @@ public class EntityComponentSystem {
 
         // Ingame UI System
         InGameUISystem inGameUISystem
-                = new InGameUISystem(mediaManager, maze.getTiledMapRenderer().getBatch());
+                = new InGameUISystem(mediaManager, characterClass);
         inGameUISystem.addedToEngine(engine);
 
         // Adding them to the Engine
@@ -219,96 +220,6 @@ public class EntityComponentSystem {
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
-    }
-
-    /**
-     * Sets up the entity for the local players character, adding components and setting up
-     * according entity system.
-     */
-    private void setUpLocalCharacterEntity() {
-        // Create Entity
-        this.localCharacter = new CharacterEntity();
-
-        // Add Components
-        localCharacter.add(new InputComponent());
-        localCharacter.add(new LightComponent(rayHandler));
-        localCharacter.add(new NetworkTransmissionComponent());
-        localCharacter.add(new TeamComponent(TeamId));
-        localCharacter.add(new NetworkComponent());
-        localCharacter.add(new IdComponent(localCharacterId));
-
-        //Set Spawn locations: Game master
-        if (TeamId == 0) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
-        }
-        if (TeamId == 1) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), clientClass));
-        }
-
-        if (TeamId == 2) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), clientClass));
-        }
-
-
-        //TODO: add further if-circle(s) to choose character class (Sara)
-        if (clientClass.equals("knight_m")) {
-            localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/knight_m.pack"), clientClass
-            ));
-            localCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
-            localCharacter.add(new HealthComponent(100));
-            localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            localCharacter.add(new InventoryComponent());
-        }
-
-        if (clientClass.equals("fighter_m")) {
-            localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/fighter_m.pack"), clientClass
-            ));
-            localCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
-            localCharacter.add(new HealthComponent(100));
-            localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            localCharacter.add(new InventoryComponent());
-        }
-
-        if (clientClass.equals("archer_f")) {
-            localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/archer_f.pack"), clientClass
-            ));
-            localCharacter.add(new WeaponComponent(itemFactory.createBow()));
-            localCharacter.add(new HealthComponent(100));
-            localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            localCharacter.add(new InventoryComponent());
-        }
-
-        if (clientClass.equals("shaman_m")) {
-            localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/shaman_m.pack"), clientClass
-            ));
-            localCharacter.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
-            localCharacter.add(new HealthComponent(100));
-            localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            localCharacter.add(new InventoryComponent());
-        }
-
-        if (clientClass.equals("dragon_red")) {
-            localCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), clientClass
-            ));
-            localCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
-            localCharacter.add(new HealthComponent(100));
-            localCharacter.add(new MagicComponent(80));
-            localCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));   //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
-            localCharacter.add(new InventoryComponent());
-            maze.openSecretPassages();  // opens passages for game master
-        }
-
-        characters.put(localCharacterId, localCharacter);
-        this.engine.addEntity(localCharacter);
     }
 
     public void setUpMazeLights() {
@@ -339,104 +250,116 @@ public class EntityComponentSystem {
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
 		return addNewCharacter(request.playerId, request.hero);
 	}
-		
-	public CharacterEntity addNewCharacter(int newCharacterId, HeroInformation newHero) {		
-		// Create Entity
-        CharacterEntity newCharacter = new CharacterEntity();
+
+    /**
+     * Sets up the entity for the local players character, adding components and setting up
+     * according entity system.
+     */
+    private void setUpLocalCharacterEntity() {
+        // Create Entity
+        this.localCharacter = setUpCharacterEntity();
 
         // Add Components
-        //TODO: add further if-circle(s) to choose character class (Sara)
-        newCharacter.add(new LightComponent(rayHandler));
+        localCharacter.add(new NetworkTransmissionComponent());
+        localCharacter.add(new TeamComponent(TeamId));
+        localCharacter.add(new NetworkComponent());
+        localCharacter.add(new IdComponent(localCharacterId));
+
+        //Set Spawn locations: Game master
+        if (TeamId == 0) {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), characterClass));
+        }
+        if (TeamId == 1) {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), characterClass));
+        }
+
+        if (TeamId == 2) {
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), characterClass));
+        }
+
+        characters.put(localCharacterId, localCharacter);
+        this.engine.addEntity(localCharacter);
+    }
+
+    /**
+     * Adds other (network-) players characters to the world
+     * @param newCharacterId
+     * @param newHero
+     * @return
+     */
+	public CharacterEntity addNewCharacter(int newCharacterId, HeroInformation newHero) {		
+		// Create Entity
+        CharacterEntity newCharacter = setUpCharacterEntity();
+
+        // Add Components
         newCharacter.add(new NetworkTransmissionComponent());
         newCharacter.add(new TeamComponent(TeamId));
-        newCharacter.add(new InputComponent());
         newCharacter.add(new IdComponent(newCharacterId));
-
-        // .................................................................................. KNIGHT
-        if (newHero.clientClass.equals("knight_m")) {
-            newCharacter.add(
-                    new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f),
-                            newHero.clientClass));
-            newCharacter.add(
-                    new CharacterSpriteComponent(mediaManager
-                            .getTextureAtlas("textures/spritesheets/characters/knight_m.pack"),
-                            newHero.clientClass));
-            newCharacter.add(new WeaponComponent(itemFactory.createSmallSword()));
-            newCharacter.add(new HealthComponent(100));
-            newCharacter.add(new MagicComponent(80));
-            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            newCharacter.add(new InventoryComponent());
-        }
-        // .................................................................................. KNIGHT
-
-
-        // ................................................................................. FIGHTER
-        if (newHero.clientClass.equals("fighter_m")) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
-            newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/fighter_m.pack"),
-                    newHero.clientClass
-            ));
-            newCharacter.add(new WeaponComponent(itemFactory.createSmallSword())); //TODO: weapon
-            newCharacter.add(new HealthComponent(100));
-            newCharacter.add(new MagicComponent(80));
-            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            newCharacter.add(new InventoryComponent());
-        }
-        // ................................................................................. FIGHTER
-
-
-        // .................................................................................. ARCHER
-        if (newHero.clientClass.equals("archer_f")) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
-            newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/archer_f.pack"),
-                    newHero.clientClass
-            ));
-            newCharacter.add(new WeaponComponent(itemFactory.createBow()));
-            newCharacter.add(new HealthComponent(100));
-            newCharacter.add(new MagicComponent(80));
-            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            newCharacter.add(new InventoryComponent());
-        }
-        // .................................................................................. ARCHER
-
-
-        // .................................................................................. SHAMAN
-        if (newHero.clientClass.equals("shaman_m")) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
-            newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/shaman_m.pack"),
-                    newHero.clientClass
-            ));
-            newCharacter.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
-            newCharacter.add(new HealthComponent(100));
-            newCharacter.add(new MagicComponent(80));
-            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
-            newCharacter.add(new InventoryComponent());
-        }
-        // .................................................................................. SHAMAN
-
-
-        // .................................................................................. DRAGON
-        // GameMaster - The Dragon
-        if (newHero.clientClass.equals("dragon_red")) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.6f), newHero.clientClass));
-            newCharacter.add(new CharacterSpriteComponent(
-                    mediaManager.getTextureAtlas("textures/spritesheets/characters/dragon_red.pack"), "dragon_red"
-            ));
-            newCharacter.add(new WeaponComponent(itemFactory.createFireBreather()));
-            newCharacter.add(new HealthComponent(100));
-            newCharacter.add(new MagicComponent(80));
-            newCharacter.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));     //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
-            newCharacter.add(new InventoryComponent());
-        }
-        // .................................................................................. DRAGON
 
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);
         return newCharacter;
 	}
+
+    /**
+     * Creates a generic {@link CharacterEntity} without {@link NetworkComponent} or
+     * {@link NetworkTransmissionComponent}
+     * @return
+     */
+    private CharacterEntity setUpCharacterEntity() {
+        // Create Entity
+        CharacterEntity characterEntity = new CharacterEntity();
+
+        // Add Components
+        characterEntity.add(new InputComponent());
+        characterEntity.add(new LightComponent(rayHandler));
+
+
+        // Add components which are equal for all classes
+        characterEntity.add(new HealthComponent(100));
+        characterEntity.add(new MagicComponent(80));
+        characterEntity.add(new InventoryComponent());
+
+        // Add class specific components
+        switch(characterClass) {
+            case KNIGHT_M:
+                characterEntity.add(new CharacterSpriteComponent(mediaManager.getTextureAtlas(
+                        "textures/spritesheets/characters/knight_m.pack"), characterClass));
+                characterEntity.add(new WeaponComponent(itemFactory.createSmallSword()));
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case FIGHTER_M:
+                characterEntity.add(new CharacterSpriteComponent(mediaManager.getTextureAtlas(
+                        "textures/spritesheets/characters/fighter_m.pack"), characterClass));
+                characterEntity.add(new WeaponComponent(itemFactory.createSmallSword()));
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case ARCHER_F:
+                characterEntity.add(new CharacterSpriteComponent(mediaManager.getTextureAtlas(
+                        "textures/spritesheets/characters/archer_f.pack"), characterClass));
+                characterEntity.add(new WeaponComponent(itemFactory.createBow()));
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case SHAMAN_M:
+                characterEntity.add(new CharacterSpriteComponent(mediaManager.getTextureAtlas(
+                        "textures/spritesheets/characters/shaman_m.pack"), characterClass));
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case DRAGON:
+                characterEntity.add(new CharacterSpriteComponent(mediaManager.getTextureAtlas(
+                        "textures/spritesheets/characters/dragon_red.pack"), characterClass));
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather()));
+                characterEntity.add(new InjurableAreaComponent(32*2.5f, 32*.6f, .8f*2, 1f*2));
+                //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
+                maze.openSecretPassages();  // opens passages for game master
+                break;
+            default: break;
+        }
+
+
+        return characterEntity;
+    }
 	
 	public void updatePosition(int id, NetworkTransmissionComponent position) {
 		if(characters.get(id) != null) {

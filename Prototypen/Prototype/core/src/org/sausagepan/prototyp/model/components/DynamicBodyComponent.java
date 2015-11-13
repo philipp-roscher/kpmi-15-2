@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
+
 /**
  * Created by georg on 21.10.15.
  */
@@ -24,19 +26,15 @@ public class DynamicBodyComponent implements Component {
     public Vector2 startPosition;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public DynamicBodyComponent(World world, Vector2 startPosition, String playerClass) {
+    public DynamicBodyComponent(World world, Vector2 startPosition, CharacterClass characterClass) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;    // set up body definition for player
         bodyDef.position.set(startPosition.x, startPosition.y); // set players bodys position
         dynamicBody = world.createBody(bodyDef);        // add body to the world
         CircleShape circle = new CircleShape();         // give body a shape
         //bigger size for dragon/GM
-        if (playerClass == "dragon_red") {
-            circle.setRadius(.4f*2);                    // set the shapes radius
-        }
-        else {
-            circle.setRadius(.4f);                    // set the shapes radius
-        }
+        if(characterClass == CharacterClass.DRAGON)  circle.setRadius(.4f*2);
+        else circle.setRadius(.4f);
         FixtureDef fixDef = new FixtureDef();           // create players fixture
         fixDef.shape       = circle;                    // give shape to fixture
         fixDef.density     = 0.5f;                      // objects density

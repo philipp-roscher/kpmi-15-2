@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
@@ -26,7 +27,7 @@ public class InGameUISystem extends ObservingEntitySystem {
     private OrthographicCamera camera;
     private Batch batch;
     private Array<TextureRegion> healthBarImages;
-    private TextureRegion knightImg;
+    private TextureRegion characterImg;
     private TextureRegion recentHealthBarImg;
     private TextureRegion attackButton;
     private Array<TextureRegion> keyFragmentImgs;
@@ -41,7 +42,7 @@ public class InGameUISystem extends ObservingEntitySystem {
             = ComponentMapper.getFor(InventoryComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
 
-    public InGameUISystem(MediaManager media, Batch batch) {
+    public InGameUISystem(MediaManager media, CharacterClass characterClass) {
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         TextureAtlas atlas = media.getTextureAtlasType("IngameUI");
@@ -58,7 +59,18 @@ public class InGameUISystem extends ObservingEntitySystem {
             this.keyFragmentImgs.add(atlas.findRegion("key", i));
 
         this.attackButton = atlas.findRegion("attackButton");
-        this.knightImg = atlas.findRegion("face_knight");
+
+        switch(characterClass) {
+            case KNIGHT_M:this.characterImg = atlas.findRegion("face_knight");break;
+            case KNIGHT_F:this.characterImg = atlas.findRegion("face_knight");break;
+            case ARCHER_M:this.characterImg = atlas.findRegion("face_archer");break;
+            case ARCHER_F:this.characterImg = atlas.findRegion("face_archer");break;
+            case DRAGON:this.characterImg = atlas.findRegion("face_dragon");break;
+            case SHAMAN_M:this.characterImg = atlas.findRegion("face_shaman");break;
+            case SHAMAN_F:this.characterImg = atlas.findRegion("face_shaman");break;
+            default:this.characterImg = atlas.findRegion("face_knight");break;
+        }
+
         this.recentHealthBarImg = healthBarImages.get(11);
     }
     /* ............................................................................... METHODS .. */
@@ -68,7 +80,7 @@ public class InGameUISystem extends ObservingEntitySystem {
      */
     public void draw() {
         this.batch.begin();
-        this.batch.draw(knightImg, 16, 400, 64, 64);
+        this.batch.draw(characterImg, 16, 400, 64, 64);
         this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
         this.batch.draw(attackButton, 32, 32, 48, 48);
         batch.draw(keyFragmentImgs.get(0), 690, 429);

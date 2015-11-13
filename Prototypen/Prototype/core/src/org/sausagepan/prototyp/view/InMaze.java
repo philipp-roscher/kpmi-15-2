@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
@@ -99,7 +100,7 @@ public class InMaze implements Screen {
      * @param game the game main class itself
      */
 	public InMaze(final KPMIPrototype game, final World world, final RayHandler rayHandler,
-                  final MapInformation mapInformation, String clientClass, int TeamId) {
+                  final MapInformation mapInformation, CharacterClass clientClass, int TeamId) {
 
         Box2D.init(); // initialize Box2D
 		this.game = game;
