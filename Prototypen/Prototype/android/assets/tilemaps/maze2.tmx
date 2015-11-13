@@ -3,12 +3,6 @@
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
- <tileset firstgid="751" name="buch" tilewidth="32" tileheight="32">
-  <image source="../textures/spritesheets/the_field_of_the_floating_island_by_buch_PD.png" width="800" height="640"/>
- </tileset>
- <tileset firstgid="1251" name="buch_snow" tilewidth="32" tileheight="32">
-  <image source="../textures/spritesheets/the_field_of_the_floating_island_snow_by_buch_PD.png" width="704" height="448"/>
- </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
    eJzdl02OwyAMhROpTWaVRPm5/6W66aKrqDeYAwxIteb1zTMh0NVUeqKh4M/YhtCmKf/cg/aK+bWf/8K/BT0ONLTvz2N4vgRd2+O5yk5scR1TeF5AEylyhtf3UfyuZAzs25vfVvEn4cMGPkTf47rXoBnGKJ93Yd/WYb+ZPWbx9yMhvxf8jmJp+ZhoHWc1v4S5sxhjvFSM0Qbamts6nyJ/ITspfufY6TN5OH9r32s16gY5XoRt8y1qpXXk8O9iHOb4IuagbTW/lp+TI57P+87GjK1/ltTUCPI74vcwxvzbHP/OqHP4KobML82PylUOnzW/YmA1ajVmeXg2fjtk8r095+1R9OPLab+bv7H0+F5MMT5Lq89m77zeib8Qx96luBaub2+PIDuXr9av5nuxUHyvf8vk59Q310Cf2V/KT9UA2oj9s9NvOT2q/yM21gjXPfbPTj/3neXzmNUZZ/2pu9wn+LhebCfBV34Yn98pT2gt7t47tEQr8B+wJuPw2fUpbir+qrZSyr0XoXiP5uZf1VkJn8/Pkv2vfGfhXQX/M/H9U/FT7zhcd+pepPa8qqOSu4MX0xr9AHQLy/g=

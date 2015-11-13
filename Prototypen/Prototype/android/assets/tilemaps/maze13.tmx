@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="79">
- <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
- </tileset>
- <tileset firstgid="751" name="the_field_of_the_floating_island_snow_by_buch_PD" tilewidth="32" tileheight="32" tilecount="308">
-  <image source="../../../../../../Prototype/android/assets/textures/spritesheets/the_field_of_the_floating_island_snow_by_buch_PD.png" trans="00007f" width="704" height="448"/>
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
@@ -26,79 +23,50 @@
    eJztl8sKgCAQRedPsicUUZt21T/0+P9/aXZFTVijNgleODu9B0VBVwCoGaSwJ0EqRseCtCCX4gf+QdDfC7p9S4R0L4gc+F2Mj4l5d5j4qT4F1/tna98o/znU/Q/+5/06dL25gf9tvt5/X/yNsJ9avymmfhehesfg99Jv61xmTL+tBL/s+1/aL/3/CesHmJGSwfHdrpgdE7IBTy8gbA==
   </data>
  </layer>
- <objectgroup name="colliderWalls">
-  <object id="1" x="0" y="0" width="480" height="96"/>
-  <object id="2" x="544" y="0" width="480" height="96"/>
-  <object id="3" x="0" y="96" width="32" height="96"/>
-  <object id="4" x="992" y="96" width="32" height="96"/>
-  <object id="5" x="0" y="288" width="32" height="736"/>
-  <object id="6" x="992" y="288" width="32" height="736"/>
-  <object id="32" x="867" y="290" width="123" height="58"/>
-  <object id="33" x="834" y="288" width="31" height="513"/>
-  <object id="34" x="418" y="736" width="413" height="64"/>
-  <object id="35" x="162" y="574" width="508" height="67"/>
-  <object id="36" x="451" y="415" width="286" height="64"/>
-  <object id="37" x="705" y="96" width="32" height="318"/>
-  <object id="38" x="163" y="289" width="191" height="62"/>
-  <object id="39" x="322" y="96" width="30" height="190"/>
-  <object id="40" x="353" y="195" width="127" height="93"/>
-  <object id="41" x="575" y="191" width="128" height="96"/>
-  <object id="42" x="128" y="287" width="33" height="608"/>
-  <object id="54" x="161" y="354" width="64" height="62"/>
-  <object id="55" x="226" y="353" width="28" height="30"/>
-  <object id="56" x="162" y="415" width="29" height="32"/>
-  <object id="57" x="738" y="98" width="28" height="126"/>
-  <object id="58" x="768" y="95" width="63" height="33"/>
-  <object id="60" x="672" y="863" width="62" height="64"/>
-  <object id="65" x="640" y="880" width="32" height="47"/>
-  <object id="66" x="799" y="864" width="65" height="83"/>
-  <object id="67" x="832" y="814" width="29" height="47"/>
-  <object id="68" x="866" y="876" width="29" height="51"/>
+ <objectgroup name="colliderWalls" width="0" height="0">
+  <object x="0" y="0" width="480" height="96"/>
+  <object x="544" y="0" width="480" height="96"/>
+  <object x="0" y="96" width="32" height="96"/>
+  <object x="992" y="96" width="32" height="96"/>
+  <object x="0" y="288" width="32" height="736"/>
+  <object x="992" y="288" width="32" height="736"/>
+  <object x="867" y="290" width="123" height="58"/>
+  <object x="834" y="288" width="31" height="513"/>
+  <object x="418" y="736" width="413" height="64"/>
+  <object x="162" y="574" width="508" height="67"/>
+  <object x="451" y="415" width="286" height="64"/>
+  <object x="705" y="96" width="32" height="318"/>
+  <object x="163" y="289" width="191" height="62"/>
+  <object x="322" y="96" width="30" height="190"/>
+  <object x="353" y="195" width="127" height="93"/>
+  <object x="575" y="191" width="128" height="96"/>
+  <object x="161" y="354" width="64" height="62"/>
+  <object x="226" y="353" width="28" height="30"/>
+  <object x="162" y="415" width="29" height="32"/>
+  <object x="738" y="98" width="28" height="126"/>
+  <object x="768" y="95" width="63" height="33"/>
+  <object x="672" y="863" width="62" height="64"/>
+  <object x="640" y="880" width="32" height="47"/>
+  <object x="799" y="864" width="65" height="83"/>
+  <object x="832" y="814" width="29" height="47"/>
+  <object x="866" y="876" width="29" height="51"/>
+  <object x="128" y="288" width="32" height="608"/>
  </objectgroup>
- <objectgroup name="gameMasterColliderWalls">
-  <object id="7" x="0" y="0" width="480" height="96"/>
-  <object id="8" x="544" y="0" width="480" height="96"/>
-  <object id="9" x="0" y="96" width="32" height="96"/>
-  <object id="10" x="992" y="96" width="32" height="96"/>
-  <object id="11" x="0" y="288" width="32" height="736"/>
-  <object id="12" x="992" y="288" width="32" height="736"/>
-  <object id="43" x="868" y="289" width="123" height="63"/>
-  <object id="44" x="833" y="285" width="32" height="515"/>
-  <object id="45" x="417" y="735" width="413" height="64"/>
-  <object id="46" x="163" y="573" width="506" height="68"/>
-  <object id="47" x="449" y="415" width="288" height="65"/>
-  <object id="48" x="574" y="191" width="129" height="96"/>
-  <object id="49" x="354" y="195" width="125" height="94"/>
-  <object id="50" x="163" y="286" width="190" height="66"/>
-  <object id="51" x="320" y="97" width="35" height="188"/>
-  <object id="52" x="704" y="95" width="32" height="318"/>
-  <object id="53" x="128" y="287" width="33" height="609"/>
-  <object id="69" x="833" y="814" width="30" height="49"/>
-  <object id="70" x="867" y="875" width="27" height="54"/>
-  <object id="71" x="801" y="863" width="63" height="84"/>
-  <object id="72" x="674" y="865" width="63" height="63"/>
-  <object id="73" x="640" y="879" width="29" height="48"/>
-  <object id="74" x="738" y="97" width="29" height="127"/>
-  <object id="75" x="768" y="98" width="64" height="30"/>
-  <object id="76" x="163" y="352" width="62" height="65"/>
-  <object id="77" x="227" y="354" width="25" height="30"/>
-  <object id="78" x="163" y="416" width="26" height="31"/>
+ <objectgroup name="lights" width="0" height="0">
+  <object name="light" x="992" y="128" width="32" height="32"/>
+  <object name="light" x="0" y="128" width="32" height="32"/>
+  <object name="light" x="386" y="29" width="29" height="34"/>
+  <object name="light" x="610" y="30" width="30" height="35"/>
+  <object name="light" x="193" y="287" width="31" height="34"/>
+  <object name="light" x="513" y="414" width="33" height="35"/>
+  <object name="light" x="672" y="414" width="33" height="36"/>
+  <object name="light" x="223" y="574" width="34" height="35"/>
+  <object name="light" x="354" y="574" width="30" height="34"/>
+  <object name="light" x="544" y="572" width="32" height="37"/>
+  <object name="light" x="545" y="737" width="32" height="32"/>
+  <object name="light" x="673" y="735" width="32" height="36"/>
  </objectgroup>
- <objectgroup name="lights">
-  <object id="13" name="light" x="992" y="128" width="32" height="32"/>
-  <object id="14" name="light" x="0" y="128" width="32" height="32"/>
-  <object id="16" name="light" x="386" y="29" width="29" height="34"/>
-  <object id="23" name="light" x="610" y="30" width="30" height="35"/>
-  <object id="24" name="light" x="193" y="287" width="31" height="34"/>
-  <object id="25" name="light" x="513" y="414" width="33" height="35"/>
-  <object id="26" name="light" x="672" y="414" width="33" height="36"/>
-  <object id="27" name="light" x="223" y="574" width="34" height="35"/>
-  <object id="28" name="light" x="354" y="574" width="30" height="34"/>
-  <object id="29" name="light" x="544" y="572" width="32" height="37"/>
-  <object id="30" name="light" x="545" y="737" width="32" height="32"/>
-  <object id="31" name="light" x="673" y="735" width="32" height="36"/>
- </objectgroup>
- <objectgroup name="monsters">
-  <object id="15" name="zombie" x="255" y="736" width="32" height="32"/>
+ <objectgroup name="monsters" width="0" height="0">
+  <object name="zombie" x="255" y="736" width="32" height="32"/>
  </objectgroup>
 </map>
