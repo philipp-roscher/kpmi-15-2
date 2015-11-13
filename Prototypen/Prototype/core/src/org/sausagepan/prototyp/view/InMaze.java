@@ -367,7 +367,9 @@ public class InMaze implements Screen {
                 if (object instanceof TakeKeyResponse) {
                     System.out.println("TakeKeyResponse");
                     TakeKeyResponse result = (TakeKeyResponse) object;
-                    ECS.takeKey(result);
+                    
+                    if(result.id != game.clientId)
+                    	ECS.takeKey(result);
                 }
             }
         }
