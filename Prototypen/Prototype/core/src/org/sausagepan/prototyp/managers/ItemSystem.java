@@ -13,6 +13,7 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 import java.util.Iterator;
 
@@ -27,11 +28,17 @@ public class ItemSystem extends ObservingEntitySystem {
             = ComponentMapper.getFor(ItemComponent.class);
     private ComponentMapper<InjurableAreaComponent> am
             = ComponentMapper.getFor(InjurableAreaComponent.class);
+    private ComponentMapper<SpriteComponent> sm
+            = ComponentMapper.getFor(SpriteComponent.class);
 
     private ImmutableArray<Entity> characters;
     private ImmutableArray<Entity> items;
+
+    private OrthogonalTiledMapRendererWithPlayers tmr;
     /* ........................................................................... CONSTRUCTOR .. */
-    public ItemSystem() {}
+    public ItemSystem(OrthogonalTiledMapRendererWithPlayers tmr) {
+        this.tmr = tmr;
+    }
     /* ............................................................................... METHODS .. */
     @Override
     public void addedToEngine(ObservableEngine engine) {
@@ -56,9 +63,11 @@ public class ItemSystem extends ObservingEntitySystem {
             Iterator<Entity> itemIterator = items.iterator();
             while (itemIterator.hasNext()) {
                 Entity item = itemIterator.next();
+                SpriteComponent sprite = sm.get(item);
                 if(area.area.overlaps(am.get(item).area)) {
                     System.out.println("Picked up Item: " + itemM.get(item).item.getClass());
                     inventory.pickUpItem(itemM.get(item).item, 1);
+                    tmr.removeSprite(sprite.sprite);
                     getEngine().removeEntity(item);
                 }
             }

@@ -26,7 +26,7 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
     private ComponentMapper<DynamicBodyComponent> dm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
-    public CharacterSpriteSystem() {};
+    public CharacterSpriteSystem() {}
     /* ............................................................................... METHODS .. */
     public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(

@@ -78,7 +78,15 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     }
 
     public void clearSprites() {
+        System.out.println("Clearing Sprites");
         sprites.clear();
+        spriteComponents.clear();
+        weaponComponents.clear();
+        characterSpriteComponents.clear();
+    }
+
+    public void removeSprite(Sprite sprite) {
+        sprites.removeValue(sprite, false);
     }
 
     public void addEntitySprite(EntitySprite entitySprite) { this.entitySprites.add(entitySprite); }

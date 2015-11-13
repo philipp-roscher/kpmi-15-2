@@ -161,6 +161,7 @@ public class EntityComponentSystem {
         // Movement System
         MovementSystem movementSystem = new MovementSystem();
         movementSystem.addedToEngine(engine);
+        engine.subscribe(movementSystem);
 
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
@@ -170,47 +171,57 @@ public class EntityComponentSystem {
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
         weaponSystem.addedToEngine(engine);
+        engine.subscribe(weaponSystem);
 
         // Input System
         InputSystem inputSystem = new InputSystem(viewport);
         inputSystem.addedToEngine(engine);
+        engine.subscribe(inputSystem);
 
         // Character Sprite System
         CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem();
         characterSpriteSystem.addedToEngine(engine);
+        engine.subscribe(characterSpriteSystem);
 
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
         positionSynchroSystem.addedToEngine(engine);
+        engine.subscribe(positionSynchroSystem);
 
         // Network System
         NetworkSystem networkSystem = new NetworkSystem();
         networkSystem.addedToEngine(engine);
+        engine.subscribe(networkSystem);
 
         // Debugging System
         VisualDebuggingSystem visualDebuggingSystem
                 = new VisualDebuggingSystem(shpRend, camera, maze);
         visualDebuggingSystem.addedToEngine(engine);
+        engine.subscribe(visualDebuggingSystem);
 
         // Battle System
         BattleSystem battleSystem = new BattleSystem(engine);
         battleSystem.addedToEngine(engine);
+        engine.subscribe(battleSystem);
 
         //Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze);
         inventorySystem.addedToEngine(engine);
+        engine.subscribe(inventorySystem);
 
         // Bullet System
         BulletSystem bulletSystem = new BulletSystem(engine, maze);
         bulletSystem.addedToEngine(engine);
+        engine.subscribe(bulletSystem);
 
         // Ingame UI System
         InGameUISystem inGameUISystem
                 = new InGameUISystem(mediaManager, characterClass);
         inGameUISystem.addedToEngine(engine);
+        engine.subscribe(inGameUISystem);
 
         // Item System
-        ItemSystem itemSystem = new ItemSystem();
+        ItemSystem itemSystem = new ItemSystem(maze.getTiledMapRenderer());
         itemSystem.addedToEngine(engine);
         engine.subscribe(itemSystem);
 
@@ -292,7 +303,6 @@ public class EntityComponentSystem {
     /**
      * Adds other (network-) players characters to the world
      * @param newCharacterId
-     * @param teamId 
      * @param newHero
      * @return
      */
@@ -334,7 +344,6 @@ public class EntityComponentSystem {
         // Add Components
         characterEntity.add(new InputComponent());
         characterEntity.add(new LightComponent(rayHandler));
-
 
         // Add components which are equal for all classes
         characterEntity.add(new HealthComponent(100));

@@ -15,6 +15,12 @@ public abstract class ObservingEntitySystem extends EntitySystem {
     
     /* ............................................................................... METHODS .. */
     public abstract void addedToEngine(ObservableEngine engine);
+
+    /**
+     * Refreshes list of entities when one is added to or removed from engine
+     * @param engine
+     * @param message
+     */
     public void getNotified(ObservableEngine engine, ObservableEntityMessage message) {
         if(message == ObservableEntityMessage.ENTITY_REMOVED ||
                 message == ObservableEntityMessage.ENTITY_ADDED)
