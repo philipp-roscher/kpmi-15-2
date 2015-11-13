@@ -18,6 +18,7 @@ public class ObservableEngine extends Engine {
     /* ........................................................................... CONSTRUCTOR .. */
     public ObservableEngine() {
         super();
+        this.observeringSystems = new Array<ObservingEntitySystem>();
     }
     /* ............................................................................... METHODS .. */
     public void subscribe(ObservingEntitySystem entitySystem) {
@@ -27,6 +28,13 @@ public class ObservableEngine extends Engine {
     @Override
     public void addEntity(Entity entity) {
         super.addEntity(entity);
+        notifyObservers(ObservableEntityMessage.ENTITY_ADDED);
+    }
+
+    @Override
+    public void removeEntity(Entity entity) {
+        super.removeEntity(entity);
+        notifyObservers(ObservableEntityMessage.ENTITY_REMOVED);
     }
 
     private void notifyObservers(ObservableEntityMessage message) {

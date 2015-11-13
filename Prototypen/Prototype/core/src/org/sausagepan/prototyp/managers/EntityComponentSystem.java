@@ -165,6 +165,7 @@ public class EntityComponentSystem {
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
         spriteSystem.addedToEngine(engine);
+        engine.subscribe(spriteSystem);
 
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
@@ -211,6 +212,7 @@ public class EntityComponentSystem {
         // Item System
         ItemSystem itemSystem = new ItemSystem();
         itemSystem.addedToEngine(engine);
+        engine.subscribe(itemSystem);
 
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);

@@ -19,6 +19,6 @@ public abstract class ObservingEntitySystem extends EntitySystem {
         if(message == ObservableEntityMessage.ENTITY_REMOVED ||
                 message == ObservableEntityMessage.ENTITY_ADDED)
             addedToEngine(engine);
-    };
+    }
     /* ..................................................................... GETTERS & SETTERS .. */
 }
