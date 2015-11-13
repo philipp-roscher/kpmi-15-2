@@ -5,7 +5,7 @@
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlsEOgjAMhrdE8Qp3QCHB938YSEDlxIu4hS0sTQusTjDEwx+X1u3ruq00lkLEDCVKnRBiEOM4Ya7D1ZH4tVqjJ2R9T6UX8J3kyKfmzqkRE78TdGxzvtjwOXseAvHPcspP7+SoWRk3zC2c1zL3Z+Oizs5qKZ8PJp+rPfjRDvwLccfcc7NvjLOmT56X7jj37Lbmc2P98/3mpuY3B+Mj8+9KmVFhbCUYZx6qJM3H/l9Iv/0tKUf4tflW+NSckPwt38Gv8Wsn7z51PBTf3fvaOn5zxlfCR9lD8FNnDN8/VRegvTfs1pOv64H7JvX7rxAfZc/l1H9pvttn6B6A6h9tHcLqQUn4MDvMP+xzqBhShBvi/mF9FnYO3+Jv/Q3G6o+vokB8rnTcn9aqNzgXqLA=
+   eJztl9sOgjAMhrdE8Rbi8QJRTPT9HwYTj1e+iBC2UJt2rhVNNF78Yazbvq7QDlJrTKpQVutojLmZtp0p19Hql/hVvcaVkbeda12QbWBbPjc3pL3p+EfD+xaypY6v2fNNyJ8w9qHt4nMFMdpH+o1ji+cdlPvzfnHPzutZPE8B/gzdj4kx80h/xwp+X0oU+6f2KtGIeMfwc/M5FhvHkYAf+/5LJMnFd/C1vv75srm5uxao/cv8Xa2lU+n6Nqi9FGhreT41vgT22JpKydetguBX7qwYvLA+FD4foCi+v2pq61Q4PsT/hDB/YR/1Dfw1aK8YG9ffBz8HbZz/XF3A/c0Zq+E39QDmZJP/W8LG9Re2+/6i+JwPvg6VhG3D2Kj+Z/HnfMjRfShXQ7a++FChegM1j+BL84kS989A7V+zfqKYQ/G1avyWfHNSugNi8p9G
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
@@ -15,12 +15,12 @@
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztzQENAAAMAiD3cO8fySBCARKW/W3eAAAAawrNhQCR
+   eJxjYBh6wI1poF0w+AC5YTKQYUkNu08yUm7GKMAEsQMcrtWj8ToKRgEGwFdmYpNDFyOlzB2IumEk1O2gOitlgMu3JjT7QeX9QNaloPI+dwSV+YMt/q2pVC7gkiOUr20GON+T4n9qAPT4R7ffngmCaQXQ4/8UGt+BxvajA6dBXu6DyseBbBNXM9LGDQDvTw/e
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlQEKgzAMRXMTFUUYyLyK7BqyuovormwFYaXY2KS2EdYPHyQlecaatgCAAnHncA0/Yfmh9tG/80Pe6yxPQpmfjl9FqEn5v3tB9l34V+4zl5+d3i3h+5uatRftr/VM0bjznwesN7EWV3b/qSXNH4T5Mc6fq/gfwOdhQnLsNVcc41Nn0s7xjXP5RzOqHGuu+AvpRYFfzyFqPOpmfjy+ef5J8BuEz5k/qij3bwy+uf8h/FL7wfB2/6zNRz8j
+   eJzVVokNwjAMNJO0UMT/jMLTMRDPIsDKxCIRlnFSp02JsHRSm+/iuLleAQCFB7XBymJhsCTvFXxiElijC7agi77410r+EchndFRwhOZp84/dF4UUY8u/6cjfNlw9u+bfNlz+ufixblizqmlgghj2sGZpMGeYWfD21GeM3HtIrzHaiNWiA6StQRstxD3wWrnnKch1842POft/Af0PakE1V9Lf0L+B83EduBs8DJ7sOSZObA+13SfiHLlW26Dfag6tzc3v7gqe/S+0ngfPfTfIwy/5rBt8aw99vnrmFEKfrz1U+yYdlebQ/ph2yWdJ/PidoI747ujFjuN9vvaQz7xYHqoRqe+I81khn+3G+M4pBX8orz41QuOzaf59eZXc+UvrlvC+79RPUJ+SwjO53Lj/0fiYFGdBaxsLyl8K+9cAc3wBrf5ILA==
   </data>
  </layer>
  <objectgroup name="colliderWalls" width="0" height="0">
@@ -50,12 +50,42 @@
   <object x="800" y="704" width="96" height="96"/>
   <object x="832" y="800" width="32" height="32"/>
   <object x="992" y="544" width="32" height="480"/>
+  <object x="96" y="672" width="32" height="32"/>
+  <object x="64" y="768" width="32" height="128"/>
+  <object x="64" y="928" width="32" height="32"/>
+  <object x="192" y="864" width="64" height="64"/>
+  <object x="416" y="480" width="16" height="64"/>
+  <object x="512" y="480" width="16" height="64"/>
+  <object x="592" y="480" width="16" height="64"/>
+  <object x="496" y="480" width="16" height="64"/>
+  <object x="496" y="416" width="16" height="64"/>
+  <object x="512" y="416" width="16" height="64"/>
+  <object x="672" y="800" width="16" height="16"/>
+  <object x="624" y="800" width="16" height="16"/>
+  <object x="816" y="800" width="16" height="16"/>
+  <object x="864" y="800" width="16" height="16"/>
+  <object x="448" y="800" width="16" height="16"/>
+  <object x="160" y="576" width="16" height="16"/>
+  <object x="208" y="832" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="992" y="128" width="32" height="32"/>
   <object name="light" x="0" y="128" width="32" height="32"/>
+  <object name="light" x="416" y="32" width="32" height="32"/>
+  <object name="light" x="576" y="96" width="32" height="32"/>
+  <object name="light" x="896" y="480" width="32" height="32"/>
+  <object name="light" x="768" y="480" width="32" height="32"/>
+  <object name="light" x="608" y="480" width="32" height="32"/>
+  <object name="light" x="384" y="480" width="32" height="32"/>
+  <object name="light" x="224" y="512" width="32" height="32"/>
+  <object name="light" x="128" y="544" width="32" height="32"/>
+  <object name="light" x="416" y="768" width="32" height="32"/>
+  <object name="light" x="640" y="768" width="32" height="32"/>
+  <object name="light" x="832" y="768" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="monsters" width="32" height="32">
-  <object name="zombie" x="224" y="224" width="32" height="32"/>
+  <object name="zombie" x="352" y="224" width="32" height="32"/>
+  <object name="zombie" x="768" y="640" width="32" height="32"/>
+  <object name="zombie" x="96" y="864" width="32" height="32"/>
  </objectgroup>
 </map>

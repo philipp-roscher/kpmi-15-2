@@ -315,7 +315,7 @@ public class GameServer {
 		System.out.println(map.entries);
 		for(int i = height; i > 0; i--)
 			for(int j = width; j > 0; j--)
-				map.entries.put(new Vector2(i,j), MathUtils.random(1,12));
+				map.entries.put(new Vector2(i,j), MathUtils.random(1,GlobalSettings.MAZE_AREAS));
 	}
 	
 	// stops the server
