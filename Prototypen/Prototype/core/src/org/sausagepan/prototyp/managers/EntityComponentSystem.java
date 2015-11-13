@@ -248,7 +248,7 @@ public class EntityComponentSystem {
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
-		return addNewCharacter(request.playerId, request.hero);
+		return addNewCharacter(request.playerId, request.teamId, request.hero);
 	}
 
     /**
@@ -284,18 +284,31 @@ public class EntityComponentSystem {
     /**
      * Adds other (network-) players characters to the world
      * @param newCharacterId
+     * @param teamId 
      * @param newHero
      * @return
      */
-	public CharacterEntity addNewCharacter(int newCharacterId, HeroInformation newHero) {		
+	public CharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, HeroInformation newHero) {		
 		// Create Entity
         CharacterEntity newCharacter = setUpCharacterEntity(newHero.clientClass);
 
         // Add Components
         newCharacter.add(new NetworkTransmissionComponent());
-        newCharacter.add(new TeamComponent(TeamId));
         newCharacter.add(new IdComponent(newCharacterId));
+        newCharacter.add(new TeamComponent(newCharacterTeamId));
 
+        //Set Spawn locations: Game master
+        if (newCharacterId == 0) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), characterClass));
+        }
+        if (newCharacterId == 1) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), characterClass));
+        }
+
+        if (newCharacterId == 2) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), characterClass));
+        }
+        
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);
         return newCharacter;

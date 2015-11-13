@@ -86,11 +86,13 @@ public class Network {
 	
 	public static class NewHeroResponse {
 		public int playerId;
+		public int teamId;
 		public HeroInformation hero;
 		
 		public NewHeroResponse() { }
-		public NewHeroResponse(int playerId, HeroInformation hero) {
+		public NewHeroResponse(int playerId, int teamId, HeroInformation hero) {
 			this.playerId = playerId;
+			this.teamId = teamId;
 			this.hero = hero;
 		}
 	}	
@@ -196,10 +198,12 @@ public class Network {
 	
 	public static class FullGameStateResponse {
 		public HashMap<Integer,HeroInformation> heroes;
+		public HashMap<Integer, Integer> teamAssignments;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes) {
+		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes, HashMap<Integer, Integer> teamAssignments) {
 			this.heroes = heroes;
+			this.teamAssignments = teamAssignments;
 		}
 	}
 	

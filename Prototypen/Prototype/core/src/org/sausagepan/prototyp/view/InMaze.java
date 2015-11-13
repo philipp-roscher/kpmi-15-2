@@ -296,7 +296,8 @@ public class InMaze implements Screen {
                 for(Entry<Integer, HeroInformation> e : otherCharacters.entrySet()) {
                     Integer heroId = e.getKey();
                     HeroInformation hero = e.getValue();
-                    CharacterEntity newCharacter = ECS.addNewCharacter(heroId, hero);
+                    int teamId = response.teamAssignments.get(heroId);
+                    CharacterEntity newCharacter = ECS.addNewCharacter(heroId, teamId, hero);
                     maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
                     maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
                 }

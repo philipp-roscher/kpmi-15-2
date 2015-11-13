@@ -68,7 +68,7 @@ public class GameServer {
 	// contains the constellation of the individual tiles
 	public static MapInformation map;
 	//HashMap to save ClientIds,TeamIds
-	public static HashMap<Integer,Integer> TeamAssignments;
+	public static HashMap<Integer,Integer> teamAssignments;
 	// manages the characters
 	private static ServerCharacterSystem serverCharacterSystem = new ServerCharacterSystem();
 	private ServerBattleSystem bs;
@@ -88,7 +88,7 @@ public class GameServer {
 		this.clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
 		positions = new HashMap<Integer,NetworkTransmissionComponent>();
-		TeamAssignments = new HashMap<Integer, Integer>();
+		teamAssignments = new HashMap<Integer, Integer>();
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,HeroInformation>();
 		bs = new ServerBattleSystem(this);
@@ -120,7 +120,7 @@ public class GameServer {
 		        		cm.put(request.playerId, hero);
                         serverCharacterSystem.addCharacter(request.playerId, new
 								ServerCharacterEntity(request.playerId));
-		        		NewHeroResponse response = new NewHeroResponse(request.playerId, request.hero);
+		        		NewHeroResponse response = new NewHeroResponse(request.playerId, teamAssignments.get(request.playerId), request.hero);
 		        		server.sendToAllUDP(response);
 		        		//updateLastAccess(request.playerId);
 		        	}
@@ -146,7 +146,7 @@ public class GameServer {
 
 				    if (object instanceof FullGameStateRequest) {
 					   System.out.println("FullGameStateRequest eingegangen");
-					   FullGameStateResponse response = new FullGameStateResponse(cm);
+					   FullGameStateResponse response = new FullGameStateResponse(cm, teamAssignments);
 		        	   connection.sendTCP(response);
 			       }
 		           
@@ -216,7 +216,7 @@ public class GameServer {
 					if (positions.containsKey(id)) {
 						positions.remove(id);
 						lastAccess.remove(id);
-						TeamAssignments.remove(id);
+						teamAssignments.remove(id);
 						cm.remove(id);
 						server.sendToAllUDP(new DeleteHeroResponse(id));
 						System.out.println("Automatically deleted Player "+connection);
@@ -265,7 +265,7 @@ public class GameServer {
 					//only happens if it wasn't deleted with "disconnected" beforehand
 					if (positions.containsKey(id)) {
 						positions.remove(id);
-						TeamAssignments.remove(id);
+						teamAssignments.remove(id);
 						toDelete.add(id);
 						cm.remove(id);
 						server.sendToAllUDP(new DeleteHeroResponse(id));
@@ -331,12 +331,12 @@ public class GameServer {
 
 		Collection<Integer> ClientCol = clientIds.values();
 		for (int i=1; i<=ClientCol.size(); i++) {
-			//System.out.println("Checking TeamId with ClientId: "+ i + " Result: "+ TeamAssignments.get(i));
+			//System.out.println("Checking TeamId with ClientId: "+ i + " Result: "+ teamAssignments.get(i));
 			//read TeamIds and count them
-			if (TeamAssignments.get(i) != null) {
-				if (TeamAssignments.get(i) == 0){ Team0++; }
-				if (TeamAssignments.get(i) == 1){ Team1++; }
-				if (TeamAssignments.get(i) == 2){ Team2++; }
+			if (teamAssignments.get(i) != null) {
+				if (teamAssignments.get(i) == 0){ Team0++; }
+				if (teamAssignments.get(i) == 1){ Team1++; }
+				if (teamAssignments.get(i) == 2){ Team2++; }
 			}
 		}
 		System.out.println("Team0: "+Team0+" - Team1: "+Team1+" - Team2: "+Team2);
@@ -345,15 +345,15 @@ public class GameServer {
 		//check for free space in Teams
 		if (Team0 < 1) {
 			TeamAssignment.id = 0;
-			TeamAssignments.put(ClientId, 0);
+			teamAssignments.put(ClientId, 0);
 		}
 		else if (Team1 < 2) {
 			TeamAssignment.id = 1;
-			TeamAssignments.put(ClientId, 1);
+			teamAssignments.put(ClientId, 1);
 		}
 		else if (Team2 < 2) {
 			TeamAssignment.id = 2;
-			TeamAssignments.put(ClientId, 2);
+			teamAssignments.put(ClientId, 2);
 		}
 		else { System.out.println("all Teams are full");
 		}
