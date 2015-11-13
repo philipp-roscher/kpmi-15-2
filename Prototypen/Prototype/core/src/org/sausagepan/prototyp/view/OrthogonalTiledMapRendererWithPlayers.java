@@ -77,6 +77,10 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         sprites.add(newSprite);
     }
 
+    public void clearSprites() {
+        sprites.clear();
+    }
+
     public void addEntitySprite(EntitySprite entitySprite) { this.entitySprites.add(entitySprite); }
 
 
