@@ -145,6 +145,7 @@ public class EntityComponentSystem {
             Entity itemEntity = new Entity();
             Item item = itemFactory.createMapItem(mi.type, mi.value);
             itemEntity.add(new ItemComponent(item));
+            itemEntity.add(new InjurableAreaComponent(mi.position.x, mi.position.y, 1f, 1f));
             SpriteComponent sprite = new SpriteComponent();
             sprite.sprite = new Sprite(item.itemImg);
             sprite.sprite.setPosition(mi.position.x, mi.position.y);
@@ -207,6 +208,10 @@ public class EntityComponentSystem {
                 = new InGameUISystem(mediaManager, characterClass);
         inGameUISystem.addedToEngine(engine);
 
+        // Item System
+        ItemSystem itemSystem = new ItemSystem();
+        itemSystem.addedToEngine(engine);
+
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
@@ -220,6 +225,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
+        this.engine.addSystem(itemSystem);
     }
 
     public void setUpMazeLights() {
