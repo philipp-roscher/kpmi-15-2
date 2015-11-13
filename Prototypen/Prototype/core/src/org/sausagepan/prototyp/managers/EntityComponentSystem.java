@@ -257,7 +257,7 @@ public class EntityComponentSystem {
      */
     private void setUpLocalCharacterEntity() {
         // Create Entity
-        this.localCharacter = setUpCharacterEntity();
+        this.localCharacter = setUpCharacterEntity(characterClass);
 
         // Add Components
         localCharacter.add(new NetworkTransmissionComponent());
@@ -289,7 +289,7 @@ public class EntityComponentSystem {
      */
 	public CharacterEntity addNewCharacter(int newCharacterId, HeroInformation newHero) {		
 		// Create Entity
-        CharacterEntity newCharacter = setUpCharacterEntity();
+        CharacterEntity newCharacter = setUpCharacterEntity(newHero.clientClass);
 
         // Add Components
         newCharacter.add(new NetworkTransmissionComponent());
@@ -306,7 +306,7 @@ public class EntityComponentSystem {
      * {@link NetworkTransmissionComponent}
      * @return
      */
-    private CharacterEntity setUpCharacterEntity() {
+    private CharacterEntity setUpCharacterEntity(CharacterClass characterClass) {
         // Create Entity
         CharacterEntity characterEntity = new CharacterEntity();
 

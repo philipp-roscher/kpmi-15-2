@@ -60,7 +60,7 @@ public class PositionSynchroSystem extends ObservingEntitySystem {
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
 
-            // Synchronize CharacterScprite with DynamicBody
+            // Synchronize CharacterSprite with DynamicBody
             if(entity.getComponent(CharacterSpriteComponent.class) != null) {
                 CharacterSpriteComponent sprite = sm.get(entity);
                 sprite.sprite.setPosition(

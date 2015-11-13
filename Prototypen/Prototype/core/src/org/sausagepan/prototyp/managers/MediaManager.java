@@ -15,22 +15,22 @@ public class MediaManager {
     private AssetManager assets;
 
     // file names
-    private String mazeBackgroundMusicFile      = "music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg";
-    private String mainMenuBackgroundImgFile    = "textures/backgrounds/main_menu_bg.png";
-    private String SelectionArcherFBig          = "textures/characterSelection/Archer_f_big.png";
-    private String SelectionKnightMBig          = "textures/characterSelection/Knight_m_big.png";
-    private String SelectionFighterMBig         = "textures/characterSelection/Fighter_m_big.png";
-    private String SelectionShamanMBig          = "textures/characterSelection/Shaman_m_big.png";
-    private String SelectionDragonRedBig        = "textures/characterSelection/Dragon_red_big.png";
-    private String IngameUISheetFile            = "textures/spritesheets/ingame_UI.pack";
-    private String itemsSheetFile               = "textures/spritesheets/items.pack";
+    private String mazeBackgroundMusicFile   = "music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg";
+    private String mainMenuBackgroundImgFile = "textures/backgrounds/main_menu_bg.png";
+    private String SelectionArcherFBig       = "textures/characterSelection/Archer_f_big.png";
+    private String SelectionKnightMBig       = "textures/characterSelection/Knight_m_big.png";
+    private String SelectionFighterMBig      = "textures/characterSelection/Fighter_m_big.png";
+    private String SelectionShamanMBig       = "textures/characterSelection/Shaman_m_big.png";
+    private String SelectionDragonRedBig     = "textures/characterSelection/Dragon_red_big.png";
+    private String IngameUISheetFile         = "textures/spritesheets/ingame_UI.pack";
+    private String itemsSheetFile            = "textures/spritesheets/items.pack";
 
     //character sheets
-    private String knightMSpriteSheetFile        = "textures/spritesheets/characters/knight_m.pack";
-    private String archerFSpriteSheetFile        = "textures/spritesheets/characters/archer_f.pack";
-    private String dragonRedSpriteSheetFile        = "textures/spritesheets/characters/dragon_red.pack";
-    private String shamanMSpriteSheetFile        = "textures/spritesheets/characters/shaman_m.pack";
-    private String fighterMSpriteSheetFile        = "textures/spritesheets/characters/fighter_m.pack";
+    private String knightMSpriteSheetFile   = "textures/spritesheets/characters/knight_m.pack";
+    private String archerFSpriteSheetFile   = "textures/spritesheets/characters/archer_f.pack";
+    private String dragonRedSpriteSheetFile = "textures/spritesheets/characters/dragon_red.pack";
+    private String shamanMSpriteSheetFile   = "textures/spritesheets/characters/shaman_m.pack";
+    private String fighterMSpriteSheetFile  = "textures/spritesheets/characters/fighter_m.pack";
     //weapons
     private String weaponsSpriteSheetFile       = "textures/spritesheets/weapons.pack";
     //monsters
