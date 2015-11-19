@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.managers;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -17,6 +18,7 @@ import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 import java.util.Iterator;
@@ -24,7 +26,7 @@ import java.util.Iterator;
 /**
  * Created by georg on 21.10.15.
  */
-public class SpriteSystem extends ObservingEntitySystem {
+public class SpriteSystem extends EntitySystem implements EntityListener{
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private ComponentMapper<SpriteComponent> sm
@@ -41,20 +43,9 @@ public class SpriteSystem extends ObservingEntitySystem {
     /* ............................................................................... METHODS .. */
     public void addedToEngine(ObservableEngine engine) {
         // Get all entities with either Sprite-, Weapon- or CharacterSprite Components
-        entities = engine.getEntitiesFor(Family.one(
-                SpriteComponent.class,
-                WeaponComponent.class,
-                CharacterSpriteComponent.class).get());
+        entities = engine.getEntitiesFor(EntityFamilies.spriteFamily);
 
         refreshMapRenderer();
-    }
-
-    @Override
-    public void getNotified(ObservableEngine engine, ObservableEntityMessage message) {
-        if(message == ObservableEntityMessage.ENTITY_REMOVED ||
-                message == ObservableEntityMessage.ENTITY_ADDED) {
-            addedToEngine(engine);
-        }
     }
 
     public void refreshMapRenderer() {
@@ -68,6 +59,26 @@ public class SpriteSystem extends ObservingEntitySystem {
 
     public void update(float deltaTime) {
         // TODO
+    }
+
+    @Override
+    public void entityAdded(Entity entity) {
+        // CHeck whether entity matters
+        if(EntityFamilies.spriteFamily.matches(entity))
+            addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        if(entities.contains(entity, false)) {
+            if (sm.get(entity) != null)
+                tmr.addSprite(sm.get(entity).sprite);
+            if (cm.get(entity) != null)
+                tmr.addSprite(entity.getComponent(CharacterSpriteComponent.class).sprite);
+            if (wm.get(entity) != null)
+                tmr.addWeaponComponent(entity.getComponent(WeaponComponent.class));
+            addedToEngine(this.getEngine());
+        }
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

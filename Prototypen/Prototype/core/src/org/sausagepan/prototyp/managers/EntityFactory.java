@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -192,4 +193,5 @@ public class EntityFactory {
         return characterEntity;
     }
     /* ..................................................................... GETTERS & SETTERS .. */
+
 }

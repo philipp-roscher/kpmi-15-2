@@ -16,19 +16,17 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
-import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
@@ -50,8 +48,6 @@ import box2dLight.RayHandler;
 public class EntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
     private ObservableEngine engine;
-    private Family characterFamily;
-    private Family monsterFamily;
     private World world;
     private MediaManager mediaManager;
     private ItemFactory itemFactory;
@@ -89,15 +85,6 @@ public class EntityComponentSystem {
         this.TeamId = TeamId;
 
         this.engine = new ObservableEngine(); // Create Engine
-        this.characterFamily = Family.all(
-                DynamicBodyComponent.class,
-                InputComponent.class,
-                CharacterSpriteComponent.class
-        ).get();
-        this.monsterFamily = Family.all(
-                SpriteComponent.class,
-                DynamicBodyComponent.class
-        ).get();
         this.characters = new HashMap<Integer,CharacterEntity>();
         this.localCharacterId = game.clientId;
 
@@ -123,7 +110,7 @@ public class EntityComponentSystem {
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
         spriteSystem.addedToEngine(engine);
-        engine.subscribe(spriteSystem);
+        engine.addEntityListener(EntityFamilies.spriteFamily, spriteSystem);
 
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
