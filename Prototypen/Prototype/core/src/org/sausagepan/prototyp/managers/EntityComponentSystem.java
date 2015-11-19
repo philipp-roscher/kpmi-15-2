@@ -144,9 +144,10 @@ public class EntityComponentSystem {
         engine.subscribe(visualDebuggingSystem);
 
         // Battle System
-        BattleSystem battleSystem = new BattleSystem(engine);
+        BattleSystem battleSystem = new BattleSystem();
         battleSystem.addedToEngine(engine);
-        engine.subscribe(battleSystem);
+        engine.addEntityListener(EntityFamilies.attackerFamily, battleSystem);
+        engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
 
         //Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze);

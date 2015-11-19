@@ -24,6 +24,7 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
@@ -34,12 +35,10 @@ import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
  * other.
  * Created by Georg on 26.06.2015.
  */
-public class BattleSystem extends ObservingEntitySystem {
+public class BattleSystem extends EntitySystem implements EntityListener {
 
 
     /* ............................................................................ ATTRIBUTES .. */
-    private ObservableEngine engine;
-
     private ImmutableArray<Entity> attackers;
     private ImmutableArray<Entity> victims;
 
@@ -59,20 +58,12 @@ public class BattleSystem extends ObservingEntitySystem {
     		= ComponentMapper.getFor(NetworkComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
-    public BattleSystem(ObservableEngine engine) {this.engine = engine;}
+    public BattleSystem() {}
 
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
-    attackers = engine.getEntitiesFor(Family.all(
-            HealthComponent.class,
-            DynamicBodyComponent.class,
-            WeaponComponent.class,
-            NetworkComponent.class,
-            InjurableAreaComponent.class).get());
-    victims = engine.getEntitiesFor(Family.all(
-            HealthComponent.class,
-            InjurableAreaComponent.class,
-            CharacterSpriteComponent.class).get());
+    public void addedToEngine(Engine engine) {
+    attackers = engine.getEntitiesFor(EntityFamilies.attackerFamily);
+    victims = engine.getEntitiesFor(EntityFamilies.victimFamily);
 }
 
     public void update(float deltaTime) {
@@ -112,7 +103,7 @@ public class BattleSystem extends ObservingEntitySystem {
                 if(v.getClass().equals(MonsterEntity.class) && hm.get(v).HP == 0) {
                     sm.get(v).sprite.rotate(90);
                     sm.get(v).sprite.setOriginCenter();
-                    engine.removeEntity(v);
+                    this.getEngine().removeEntity(v);
                     System.out.println("Monster killed");
                 }
 
@@ -127,6 +118,16 @@ public class BattleSystem extends ObservingEntitySystem {
         
         if(victim.getClass().equals(CharacterEntity.class))
         	network.sendHPUpdate(new HPUpdateRequest(victim.getComponent(IdComponent.class).id, health.HP));
+    }
+
+    @Override
+    public void entityAdded(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        addedToEngine(this.getEngine());
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */
