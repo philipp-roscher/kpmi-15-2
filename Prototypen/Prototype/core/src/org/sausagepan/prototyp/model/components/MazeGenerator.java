@@ -15,7 +15,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
 
 
@@ -42,6 +44,7 @@ public class MazeGenerator {
     Array<Vector2> lightPositions;
     Array<Vector2> gameMasterSecretPositions;
     Array<Vector2> monsterPositions;
+	Array<MapMonsterObject> monsterObjects;
     Array<MapItem> mapItems;
 
 	float[][] positions;
@@ -66,6 +69,7 @@ public class MazeGenerator {
 
         this.lightPositions = new Array<Vector2>();
         this.monsterPositions = new Array<Vector2>();
+        this.monsterObjects = new Array<MapMonsterObject>();
         this.gameMasterSecretPositions = new Array<Vector2>();
         this.mapItems = new Array<MapItem>();
 
@@ -123,7 +127,7 @@ public class MazeGenerator {
 
 		// Team Blues Spawn Room
 		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx",
-				mazeWidth + 1, (int) Math.ceil(mazeHeight / 2) + 1);
+                mazeWidth + 1, (int) Math.ceil(mazeHeight / 2) + 1);
 		positions[3][0] =  mazeWidth * 32 * 32 + 16 * 32;
 		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
 		positions[4][0] =  mazeWidth * 32 * 32 + 16 * 32;
@@ -218,8 +222,7 @@ public class MazeGenerator {
 	private void addNewMazeCell(String tile, int x, int y){
 		tiledMap = new TmxMapLoader().load(tile);
 		calculateLightPositions(tiledMap, x, y);
-        calculateMonsterPositions(tiledMap, x, y);
-		setUpItems(tiledMap, x, y);
+        calculateObjectPositions(tiledMap, x, y);
 		
 		for(int layer_nr = 0; layer_nr < 6; layer_nr++){ 	//für alle Layer
 			if(layer_nr == 4){								
@@ -323,47 +326,46 @@ public class MazeGenerator {
         }
     }
 
-	private void calculateMonsterPositions(TiledMap map, int x, int y) {
-		MapLayer monstersLayer;
-		if(map.getLayers().get("monsters") != null) {
+	private void calculateObjectPositions(TiledMap map, int x, int y) {
+		MapLayer objectLayer;
+		if(map.getLayers().get("mapObjects") != null) {
 			try {
-				monstersLayer = map.getLayers().get("monsters");   // get lights layer
+				objectLayer = map.getLayers().get("mapObjects");
 
-				for (MapObject mo : monstersLayer.getObjects()) {
-					monsterPositions.add(new Vector2(
-							mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
-							mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
-					));
+				for (MapObject mo : objectLayer.getObjects()) {
+                    System.out.print(mo.getName());
+                    // Create Monsters .................................................... MONSTERS
+                    if(mo.getName().equals("monster")) {
+                        System.out.print("ma");
+                        MapMonsterObject monster = new MapMonsterObject(
+                                new Vector2(
+                                        mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
+                                        mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
+                                ),
+                                null
+                        );
+                        if(mo.getProperties().get("type").equals("zombie"))
+                            monster.characterClass = CharacterClass.MONSTER_ZOMBIE;
+                        if(mo.getProperties().get("type").equals("skeleton"))
+                            monster.characterClass = CharacterClass.MONSTER_SKELETON;
+                        this.monsterObjects.add(monster);
+                    }
+
+                    // Create Items .......................................................... ITEMS
+                    if(mo.getName().equals("item")) {
+                        mapItems.add(new MapItem(
+                                new Vector2(
+                                        mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
+                                        mo.getProperties().get("y", Float.class)/32 + y*32 + .5f
+                                ),
+                                mo.getProperties().get("type", String.class),
+                                Float.parseFloat(mo.getProperties().get("value", String.class))));
+                    }
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-    /**
-     * Read item locations from map and store them in an array
-     * @param map
-     * @param x
-     * @param y
-     */
-	public void setUpItems(TiledMap map, int x, int y)  {
-        MapLayer itemsLayer;
-        if(map.getLayers().get("items") != null) {
-            try {
-                itemsLayer = map.getLayers().get("items");
-                for (MapObject mo : itemsLayer.getObjects()) {
-                    mapItems.add(new MapItem(
-                            mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
-                            mo.getProperties().get("y", Float.class)/32 + y*32 + .5f,
-                            mo.getName(),
-                            Float.parseFloat(mo.getProperties().get("value", String.class))
-                    ));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 	}
 
 	
@@ -394,6 +396,10 @@ public class MazeGenerator {
 
     public Array<Vector2> getMonsterPositions() {
         return monsterPositions;
+    }
+
+    public Array<MapMonsterObject> getMonsterObjects() {
+        return  monsterObjects;
     }
 
     public Array<Vector2> getGameMasterSecretPositions() {

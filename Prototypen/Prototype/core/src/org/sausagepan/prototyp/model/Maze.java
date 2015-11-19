@@ -24,6 +24,7 @@ import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.MazeGenerator;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
@@ -41,6 +42,7 @@ public class Maze extends EntitySystem {
     private Array<Vector2> monsterPositions;
     private Array<Vector2> gameMasterSecretPositions;
     private Array<MapItem> mapItems;
+    private Array<MapMonsterObject> mapMonsterObjects;
     private World world;
     private Array<Body> doorLockerBodies;
     private Array<BodyDef> doorLockerBodyDefs;
@@ -79,6 +81,7 @@ public class Maze extends EntitySystem {
         monsterPositions = generator.getMonsterPositions();
         mapItems = generator.getMapItems();
         gameMasterSecretPositions = generator.getGameMasterSecretPositions();
+        mapMonsterObjects = generator.getMonsterObjects();
         // create static bodies from colliders
         Rectangle r;
         for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
@@ -177,6 +180,10 @@ public class Maze extends EntitySystem {
 
     public Array<MapItem> getMapItems() {
         return mapItems;
+    }
+
+    public Array<MapMonsterObject> getMapMonsterObjects() {
+        return mapMonsterObjects;
     }
 
     public MapObjects getColliders() {

@@ -28,6 +28,7 @@ import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.ItemFactory;
@@ -63,18 +64,19 @@ public class EntityFactory {
      * Creates a {@link MonsterEntity} for the game world
      * @return
      */
-    public MonsterEntity createMonster(float x, float y, CharacterClass characterClass) {
+    public MonsterEntity createMonster(MapMonsterObject mapMonsterObject) {
         MonsterEntity monster = new MonsterEntity();
-        monster.add(new DynamicBodyComponent(world, new Vector2(x,y), CharacterClass.MONSTER));
-        monster.add(new InjurableAreaComponent(x, y, .8f, 1f));
+        monster.add(new DynamicBodyComponent(world, mapMonsterObject.position, CharacterClass.MONSTER));
+        monster.add(new InjurableAreaComponent(
+                mapMonsterObject.position.x, mapMonsterObject.position.y, .8f, 1f));
         //same Team as GM -> no friendly fire
         monster.add(new TeamComponent(0));
-        monster.add(new SensorBodyComponent(world, new Vector2(x, y)));
+        monster.add(new SensorBodyComponent(world, mapMonsterObject.position));
 
         int health;
         TextureAtlas tex;
 
-        switch(characterClass) {
+        switch(mapMonsterObject.characterClass) {
             case MONSTER_ZOMBIE:
                 health = 20;
                 tex = media.getTextureAtlas("textures/spritesheets/monsters/zombie_01.pack");
@@ -106,7 +108,7 @@ public class EntityFactory {
         itemEntity.add(new InjurableAreaComponent(mapItem.position.x, mapItem.position.y, 1f, 1f));
         SpriteComponent sprite = new SpriteComponent();
         sprite.sprite = new Sprite(item.itemImg);
-        sprite.sprite.setPosition(mapItem.position.x, mapItem.position.y);
+        sprite.sprite.setPosition(mapItem.position.x-.5f, mapItem.position.y-.5f);
         sprite.sprite.setSize(1f, 1f);
         sprite.sprite.setOriginCenter();
         itemEntity.add(sprite);

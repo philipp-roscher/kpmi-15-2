@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -72,6 +74,7 @@ public class GameServer {
 	// manages the characters
 	private static ServerCharacterSystem serverCharacterSystem = new ServerCharacterSystem();
 	private ServerBattleSystem bs;
+    private List<Integer> roomList;
 	
 	public static void main (String[] args) {
 		// starts new server
@@ -85,6 +88,9 @@ public class GameServer {
 
 
 	public GameServer() {
+        this.roomList = new LinkedList<Integer>();
+        for(int i=1; i <= GlobalSettings.MAZE_AREAS; i++) roomList.add(i);
+
 		this.clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
 		positions = new HashMap<Integer,NetworkTransmissionComponent>();
@@ -314,8 +320,12 @@ public class GameServer {
 		map.entries = new HashMap<Vector2, Integer>();
 		System.out.println(map.entries);
 		for(int i = height; i > 0; i--)
-			for(int j = width; j > 0; j--)
-				map.entries.put(new Vector2(i,j), MathUtils.random(1,GlobalSettings.MAZE_AREAS));
+			for(int j = width; j > 0; j--) {
+                System.out.println(roomList);
+                int r = MathUtils.random(1, roomList.size());
+                map.entries.put(new Vector2(i, j), roomList.get(r-1));
+                roomList.remove(r-1);
+            }
 	}
 	
 	// stops the server

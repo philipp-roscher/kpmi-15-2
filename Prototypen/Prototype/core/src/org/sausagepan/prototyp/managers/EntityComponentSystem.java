@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,6 +28,7 @@ import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
@@ -103,9 +105,9 @@ public class EntityComponentSystem {
     /* ............................................................................... METHODS .. */
     private void setUpEntitySystems() {
         // Movement System
-        MovementSystem movementSystem = new MovementSystem();
+        MovementSystem movementSystem = new MovementSystem(world);
         movementSystem.addedToEngine(engine);
-        engine.subscribe(movementSystem);
+        engine.addEntityListener(Family.all(DynamicBodyComponent.class).get(), movementSystem);
 
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
@@ -208,10 +210,9 @@ public class EntityComponentSystem {
 
     private void setUpMonsters() {
         // Get Objects from Maps Monster Layer and add monster entities there
-        for(Vector2 pos : maze.getMonsterPositions()) {
+        for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
             // Using factory method for creating monsters
-            this.engine.addEntity(
-                    entityFactory.createMonster(pos.x, pos.y, CharacterClass.MONSTER_ZOMBIE));
+            this.engine.addEntity(entityFactory.createMonster(mapObject));
         }
         // TODO
     }

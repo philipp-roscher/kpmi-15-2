@@ -97,10 +97,33 @@
   <object name="light" x="800" y="768" width="32" height="32"/>
   <object name="light" x="768" y="160" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="items" width="32" height="32">
-  <object name="key" x="480" y="416" width="32" height="32">
+ <objectgroup name="mapObjects" width="32" height="32">
+  <object name="monster" x="480" y="224" width="32" height="32">
    <properties>
+    <property name="type" value="zombie"/>
+   </properties>
+  </object>
+  <object name="monster" x="640" y="480" width="32" height="32">
+   <properties>
+    <property name="type" value="skeleton"/>
+   </properties>
+  </object>
+  <object name="item" x="512" y="416" width="32" height="32">
+   <properties>
+    <property name="type" value="key"/>
     <property name="value" value="1"/>
+   </properties>
+  </object>
+  <object name="item" x="320" y="480" width="32" height="32">
+   <properties>
+    <property name="type" value="potion_hp"/>
+    <property name="value" value="10"/>
+   </properties>
+  </object>
+  <object name="item" x="352" y="480" width="32" height="32">
+   <properties>
+    <property name="type" value="potion_hp"/>
+    <property name="value" value="10"/>
    </properties>
   </object>
  </objectgroup>
