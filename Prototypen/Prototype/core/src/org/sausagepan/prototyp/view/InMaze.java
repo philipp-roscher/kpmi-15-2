@@ -170,7 +170,6 @@ public class InMaze implements Screen {
         ECS.draw();
         // ............................................................................... RENDERING
 
-
         ECS.update(delta);
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
 	}

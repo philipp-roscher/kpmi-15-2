@@ -71,15 +71,6 @@ public class Bow extends WeaponItem {
             Bullet b = i.next();
             b.x += Gdx.graphics.getDeltaTime() * 1 * b.direction.x;
             b.y += Gdx.graphics.getDeltaTime() * 1 * b.direction.y;
-
-            // if arrows leave sight distance, remove them
-            if(b.x > UnitConverter.pixelsToMeters(800 * 10) ||
-                    b.x < -1*UnitConverter.pixelsToMeters(800*10) ||
-                    b.y > UnitConverter.pixelsToMeters(480*10) ||
-                    b.y < -1*UnitConverter.pixelsToMeters(480*10)) {
-                b.reset();
-                i.remove();
-            }
         }
     }
 

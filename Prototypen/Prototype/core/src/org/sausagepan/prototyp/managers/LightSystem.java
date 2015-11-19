@@ -27,9 +27,6 @@ public class LightSystem extends ObservingEntitySystem {
     /* ............................................................................... METHODS .. */
     public void addedToEngine(ObservableEngine engine) {
         entities = engine.getEntitiesFor(Family.all(LightComponent.class).get());
-        for(Entity e : entities) {
-            LightComponent light = e.getComponent(LightComponent.class);
-        }
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */
