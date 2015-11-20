@@ -32,9 +32,6 @@ public class SensorBodyComponent implements Component {
 
         FixtureDef fixDef = new FixtureDef();           // create players fixture
         fixDef.shape       = circle;                    // give shape to fixture
-        fixDef.density     = 0.5f;                      // objects density
-        fixDef.friction    = 0.4f;                      // objects friction on other objects
-        fixDef.restitution = 0.0f;                      // bouncing
         fixDef.isSensor = true;                         //makes it a sensor
         fixture = sensorBody.createFixture(fixDef);    // add fixture to body
         circle.dispose();

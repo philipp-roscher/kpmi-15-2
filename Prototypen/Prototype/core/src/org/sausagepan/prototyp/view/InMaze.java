@@ -84,8 +84,7 @@ public class InMaze implements Screen {
 	private KeepAliveRequest                 keepAliveRequest;
 	private Array<Object>                    networkMessages;
 	private HashMap<Integer,HeroInformation> otherCharacters;
-	private boolean         FGSreceived = false;
-	private MonsterListener monsterLis;
+	private boolean                          FGSreceived = false;
 
     private Maze maze;
 
@@ -135,7 +134,7 @@ public class InMaze implements Screen {
 		this.batch = new SpriteBatch();
         Gdx.input.setInputProcessor(ECS.getInputProcessor());
 		//Listener for Monsters to see clients
-		world.setContactListener(monsterLis);
+		world.setContactListener(new MonsterListener());
 	}
 
 	@Override
