@@ -3,27 +3,24 @@
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
- <tileset firstgid="751" name="poke" tilewidth="32" tileheight="32">
-  <image source="../textures/spritesheets/pokepublic.png" width="2048" height="2048"/>
- </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzbwMzAsIFEbEKGHmpimP3r+RkYNvIPnDveA+3+OGo/0eqpHV+k2k/t8Bq1f9R+WtgPyicbiMDbhBgYtgoRpxamnhj7Qe4sBao1EMCPy4SIU4esnlj7qamOVuaO2j9q/6j9tLGfmHKNVuWfPpHlGTnYUID48IJhKzYGBms0bMNGujnk4iqgXdVouGbU/lH7R+0f8vYDAEKNxrs=
+   eJzt1s0KgCAMB/AJfVz1/V+rDh46+SIZIckgaPNjYh7+IMT2izVCrQA0I8bHAoCD+2yYfbjpyd98j4ORydfOile7w+NbSJ8HNa4RP8yxth++W223xSwFehoU/HyNzqn7FxvYfXuPnPtPtUv4XyLp45rc/5/hy/rUPejRp2T4w2/Bv+5AUn64f/15/sOX9yVzAr/nhzA=
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlksOgjAURbsBkDB14HcPuhMd4XcPjnArfkC3oBPZlg69JDQ+sRXatB0QbnLykqYfbvv6aNZh7AEyjcilOz6PexAX8ekx9vLqRy7VcTFZl37PxGds6tePXKrjqH+RH9ui+yHyY1t0P3bBB1dSWbMXMtYHQzACYzAI9fupaoE5lmANNmALVoJ56/ZTUYTzOWCOIziDBKTgFOr1E4nef1eS3X9XktU/V2r9t/51/HcN/SNM++e1T0a5Dpo+f7o+rb+y9U3757W3XH95W16HI3J2bf6L/d/wHrp7v9G0ZP5l0bRk/qve+aZk2/8MuT7/U6ts+D/jLZmAa/DdlpbaXPivUtPPv0pN85/n2aXItSryXKTzvwFyZvvV
+   eJzt1kkKwCAMQFGv3clr2MHDNgUL2YSsJIL/QcBMuHBjSvF2iUNiU+fVybPaX1rfmrXqv1vikbjU+XTyqvZL61uzVn0E2R/p5nu36k71UwLvBgAA8+L/BSDKC44sIq0=
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
+   eJztzQENAAAMAiD3cO8fySBCARKW/W3eAAAAawrNhQCR
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztltsNgjAUhrsAAk/6JKLu4DhcdQXdxusOuA3XQfyJEGvT1JYIwdgv+dKkOflPH04LhGhEFBYhJaxgCjOYW93rVFnahKzgGjpwAV27ex3LxnrJI0RGBGPoQR8GnFzZOpmeNBdkXOENHuEJnjm5snWqFMgoYQVTmMGckytbx3IwCNkbz5VlPpE7o2xdS9uvXu8wadahSKi+9Hk0ml8kxf3LBOaK91MVx8R7L9A1++3vId8XGPTc/xdQfaP/Efq7JPouasbNFLM+G3jeQ/xLRnBnve/FzJ5G823qOds2s/bJsc3iAy/NSzI=
+   eJztlkkKgDAQBPsnxkQFRfQrLv//i/GkN2FAKpAp6FuYog9J5pQ0G5L0EHMmw4wjZxXHUIA/fZ76jwi6nTJoQXcQf//cz9HDfrp/Cf4F9tP9Sf8G+xv3V+2n9+/O/VW/f95f2nNGQ957ezDOuP+fCwMkExk=
   </data>
  </layer>
  <objectgroup name="colliderWalls" width="0" height="0">
@@ -33,24 +30,6 @@
   <object x="992" y="96" width="32" height="96"/>
   <object x="0" y="288" width="32" height="736"/>
   <object x="992" y="288" width="32" height="736"/>
-  <object x="32" y="736" width="448" height="288"/>
-  <object x="32" y="704" width="256" height="32"/>
-  <object x="32" y="288" width="64" height="416"/>
-  <object x="672" y="800" width="64" height="32"/>
-  <object x="544" y="992" width="384" height="32"/>
-  <object x="928" y="800" width="64" height="224"/>
-  <object x="736" y="832" width="96"/>
-  <object x="576" y="832" width="96"/>
-  <object x="544" y="480" width="288" height="160"/>
-  <object x="832" y="608" width="32" height="32"/>
-  <object x="352" y="512" width="32" height="32"/>
-  <object x="256" y="128" width="192" height="160"/>
-  <object x="576" y="128" width="192" height="160"/>
-  <object x="544" y="256" width="32" height="32"/>
-  <object x="224" y="256" width="32" height="32"/>
-  <object x="32" y="96" width="64" height="96"/>
-  <object x="928" y="96" width="64" height="96"/>
-  <object x="928" y="288" width="64" height="512"/>
  </objectgroup>
  <objectgroup name="lights" width="32" height="32">
   <object name="light" x="992" y="128" width="32" height="32"/>
