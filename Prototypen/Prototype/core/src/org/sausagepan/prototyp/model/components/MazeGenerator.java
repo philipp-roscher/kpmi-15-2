@@ -245,10 +245,10 @@ public class MazeGenerator {
 						if(newLayer.getCell(k, l) != null)	cell.setTile(newLayer.getCell(k, l).getTile()); //hol dir die Kachel falls die Zelle existiert
 
 						switch(layer_nr){															//setze Kachel auf entsprechenden Layer an korrekte Position
-							case 0: ground.setCell(k  + 32*x, l + 32*y, cell);
-							case 1: walls.setCell(k  + 32*x, l + 32*y, cell);
-							case 2: objects.setCell(k  + 32*x, l + 32*y, cell);
-							case 3: tops.setCell(k  + 32*x, l + 32*y, cell);
+							case 0: ground.setCell(k  + 32*x, l + 32*y, cell);break;
+							case 1: walls.setCell(k  + 32*x, l + 32*y, cell);break;
+							case 2: objects.setCell(k  + 32*x, l + 32*y, cell);break;
+							case 3: tops.setCell(k  + 32*x, l + 32*y, cell);break;
 						}
 				}
 			}
