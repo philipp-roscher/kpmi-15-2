@@ -52,7 +52,6 @@ public class Network {
         kryo.register(NetworkPosition.class);
         kryo.register(NetworkTransmissionComponent.class);
         kryo.register(Direction.class);
-        kryo.register(HeroInformation.class);
         kryo.register(Status.class);
         kryo.register(Weapon.class);
         kryo.register(Damagetype.class);
@@ -64,6 +63,21 @@ public class Network {
 		kryo.register(CharacterClass.class);
 //        kryo.register(KeySection.class);
 	}
+	
+
+	public static class NetworkPosition {
+		public Vector3 position;
+		public Direction direction;
+		public boolean isMoving;
+		
+		public NetworkPosition() {}
+		public NetworkPosition(Vector3 position, Direction direction, boolean isMoving) {
+			super();
+			this.position = position;
+			this.direction = direction;
+			this.isMoving = isMoving;
+		}
+	}
 
 	public static class KeepAliveRequest {
 		public int playerId;
@@ -73,27 +87,28 @@ public class Network {
 			this.playerId = playerId;
 		}
 	}
+	
 	public static class NewHeroRequest {
 		public int playerId;
-		public HeroInformation hero;
+		public CharacterClass clientClass;
 		
 		public NewHeroRequest() { }
-		public NewHeroRequest(int playerId, HeroInformation hero) {
+		public NewHeroRequest(int playerId, CharacterClass clientClass) {
 			this.playerId = playerId;
-			this.hero = hero;
+			this.clientClass = clientClass;
 		}
 	}
 	
 	public static class NewHeroResponse {
 		public int playerId;
 		public int teamId;
-		public HeroInformation hero;
+		public CharacterClass clientClass;
 		
 		public NewHeroResponse() { }
-		public NewHeroResponse(int playerId, int teamId, HeroInformation hero) {
+		public NewHeroResponse(int playerId, int teamId, CharacterClass clientClass) {
 			this.playerId = playerId;
 			this.teamId = teamId;
-			this.hero = hero;
+			this.clientClass = clientClass;
 		}
 	}	
 	
@@ -197,11 +212,11 @@ public class Network {
 	}
 	
 	public static class FullGameStateResponse {
-		public HashMap<Integer,HeroInformation> heroes;
+		public HashMap<Integer,CharacterClass> heroes;
 		public HashMap<Integer, Integer> teamAssignments;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,HeroInformation> heroes, HashMap<Integer, Integer> teamAssignments) {
+		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer, Integer> teamAssignments) {
 			this.heroes = heroes;
 			this.teamAssignments = teamAssignments;
 		}

@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.network.NetworkPosition;
+import org.sausagepan.prototyp.network.Network.NetworkPosition;
 
 public class ServerPlayer {
 

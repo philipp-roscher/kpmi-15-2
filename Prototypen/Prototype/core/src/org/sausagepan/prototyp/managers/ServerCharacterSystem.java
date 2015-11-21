@@ -9,7 +9,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
-import org.sausagepan.prototyp.network.NetworkPosition;
+import org.sausagepan.prototyp.network.Network.NetworkPosition;
 
 import java.util.ArrayList;
 import java.util.HashMap;

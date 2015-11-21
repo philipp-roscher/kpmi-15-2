@@ -33,7 +33,6 @@ import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
-import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.MonsterListener;
@@ -83,7 +82,7 @@ public class InMaze implements Screen {
 	private PositionUpdate                   posUpdate;
 	private KeepAliveRequest                 keepAliveRequest;
 	private Array<Object>                    networkMessages;
-	private HashMap<Integer,HeroInformation> otherCharacters;
+	private HashMap<Integer,CharacterClass>  otherCharacters;
 	private boolean                          FGSreceived = false;
 
     private Maze maze;
@@ -291,11 +290,11 @@ public class InMaze implements Screen {
                 if (otherCharacters.containsKey(game.clientId))
                     otherCharacters.remove(game.clientId);
 
-                for(Entry<Integer, HeroInformation> e : otherCharacters.entrySet()) {
+                for(Entry<Integer,CharacterClass> e : otherCharacters.entrySet()) {
                     Integer heroId = e.getKey();
-                    HeroInformation hero = e.getValue();
+                    CharacterClass clientClass = e.getValue();
                     int teamId = response.teamAssignments.get(heroId);
-                    CharacterEntity newCharacter = ECS.addNewCharacter(heroId, teamId, hero);
+                    CharacterEntity newCharacter = ECS.addNewCharacter(heroId, teamId, clientClass);
                     maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
                     maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
                 }

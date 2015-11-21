@@ -32,7 +32,6 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
@@ -233,7 +232,7 @@ public class EntityComponentSystem {
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
-		return addNewCharacter(request.playerId, request.teamId, request.hero);
+		return addNewCharacter(request.playerId, request.teamId, request.clientClass);
 	}
 
     /**
@@ -262,6 +261,9 @@ public class EntityComponentSystem {
             localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), characterClass));
         }
 
+        // opens passages for game master
+        if(characterClass == CharacterClass.DRAGON) maze.openSecretPassages();
+        
         characters.put(localCharacterId, localCharacter);
         this.engine.addEntity(localCharacter);
     }
@@ -269,12 +271,13 @@ public class EntityComponentSystem {
     /**
      * Adds other (network-) players characters to the world
      * @param newCharacterId
-     * @param newHero
+     * @param clientClass
      * @return
      */
-	public CharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, HeroInformation newHero) {		
+	public CharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, CharacterClass clientClass) {		
+		System.out.println(newCharacterId + ", " + newCharacterTeamId + ", " + clientClass);
 		// Create Entity
-        CharacterEntity newCharacter = setUpCharacterEntity(newHero.clientClass);
+        CharacterEntity newCharacter = setUpCharacterEntity(clientClass);
 
         // Add Components
         newCharacter.add(new NetworkTransmissionComponent());
@@ -283,14 +286,14 @@ public class EntityComponentSystem {
 
         //Set Spawn locations: Game master
         if (newCharacterId == 0) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), characterClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
         }
         if (newCharacterId == 1) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), characterClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), clientClass));
         }
 
         if (newCharacterId == 2) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), characterClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), clientClass));
         }
         
         characters.put(newCharacterId, newCharacter);
@@ -306,9 +309,6 @@ public class EntityComponentSystem {
     private CharacterEntity setUpCharacterEntity(CharacterClass characterClass) {
         // Create Entity
         CharacterEntity characterEntity = entityFactory.createCharacter(characterClass);
-
-        // opens passages for game master
-        if(characterClass == CharacterClass.DRAGON) maze.openSecretPassages();
 
         return characterEntity;
     }

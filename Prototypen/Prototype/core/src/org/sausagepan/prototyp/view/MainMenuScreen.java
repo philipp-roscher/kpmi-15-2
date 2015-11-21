@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.network.HeroInformation;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
@@ -219,7 +218,7 @@ public class MainMenuScreen implements Screen {
 					game.client.sendTCP(
 							new NewHeroRequest(
 									game.clientId,
-									new HeroInformation(clientClass)
+									clientClass
 							)
 					);
 					heroRequestSent = true;

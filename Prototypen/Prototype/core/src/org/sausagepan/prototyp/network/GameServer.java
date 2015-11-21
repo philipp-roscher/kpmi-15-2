@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.math.MathUtils;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.managers.ServerBattleSystem;
 import org.sausagepan.prototyp.managers.ServerCharacterSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
@@ -66,7 +67,7 @@ public class GameServer {
 	// container for deleted clients
 	public static ArrayList<Integer> toDelete = new ArrayList<Integer>();
 	// contains the classes of all characters
-	public static HashMap<Integer,HeroInformation> cm;
+	public static HashMap<Integer,CharacterClass> cm;
 	// contains the constellation of the individual tiles
 	public static MapInformation map;
 	//HashMap to save ClientIds,TeamIds
@@ -96,7 +97,7 @@ public class GameServer {
 		positions = new HashMap<Integer,NetworkTransmissionComponent>();
 		teamAssignments = new HashMap<Integer, Integer>();
 		lastAccess = new HashMap<Integer,Long>();		
-		cm = new HashMap<Integer,HeroInformation>();
+		cm = new HashMap<Integer,CharacterClass>();
 		bs = new ServerBattleSystem(this);
 		setupMap(5,5);
 
@@ -119,14 +120,13 @@ public class GameServer {
 		        				        	
 		        	if (object instanceof NewHeroRequest) {
 		        		NewHeroRequest request = (NewHeroRequest) object;
-		        		HeroInformation hero = request.hero;
-		        		System.out.println("New Hero (ID " + request.playerId + "): " + request.hero.clientClass);
+		        		System.out.println("New Hero (ID " + request.playerId + "): " + request.clientClass);
 		        		connection.sendTCP(map);
 		        		
-		        		cm.put(request.playerId, hero);
+		        		cm.put(request.playerId, request.clientClass);
                         serverCharacterSystem.addCharacter(request.playerId, new
 								ServerCharacterEntity(request.playerId));
-		        		NewHeroResponse response = new NewHeroResponse(request.playerId, teamAssignments.get(request.playerId), request.hero);
+		        		NewHeroResponse response = new NewHeroResponse(request.playerId, teamAssignments.get(request.playerId), request.clientClass);
 		        		server.sendToAllUDP(response);
 		        		//updateLastAccess(request.playerId);
 		        	}
