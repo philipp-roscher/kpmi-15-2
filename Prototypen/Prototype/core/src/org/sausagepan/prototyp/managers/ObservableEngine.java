@@ -14,15 +14,15 @@ import java.util.Observable;
  */
 public class ObservableEngine extends Engine {
     /* ............................................................................ ATTRIBUTES .. */
-    private Array<ObservingEntitySystem> observeringSystems;
+    private Array<ObservingEntitySystem> observingSystems;
     /* ........................................................................... CONSTRUCTOR .. */
     public ObservableEngine() {
         super();
-        this.observeringSystems = new Array<ObservingEntitySystem>();
+        this.observingSystems = new Array<ObservingEntitySystem>();
     }
     /* ............................................................................... METHODS .. */
     public void subscribe(ObservingEntitySystem entitySystem) {
-        this.observeringSystems.add(entitySystem);
+        this.observingSystems.add(entitySystem);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ObservableEngine extends Engine {
     }
 
     private void notifyObservers(ObservableEntityMessage message) {
-        for(ObservingEntitySystem oes : observeringSystems)
+        for(ObservingEntitySystem oes : observingSystems)
             oes.getNotified(this, message);
     }
     /* ..................................................................... GETTERS & SETTERS .. */

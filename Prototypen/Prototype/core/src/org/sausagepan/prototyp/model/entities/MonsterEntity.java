@@ -27,7 +27,7 @@ public class MonsterEntity extends Entity {
      * {@link com.badlogic.ashley.core.Component}s a MonsterEntity should contain.
      * @return
      */
-    public static Family getFamiliy() {
+    public static Family getFamily() {
         return EntityFamilies.monsterFamily;
     }
 }
