@@ -39,7 +39,7 @@ public class MonsterSystem extends ObservingEntitySystem {
      * @param engine
      */
     public void addedToEngine(ObservableEngine engine) {
-        entities = engine.getEntitiesFor(MonsterEntity.getFamiliy());
+        entities = engine.getEntitiesFor(MonsterEntity.getFamily());
     }
 
     public void update(float deltaTime) {
