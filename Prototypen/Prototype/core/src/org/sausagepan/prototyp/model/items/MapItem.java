@@ -1,10 +1,10 @@
 package org.sausagepan.prototyp.model.items;
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.entities.MapFactoryObject;
+
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by georg on 13.11.15.

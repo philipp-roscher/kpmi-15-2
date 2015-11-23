@@ -1,8 +1,8 @@
 package org.sausagepan.prototyp.model.entities;
 
-import com.badlogic.gdx.math.Vector2;
-
 import org.sausagepan.prototyp.enums.CharacterClass;
+
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by georg on 19.11.15.

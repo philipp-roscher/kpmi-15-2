@@ -1,13 +1,10 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.utils.Array;
-
 import org.sausagepan.prototyp.enums.ObservableEntityMessage;
 
-import java.util.Observable;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by georg on 06.11.15.

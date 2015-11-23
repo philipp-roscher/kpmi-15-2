@@ -1,9 +1,9 @@
 package org.sausagepan.prototyp.model.items;
 
+import org.sausagepan.prototyp.enums.Damagetype;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-
-import org.sausagepan.prototyp.enums.Damagetype;
 
 /**
  * Created by georg on 02.11.15.

@@ -1,16 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
@@ -32,13 +21,21 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.Network.ShootResponse;
-import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
+import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 
 import box2dLight.RayHandler;
+
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s

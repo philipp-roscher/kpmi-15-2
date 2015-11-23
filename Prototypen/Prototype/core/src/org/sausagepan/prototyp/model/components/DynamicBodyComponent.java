@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.model.components;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -9,8 +11,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-
-import org.sausagepan.prototyp.enums.CharacterClass;
 
 /**
  * Created by georg on 21.10.15.

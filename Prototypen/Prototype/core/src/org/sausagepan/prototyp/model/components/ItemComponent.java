@@ -1,8 +1,8 @@
 package org.sausagepan.prototyp.model.components;
 
-import com.badlogic.ashley.core.Component;
-
 import org.sausagepan.prototyp.model.items.Item;
+
+import com.badlogic.ashley.core.Component;
 
 /**
  * Created by georg on 12.11.15.

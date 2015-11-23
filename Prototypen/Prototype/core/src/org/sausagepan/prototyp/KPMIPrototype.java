@@ -2,10 +2,10 @@ package org.sausagepan.prototyp;
 
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
-import org.sausagepan.prototyp.network.Network.TeamAssignment;
+import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.MaxClients;
+import org.sausagepan.prototyp.network.Network.TeamAssignment;
 import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;

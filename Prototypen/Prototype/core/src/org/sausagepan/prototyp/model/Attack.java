@@ -1,7 +1,8 @@
 package org.sausagepan.prototyp.model;
 
-import com.badlogic.gdx.math.Rectangle;
 import org.sausagepan.prototyp.enums.Damagetype;
+
+import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by Georg on 06.07.2015.

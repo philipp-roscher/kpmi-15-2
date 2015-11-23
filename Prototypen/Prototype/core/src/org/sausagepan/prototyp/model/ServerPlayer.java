@@ -1,18 +1,12 @@
 package org.sausagepan.prototyp.model;
 
-import box2dLight.PointLight;
+import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.network.Network.NetworkPosition;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.TimeUtils;
-
-import org.sausagepan.prototyp.enums.Direction;
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.network.Network.NetworkPosition;
 
 public class ServerPlayer {
 

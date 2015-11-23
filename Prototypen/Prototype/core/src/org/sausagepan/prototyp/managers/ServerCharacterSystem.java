@@ -1,18 +1,12 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.gdx.math.Vector3;
-import com.esotericsoftware.kryonet.Server;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.sausagepan.prototyp.enums.Direction;
-import org.sausagepan.prototyp.model.ServerPlayer;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
-import org.sausagepan.prototyp.network.Network.NetworkPosition;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by georg on 29.10.15.

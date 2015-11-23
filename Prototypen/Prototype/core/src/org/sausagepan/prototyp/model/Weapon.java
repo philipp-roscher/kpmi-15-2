@@ -1,10 +1,11 @@
 package org.sausagepan.prototyp.model;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Weapontype;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by Georg on 26.06.2015.

@@ -1,15 +1,15 @@
 package org.sausagepan.prototyp.model.components;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.Array;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.sausagepan.prototyp.model.items.Bag;
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 import org.sausagepan.prototyp.model.items.WeaponItem;
 
-import java.util.Map;
-import java.util.HashMap;
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Array;
 
 
 /**

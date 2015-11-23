@@ -1,8 +1,8 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.EntitySystem;
-
 import org.sausagepan.prototyp.enums.ObservableEntityMessage;
+
+import com.badlogic.ashley.core.EntitySystem;
 
 /**
  * Observable {@link com.badlogic.ashley.core.Engine} which notifies {@link ObservingEntitySystem}

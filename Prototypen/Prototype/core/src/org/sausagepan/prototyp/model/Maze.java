@@ -1,9 +1,16 @@
 package org.sausagepan.prototyp.model;
 
-import com.badlogic.ashley.core.Entity;
+import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
+import org.sausagepan.prototyp.model.components.MazeGenerator;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
+
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -12,22 +19,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-
-import org.sausagepan.prototyp.enums.ObjectGroup;
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
-import org.sausagepan.prototyp.model.components.MazeGenerator;
-import org.sausagepan.prototyp.model.components.SpriteComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 /**
  * Created by georg on 18.10.15.

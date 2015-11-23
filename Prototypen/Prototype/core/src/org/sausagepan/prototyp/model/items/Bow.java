@@ -1,5 +1,12 @@
 package org.sausagepan.prototyp.model.items;
 
+import java.util.Iterator;
+
+import org.sausagepan.prototyp.Utils.UnitConverter;
+import org.sausagepan.prototyp.enums.Damagetype;
+import org.sausagepan.prototyp.graphics.EntitySprite;
+import org.sausagepan.prototyp.model.Bullet;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -7,13 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.TimeUtils;
-
-import org.sausagepan.prototyp.Utils.UnitConverter;
-import org.sausagepan.prototyp.enums.Damagetype;
-import org.sausagepan.prototyp.graphics.EntitySprite;
-import org.sausagepan.prototyp.model.Bullet;
-
-import java.util.Iterator;
 
 /**
  * Created by georg on 02.11.15.

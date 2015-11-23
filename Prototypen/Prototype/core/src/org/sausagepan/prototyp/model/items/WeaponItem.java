@@ -1,11 +1,10 @@
 package org.sausagepan.prototyp.model.items;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.graphics.EntitySprite;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Created by georg on 02.11.15.

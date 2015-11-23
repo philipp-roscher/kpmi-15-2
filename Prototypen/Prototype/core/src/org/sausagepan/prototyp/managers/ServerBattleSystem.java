@@ -2,7 +2,8 @@ package org.sausagepan.prototyp.managers;
 
 import java.util.ArrayList;
 
-import org.sausagepan.prototyp.model.*;
+import org.sausagepan.prototyp.model.Bullet;
+import org.sausagepan.prototyp.model.ServerPlayer;
 import org.sausagepan.prototyp.network.GameServer;
 
 /**
