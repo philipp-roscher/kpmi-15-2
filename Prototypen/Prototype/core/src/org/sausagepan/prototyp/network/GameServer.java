@@ -28,7 +28,6 @@ import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
-import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
@@ -91,7 +90,7 @@ public class GameServer {
         this.roomList = new LinkedList<Integer>();
         for(int i=1; i <= GlobalSettings.MAZE_AREAS; i++) roomList.add(i);
 
-		this.clientCount = 0;
+		clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
 		positions = new HashMap<Integer,NetworkTransmissionComponent>();
 		teamAssignments = new HashMap<Integer, Integer>();
@@ -111,12 +110,7 @@ public class GameServer {
 			server.bind(Network.TCPPort, Network.UDPPort);
 			
 		    server.addListener(new Listener() {
-		        public void received (Connection connection, Object object) {
-		        	if (object instanceof KeepAliveRequest) {
-		        		// System.out.println("KeepAliveRequest von "+((KeepAliveRequest)object).playerId);
-		        		updateLastAccess(((KeepAliveRequest)object).playerId);      		
-		        	}
-		        				        	
+		        public void received (Connection connection, Object object) {		        				        	
 		        	if (object instanceof NewHeroRequest) {
 		        		NewHeroRequest request = (NewHeroRequest) object;
 		        		System.out.println("New Hero (ID " + request.playerId + "): " + request.clientClass);
@@ -320,7 +314,7 @@ public class GameServer {
 		System.out.println(map.entries);
 		for(int i = height; i > 0; i--)
 			for(int j = width; j > 0; j--) {
-                System.out.println(roomList);
+                // System.out.println(roomList);
                 int r = MathUtils.random(1, roomList.size());
                 map.entries.put(new Vector2(i, j), roomList.get(r-1));
                 roomList.remove(r-1);

@@ -6,6 +6,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.network.Network.PositionUpdate;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -18,7 +19,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 public class NetworkSystem extends ObservingEntitySystem{
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
-    private float elapsedTime=0;
+    private PositionUpdate posUpdate = new PositionUpdate();
 
     private ComponentMapper<DynamicBodyComponent> dm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
@@ -47,12 +48,15 @@ public class NetworkSystem extends ObservingEntitySystem{
             NetworkTransmissionComponent networkTransmissionComponent = ntm.get(entity);
             NetworkComponent network = nm.get(entity);
             InputComponent input = im.get(entity);
+            
+            // send PositionUpdate (every tick)
             networkTransmissionComponent.moving     = input.moving;
             networkTransmissionComponent.direction  = input.direction;
             networkTransmissionComponent.linearVelocity = body.dynamicBody.getLinearVelocity();
             networkTransmissionComponent.position   = body.dynamicBody.getPosition();
-            network.posUpdate.position = networkTransmissionComponent;
-            network.sendPositionUpdate();            
+            posUpdate.playerId = network.id;
+            posUpdate.position = networkTransmissionComponent;
+            network.client.sendUDP(posUpdate);
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */

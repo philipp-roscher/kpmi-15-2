@@ -24,7 +24,6 @@ import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.KeepAliveRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
@@ -80,7 +79,6 @@ public class InMaze implements Screen {
 
     // Containers
 	private PositionUpdate                   posUpdate;
-	private KeepAliveRequest                 keepAliveRequest;
 	private Array<Object>                    networkMessages;
 	private HashMap<Integer,CharacterClass>  otherCharacters;
 	private boolean                          FGSreceived = false;
@@ -150,8 +148,6 @@ public class InMaze implements Screen {
         // process Updates
         processNetworkMessages();
         updateCamera();
-        updateNetwork();
-
 
         // ............................................................................... RENDERING
         // Tiled Map
@@ -238,13 +234,7 @@ public class InMaze implements Screen {
         ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).client = game.client;
         ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).id = game.clientId;
 
-        posUpdate = new PositionUpdate();
-        posUpdate.playerId = game.clientId;
-        ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).posUpdate = posUpdate;
-
         networkMessages = new Array<Object>();
-
-        this.keepAliveRequest = new KeepAliveRequest(game.clientId);
 
         game.client.addListener(new Listener() {
             public void received(Connection connection, Object object) {
@@ -274,9 +264,6 @@ public class InMaze implements Screen {
     }
 
     /* ..................................................................... GAME LOOP METHODS .. */
-    public void sendKeepAliveRequest() {
-        game.client.sendTCP(InMaze.this.keepAliveRequest);
-    }
 
     public void processNetworkMessages() {
         for(Object object : networkMessages) {
@@ -387,14 +374,6 @@ public class InMaze implements Screen {
                 break;
             default: break;
         }
-    }
-    private void updateNetwork() {
-        if(elapsedTimeSec != (int) elapsedTime) sendKeepAliveRequest();
-        elapsedTimeSec = (int) elapsedTime;
-
-        // Update Player
-        posUpdate.position = ECS.getLocalCharacterEntity().getComponent(NetworkTransmissionComponent.class);
-        game.client.sendUDP(posUpdate);
     }
 
     private void updateCamera() {

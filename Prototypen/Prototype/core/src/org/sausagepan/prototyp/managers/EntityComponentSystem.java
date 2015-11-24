@@ -282,14 +282,14 @@ public class EntityComponentSystem {
         newCharacter.add(new TeamComponent(newCharacterTeamId));
 
         //Set Spawn locations: Game master
-        if (newCharacterId == 0) {
+        if (newCharacterTeamId == 0) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
         }
-        if (newCharacterId == 1) {
+        if (newCharacterTeamId == 1) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), clientClass));
         }
 
-        if (newCharacterId == 2) {
+        if (newCharacterTeamId == 2) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), clientClass));
         }
         

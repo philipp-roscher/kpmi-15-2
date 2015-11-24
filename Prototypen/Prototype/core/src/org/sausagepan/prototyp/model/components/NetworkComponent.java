@@ -17,16 +17,11 @@ import com.esotericsoftware.kryonet.Client;
 public class NetworkComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Client client;
-    public PositionUpdate posUpdate;
     public int id;
 
     /* ........................................................................... CONSTRUCTOR .. */
     
-    /* ............................................................................... METHODS .. */
-    public void sendPositionUpdate() {
-    	client.sendUDP(posUpdate);
-    }
-    
+    /* ............................................................................... METHODS .. */    
     public void attack() {
     	client.sendUDP(new AttackRequest(id, false));
     }
