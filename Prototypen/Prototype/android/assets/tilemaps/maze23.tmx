@@ -1,48 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="65">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1s0KgCAMB/AJfVz1/V+rDh46+SIZIckgaPNjYh7+IMT2izVCrQA0I8bHAoCD+2yYfbjpyd98j4ORydfOile7w+NbSJ8HNa4RP8yxth++W223xSwFehoU/HyNzqn7FxvYfXuPnPtPtUv4XyLp45rc/5/hy/rUPejRp2T4w2/Bv+5AUn64f/15/sOX9yVzAr/nhzA=
+   eJztllEOgjAMhmuCmvgkJ/BJ738YFRUVCYnncA1rUidjXYeQGB/+uAnr94+1S9czgLVCudEZABpox7kyjla/xN+bGDehDmx8sXyax8Yh/hnkXhv2LvH5XBNnSj5+iyzirIbizy07Nldw3dZoN2t9u/Mxcn9oLb4QM3fkPl+ysTT/cM0dPv1yhsv1+QjlP7Ie0PIeVoV972h+K/Z/ZT1J2SE+souI3Mytp5AHKb/xsDfQynfWfR7cNX382t7pxJMo5CGG30RwuzxcYBo+eUjl4512SPAgyYNQ/aV4oN4ghY9aGT0VfMmdFqr/it03mm9wSuC79a/hp+yfP9PmID9/DV/Ldfma/deJbOxDQ70I77+66p96VA1f0odR39xXK+SjNLrCe+/s23cp2Lu0/n1CX+SpZL6ynnwbkj+E/vzxmV16AQ2/xb0=
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzt1kkKwCAMQFGv3clr2MHDNgUL2YSsJIL/QcBMuHBjSvF2iUNiU+fVybPaX1rfmrXqv1vikbjU+XTyqvZL61uzVn0E2R/p5nu36k71UwLvBgAA8+L/BSDKC44sIq0=
+   eJztllsKwjAQRZNl++qX1scG6qNftdpuQzeiG1G8A1MIyBCJSVtrDlzI3EyYpgNDlOqeKTSDJsZ6bIkT4/yI96VcyW/YQwdoZ6y3ljg3zme8L+VKfh9I7CnBoL7l1qx3Llqpq5bjT8kcahM31LprOQ7NA7WeWo4jw2XTYq05tIBSaAWtoZp98pbspwFq0z0L6AiV0BmqeK9g78R+qfz/l9ohv83e9Pkb/p0h9aCru9CMaeZNF9CMqaxZ3/OL7y9fuL6/IpGIH14bO0OR
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztzQENAAAMAiD3cO8fySBCARKW/W3eAAAAawrNhQCR
+   eJztz0EKgzAQBdDkH8LLKOhKulMP0npV3XoIu+2ygRgYYuMYFLr5D4b8hGSGGEN3mq1fJ5vOsRLG1Fs12J/LfYn9e+nt+i+uVpvOUrv1q5W+4c6Z+R8x81eOZ59RZdwtoOerHqJXzj/oWAc9BwN8xXroOeUJPQcjfMVe0DMRERER0T98Ad3EIA4=
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlkkKgDAQBPsnxkQFRfQrLv//i/GkN2FAKpAp6FuYog9J5pQ0G5L0EHMmw4wjZxXHUIA/fZ76jwi6nTJoQXcQf//cz9HDfrp/Cf4F9tP9Sf8G+xv3V+2n9+/O/VW/f95f2nNGQ957ezDOuP+fCwMkExk=
+   eJwLZmBg0CERhwOxLgMCqACxJxnmBAGxPgPpAGSfHhpfF4dafECNAvvR/a+HQy0h+5WpYL8qA3n+VyJDDzb7yA1/ckEeEOfi4Y8C4oHiANqtwEBe/qMWIDf/j9pPHaA6wPYPtP8Hg/3k1FvUtH+g/T+Q9gcMsP3yo/aPaPvJbX9TC6iM2j+iy79R/zMwBAKxJhkYud2uQKYZoPoHAPQwF7E=
   </data>
  </layer>
- <objectgroup name="colliderWalls" width="0" height="0">
-  <object x="0" y="0" width="480" height="96"/>
-  <object x="544" y="0" width="480" height="96"/>
-  <object x="0" y="96" width="32" height="96"/>
-  <object x="992" y="96" width="32" height="96"/>
-  <object x="0" y="288" width="32" height="736"/>
-  <object x="992" y="288" width="32" height="736"/>
+ <objectgroup name="colliderWalls">
+  <object id="1" x="0" y="0" width="480" height="96"/>
+  <object id="2" x="544" y="0" width="480" height="96"/>
+  <object id="3" x="0" y="96" width="32" height="96"/>
+  <object id="4" x="992" y="96" width="32" height="96"/>
+  <object id="5" x="0" y="288" width="32" height="736"/>
+  <object id="6" x="992" y="288" width="32" height="736"/>
+  <object id="19" x="544" y="96" width="64" height="160"/>
+  <object id="21" x="416" y="96" width="64" height="160"/>
+  <object id="22" x="225" y="383" width="352" height="32"/>
+  <object id="23" x="384" y="352" width="32" height="32"/>
+  <object id="27" x="256" y="640" width="32" height="64"/>
+  <object id="29" x="192" y="672" width="64" height="128"/>
+  <object id="30" x="256" y="768" width="192" height="64"/>
+  <object id="31" x="448" y="800" width="160" height="64"/>
+  <object id="32" x="608" y="768" width="64" height="64"/>
+  <object id="36" x="544" y="416" width="64" height="32"/>
+  <object id="37" x="576" y="448" width="64" height="32"/>
+  <object id="38" x="608" y="480" width="64" height="32"/>
+  <object id="42" x="640" y="576" width="64" height="192"/>
+  <object id="43" x="640" y="512" width="32" height="64"/>
+  <object id="46" x="192" y="416" width="64" height="128"/>
+  <object id="47" x="224" y="544" width="64" height="32"/>
+  <object id="48" x="256" y="576" width="64" height="32"/>
+  <object id="49" x="288" y="608" width="32" height="64"/>
+  <object id="52" x="32" y="96" width="128" height="32"/>
+  <object id="53" x="224" y="96" width="64" height="32"/>
+  <object id="54" x="352" y="96" width="64" height="64"/>
+  <object id="55" x="320" y="160" width="32" height="32"/>
+  <object id="56" x="64" y="128" width="32" height="32"/>
+  <object id="57" x="640" y="96" width="288" height="64"/>
+  <object id="58" x="480" y="320" width="64" height="32"/>
+  <object id="59" x="672" y="320" width="32" height="32"/>
+  <object id="60" x="768" y="320" width="32" height="32"/>
+  <object id="61" x="864" y="320" width="32" height="32"/>
+  <object id="62" x="320" y="320" width="32" height="32"/>
+  <object id="63" x="224" y="320" width="32" height="32"/>
+  <object id="64" x="128" y="320" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="lights" width="32" height="32">
-  <object name="light" x="992" y="128" width="32" height="32"/>
-  <object name="light" x="0" y="128" width="32" height="32"/>
+ <objectgroup name="lights">
+  <object id="7" name="light" x="992" y="128" width="32" height="32"/>
+  <object id="8" name="light" x="0" y="128" width="32" height="32"/>
+  <object id="16" x="448" y="192" width="32" height="32"/>
+  <object id="51" x="544" y="192" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="mapObjects" width="32" height="32">
-  <object name="item" x="288" y="416" width="32" height="32">
+ <objectgroup name="mapObjects">
+  <object id="9" name="item" x="147" y="172" width="32" height="32">
    <properties>
     <property name="type" value="potion_hp"/>
     <property name="value" value="10"/>
    </properties>
   </object>
-  <object name="monster" x="384" y="416" width="32" height="32">
+  <object id="10" name="monster" x="234" y="170" width="32" height="32">
    <properties>
     <property name="type" value="zombie"/>
    </properties>
