@@ -8,6 +8,7 @@ import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
+import org.sausagepan.prototyp.managers.NetworkSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
@@ -77,12 +78,6 @@ public class InMaze implements Screen {
 	private float   disconnectTime = 0;
 	private float   timeOut        = 5;
 
-    // Containers
-	private PositionUpdate                   posUpdate;
-	private Array<Object>                    networkMessages;
-	private HashMap<Integer,CharacterClass>  otherCharacters;
-	private boolean                          FGSreceived = false;
-
     private Maze maze;
 
     // Physics
@@ -146,7 +141,6 @@ public class InMaze implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // process Updates
-        processNetworkMessages();
         updateCamera();
 
         // ............................................................................... RENDERING
@@ -233,133 +227,17 @@ public class InMaze implements Screen {
         // add client to NetworkComponent
         ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).client = game.client;
         ECS.getLocalCharacterEntity().getComponent(NetworkComponent.class).id = game.clientId;
-
-        networkMessages = new Array<Object>();
-
+        
         game.client.addListener(new Listener() {
-            public void received(Connection connection, Object object) {
-                if ((object instanceof NewHeroResponse) ||
-                        (object instanceof DeleteHeroResponse) ||
-                        (object instanceof DeleteHeroResponse) ||
-                        (object instanceof GameStateResponse) ||
-                        (object instanceof AttackResponse) ||
-                        (object instanceof ShootResponse) ||
-                        (object instanceof HPUpdateResponse) ||
-                        (object instanceof FullGameStateResponse) ||
-                        (object instanceof LoseKeyResponse) ||
-                        (object instanceof TakeKeyResponse)) {
-                    // System.out.println( object.getClass() +" empfangen");
-                    networkMessages.add(object);
-                }
-            }
-
             public void disconnected(Connection connection) {
                 game.connected = false;
                 Gdx.app.log("KPMIPrototype", "disconnected from server.");
 //                Gdx.app.exit();
             }
         });
-
-        game.client.sendTCP(new FullGameStateRequest());
     }
 
     /* ..................................................................... GAME LOOP METHODS .. */
-
-    public void processNetworkMessages() {
-        for(Object object : networkMessages) {
-            if (object instanceof FullGameStateResponse) {
-                // adds all the player of the FullGameStateResponse
-
-                System.out.println("FullGameStateResponse");
-                FullGameStateResponse response = (FullGameStateResponse) object;
-                otherCharacters = response.heroes;
-
-                if (otherCharacters.containsKey(game.clientId))
-                    otherCharacters.remove(game.clientId);
-
-                for(Entry<Integer,CharacterClass> e : otherCharacters.entrySet()) {
-                    Integer heroId = e.getKey();
-                    CharacterClass clientClass = e.getValue();
-                    int teamId = response.teamAssignments.get(heroId);
-                    CharacterEntity newCharacter = ECS.addNewCharacter(heroId, teamId, clientClass);
-                    maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
-                    maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
-                }
-
-                FGSreceived = true;
-            }
-            if(FGSreceived) {
-                if (object instanceof NewHeroResponse) {
-                    NewHeroResponse request = (NewHeroResponse) object;
-                    CharacterEntity newCharacter = ECS.addNewCharacter(request);
-                    maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
-                    maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
-                }
-
-                if (object instanceof DeleteHeroResponse) {
-                    int playerId = ((DeleteHeroResponse) object).playerId;
-                    System.out.println(playerId + " was inactive for too long and thus removed from the session.");
-
-                    if( playerId == game.clientId )
-                        game.connected = false;
-
-                    CharacterEntity removedCharacter = ECS.getCharacter(playerId);
-                    if(removedCharacter != null) {
-                        maze.removeCharacterSpriteComponent(removedCharacter.getComponent(CharacterSpriteComponent.class));
-                        maze.removeWeaponComponent(removedCharacter.getComponent(WeaponComponent.class));
-                        ECS.deleteCharacter(playerId);
-                    }
-                }
-
-                if (object instanceof GameStateResponse) {
-                    GameStateResponse result = (GameStateResponse) object;
-
-                    for(Entry<Integer, NetworkTransmissionComponent> e : result.positions.entrySet()) {
-                        if(e.getKey() != game.clientId)
-                            ECS.updatePosition(e.getKey(), e.getValue());
-                    }
-                }
-
-                if (object instanceof AttackResponse) {
-                    AttackResponse result = (AttackResponse) object;
-                    if(result.playerId != game.clientId) {
-                        if(result.stop == false)
-                            ECS.attack(result.playerId);
-                        else
-                            ECS.stopAttacking(result.playerId);
-                    }
-                }
-
-                if (object instanceof ShootResponse) {
-                    ShootResponse result = (ShootResponse) object;
-                    if(result.playerId != game.clientId) {
-                        ECS.shoot(result);
-                    }
-                }
-
-                if (object instanceof HPUpdateResponse) {
-                    HPUpdateResponse result = (HPUpdateResponse) object;
-                    ECS.updateHP(result);
-                }
-
-                if (object instanceof LoseKeyResponse) {
-                    System.out.println("LoseKeyResponse");
-                    LoseKeyResponse result = (LoseKeyResponse) object;
-                    ECS.loseKey(result);
-                }
-
-                if (object instanceof TakeKeyResponse) {
-                    System.out.println("TakeKeyResponse");
-                    TakeKeyResponse result = (TakeKeyResponse) object;
-                    
-                    if(result.id != game.clientId)
-                    	ECS.takeKey(result);
-                }
-            }
-        }
-        networkMessages.clear();
-    }
-
 
     /**
      * Observes player instance for submitting stuff to the server

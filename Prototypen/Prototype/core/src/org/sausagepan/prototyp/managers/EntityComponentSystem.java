@@ -6,6 +6,7 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
@@ -131,7 +132,7 @@ public class EntityComponentSystem {
         engine.subscribe(positionSynchroSystem);
 
         // Network System
-        NetworkSystem networkSystem = new NetworkSystem();
+        NetworkSystem networkSystem = new NetworkSystem(this);
         networkSystem.addedToEngine(engine);
         engine.subscribe(networkSystem);
 
@@ -295,6 +296,8 @@ public class EntityComponentSystem {
         
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);
+        maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+        maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
         return newCharacter;
 	}
 
@@ -310,81 +313,27 @@ public class EntityComponentSystem {
         return characterEntity;
     }
 
-    /* TODO move stuff that doesn't belong here to the respective systems, like
-       {@link NetworkSystem} */
-	public void updatePosition(int id, NetworkTransmissionComponent position) {
-		if(characters.get(id) != null) {
-			this.characters.get(id)
-                    .getComponent(DynamicBodyComponent.class)
-                    .dynamicBody
-                    .setTransform(position.position, 0f);
-			this.characters.get(id).getComponent(DynamicBodyComponent.class)
-                    .dynamicBody.setLinearVelocity(position.linearVelocity);
-			if(position.direction != null)
-				this.characters.get(id).getComponent(InputComponent.class).direction
-                        = position.direction;
-		}
-	}
-
 	public void deleteCharacter(int id) {
 		if(characters.get(id) != null) {
 //			System.out.println("Character wird gelöscht: " +id);
+			maze.removeCharacterSpriteComponent(characters.get(id).getComponent(CharacterSpriteComponent.class));
+            maze.removeWeaponComponent(characters.get(id).getComponent(WeaponComponent.class));
 			engine.removeEntity(this.characters.get(id));
 			this.characters.remove(id);
 		}
 	}
-	
-	public void attack(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character greift an: " + id);
-			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = true;
-//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
-		}
-	}
-
-	public void stopAttacking(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character bricht Angriff ab: "+id);
-			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = false;
-//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
-		}
-	}
-	
-	public void shoot(ShootResponse sr) {
-		if(characters.get(sr.playerId) != null) {
-//			System.out.println("Character schießt: "+sr.playerId);
-			((Bow)this.characters.get(sr.playerId).getComponent(WeaponComponent.class).weapon).shoot(sr.position, sr.direction);
-		}
-	}
-
-	public void updateHP(HPUpdateResponse result) {
-		if(characters.get(result.playerId) != null)
-			this.characters.get(result.playerId).getComponent(HealthComponent.class).HP = result.HP;		
-	}
 
 	public CharacterEntity getCharacter(int playerId) {
-		if(characters.get(playerId) != null)
-			return characters.get(playerId);
-		
-		return null;
-	}
-
-	public void loseKey(LoseKeyResponse result) {
-		if(characters.get(result.id) != null) {
-			characters.get(result.id).getComponent(InventoryComponent.class).dropAllItems();
-		}
-	}
-
-	public void takeKey(TakeKeyResponse result) {
-        if (characters.get(result.id) != null) {
-			characters.get(result.id).getComponent(InventoryComponent.class)
-                    .pickUpItem(itemFactory.createKeyFragment(result.keySection), 1);
-		}
+		return characters.get(playerId);
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;
+    }
+    
+    public ItemFactory getItemFactory() {
+    	return itemFactory;
     }
 
     public InputProcessor getInputProcessor() {

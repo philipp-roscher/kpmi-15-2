@@ -47,41 +47,34 @@ public class KPMIPrototype extends Game {
 		Network.register(client);
 
 		//Listeners to receive data from server
-		client.addListener(new Listener() {									//receives Client ID
+		client.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
+				//receives Client ID
 				if (object instanceof IDAssignment) {
 					IDAssignment result = (IDAssignment) object;
 					clientId = result.id;
 				}
-			}
-		});
-		client.addListener(new Listener() {									//receives current number of clients
-			public void received(Connection connection, Object object) {
+
+				//receives current number of clients
 				if (object instanceof GameClientCount) {
 					GameClientCount result = (GameClientCount) object;
 					clientCount = result.count;
 				}
-			}
-		});
-		client.addListener(new Listener() {									//receives Team ID
-			public void received(Connection connection, Object object) {
+				
+				//receives Team ID
 				if(object instanceof TeamAssignment) {
 					TeamAssignment result = (TeamAssignment) object;
 					TeamId = result.id;
 					TeamAssignmentReceived = true;
 				}
-			}
-		});
-		client.addListener(new Listener() {									//receives max. number of clients
-			public void received(Connection connection, Object object) {
+				
+				//receives max. number of clients
 				if(object instanceof MaxClients) {
 					MaxClients result = (MaxClients) object;
 					maxClients = result.count;
 				}
 			}
 		});
-
-
 
 		// switch to main menu screen
 		this.setScreen(new MainMenuScreen(this));
