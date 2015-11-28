@@ -15,7 +15,7 @@
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJxjYBgcwI2JOHFXHOqwqcVmJi57RioYyPAYynHhz8jAEMBIuTknsZiBHC64wigXqC8Pj/0wfUM5jEHAgQmCSQEgP5+Chs1FJgimBNhTqJ9S+4kBQz2eR8HgAZSkJULlzmkyy8xECstaSvNHPRXK+uEGUoBhEgvEyYzY6zFyACnx1AS0sxqIG+kQN8TUydQAtkCznSitb4DhcRWIrwHxBRLDZhrQbmsK7X8PtPMzEH8B4nej+YZsgC3NEUp72NSNtg1GAS4AAFUPG3k=
+   eJxjYBgcwI2JOHFXHOqwqcVmJi57RioYyPAYynHhz8jAEMBIuTknsZiBHC64wigXqC8Pj/0wfUM5jEHAgQmCSQEgP5+iQtzAgP0QCMOhHs+jYPAAStISoXLnNJn5MpHC/Exp/qinYnkyXEAKMExigTiZEXs9Rg4gJZ6agHZWA3EjHeKGmDqZGsAWaLYTheZfBIbHVSC+BsQXSAybaUC7rSm0/z3Qzs9A/AWI343mG7IBtjRHKO1hUzfaNhgFuAAAQXgZAA==
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
