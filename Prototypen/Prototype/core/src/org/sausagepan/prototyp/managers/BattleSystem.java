@@ -7,6 +7,7 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
@@ -48,6 +49,8 @@ public class BattleSystem extends EntitySystem implements EntityListener {
             = ComponentMapper.getFor(CharacterSpriteComponent.class);
     private ComponentMapper<NetworkComponent> nm
     		= ComponentMapper.getFor(NetworkComponent.class);
+    private ComponentMapper<NetworkTransmissionComponent> ntm
+    		= ComponentMapper.getFor(NetworkTransmissionComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
     public BattleSystem() {}
@@ -63,6 +66,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
             WeaponComponent weapon = wm.get(attacker);
             DynamicBodyComponent body = dm.get(attacker);
             NetworkComponent network = nm.get(attacker);
+            NetworkTransmissionComponent ntc = ntm.get(attacker);
 
             // Check victims for damage
             for(Entity v : victims) {
@@ -75,13 +79,13 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                         // Handle Sword
                         if(weapon.weapon.getClass().equals(Sword.class))
                             if (((Sword)weapon.weapon).checkHit(area.area))
-                                calculateDamage(weapon, health, v, network);
+                                calculateDamage(weapon, health, v, ntc);
 
                         // Handle Bow
                         if(weapon.weapon.getClass().equals(Bow.class)) {
                             Bow bow = (Bow)weapon.weapon;
                             bow.shoot(body.dynamicBody.getPosition(),body.direction);
-                            network.shoot(body.dynamicBody.getPosition(),body.direction);
+                            ntc.shoot = true;
                             weapon.weapon.justUsed = false; // usage over, waiting for next attack
                         }
                     }
@@ -89,7 +93,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                     // If weapon is a bow
                     if(weapon.weapon.getClass().equals(Bow.class))
                         if(((Bow)weapon.weapon).checkHit(area.area))
-                            calculateDamage(weapon, health, v, network);
+                            calculateDamage(weapon, health, v, ntc);
                 }
 
                 if(v.getClass().equals(MonsterEntity.class) && hm.get(v).HP == 0) {
@@ -104,12 +108,12 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         }
     }
 
-    public void calculateDamage(WeaponComponent weapon, HealthComponent health, Entity victim, NetworkComponent network) {
+    public void calculateDamage(WeaponComponent weapon, HealthComponent health, Entity victim, NetworkTransmissionComponent ntc) {
         if(health.HP - weapon.weapon.strength > 0) health.HP -= weapon.weapon.strength;
         else health.HP = 0;
         
         if(victim.getClass().equals(CharacterEntity.class))
-        	network.sendHPUpdate(new HPUpdateRequest(victim.getComponent(IdComponent.class).id, health.HP));
+        	ntc.HPUpdates.add(new HPUpdateRequest(victim.getComponent(IdComponent.class).id, health.HP));
     }
 
     @Override

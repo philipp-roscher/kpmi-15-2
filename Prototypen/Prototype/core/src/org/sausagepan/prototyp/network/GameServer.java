@@ -32,6 +32,7 @@ import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.MaxClients;
+import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
@@ -59,7 +60,7 @@ public class GameServer {
 	// contains client ids
 	public static HashMap<InetSocketAddress,Integer> clientIds;
 	// contains current positions of all characters sent by positionupdates
-	public static HashMap<Integer,NetworkTransmissionComponent> positions;
+	public static HashMap<Integer,NetworkPosition> positions;
 	// saves the last time each client was active, used for kicking inactive clients
 	public static HashMap<Integer,Long> lastAccess;
 	// container for deleted clients
@@ -92,7 +93,7 @@ public class GameServer {
 
 		clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
-		positions = new HashMap<Integer,NetworkTransmissionComponent>();
+		positions = new HashMap<Integer,NetworkPosition>();
 		teamAssignments = new HashMap<Integer, Integer>();
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,CharacterClass>();

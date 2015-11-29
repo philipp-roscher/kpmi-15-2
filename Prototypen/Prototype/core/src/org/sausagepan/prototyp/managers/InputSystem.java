@@ -4,6 +4,7 @@ import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -33,6 +34,8 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
             = ComponentMapper.getFor(WeaponComponent.class);
     private ComponentMapper<NetworkComponent> nm
     		= ComponentMapper.getFor(NetworkComponent.class);
+    private ComponentMapper<NetworkTransmissionComponent> ntm
+			= ComponentMapper.getFor(NetworkTransmissionComponent.class);
 
 
     private float ax, ay;
@@ -148,9 +151,10 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
             NetworkComponent network = nm.get(entity);
+            NetworkTransmissionComponent ntc = ntm.get(entity);
             if (keycode == Input.Keys.A) {
             	input.weaponDrawn = false;
-            	network.stopAttacking = true;
+            	ntc.stopAttacking = true;
             }
         }
         return true;

@@ -5,6 +5,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
@@ -32,6 +33,8 @@ public class InventorySystem extends ObservingEntitySystem {
             = ComponentMapper.getFor(DynamicBodyComponent.class);
     private ComponentMapper<NetworkComponent> nm
             = ComponentMapper.getFor(NetworkComponent.class);
+    private ComponentMapper<NetworkTransmissionComponent> ntm
+            = ComponentMapper.getFor(NetworkTransmissionComponent.class);
 
     public InventorySystem(Maze maze) {
         this.maze = maze;
@@ -54,11 +57,12 @@ public class InventorySystem extends ObservingEntitySystem {
         for (Entity entity : characters) {
             InventoryComponent inventory = im.get(entity);
             NetworkComponent network = nm.get(entity);
+            NetworkTransmissionComponent ntc = ntm.get(entity);
             DynamicBodyComponent body = dbm.get(entity);
 
             // If a new key fragment hast been picked up, notify server
             if(inventory.justPGotKey) {
-                network.takeKey(inventory.recentlyFoundKey.keyFragmentNr);
+                ntc.takeKey.add(inventory.recentlyFoundKey.keyFragmentNr);
                 inventory.justPGotKey = false;
                 inventory.recentlyFoundKey = null;
                 if(inventory.keyFragments.size == 3) maze.openTreasureRoom();
@@ -67,7 +71,7 @@ public class InventorySystem extends ObservingEntitySystem {
             // If a character lost key fragments, notify server
             if(inventory.justLostKey) {
                 for(KeyFragmentItem kf : inventory.keyFragments)
-                    network.loseKey(kf.keyFragmentNr, body.x, body.y);
+                	ntc.loseKey.add(kf.keyFragmentNr);
                 inventory.justLostKey = false;
                 inventory.keyFragments = new Array<KeyFragmentItem>();
                 maze.lockTreasureRoom();

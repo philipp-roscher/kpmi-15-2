@@ -17,27 +17,10 @@ public class NetworkComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Client client;
     public int id;
-    public boolean stopAttacking = false;
 
     /* ........................................................................... CONSTRUCTOR .. */
     
-    /* ............................................................................... METHODS .. */    
-	public void shoot(Vector2 position, Vector2 direction) {
-		client.sendUDP(new ShootRequest(id,position,direction));		
-	}
-	
-	public void sendHPUpdate(HPUpdateRequest hpupdate) {
-		client.sendTCP(hpupdate);
-	}
-
-	public void loseKey(int keySection, float x, float y) {
-		System.out.println("LOSEKEY");
-		client.sendTCP(new LoseKeyRequest(id,keySection,x,y));
-	}
-
-	public void takeKey(int keySection) {
-		client.sendTCP(new TakeKeyRequest(id,keySection));
-	}
+    /* ............................................................................... METHODS .. */
     
     /* ..................................................................... GETTERS & SETTERS .. */
 }

@@ -60,21 +60,21 @@ public class Network {
 		kryo.register(Vector3.class);
         kryo.register(HashMap.class);
 		kryo.register(CharacterClass.class);
-//        kryo.register(KeySection.class);
 	}
 	
 
 	public static class NetworkPosition {
-		public Vector3 position;
-		public Direction direction;
-		public boolean isMoving;
+		public Vector2 position;
+	    public Vector2 velocity;
+	    public Direction direction;
+	    public boolean moving;
 		
 		public NetworkPosition() {}
-		public NetworkPosition(Vector3 position, Direction direction, boolean isMoving) {
-			super();
+		public NetworkPosition(Vector2 position, Vector2 velocity, Direction direction, boolean moving) {
 			this.position = position;
+			this.velocity = velocity;
 			this.direction = direction;
-			this.isMoving = isMoving;
+			this.moving = moving;
 		}
 	}
 	
@@ -112,7 +112,7 @@ public class Network {
 	
 	public static class PositionUpdate {
 		public int playerId;
-		public NetworkTransmissionComponent position;
+		public NetworkPosition position;
 		
 		public PositionUpdate() { }
 	}	
@@ -192,7 +192,7 @@ public class Network {
 	}
 	
 	public static class GameStateResponse {
-		public HashMap<Integer, NetworkTransmissionComponent> positions;
+		public HashMap<Integer, NetworkPosition> positions;
 		
 		public GameStateResponse() { }
 	}

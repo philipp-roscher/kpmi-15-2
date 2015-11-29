@@ -7,6 +7,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
+import org.sausagepan.prototyp.network.Network.NetworkPosition;
 
 /**
  * Created by georg on 29.10.15.
@@ -42,7 +43,7 @@ public class ServerCharacterSystem {
      * @param component
      */
 
-    public void updatePosition(int ID, NetworkTransmissionComponent component) {
+    public void updatePosition(int ID, NetworkPosition component) {
         if(characters.get(ID) != null) {
             this.characters.get(ID).getComponent(DynamicBodyComponent.class).dynamicBody
                     .setTransform(component.position, 0f);

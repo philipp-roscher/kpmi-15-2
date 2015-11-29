@@ -235,6 +235,8 @@ public class InMaze implements Screen {
 //                Gdx.app.exit();
             }
         });
+        
+        ECS.setupNetworkSystem();
     }
 
     /* ..................................................................... GAME LOOP METHODS .. */

@@ -327,6 +327,10 @@ public class EntityComponentSystem {
 		return characters.get(playerId);
 	}
 	
+	public void setupNetworkSystem() {
+		engine.getSystem(NetworkSystem.class).setupSystem();
+	}
+	
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;

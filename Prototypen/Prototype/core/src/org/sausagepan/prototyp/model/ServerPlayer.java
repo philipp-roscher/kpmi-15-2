@@ -57,7 +57,7 @@ public class ServerPlayer {
 		this.direction = new Vector2(0,0);
 
 		this.activeBullets = new Array<Bullet>();
-        this.position  = new NetworkPosition(new Vector3(0,0,0), this.dir, this.moving);
+        //this.position  = new NetworkPosition(new Vector3(0,0,0), this.dir, this.moving);
 
 		// Physics
 		this.moving = false;
