@@ -17,6 +17,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
+import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
@@ -59,7 +60,9 @@ public class NetworkSystem extends ObservingEntitySystem{
     private ComponentMapper<NetworkComponent> nm
     		= ComponentMapper.getFor(NetworkComponent.class);
     private ComponentMapper<InputComponent> im
-            = ComponentMapper.getFor(InputComponent.class);
+    		= ComponentMapper.getFor(InputComponent.class);
+    private ComponentMapper<WeaponComponent> wm
+    		= ComponentMapper.getFor(WeaponComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public NetworkSystem(EntityComponentSystem ECS) {
     	this.ECS = ECS;
@@ -112,6 +115,7 @@ public class NetworkSystem extends ObservingEntitySystem{
             DynamicBodyComponent body = dm.get(entity);
             NetworkTransmissionComponent networkTransmissionComponent = ntm.get(entity);
             NetworkComponent network = nm.get(entity);
+            WeaponComponent weapon = wm.get(entity);
             InputComponent input = im.get(entity);
             
             // send PositionUpdate (every tick)
@@ -121,6 +125,14 @@ public class NetworkSystem extends ObservingEntitySystem{
             networkTransmissionComponent.position   = body.dynamicBody.getPosition();
             posUpdate.position = networkTransmissionComponent;
             network.client.sendUDP(posUpdate);
+            
+            if(weapon.weapon.justUsed) {
+            	network.client.sendUDP(new AttackRequest(network.id, false));
+            }
+            if(network.stopAttacking) {
+            	network.client.sendUDP(new AttackRequest(network.id, true));
+            	network.stopAttacking = false;
+            }
         }
         
         for(Object object : networkMessages) {

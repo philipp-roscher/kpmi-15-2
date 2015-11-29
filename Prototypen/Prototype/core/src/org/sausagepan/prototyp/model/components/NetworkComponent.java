@@ -17,18 +17,11 @@ public class NetworkComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Client client;
     public int id;
+    public boolean stopAttacking = false;
 
     /* ........................................................................... CONSTRUCTOR .. */
     
     /* ............................................................................... METHODS .. */    
-    public void attack() {
-    	client.sendUDP(new AttackRequest(id, false));
-    }
-
-	public void stopAttacking() {
-    	client.sendUDP(new AttackRequest(id, true));		
-	}
-
 	public void shoot(Vector2 position, Vector2 direction) {
 		client.sendUDP(new ShootRequest(id,position,direction));		
 	}

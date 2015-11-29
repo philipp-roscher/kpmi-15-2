@@ -126,7 +126,6 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
             WeaponComponent weapon = wm.get(entity);
-            NetworkComponent network = nm.get(entity);
             switch(keycode) {
                 case Input.Keys.UP:     input.direction = Direction.NORTH;break;
                 case Input.Keys.LEFT:   input.direction = Direction.WEST;break;
@@ -136,7 +135,6 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
                     input.weaponDrawn = true;
                     System.out.println("Attacking!");
                     weapon.weapon.justUsed = true;
-                    network.attack();                    
                     break;
                 default:break;
             }
@@ -152,7 +150,7 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
             NetworkComponent network = nm.get(entity);
             if (keycode == Input.Keys.A) {
             	input.weaponDrawn = false;
-            	network.stopAttacking();
+            	network.stopAttacking = true;
             }
         }
         return true;
