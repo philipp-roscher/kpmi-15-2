@@ -22,17 +22,18 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
+import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
-
-import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.World;
+
+import box2dLight.RayHandler;
 
 /**
  * This class creates and returns {@link Entity}s for use in the game world
@@ -58,7 +59,13 @@ public class EntityFactory {
     }
     /* ............................................................................... METHODS .. */
 
-    /**
+    public EntityFactory(MediaManager media, World world) {
+        this.media = media;
+        this.world = world;
+        this.itemFactory = new ItemFactory(media);
+	}
+
+	/**
      * Creates a {@link MonsterEntity} for the game world
      * @return
      */
@@ -127,7 +134,8 @@ public class EntityFactory {
             default: color = new Color(1,.8f,.5f, 1); break;
         }
 
-        light.add(new LightComponent(rayHandler, x, y, color, 20, 2));
+        if(rayHandler != null)
+        	light.add(new LightComponent(rayHandler, x, y, color, 20, 2));
 
         if(GlobalSettings.DEBUGGING_ACTIVE)
             System.out.println("Light: " + x + "|" + y);
@@ -193,5 +201,45 @@ public class EntityFactory {
         return characterEntity;
     }
     /* ..................................................................... GETTERS & SETTERS .. */
+
+	public ServerCharacterEntity createServerCharacter(CharacterClass characterClass) {
+        ServerCharacterEntity characterEntity = new ServerCharacterEntity();
+
+        // Add Components
+        characterEntity.add(new InputComponent());
+
+        // Add components which are equal for all classes
+        characterEntity.add(new HealthComponent(100));
+        characterEntity.add(new MagicComponent(80));
+        characterEntity.add(new InventoryComponent());
+
+        // Add class specific components
+        switch(characterClass) {
+            case KNIGHT_M:
+                //characterEntity.add(new WeaponComponent(itemFactory.createSmallSword()));
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case FIGHTER_M:
+                //characterEntity.add(new WeaponComponent(itemFactory.createBoxerGlove(ItemType.GLOVE_RED)));
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case ARCHER_F:
+                //characterEntity.add(new WeaponComponent(itemFactory.createBow()));
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case SHAMAN_M:
+                //characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case DRAGON:
+                //characterEntity.add(new WeaponComponent(itemFactory.createFireBreather()));
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
+                //has to be *2 here and added in DynamicBodyComponent
+                break;
+            default: break;
+        }
+
+        return characterEntity;
+	}
 
 }

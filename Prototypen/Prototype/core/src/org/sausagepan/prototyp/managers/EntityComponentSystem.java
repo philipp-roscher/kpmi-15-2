@@ -8,10 +8,7 @@ import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -19,16 +16,9 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
-import org.sausagepan.prototyp.network.Network.ShootResponse;
-import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
-
-import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.InputProcessor;
@@ -37,6 +27,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import box2dLight.RayHandler;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -165,7 +157,7 @@ public class EntityComponentSystem {
         engine.subscribe(inGameUISystem);
 
         // Item System
-        ItemSystem itemSystem = new ItemSystem(maze.getTiledMapRenderer());
+        ItemSystem itemSystem = new ItemSystem();
         itemSystem.addedToEngine(engine);
         engine.subscribe(itemSystem);
 

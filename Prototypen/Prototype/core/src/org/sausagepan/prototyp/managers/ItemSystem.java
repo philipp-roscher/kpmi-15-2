@@ -10,7 +10,6 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -33,11 +32,8 @@ public class ItemSystem extends ObservingEntitySystem {
 
     private ImmutableArray<Entity> characters;
     private ImmutableArray<Entity> items;
-
-    private OrthogonalTiledMapRendererWithPlayers tmr;
     /* ........................................................................... CONSTRUCTOR .. */
-    public ItemSystem(OrthogonalTiledMapRendererWithPlayers tmr) {
-        this.tmr = tmr;
+    public ItemSystem() {
     }
     /* ............................................................................... METHODS .. */
     @Override
@@ -63,11 +59,12 @@ public class ItemSystem extends ObservingEntitySystem {
             Iterator<Entity> itemIterator = items.iterator();
             while (itemIterator.hasNext()) {
                 Entity item = itemIterator.next();
-                SpriteComponent sprite = sm.get(item);
+                // TODO: revisit ItemSystem
+                //SpriteComponent sprite = sm.get(item);
                 if(area.area.overlaps(am.get(item).area)) {
                     System.out.println("Picked up Item: " + itemM.get(item).item.getClass());
                     inventory.pickUpItem(itemM.get(item).item, 1);
-                    tmr.removeSprite(sprite.sprite);
+                    //tmr.removeSprite(sprite.sprite);
                     getEngine().removeEntity(item);
                 }
             }

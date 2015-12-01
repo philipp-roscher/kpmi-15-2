@@ -1,38 +1,17 @@
 package org.sausagepan.prototyp.view;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.PlayerAction;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
-import org.sausagepan.prototyp.managers.NetworkSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.network.MonsterListener;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
-import org.sausagepan.prototyp.network.Network.AttackResponse;
-import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
-import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
-import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
-import org.sausagepan.prototyp.network.Network.GameStateResponse;
-import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
-import org.sausagepan.prototyp.network.Network.NewHeroResponse;
-import org.sausagepan.prototyp.network.Network.PositionUpdate;
-import org.sausagepan.prototyp.network.Network.ShootResponse;
-import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
-
-import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -46,11 +25,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import box2dLight.RayHandler;
 
 /**
  * Screen for all ingame action. Here everything is rendered to the screen

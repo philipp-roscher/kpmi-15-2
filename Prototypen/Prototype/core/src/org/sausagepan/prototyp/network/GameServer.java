@@ -12,18 +12,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.managers.ServerBattleSystem;
-import org.sausagepan.prototyp.managers.ServerCharacterSystem;
+import org.sausagepan.prototyp.managers.ServerEntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
-import org.sausagepan.prototyp.network.Network.GameStateRequest;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
@@ -32,7 +28,6 @@ import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.MaxClients;
-import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
@@ -42,13 +37,14 @@ import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-public class GameServer {
+public class GameServer implements ApplicationListener {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
 	public static final int timeoutMs = 5000;
 	// Anzahl der GameStateUpdates pro Sekunde
@@ -56,11 +52,12 @@ public class GameServer {
 	
 	public static Server server;
 	public static int maxId = 1;
+	public static ServerEntityComponentSystem ECS;
+	private static long lastUpdate;
+	private static long delta;
 	
 	// contains client ids
 	public static HashMap<InetSocketAddress,Integer> clientIds;
-	// contains current positions of all characters sent by positionupdates
-	public static HashMap<Integer,NetworkPosition> positions;
 	// saves the last time each client was active, used for kicking inactive clients
 	public static HashMap<Integer,Long> lastAccess;
 	// container for deleted clients
@@ -72,8 +69,6 @@ public class GameServer {
 	//HashMap to save ClientIds,TeamIds
 	public static HashMap<Integer,Integer> teamAssignments;
 	// manages the characters
-	private static ServerCharacterSystem serverCharacterSystem = new ServerCharacterSystem();
-	private ServerBattleSystem bs;
     private List<Integer> roomList;
 	
 	public static void main (String[] args) {
@@ -85,24 +80,24 @@ public class GameServer {
 	public static int clientCount;
 	//maximal Number of Clients per Session
 	private int maxClients = GlobalSettings.MANDATORY_CLIENTS;
+	
+	public void create () {
 
-
-	public GameServer() {
         this.roomList = new LinkedList<Integer>();
         for(int i=1; i <= GlobalSettings.MAZE_AREAS; i++) roomList.add(i);
 
 		clientCount = 0;
 		clientIds = new HashMap<InetSocketAddress, Integer>();
-		positions = new HashMap<Integer,NetworkPosition>();
 		teamAssignments = new HashMap<Integer, Integer>();
-		lastAccess = new HashMap<Integer,Long>();		
+		lastAccess = new HashMap<Integer,Long>();
 		cm = new HashMap<Integer,CharacterClass>();
-		bs = new ServerBattleSystem(this);
 		setupMap(5,5);
+		
+		ECS = new ServerEntityComponentSystem(map);
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
-		executor.scheduleAtFixedRate(updateGameState, 0, 1000000L/updateRate, TimeUnit.MICROSECONDS);
+		//executor.scheduleAtFixedRate(updateGameState, 0, 1000000L/updateRate, TimeUnit.MICROSECONDS);
 
 		try {
 			server = new Server();
@@ -116,10 +111,8 @@ public class GameServer {
 		        		NewHeroRequest request = (NewHeroRequest) object;
 		        		System.out.println("New Hero (ID " + request.playerId + "): " + request.clientClass);
 		        		connection.sendTCP(map);
-		        		
+		        		ECS.addNewCharacter(request.playerId, teamAssignments.get(request.playerId), request.clientClass);
 		        		cm.put(request.playerId, request.clientClass);
-                        serverCharacterSystem.addCharacter(request.playerId, new
-								ServerCharacterEntity(request.playerId));
 		        		NewHeroResponse response = new NewHeroResponse(request.playerId, teamAssignments.get(request.playerId), request.clientClass);
 		        		server.sendToAllUDP(response);
 		        		//updateLastAccess(request.playerId);
@@ -129,20 +122,9 @@ public class GameServer {
 					   // System.out.println("PositionUpdate eingegangen");
 					
 					   PositionUpdate request = (PositionUpdate)object;
-					   positions.put(request.playerId, request.position);
-					   //serverCharacterSystem.updatePosition(request.playerId, request.position);
-					   //playerMan.updatePosition(request.playerId, request.position);
-
+					   ECS.updatePosition(request.playerId, request.position);
 					   updateLastAccess(request.playerId);
 		        	}
-			           
-				    if (object instanceof GameStateRequest) {
-					   // System.out.println("GameStateRequest eingegangen");
-
-					   GameStateResponse response = new GameStateResponse();
-					   response.positions = positions;
-					   connection.sendUDP(response);
-				    }
 
 				    if (object instanceof FullGameStateRequest) {
 					   System.out.println("FullGameStateRequest eingegangen");
@@ -213,8 +195,8 @@ public class GameServer {
 					//connection.id is (at the moment) identical to the ID in ClientIds
 					int id = connection.getID();
 					//only happens if it wasn't deleted with "deleteOldClients" beforehand
-					if (positions.containsKey(id)) {
-						positions.remove(id);
+					if (ECS.getCharacter(id) != null) {
+						ECS.deleteCharacter(id);
 						lastAccess.remove(id);
 						teamAssignments.remove(id);
 						cm.remove(id);
@@ -236,23 +218,49 @@ public class GameServer {
 			e.printStackTrace();
 		}
 	}
+
+	public void resize (int width, int height) {
+		
+	}
+
+	public void render () {
+		long currentTime = System.nanoTime();
+		delta = lastUpdate - currentTime;
+		lastUpdate = currentTime;
+		updateGameState();
+	}
+
+	public void pause () {
+		
+	}
+
+	public void resume () {
+		
+	}
+
+	public void dispose () {
+		
+	}
 	
 	// saves current timestamp for a players last activity
 	public static void updateLastAccess(int clientId) {
 		lastAccess.put(clientId, System.nanoTime());
 	}
 	
+	public static void sendGameState() {
+		GameStateResponse response = new GameStateResponse();
+		response.positions = ECS.getGameState();
+		server.sendToAllUDP(response);
+	}
+	
 	// sends current positions of all characters to all clients, is executed a defined amount of times per second
-	static Runnable updateGameState = new Runnable() {
-		public void run() {
-			if(clientIds.size() > 0) {
-				// System.out.println(new java.util.Date() + " - "+ ++i +" - GameState an Clients geschickt ");
-				GameStateResponse response = new GameStateResponse();
-				response.positions = positions;
-				server.sendToAllUDP(response);
-			}
-		}	
-	};
+	public static void updateGameState() {
+		ECS.update(delta);
+		if(clientIds.size() > 0) {
+			// System.out.println(new java.util.Date() + " - "+ ++i +" - GameState an Clients geschickt ");
+			sendGameState();				
+		}
+	}
 	
 	// deletes all characters that haven't been active in the last x seconds
 	static Runnable deleteOldClients = new Runnable() {
@@ -263,8 +271,8 @@ public class GameServer {
 	        	if( (System.nanoTime() - ltime.getValue())/1e6 > timeoutMs ) {
 	        		int id = ltime.getKey();
 					//only happens if it wasn't deleted with "disconnected" beforehand
-					if (positions.containsKey(id)) {
-						positions.remove(id);
+					if (ECS.getCharacter(id) != null) {
+						ECS.deleteCharacter(id);
 						teamAssignments.remove(id);
 						toDelete.add(id);
 						cm.remove(id);
@@ -315,7 +323,7 @@ public class GameServer {
 		System.out.println(map.entries);
 		for(int i = height; i > 0; i--)
 			for(int j = width; j > 0; j--) {
-                // System.out.println(roomList);
+                System.out.println(roomList);
                 int r = MathUtils.random(1, roomList.size());
                 map.entries.put(new Vector2(i, j), roomList.get(r-1));
                 roomList.remove(r-1);

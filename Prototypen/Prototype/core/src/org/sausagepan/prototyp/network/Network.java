@@ -34,7 +34,6 @@ public class Network {
 		kryo.register(ShootResponse.class);
 		kryo.register(HPUpdateRequest.class);
 		kryo.register(HPUpdateResponse.class);
-		kryo.register(GameStateRequest.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(FullGameStateRequest.class);
 		kryo.register(FullGameStateResponse.class);
@@ -185,10 +184,6 @@ public class Network {
 			this.playerId = playerId;
 			this.HP = HP;
 		}		
-	}
-	
-	public static class GameStateRequest {
-		public GameStateRequest() { }
 	}
 	
 	public static class GameStateResponse {

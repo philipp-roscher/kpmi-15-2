@@ -2,12 +2,12 @@ package org.sausagepan.prototyp.managers;
 
 import org.sausagepan.prototyp.model.components.LightComponent;
 
-import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+
+import box2dLight.RayHandler;
 
 /**
  * Created by georg on 30.10.15.

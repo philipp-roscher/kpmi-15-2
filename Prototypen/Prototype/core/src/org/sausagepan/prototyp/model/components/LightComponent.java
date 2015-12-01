@@ -1,10 +1,10 @@
 package org.sausagepan.prototyp.model.components;
 
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Color;
+
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 
 /**
  * Created by georg on 28.10.15.

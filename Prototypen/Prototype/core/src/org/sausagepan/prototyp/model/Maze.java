@@ -57,6 +57,15 @@ public class Maze extends EntitySystem {
         // set up map renderer and scale
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
     }
+    public Maze(Network.MapInformation mapInformation, World world) {
+        this.mapInformation = mapInformation;
+        this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
+        this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
+        this.doorLockerRectangles = new Array<Rectangle>();
+        this.secretWalls = new Array<Body>();
+        setUpTiledMap(world);
+        this.world = world;
+    }
     /* ............................................................................... METHODS .. */
     public void render(OrthographicCamera camera) {
         tiledMapRenderer.setView(camera);

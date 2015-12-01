@@ -1,10 +1,8 @@
 package org.sausagepan.prototyp.model.components;
 
-import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 /**

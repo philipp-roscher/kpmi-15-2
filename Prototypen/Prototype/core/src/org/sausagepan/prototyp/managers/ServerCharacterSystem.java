@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.network.Network.NetworkPosition;
 
