@@ -280,24 +280,6 @@ public class GameServer implements ApplicationListener {
 	    }
 	};
 	
-	// inflicts damage to a certain character
-	// TODO: update to new system
-	/*
-	 * @Deprecated
-	public void inflictDamage(int playerId, int damage) {
-		ServerPlayer player = playerMan.players.get(playerId);
-		player.getStatus_().doPhysicalHarm(damage);
-		
-		if (player.getStatus_().getHP() == 0) {
-			// TODO
-			// Player dies
-		}
-		
-		System.out.println(damage + " Schaden an Spieler Nr. "+playerId+", hat jetzt noch "+ player.getStatus_().getHP() +" HP.");
-		
-		server.sendToAllTCP(new HPUpdate(playerId, player.getStatus_().getHP()));
-	}*/
-	
 	// generates random map with given width and height
 	public void setupMap(int width, int height) {
 		map = new MapInformation();

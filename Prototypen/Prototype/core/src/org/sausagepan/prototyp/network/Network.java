@@ -6,8 +6,6 @@ import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.enums.Weapontype;
-import org.sausagepan.prototyp.model.Status;
-import org.sausagepan.prototyp.model.Weapon;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -50,8 +48,6 @@ public class Network {
         kryo.register(NetworkPosition.class);
         kryo.register(NetworkTransmissionComponent.class);
         kryo.register(Direction.class);
-        kryo.register(Status.class);
-        kryo.register(Weapon.class);
         kryo.register(Damagetype.class);
         kryo.register(Weapontype.class);
 		kryo.register(Rectangle.class);
