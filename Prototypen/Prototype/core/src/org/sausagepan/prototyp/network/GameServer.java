@@ -1,8 +1,6 @@
 package org.sausagepan.prototyp.network;
 
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,8 +54,6 @@ public class GameServer implements ApplicationListener {
 	private static long lastUpdate;
 	private static long delta;
 	
-	// contains client ids
-	public static HashMap<InetSocketAddress,Integer> clientIds;
 	// saves the last time each client was active, used for kicking inactive clients
 	public static HashMap<Integer,Long> lastAccess;
 	// container for deleted clients
@@ -70,11 +66,6 @@ public class GameServer implements ApplicationListener {
 	public static HashMap<Integer,Integer> teamAssignments;
 	// manages the characters
     private List<Integer> roomList;
-	
-	public static void main (String[] args) {
-		// starts new server
-		GameServer gs = new GameServer();
-	}
 
 	//to count active Clients in Session
 	public static int clientCount;
@@ -82,12 +73,10 @@ public class GameServer implements ApplicationListener {
 	private int maxClients = GlobalSettings.MANDATORY_CLIENTS;
 	
 	public void create () {
-
         this.roomList = new LinkedList<Integer>();
         for(int i=1; i <= GlobalSettings.MAZE_AREAS; i++) roomList.add(i);
 
 		clientCount = 0;
-		clientIds = new HashMap<InetSocketAddress, Integer>();
 		teamAssignments = new HashMap<Integer, Integer>();
 		lastAccess = new HashMap<Integer,Long>();
 		cm = new HashMap<Integer,CharacterClass>();
@@ -162,7 +151,6 @@ public class GameServer implements ApplicationListener {
 		        }
 		        
 		        public void connected( Connection connection ) {
-		        	clientIds.put(connection.getRemoteAddressTCP(), maxId);
 		        	System.out.println("Connection incoming from " + connection.getRemoteAddressTCP());
 		        	System.out.println("Assigned ID "+ maxId + " to Client.");
 		        	IDAssignment idAssignment = new IDAssignment();
@@ -188,10 +176,6 @@ public class GameServer implements ApplicationListener {
 		        }
 		        
 				public void disconnected (Connection connection) {
-					//kann die getrennte IP nicht ausgeben, weil sie ja schon getrennt ist
-					//InetSocketAddress ip = connection.getRemoteAddressTCP();
-					//if(ip == null) ip = connection.getRemoteAddressUDP();
-
 					//connection.id is (at the moment) identical to the ID in ClientIds
 					int id = connection.getID();
 					//only happens if it wasn't deleted with "deleteOldClients" beforehand
@@ -239,7 +223,7 @@ public class GameServer implements ApplicationListener {
 	}
 
 	public void dispose () {
-		
+		stop();
 	}
 	
 	// saves current timestamp for a players last activity
@@ -256,7 +240,7 @@ public class GameServer implements ApplicationListener {
 	// sends current positions of all characters to all clients, is executed a defined amount of times per second
 	public static void updateGameState() {
 		ECS.update(delta);
-		if(clientIds.size() > 0) {
+		if(clientCount > 0) {
 			// System.out.println(new java.util.Date() + " - "+ ++i +" - GameState an Clients geschickt ");
 			sendGameState();				
 		}
@@ -341,8 +325,7 @@ public class GameServer implements ApplicationListener {
 		int Team1 = 0;
 		int Team2 = 0;
 
-		Collection<Integer> ClientCol = clientIds.values();
-		for (int i=1; i<=ClientCol.size(); i++) {
+		for (int i=1; i<=clientCount; i++) {
 			//System.out.println("Checking TeamId with ClientId: "+ i + " Result: "+ teamAssignments.get(i));
 			//read TeamIds and count them
 			if (teamAssignments.get(i) != null) {
