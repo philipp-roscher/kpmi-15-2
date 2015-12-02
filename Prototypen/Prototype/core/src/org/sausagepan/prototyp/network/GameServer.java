@@ -44,9 +44,7 @@ import com.esotericsoftware.kryonet.Server;
 
 public class GameServer implements ApplicationListener {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
-	public static final int timeoutMs = 5000;
-	// Anzahl der GameStateUpdates pro Sekunde
-	public static final int updateRate = 32;
+	public static final int timeoutMs = GlobalSettings.TIMEOUT_MS;
 	
 	public static Server server;
 	public static int maxId = 1;
@@ -86,7 +84,6 @@ public class GameServer implements ApplicationListener {
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
-		//executor.scheduleAtFixedRate(updateGameState, 0, 1000000L/updateRate, TimeUnit.MICROSECONDS);
 
 		try {
 			server = new Server();
