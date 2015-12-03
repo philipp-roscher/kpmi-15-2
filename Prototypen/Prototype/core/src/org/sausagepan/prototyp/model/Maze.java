@@ -30,6 +30,9 @@ public class Maze extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     //Tiled Map for map creation and collision detection
     private Network.MapInformation mapInformation;
+    private int width;
+    private int height;
+    private MazeGenerator generator;
     private TiledMap tiledMap;         // contains the layers of the tiled map
     private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
     private Array<Vector2> lightPositions;
@@ -48,10 +51,13 @@ public class Maze extends EntitySystem {
 
     public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager) {
         this.mapInformation = mapInformation;
+        this.width = mapInformation.width;
+        this.height = mapInformation.height;
         this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
         this.doorLockerRectangles = new Array<Rectangle>();
         this.secretWalls = new Array<Body>();
+        generator = new MazeGenerator(width, height);
         setUpTiledMap(world);
         this.world = world;
         // set up map renderer and scale
@@ -67,9 +73,6 @@ public class Maze extends EntitySystem {
      * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithPlayers} for the game
      */
     public void setUpTiledMap(World world) {
-
-        MazeGenerator generator = new MazeGenerator();
-        generator.setParam(mapInformation.width, mapInformation.height);
         tiledMap = generator.createNewMapFromGrid(mapInformation.entries);
         lightPositions = generator.getLightPositions();
         monsterPositions = generator.getMonsterPositions();
@@ -182,5 +185,9 @@ public class Maze extends EntitySystem {
 
     public MapObjects getColliders() {
         return tiledMap.getLayers().get("colliderWalls").getObjects();
+    }
+    
+    public float[][] getStartPositions() {
+    	return generator.getStartPositions();
     }
 }

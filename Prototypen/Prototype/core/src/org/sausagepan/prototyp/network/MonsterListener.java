@@ -13,7 +13,7 @@ public class MonsterListener implements ContactListener {
     @Override
     public void endContact(Contact contact) {
         //stop following and go back to walking in circles
-        System.out.println("Monster lost sight of Client.");
+//        System.out.println("Monster lost sight of Client.");
     }
 
     @Override
@@ -22,13 +22,13 @@ public class MonsterListener implements ContactListener {
         Fixture A = contact.getFixtureA();
         Fixture B = contact.getFixtureB();
 
-        System.out.println(B.getBody().getUserData());
+//        System.out.println(B.getBody().getUserData());
 
-        System.out.println(A.getBody().getUserData());
+//        System.out.println(A.getBody().getUserData());
         
 
         //start following client
-        System.out.println("Monster detected Client!");
+//        System.out.println("Monster detected Client!");
     }
 
     @Override

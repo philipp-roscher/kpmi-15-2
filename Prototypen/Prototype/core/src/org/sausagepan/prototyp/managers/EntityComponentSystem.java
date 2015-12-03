@@ -64,7 +64,7 @@ public class EntityComponentSystem {
     private CharacterClass characterClass;
     private int TeamId;
 
-    private float [] [] startPos;
+    private float[][] startPositions;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
@@ -78,6 +78,7 @@ public class EntityComponentSystem {
         this.viewport = viewport;
         this.rayHandler = rayHandler;
         this.maze = maze;
+        this.startPositions = maze.getStartPositions();
         this.shpRend = new ShapeRenderer();
         this.characterClass = characterClass;
         this.TeamId = TeamId;
@@ -248,14 +249,13 @@ public class EntityComponentSystem {
 
         //Set Spawn locations: Game master
         if (TeamId == 0) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), characterClass));
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), characterClass));
         }
         if (TeamId == 1) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), characterClass));
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), characterClass));
         }
-
         if (TeamId == 2) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), characterClass));
+            localCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), characterClass));
         }
 
         // opens passages for game master
@@ -282,15 +282,14 @@ public class EntityComponentSystem {
         newCharacter.add(new TeamComponent(newCharacterTeamId));
 
         //Set Spawn locations: Game master
-        if (newCharacterId == 0) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
+        if (newCharacterTeamId == 0) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), clientClass));
         }
-        if (newCharacterId == 1) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), clientClass));
+        if (newCharacterTeamId == 1) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), clientClass));
         }
-
-        if (newCharacterId == 2) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), clientClass));
+        if (newCharacterTeamId == 2) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass));
         }
         
         characters.put(newCharacterId, newCharacter);

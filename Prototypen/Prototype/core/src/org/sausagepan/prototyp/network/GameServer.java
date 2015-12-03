@@ -98,7 +98,7 @@ public class GameServer {
 		lastAccess = new HashMap<Integer,Long>();		
 		cm = new HashMap<Integer,CharacterClass>();
 		bs = new ServerBattleSystem(this);
-		setupMap(5,5);
+		setupMap(GlobalSettings.MAZE_WIDTH, GlobalSettings.MAZE_HEIGHT);
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
@@ -318,12 +318,19 @@ public class GameServer {
 		map.width = width;
 		map.entries = new HashMap<Vector2, Integer>();
 		System.out.println(map.entries);
-		for(int i = height; i > 0; i--)
-			for(int j = width; j > 0; j--) {
-                System.out.println(roomList);
-                int r = MathUtils.random(1, roomList.size());
-                map.entries.put(new Vector2(i, j), roomList.get(r-1));
-                roomList.remove(r-1);
+		for(int i = width; i > 0; i--)
+			for(int j = height; j > 0; j--) {
+				if (i == (int) Math.ceil(width / 2f) && j == (int) Math.ceil(height / 2f)) {
+					// Mark treasure room with -1
+	                map.entries.put(new Vector2(i, j), -1);
+				} else {
+	                int r = MathUtils.random(1, roomList.size());
+	                map.entries.put(new Vector2(i, j), roomList.get(r-1));
+	                roomList.remove(r-1);
+	                if(roomList.isEmpty())
+	                    for(int t=1; t <= GlobalSettings.MAZE_AREAS; t++)
+	                    	roomList.add(t);
+				}
             }
 	}
 	
