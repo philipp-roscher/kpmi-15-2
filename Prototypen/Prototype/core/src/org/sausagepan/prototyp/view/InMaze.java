@@ -131,7 +131,7 @@ public class InMaze implements Screen {
         if(GlobalSettings.DEBUGGING_ACTIVE) debugRenderer.render(world, camera.combined);
 
         // Light
-        rayHandler.setCombinedMatrix(camera.combined);
+        rayHandler.setCombinedMatrix(camera);
         rayHandler.updateAndRender();
 
         // Stuff which should not be effected by RayHandler must be drawn after rayHandler.upd...

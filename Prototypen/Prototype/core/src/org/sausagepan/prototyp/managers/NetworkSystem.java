@@ -202,10 +202,7 @@ public class NetworkSystem extends ObservingEntitySystem{
                 if(result.playerId != posUpdate.playerId) {
                     CharacterEntity character = ECS.getCharacter(result.playerId);
                     if(character != null) {
-                        if(result.stop == false)
-                			character.getComponent(InputComponent.class).weaponDrawn = true;
-                        else
-                			character.getComponent(InputComponent.class).weaponDrawn = false;
+                    	character.getComponent(InputComponent.class).weaponDrawn = !result.stop;
                     }
                 }
             }
