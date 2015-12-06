@@ -18,7 +18,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class MovementSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
-    private float elapsedTime=0;
+    private float elapsedTime;
     private World world;
     /* ........................................................................... CONSTRUCTOR .. */
 
@@ -26,7 +26,10 @@ public class MovementSystem extends EntitySystem implements EntityListener {
     private ComponentMapper<DynamicBodyComponent> pm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
 
-    public MovementSystem(World world) {this.world = world;}
+    public MovementSystem(World world) {
+    	this.world = world;
+    	this.elapsedTime = 0;
+    }
 
     /* ............................................................................... METHODS .. */
     public void addedToEngine(ObservableEngine engine) {

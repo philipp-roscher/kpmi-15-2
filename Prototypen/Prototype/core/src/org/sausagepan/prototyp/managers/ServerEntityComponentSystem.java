@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.ServerSettings;
+import org.sausagepan.prototyp.model.components.CharacterClassComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
@@ -13,16 +15,23 @@ import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.network.GameServer;
+import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
+import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
+import com.esotericsoftware.kryonet.Server;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -38,11 +47,17 @@ public class ServerEntityComponentSystem {
     private MediaManager mediaManager;
     private Maze maze;
     private HashMap<Integer,ServerCharacterEntity> characters;
-
+    private HashMap<Integer,MonsterEntity> monsters;
+    private HashMap<Integer,Entity> items;
+    private GameServer gameServer;
+    private Server server;
+    private float tickrate = ServerSettings.TICKRATE;
+    
     private EntityFactory entityFactory;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public ServerEntityComponentSystem(MapInformation mapInformation) {
+    public ServerEntityComponentSystem(MapInformation mapInformation, Server server, GameServer gameServer) {
+    	Box2D.init();
         this.mediaManager = new MediaManager();
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
@@ -50,10 +65,13 @@ public class ServerEntityComponentSystem {
 
         this.engine = new ObservableEngine(); // Create Engine
         this.characters = new HashMap<Integer,ServerCharacterEntity>();
+        this.monsters = new HashMap<Integer,MonsterEntity>();
+        this.items = new HashMap<Integer,Entity>();
 
         this.entityFactory = new EntityFactory(mediaManager, world);
-        
-        setUpEntities();
+        this.server = server;
+        this.gameServer = gameServer;
+
         setUpMonsters();
         setUpItems();
 
@@ -99,6 +117,9 @@ public class ServerEntityComponentSystem {
         itemSystem.addedToEngine(engine);
         engine.subscribe(itemSystem);
 
+        // Network System
+        ServerNetworkSystem networkSystem = new ServerNetworkSystem(this, server, gameServer);
+        
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
         this.engine.addSystem(weaponSystem);
@@ -107,30 +128,34 @@ public class ServerEntityComponentSystem {
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(itemSystem);
-    }
-
-    private void setUpEntities() {
-        // TODO
+        this.engine.addSystem(networkSystem);
     }
 
     private void setUpMonsters() {
+    	int i = 1;
         // Get Objects from Maps Monster Layer and add monster entities there
         for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
             // Using factory method for creating monsters
-            this.engine.addEntity(entityFactory.createMonster(mapObject));
+        	MonsterEntity monster = entityFactory.createMonster(mapObject);
+        	monsters.put(i++, monster);
+            this.engine.addEntity(monster);
         }
         // TODO
     }
 
     private void setUpItems() {
+    	int i = 1;
         // Get Objects from Maps Monster Layer and add monster entities there
         for(MapItem mi : maze.getMapItems()) {
-            this.engine.addEntity(entityFactory.createItem(mi));
+        	Entity item = entityFactory.createItem(mi);
+        	items.put(i++, entityFactory.createItem(mi));
+            this.engine.addEntity(item);
         }
     }
 
     public void update(float delta) {
         engine.update(delta);
+        world.step(1 / tickrate, 6, 2);    // time step at which world is updated
     }
 
 	public ServerCharacterEntity addNewCharacter(NewHeroResponse request) {
@@ -151,7 +176,8 @@ public class ServerEntityComponentSystem {
         // Add Components
         newCharacter.add(new IdComponent(newCharacterId));
         newCharacter.add(new TeamComponent(newCharacterTeamId));
-
+        newCharacter.add(new CharacterClassComponent(clientClass));
+        
         //Set Spawn locations: Game master
         if (newCharacterTeamId == 0) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
@@ -192,28 +218,40 @@ public class ServerEntityComponentSystem {
 		return characters.get(playerId);
 	}
 	
-	public void setupNetworkSystem() {
-		engine.getSystem(NetworkSystem.class).setupSystem();
-	}
-	
     /* ..................................................................... GETTERS & SETTERS .. */    
     public ItemFactory getItemFactory() {
     	return itemFactory;
     }
 
-	public HashMap<Integer, NetworkPosition> getGameState() {
-		HashMap<Integer,NetworkPosition> result = new HashMap<Integer,NetworkPosition>();
-		for(HashMap.Entry<Integer,ServerCharacterEntity> character : characters.entrySet()) {
+	public GameStateResponse getGameState() {
+		HashMap<Integer,NetworkPosition> characters = new HashMap<Integer,NetworkPosition>();
+		for(HashMap.Entry<Integer,ServerCharacterEntity> character : this.characters.entrySet()) {
 			NetworkPosition np = new NetworkPosition();
 		    np.moving     = character.getValue().getComponent(InputComponent.class).moving;
 		    np.direction  = character.getValue().getComponent(InputComponent.class).direction;
 		    np.velocity   = character.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getLinearVelocity();
 		    np.position   = character.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getPosition();
-			result.put(
+			characters.put(
 					character.getKey(),
 					np
 				);
 		}
+		
+		HashMap<Integer,NetworkPosition> monsters = new HashMap<Integer,NetworkPosition>();
+		for(HashMap.Entry<Integer,MonsterEntity> monster : this.monsters.entrySet()) {
+			NetworkPosition np = new NetworkPosition();
+		    np.velocity   = monster.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getLinearVelocity();
+		    np.position   = monster.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getPosition();
+			monsters.put(
+					monster.getKey(),
+					np
+				);
+		}
+		
+		GameStateResponse result = new GameStateResponse();
+		result.characters = characters;
+		result.monsters = monsters;
+		
 		return result;
 	}
 
@@ -228,5 +266,21 @@ public class ServerEntityComponentSystem {
 	    if(position.direction != null)
 	    	character.getComponent(InputComponent.class).direction = position.direction;
 	}
-	
+
+	public FullGameStateResponse generateFullGameStateResponse() {
+		HashMap<Integer,CharacterClass> heroes = new HashMap<Integer,CharacterClass>();
+		HashMap<Integer,MapMonsterObject> monsters = new HashMap<Integer,MapMonsterObject>(); 
+		HashMap<Integer,Integer> teamAssignments = new HashMap<Integer,Integer>();
+		
+		for(HashMap.Entry<Integer,ServerCharacterEntity> c : characters.entrySet()) {
+			heroes.put(c.getKey(), c.getValue().getComponent(CharacterClassComponent.class).characterClass);
+			teamAssignments.put(c.getKey(), c.getValue().getComponent(TeamComponent.class).TeamId);
+		}
+		
+		for(HashMap.Entry<Integer,MonsterEntity> m : this.monsters.entrySet()) {
+			monsters.put(m.getKey(), m.getValue().createClientInformation());
+		}
+		
+		return new FullGameStateResponse(heroes, monsters, teamAssignments);
+	}	
 }

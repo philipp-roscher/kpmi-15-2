@@ -1,7 +1,7 @@
 package org.sausagepan.prototyp.network;
 
 import org.mockito.Mockito;
-import org.sausagepan.prototyp.model.GlobalSettings;
+import org.sausagepan.prototyp.model.ServerSettings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -27,7 +27,7 @@ public class ServerLauncher {
 		// Create new configuration
 		HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
 		// Set tickrate
-		config.renderInterval = 1f / GlobalSettings.TICKRATE;
+		config.renderInterval = 1f / ServerSettings.TICKRATE;
 		
 		// Create server
 		new HeadlessApplication(new GameServer(), config);

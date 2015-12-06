@@ -16,10 +16,12 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -48,6 +50,8 @@ public class EntityComponentSystem {
     private Maze maze;
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
+    private HashMap<Integer,MonsterEntity> monsters;
+    private HashMap<Integer,Entity> items;
 
     private EntityFactory entityFactory;
 
@@ -77,32 +81,33 @@ public class EntityComponentSystem {
 
         this.engine = new ObservableEngine(); // Create Engine
         this.characters = new HashMap<Integer,CharacterEntity>();
+        this.monsters = new HashMap<Integer,MonsterEntity>();
+        this.items = new HashMap<Integer,Entity>();
         this.localCharacterId = game.clientId;
 
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
         
-        setUpEntities();
         setUpLocalCharacterEntity();
         setUpMazeLights();
-        setUpMonsters();
-        setUpItems();
 
         // At least - not before adding entities
         setUpEntitySystems();
     }
 
     /* ............................................................................... METHODS .. */
-    private void setUpEntitySystems() {
-        // Movement System
-        MovementSystem movementSystem = new MovementSystem(world);
-        movementSystem.addedToEngine(engine);
-        engine.addEntityListener(Family.all(DynamicBodyComponent.class).get(), movementSystem);
+    private void setUpEntitySystems() { 
+        //TODO: port this
+    	// Movement System
+        //MovementSystem movementSystem = new MovementSystem(world);
+        //movementSystem.addedToEngine(engine);
+        //engine.addEntityListener(Family.all(DynamicBodyComponent.class).get(), movementSystem);
 
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
         spriteSystem.addedToEngine(engine);
         engine.addEntityListener(EntityFamilies.spriteFamily, spriteSystem);
 
+        //TODO: port updateArrows();
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
         weaponSystem.addedToEngine(engine);
@@ -118,6 +123,7 @@ public class EntityComponentSystem {
         characterSpriteSystem.addedToEngine(engine);
         engine.subscribe(characterSpriteSystem);
 
+        //TODO: port this
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
         positionSynchroSystem.addedToEngine(engine);
@@ -134,17 +140,20 @@ public class EntityComponentSystem {
         visualDebuggingSystem.addedToEngine(engine);
         engine.subscribe(visualDebuggingSystem);
 
+        //TODO: port this
         // Battle System
         BattleSystem battleSystem = new BattleSystem();
         battleSystem.addedToEngine(engine);
         engine.addEntityListener(EntityFamilies.attackerFamily, battleSystem);
         engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
 
+        //TODO: port this
         //Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze);
         inventorySystem.addedToEngine(engine);
         engine.subscribe(inventorySystem);
 
+        //TODO: port this
         // Bullet System
         BulletSystem bulletSystem = new BulletSystem(engine, maze);
         bulletSystem.addedToEngine(engine);
@@ -156,6 +165,7 @@ public class EntityComponentSystem {
         inGameUISystem.addedToEngine(engine);
         engine.subscribe(inGameUISystem);
 
+        //TODO: port this
         // Item System
         ItemSystem itemSystem = new ItemSystem();
         itemSystem.addedToEngine(engine);
@@ -167,7 +177,7 @@ public class EntityComponentSystem {
         engine.subscribe(lightSystem);
 
         // Adding them to the Engine
-        this.engine.addSystem(movementSystem);
+        //this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
         this.engine.addSystem(weaponSystem);
         this.engine.addSystem(characterSpriteSystem);
@@ -193,15 +203,14 @@ public class EntityComponentSystem {
         }
     }
 
-    private void setUpEntities() {
-        // TODO
-    }
-
-    private void setUpMonsters() {
+    public void setUpMonsters(HashMap<Integer,MapMonsterObject> mapMonsterObjects) {
         // Get Objects from Maps Monster Layer and add monster entities there
-        for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
+        for(HashMap.Entry<Integer,MapMonsterObject> mapObject : mapMonsterObjects.entrySet()) {
             // Using factory method for creating monsters
-            this.engine.addEntity(entityFactory.createMonster(mapObject));
+        	MonsterEntity monster = entityFactory.createMonster(mapObject.getValue());
+        	monsters.put(mapObject.getKey(), monster);
+            this.engine.addEntity(monster);
+            maze.addCharacterSpriteComponent(monster.getComponent(CharacterSpriteComponent.class));
         }
         // TODO
     }
@@ -317,6 +326,10 @@ public class EntityComponentSystem {
 
 	public CharacterEntity getCharacter(int playerId) {
 		return characters.get(playerId);
+	}
+
+	public MonsterEntity getMonster(Integer key) {
+		return monsters.get(key);
 	}
 	
 	public void setupNetworkSystem() {

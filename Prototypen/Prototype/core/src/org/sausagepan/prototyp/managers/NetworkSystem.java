@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
@@ -146,6 +147,8 @@ public class NetworkSystem extends ObservingEntitySystem{
                     int teamId = response.teamAssignments.get(heroId);
                     ECS.addNewCharacter(heroId, teamId, clientClass);
                 }
+                
+                ECS.setUpMonsters(response.monsters);
 
                 nm.get(localEntity).client.addListener(new Listener() {
                     public void received(Connection connection, Object object) {
@@ -179,7 +182,7 @@ public class NetworkSystem extends ObservingEntitySystem{
             if (object instanceof GameStateResponse) {
                 GameStateResponse result = (GameStateResponse) object;
 
-                for(Entry<Integer, NetworkPosition> e : result.positions.entrySet()) {
+                for(Entry<Integer, NetworkPosition> e : result.characters.entrySet()) {
                     if(e.getKey() != posUpdate.playerId) {
                         CharacterEntity character = ECS.getCharacter(e.getKey());
                         if(character != null) {
@@ -194,6 +197,21 @@ public class NetworkSystem extends ObservingEntitySystem{
                                         = e.getValue().direction;
                         }
                 	}
+                }
+
+                for(Entry<Integer, NetworkPosition> e : result.monsters.entrySet()) {
+                    MonsterEntity monster = ECS.getMonster(e.getKey());
+                    if(monster != null) {
+            			monster.getComponent(DynamicBodyComponent.class)
+                                .dynamicBody
+                                .setTransform(e.getValue().position, 0f);
+            			monster.getComponent(DynamicBodyComponent.class)
+                                .dynamicBody
+                                .setLinearVelocity(e.getValue().velocity);
+//            			if(e.getValue().direction != null)
+//            				character.getComponent(InputComponent.class).direction
+//                                    = e.getValue().direction;
+                    }
                 }
             }
 

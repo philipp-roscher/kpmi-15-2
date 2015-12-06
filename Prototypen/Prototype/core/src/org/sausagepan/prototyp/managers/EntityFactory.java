@@ -4,6 +4,7 @@ import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.GlobalSettings;
+import org.sausagepan.prototyp.model.components.CharacterClassComponent;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
@@ -96,12 +97,18 @@ public class EntityFactory {
                 break;
         }
 
+        // if health value was already set by the server, use that value instead
+        if(mapMonsterObject.health != -1)
+        	health = mapMonsterObject.health;
+        
         monster.add(new HealthComponent(health));
         monster.add(new CharacterSpriteComponent(tex, CharacterClass.MONSTER));
+        System.out.println("created new CharacterSpriteComponent (tex="+ tex.toString());
+        monster.add(new CharacterClassComponent(mapMonsterObject.characterClass));
 
         return  monster;
     }
-
+    
     /**
      * Creates a {@link Entity} for the game world
      * @return

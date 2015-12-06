@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.managers.ServerEntityComponentSystem;
-import org.sausagepan.prototyp.model.GlobalSettings;
+import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
@@ -44,43 +44,37 @@ import com.esotericsoftware.kryonet.Server;
 
 public class GameServer implements ApplicationListener {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
-	public static final int timeoutMs = GlobalSettings.TIMEOUT_MS;
+	private static final int timeoutMs = ServerSettings.TIMEOUT_MS;
 	
-	public static Server server;
-	public static int maxId = 1;
-	public static ServerEntityComponentSystem ECS;
+	private static Server server;
+	private static ServerEntityComponentSystem ECS;
 	private static long lastUpdate;
-	private static long delta;
+	private static float delta;
 	
 	// saves the last time each client was active, used for kicking inactive clients
-	public static HashMap<Integer,Long> lastAccess;
+	private static HashMap<Integer,Long> lastAccess;
 	// container for deleted clients
-	public static ArrayList<Integer> toDelete = new ArrayList<Integer>();
-	// contains the classes of all characters
-	public static HashMap<Integer,CharacterClass> cm;
+	private static ArrayList<Integer> toDelete = new ArrayList<Integer>();
 	// contains the constellation of the individual tiles
-	public static MapInformation map;
+	private static MapInformation map;
 	//HashMap to save ClientIds,TeamIds
-	public static HashMap<Integer,Integer> teamAssignments;
+	private static HashMap<Integer,Integer> teamAssignments;
 	// manages the characters
     private List<Integer> roomList;
 
 	//to count active Clients in Session
-	public static int clientCount;
+    private static int clientCount;
 	//maximal Number of Clients per Session
-	private int maxClients = GlobalSettings.MANDATORY_CLIENTS;
+	private int maxClients = ServerSettings.MANDATORY_CLIENTS;
 	
 	public void create () {
         this.roomList = new LinkedList<Integer>();
-        for(int i=1; i <= GlobalSettings.MAZE_AREAS; i++) roomList.add(i);
+        for(int i=1; i <= ServerSettings.MAZE_AREAS; i++) roomList.add(i);
 
 		clientCount = 0;
 		teamAssignments = new HashMap<Integer, Integer>();
 		lastAccess = new HashMap<Integer,Long>();
-		cm = new HashMap<Integer,CharacterClass>();
 		setupMap(5,5);
-		
-		ECS = new ServerEntityComponentSystem(map);
 
 		ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
@@ -92,69 +86,13 @@ public class GameServer implements ApplicationListener {
 			server.bind(Network.TCPPort, Network.UDPPort);
 			
 		    server.addListener(new Listener() {
-		        public void received (Connection connection, Object object) {		        				        	
-		        	if (object instanceof NewHeroRequest) {
-		        		NewHeroRequest request = (NewHeroRequest) object;
-		        		System.out.println("New Hero (ID " + request.playerId + "): " + request.clientClass);
-		        		connection.sendTCP(map);
-		        		ECS.addNewCharacter(request.playerId, teamAssignments.get(request.playerId), request.clientClass);
-		        		cm.put(request.playerId, request.clientClass);
-		        		NewHeroResponse response = new NewHeroResponse(request.playerId, teamAssignments.get(request.playerId), request.clientClass);
-		        		server.sendToAllUDP(response);
-		        		//updateLastAccess(request.playerId);
-		        	}
-		        	
-		        	if (object instanceof PositionUpdate) {
-					   // System.out.println("PositionUpdate eingegangen");
-					
-					   PositionUpdate request = (PositionUpdate)object;
-					   ECS.updatePosition(request.playerId, request.position);
-					   updateLastAccess(request.playerId);
-		        	}
-
-				    if (object instanceof FullGameStateRequest) {
-					   System.out.println("FullGameStateRequest eingegangen");
-					   FullGameStateResponse response = new FullGameStateResponse(cm, teamAssignments);
-		        	   connection.sendTCP(response);
-			       }
-		           
-
-		           if (object instanceof AttackRequest) {
-					   AttackRequest request = (AttackRequest)object;
-					   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
-		           }
-		           
-		           if (object instanceof ShootRequest) {
-		        	   ShootRequest request = (ShootRequest) object;
-		        	   server.sendToAllUDP(new ShootResponse(request.playerId, request.position, request.direction));
-		           }
-		           
-		           if (object instanceof HPUpdateRequest) {
-		        	   HPUpdateRequest request = (HPUpdateRequest) object;
-		        	   server.sendToAllTCP(new HPUpdateResponse(request.playerId, request.HP));
-		           }
-
-		           if (object instanceof TakeKeyRequest) {
-		        	   	System.out.println("TakeKeyResponse");
-		        	   	TakeKeyRequest request = (TakeKeyRequest) object;
-		        	   	server.sendToAllTCP(new TakeKeyResponse(request.id, request.keySection));
-		           }
-		           
-		           if (object instanceof LoseKeyRequest) {
-						System.out.println("LoseKeyResponse");
-						LoseKeyRequest request = (LoseKeyRequest) object;
-						server.sendToAllTCP(new LoseKeyResponse(request.id, request.keySection, request.x, request.y));
-		           }
-		        }
-		        
 		        public void connected( Connection connection ) {
 		        	System.out.println("Connection incoming from " + connection.getRemoteAddressTCP());
-		        	System.out.println("Assigned ID "+ maxId + " to Client.");
 		        	IDAssignment idAssignment = new IDAssignment();
-		        	idAssignment.id = maxId;
+		        	idAssignment.id = connection.getID();
+		        	System.out.println("Assigned ID "+ idAssignment.id + " to Client.");
 		        	connection.sendTCP(idAssignment);
-			        //updateLastAccess(maxId);
-		        	maxId++;
+		        	
 					//send maxClients to Client(s)
 					MaxClients MaxClients = new MaxClients();
 					MaxClients.count = maxClients;
@@ -180,7 +118,6 @@ public class GameServer implements ApplicationListener {
 						ECS.deleteCharacter(id);
 						lastAccess.remove(id);
 						teamAssignments.remove(id);
-						cm.remove(id);
 						server.sendToAllUDP(new DeleteHeroResponse(id));
 						System.out.println("Automatically deleted Player "+connection);
 
@@ -194,7 +131,9 @@ public class GameServer implements ApplicationListener {
 				}
 		     });
 		    
+			ECS = new ServerEntityComponentSystem(map, server, this);
 		    System.out.println("Server up and running");
+		    lastUpdate = System.nanoTime();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -206,7 +145,7 @@ public class GameServer implements ApplicationListener {
 
 	public void render () {
 		long currentTime = System.nanoTime();
-		delta = lastUpdate - currentTime;
+		delta = (currentTime - lastUpdate)/ 1e9f;
 		lastUpdate = currentTime;
 		updateGameState();
 	}
@@ -230,7 +169,7 @@ public class GameServer implements ApplicationListener {
 	
 	public static void sendGameState() {
 		GameStateResponse response = new GameStateResponse();
-		response.positions = ECS.getGameState();
+		response = ECS.getGameState();
 		server.sendToAllUDP(response);
 	}
 	
@@ -239,7 +178,7 @@ public class GameServer implements ApplicationListener {
 		ECS.update(delta);
 		if(clientCount > 0) {
 			// System.out.println(new java.util.Date() + " - "+ ++i +" - GameState an Clients geschickt ");
-			sendGameState();				
+			sendGameState();			
 		}
 	}
 	
@@ -256,7 +195,6 @@ public class GameServer implements ApplicationListener {
 						ECS.deleteCharacter(id);
 						teamAssignments.remove(id);
 						toDelete.add(id);
-						cm.remove(id);
 						server.sendToAllUDP(new DeleteHeroResponse(id));
 						System.out.println("Automatically deleted Player "+ltime.getKey());
 
@@ -334,7 +272,13 @@ public class GameServer implements ApplicationListener {
 
 		server.sendToTCP(ClientId, TeamAssignment);
 		System.out.println("Team Id "+TeamAssignment.id+" assigned to ClientId "+ClientId);
-
 	}
 	
+	public MapInformation getMap() {
+		return map;
+	}
+	
+	public HashMap<Integer,Integer> getTeamAssignments() {
+		return teamAssignments;
+	}
 }

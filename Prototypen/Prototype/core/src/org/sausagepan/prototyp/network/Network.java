@@ -7,6 +7,8 @@ import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.enums.Weapontype;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.entities.MapFactoryObject;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -47,6 +49,8 @@ public class Network {
 
         kryo.register(NetworkPosition.class);
         kryo.register(NetworkTransmissionComponent.class);
+        kryo.register(MapMonsterObject.class);
+        kryo.register(MapFactoryObject.class);
         kryo.register(Direction.class);
         kryo.register(Damagetype.class);
         kryo.register(Weapontype.class);
@@ -183,7 +187,8 @@ public class Network {
 	}
 	
 	public static class GameStateResponse {
-		public HashMap<Integer, NetworkPosition> positions;
+		public HashMap<Integer,NetworkPosition> characters;
+		public HashMap<Integer,NetworkPosition> monsters;
 		
 		public GameStateResponse() { }
 	}
@@ -194,11 +199,13 @@ public class Network {
 	
 	public static class FullGameStateResponse {
 		public HashMap<Integer,CharacterClass> heroes;
-		public HashMap<Integer, Integer> teamAssignments;
+		public HashMap<Integer,MapMonsterObject> monsters; 
+		public HashMap<Integer,Integer> teamAssignments;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer, Integer> teamAssignments) {
+		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer,MapMonsterObject> monsters, HashMap<Integer, Integer> teamAssignments) {
 			this.heroes = heroes;
+			this.monsters = monsters;
 			this.teamAssignments = teamAssignments;
 		}
 	}
