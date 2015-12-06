@@ -1,34 +1,14 @@
 package org.sausagepan.prototyp.managers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.HealthComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
-import org.sausagepan.prototyp.model.components.LightComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.CharacterEntity;
-import org.sausagepan.prototyp.model.entities.MonsterEntity;
-import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
-import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
-import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
-import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
@@ -37,10 +17,6 @@ import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -68,16 +44,6 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
     private GameServer gameServer;
 	private ServerEntityComponentSystem ECS;
 	
-    private ComponentMapper<DynamicBodyComponent> dm
-            = ComponentMapper.getFor(DynamicBodyComponent.class);
-    private ComponentMapper<NetworkTransmissionComponent> ntm
-            = ComponentMapper.getFor(NetworkTransmissionComponent.class);
-    private ComponentMapper<NetworkComponent> nm
-    		= ComponentMapper.getFor(NetworkComponent.class);
-    private ComponentMapper<InputComponent> im
-    		= ComponentMapper.getFor(InputComponent.class);
-    private ComponentMapper<WeaponComponent> wm
-    		= ComponentMapper.getFor(WeaponComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public ServerNetworkSystem(ServerEntityComponentSystem ECS, Server server, GameServer gameServer) {
     	this.ECS = ECS;
