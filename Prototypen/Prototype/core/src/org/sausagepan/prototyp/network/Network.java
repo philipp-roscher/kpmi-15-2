@@ -1,20 +1,20 @@
 package org.sausagepan.prototyp.network;
 
-import java.util.HashMap;
-
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.enums.Damagetype;
-import org.sausagepan.prototyp.enums.Direction;
-import org.sausagepan.prototyp.enums.Weapontype;
-import org.sausagepan.prototyp.model.Status;
-import org.sausagepan.prototyp.model.Weapon;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.enums.Damagetype;
+import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.enums.Weapontype;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.entities.MapFactoryObject;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+
+import java.util.HashMap;
 
 public class Network {
 	public static final int TCPPort = 49078;
@@ -24,7 +24,6 @@ public class Network {
 		Kryo kryo = endPoint.getKryo();
 		//kryo.setRegistrationRequired(false);
 		
-		kryo.register(KeepAliveRequest.class);
 		kryo.register(NewHeroRequest.class);
 		kryo.register(NewHeroResponse.class);
 		kryo.register(DeleteHeroResponse.class);
@@ -33,12 +32,11 @@ public class Network {
 		kryo.register(AttackResponse.class);
 		kryo.register(ShootRequest.class);
 		kryo.register(ShootResponse.class);
-		kryo.register(HPUpdateRequest.class);
 		kryo.register(HPUpdateResponse.class);
-		kryo.register(GameStateRequest.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(FullGameStateRequest.class);
 		kryo.register(FullGameStateResponse.class);
+        kryo.register(DeleteBulletResponse.class);
 		kryo.register(TakeKeyRequest.class);
 		kryo.register(TakeKeyResponse.class);
 		kryo.register(LoseKeyRequest.class);
@@ -51,9 +49,9 @@ public class Network {
 
         kryo.register(NetworkPosition.class);
         kryo.register(NetworkTransmissionComponent.class);
+        kryo.register(MapMonsterObject.class);
+        kryo.register(MapFactoryObject.class);
         kryo.register(Direction.class);
-        kryo.register(Status.class);
-        kryo.register(Weapon.class);
         kryo.register(Damagetype.class);
         kryo.register(Weapontype.class);
 		kryo.register(Rectangle.class);
@@ -61,30 +59,23 @@ public class Network {
 		kryo.register(Vector3.class);
         kryo.register(HashMap.class);
 		kryo.register(CharacterClass.class);
-//        kryo.register(KeySection.class);
 	}
 	
 
 	public static class NetworkPosition {
-		public Vector3 position;
-		public Direction direction;
-		public boolean isMoving;
+		public Vector2 position;
+	    public Vector2 velocity;
+		public Vector2 bodyDirection;
+	    public Direction direction;
+	    public boolean moving;
 		
 		public NetworkPosition() {}
-		public NetworkPosition(Vector3 position, Direction direction, boolean isMoving) {
-			super();
+		public NetworkPosition(Vector2 position, Vector2 velocity, Vector2 bodyDirection, Direction direction, boolean moving) {
 			this.position = position;
+			this.velocity = velocity;
+            this.bodyDirection = bodyDirection;
 			this.direction = direction;
-			this.isMoving = isMoving;
-		}
-	}
-
-	public static class KeepAliveRequest {
-		public int playerId;
-		
-		public KeepAliveRequest() { }
-		public KeepAliveRequest(int playerId) {
-			this.playerId = playerId;
+			this.moving = moving;
 		}
 	}
 	
@@ -122,7 +113,7 @@ public class Network {
 	
 	public static class PositionUpdate {
 		public int playerId;
-		public NetworkTransmissionComponent position;
+		public NetworkPosition position;
 		
 		public PositionUpdate() { }
 	}	
@@ -151,14 +142,10 @@ public class Network {
 	
 	public static class ShootRequest {
 		public int playerId;
-		public Vector2 position;
-		public Vector2 direction;
 
 		public ShootRequest() { }
-		public ShootRequest(int playerId, Vector2 position, Vector2 direction) {
+		public ShootRequest(int playerId) {
 			this.playerId = playerId;
-			this.position = position;
-			this.direction = direction;
 		}
 	}
 	
@@ -166,43 +153,33 @@ public class Network {
 		public int playerId;
 		public Vector2 position;
 		public Vector2 direction;
+        public int bulletId;
 
 		public ShootResponse() { }
-		public ShootResponse(int playerId, Vector2 position, Vector2 direction) {
+		public ShootResponse(int playerId, Vector2 position, Vector2 direction, int bulletId) {
 			this.playerId = playerId;
 			this.position = position;
 			this.direction = direction;
+            this.bulletId = bulletId;
 		}
-	}
-	
-	public static class HPUpdateRequest {
-		public int playerId;
-		public int HP;
-
-		public HPUpdateRequest() { }
-		public HPUpdateRequest(int playerId, int HP) {
-			this.playerId = playerId;
-			this.HP = HP;
-		}		
 	}
 	
 	public static class HPUpdateResponse {
 		public int playerId;
+        public boolean isHuman;
 		public int HP;
 
 		public HPUpdateResponse() { }
-		public HPUpdateResponse(int playerId, int HP) {
+		public HPUpdateResponse(int playerId, boolean isHuman, int HP) {
 			this.playerId = playerId;
+            this.isHuman = isHuman;
 			this.HP = HP;
 		}		
 	}
 	
-	public static class GameStateRequest {
-		public GameStateRequest() { }
-	}
-	
 	public static class GameStateResponse {
-		public HashMap<Integer, NetworkTransmissionComponent> positions;
+		public HashMap<Integer,NetworkPosition> characters;
+		public HashMap<Integer,NetworkPosition> monsters;
 		
 		public GameStateResponse() { }
 	}
@@ -213,14 +190,27 @@ public class Network {
 	
 	public static class FullGameStateResponse {
 		public HashMap<Integer,CharacterClass> heroes;
-		public HashMap<Integer, Integer> teamAssignments;
+		public HashMap<Integer,MapMonsterObject> monsters; 
+		public HashMap<Integer,Integer> teamAssignments;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer, Integer> teamAssignments) {
+		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer,MapMonsterObject> monsters, HashMap<Integer, Integer> teamAssignments) {
 			this.heroes = heroes;
+			this.monsters = monsters;
 			this.teamAssignments = teamAssignments;
 		}
 	}
+
+    public static class DeleteBulletResponse {
+        public int playerId;
+        public int bulletId;
+
+        public DeleteBulletResponse() { }
+        public DeleteBulletResponse(int playerId, int bulletId) {
+            this.playerId = playerId;
+            this.bulletId = bulletId;
+        }
+    }
 	
 	public static class TakeKeyRequest {
 		public int id;

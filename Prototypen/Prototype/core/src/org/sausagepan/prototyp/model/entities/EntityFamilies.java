@@ -1,15 +1,16 @@
 package org.sausagepan.prototyp.model.entities;
 
+import com.badlogic.ashley.core.Family;
+
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-
-import com.badlogic.ashley.core.Family;
 
 /**
  * Created by georg on 19.11.15.
@@ -32,13 +33,20 @@ public class EntityFamilies {
             HealthComponent.class,
             DynamicBodyComponent.class,
             WeaponComponent.class,
-            NetworkComponent.class,
             InjurableAreaComponent.class).get();
 
     public static Family victimFamily = Family.all(
             HealthComponent.class,
-            InjurableAreaComponent.class,
-            CharacterSpriteComponent.class).get();
+            InjurableAreaComponent.class).get();
+
+    public static Family positionSynchroFamily = Family.all(
+            DynamicBodyComponent.class).one(
+            LightComponent.class,
+            CharacterSpriteComponent.class,
+            WeaponComponent.class,
+            InputComponent.class,
+            InjurableAreaComponent.class
+    ).get();
 
     /* ........................................................................... CONSTRUCTOR .. */
     

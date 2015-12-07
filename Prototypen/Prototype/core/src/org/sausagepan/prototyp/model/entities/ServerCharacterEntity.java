@@ -1,15 +1,41 @@
 package org.sausagepan.prototyp.model.entities;
 
-/**
- * Server characters must not have an
- * {@link org.sausagepan.prototyp.model.components.InputComponent} as this would cause the
- * {@link org.sausagepan.prototyp.managers.InputSystem} to process them
- */
-public class ServerCharacterEntity extends CharacterEntity {
-	private int ID;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.MagicComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 
-    public ServerCharacterEntity(int ID) {
-        super();
-        this.ID = ID;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+
+/**
+ * Created by philipp on 30.11.15.
+ */
+public class ServerCharacterEntity extends Entity {
+    /* ............................................................................ ATTRIBUTES .. */
+    
+    /* ........................................................................... CONSTRUCTOR .. */
+    
+    /* ............................................................................... METHODS .. */
+    
+    /* ..................................................................... GETTERS & SETTERS .. */
+    /**
+     * Returns the entity {@link Family} of ServerCharacterEntities, telling you which
+     * {@link com.badlogic.ashley.core.Component}s a ServerCharacterEntity should contain.
+     * @return
+     */
+    public static Family getFamily() {
+        return Family.all(
+                DynamicBodyComponent.class,
+                WeaponComponent.class,
+                InputComponent.class,
+                HealthComponent.class,
+                MagicComponent.class,
+                InventoryComponent.class,
+                TeamComponent.class
+        ).get();
     }
 }

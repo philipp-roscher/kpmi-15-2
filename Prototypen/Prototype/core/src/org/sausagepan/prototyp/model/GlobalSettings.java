@@ -5,11 +5,7 @@ package org.sausagepan.prototyp.model;
  */
 public class GlobalSettings {
     public final static int PIXELS_PER_METER = 32;
-    public final static int MANDATORY_CLIENTS = 2;
     public final static int GAME_ZOOM_OUT = 1;
-    public static final boolean DEBUGGING_ACTIVE = true;
+    public final static boolean DEBUGGING_ACTIVE = true;
     public final static boolean PLAY_BG_MUSIC = false;
-    public final static int MAZE_AREAS = 24;
-    public final static int MAZE_WIDTH = 6;
-    public final static int MAZE_HEIGHT = 6;
 }

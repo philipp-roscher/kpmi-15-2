@@ -1,16 +1,20 @@
 package org.sausagepan.prototyp.managers;
 
-import java.util.HashMap;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -18,24 +22,14 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
-import org.sausagepan.prototyp.network.Network.ShootResponse;
-import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
+
+import java.util.HashMap;
 
 import box2dLight.RayHandler;
-
-import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -55,6 +49,8 @@ public class EntityComponentSystem {
     private Maze maze;
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
+    private HashMap<Integer,MonsterEntity> monsters;
+    private HashMap<Integer,Entity> items;
 
     private EntityFactory entityFactory;
 
@@ -85,15 +81,14 @@ public class EntityComponentSystem {
 
         this.engine = new ObservableEngine(); // Create Engine
         this.characters = new HashMap<Integer,CharacterEntity>();
+        this.monsters = new HashMap<Integer,MonsterEntity>();
+        this.items = new HashMap<Integer,Entity>();
         this.localCharacterId = game.clientId;
 
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
         
-        setUpEntities();
         setUpLocalCharacterEntity();
         setUpMazeLights();
-        setUpMonsters();
-        setUpItems();
 
         // At least - not before adding entities
         setUpEntitySystems();
@@ -101,11 +96,6 @@ public class EntityComponentSystem {
 
     /* ............................................................................... METHODS .. */
     private void setUpEntitySystems() {
-        // Movement System
-        MovementSystem movementSystem = new MovementSystem(world);
-        movementSystem.addedToEngine(engine);
-        engine.addEntityListener(Family.all(DynamicBodyComponent.class).get(), movementSystem);
-
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
         spriteSystem.addedToEngine(engine);
@@ -129,10 +119,10 @@ public class EntityComponentSystem {
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
         positionSynchroSystem.addedToEngine(engine);
-        engine.subscribe(positionSynchroSystem);
+        engine.addEntityListener(EntityFamilies.positionSynchroFamily, positionSynchroSystem);
 
         // Network System
-        NetworkSystem networkSystem = new NetworkSystem();
+        NetworkSystem networkSystem = new NetworkSystem(this);
         networkSystem.addedToEngine(engine);
         engine.subscribe(networkSystem);
 
@@ -142,12 +132,7 @@ public class EntityComponentSystem {
         visualDebuggingSystem.addedToEngine(engine);
         engine.subscribe(visualDebuggingSystem);
 
-        // Battle System
-        BattleSystem battleSystem = new BattleSystem();
-        battleSystem.addedToEngine(engine);
-        engine.addEntityListener(EntityFamilies.attackerFamily, battleSystem);
-        engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
-
+        //TODO: port this
         //Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze);
         inventorySystem.addedToEngine(engine);
@@ -164,8 +149,9 @@ public class EntityComponentSystem {
         inGameUISystem.addedToEngine(engine);
         engine.subscribe(inGameUISystem);
 
+        //TODO: port this
         // Item System
-        ItemSystem itemSystem = new ItemSystem(maze.getTiledMapRenderer());
+        ItemSystem itemSystem = new ItemSystem();
         itemSystem.addedToEngine(engine);
         engine.subscribe(itemSystem);
 
@@ -175,7 +161,7 @@ public class EntityComponentSystem {
         engine.subscribe(lightSystem);
 
         // Adding them to the Engine
-        this.engine.addSystem(movementSystem);
+        //this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
         this.engine.addSystem(weaponSystem);
         this.engine.addSystem(characterSpriteSystem);
@@ -183,7 +169,6 @@ public class EntityComponentSystem {
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(networkSystem);
         this.engine.addSystem(visualDebuggingSystem);
-        this.engine.addSystem(battleSystem);
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
@@ -201,15 +186,14 @@ public class EntityComponentSystem {
         }
     }
 
-    private void setUpEntities() {
-        // TODO
-    }
-
-    private void setUpMonsters() {
+    public void setUpMonsters(HashMap<Integer,MapMonsterObject> mapMonsterObjects) {
         // Get Objects from Maps Monster Layer and add monster entities there
-        for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
+        for(HashMap.Entry<Integer,MapMonsterObject> mapObject : mapMonsterObjects.entrySet()) {
             // Using factory method for creating monsters
-            this.engine.addEntity(entityFactory.createMonster(mapObject));
+        	MonsterEntity monster = entityFactory.createMonster(mapObject.getValue());
+        	monsters.put(mapObject.getKey(), monster);
+            this.engine.addEntity(monster);
+            maze.addCharacterSpriteComponent(monster.getComponent(CharacterSpriteComponent.class));
         }
         // TODO
     }
@@ -294,6 +278,8 @@ public class EntityComponentSystem {
         
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);
+        maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
+        maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
         return newCharacter;
 	}
 
@@ -309,81 +295,35 @@ public class EntityComponentSystem {
         return characterEntity;
     }
 
-    /* TODO move stuff that doesn't belong here to the respective systems, like
-       {@link NetworkSystem} */
-	public void updatePosition(int id, NetworkTransmissionComponent position) {
-		if(characters.get(id) != null) {
-			this.characters.get(id)
-                    .getComponent(DynamicBodyComponent.class)
-                    .dynamicBody
-                    .setTransform(position.position, 0f);
-			this.characters.get(id).getComponent(DynamicBodyComponent.class)
-                    .dynamicBody.setLinearVelocity(position.linearVelocity);
-			if(position.direction != null)
-				this.characters.get(id).getComponent(InputComponent.class).direction
-                        = position.direction;
-		}
-	}
-
 	public void deleteCharacter(int id) {
 		if(characters.get(id) != null) {
 //			System.out.println("Character wird gelöscht: " +id);
+			maze.removeCharacterSpriteComponent(characters.get(id).getComponent(CharacterSpriteComponent.class));
+            maze.removeWeaponComponent(characters.get(id).getComponent(WeaponComponent.class));
 			engine.removeEntity(this.characters.get(id));
 			this.characters.remove(id);
 		}
 	}
-	
-	public void attack(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character greift an: " + id);
-			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = true;
-//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
-		}
-	}
-
-	public void stopAttacking(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character bricht Angriff ab: "+id);
-			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = false;
-//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
-		}
-	}
-	
-	public void shoot(ShootResponse sr) {
-		if(characters.get(sr.playerId) != null) {
-//			System.out.println("Character schießt: "+sr.playerId);
-			((Bow)this.characters.get(sr.playerId).getComponent(WeaponComponent.class).weapon).shoot(sr.position, sr.direction);
-		}
-	}
-
-	public void updateHP(HPUpdateResponse result) {
-		if(characters.get(result.playerId) != null)
-			this.characters.get(result.playerId).getComponent(HealthComponent.class).HP = result.HP;		
-	}
 
 	public CharacterEntity getCharacter(int playerId) {
-		if(characters.get(playerId) != null)
-			return characters.get(playerId);
-		
-		return null;
+		return characters.get(playerId);
 	}
 
-	public void loseKey(LoseKeyResponse result) {
-		if(characters.get(result.id) != null) {
-			characters.get(result.id).getComponent(InventoryComponent.class).dropAllItems();
-		}
+	public MonsterEntity getMonster(Integer key) {
+		return monsters.get(key);
 	}
-
-	public void takeKey(TakeKeyResponse result) {
-        if (characters.get(result.id) != null) {
-			characters.get(result.id).getComponent(InventoryComponent.class)
-                    .pickUpItem(itemFactory.createKeyFragment(result.keySection), 1);
-		}
+	
+	public void setupNetworkSystem() {
+		engine.getSystem(NetworkSystem.class).setupSystem();
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;
+    }
+    
+    public ItemFactory getItemFactory() {
+    	return itemFactory;
     }
 
     public InputProcessor getInputProcessor() {

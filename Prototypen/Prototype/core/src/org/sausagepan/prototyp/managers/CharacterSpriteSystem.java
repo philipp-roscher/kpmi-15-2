@@ -1,12 +1,16 @@
 package org.sausagepan.prototyp.managers;
 
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
 
 /**
  * Turns and refreshes characters sprite.
@@ -21,6 +25,11 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
             = ComponentMapper.getFor(CharacterSpriteComponent.class);
     private ComponentMapper<DynamicBodyComponent> dm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
+    private ComponentMapper<WeaponComponent> wm
+            = ComponentMapper.getFor(WeaponComponent.class);
+    private ComponentMapper<InputComponent> im
+            = ComponentMapper.getFor(InputComponent.class);
+
     /* ........................................................................... CONSTRUCTOR .. */
     public CharacterSpriteSystem() {}
     /* ............................................................................... METHODS .. */
@@ -35,6 +44,8 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
         for (Entity entity : entities) {
             CharacterSpriteComponent sprite = cm.get(entity);
             DynamicBodyComponent body = dm.get(entity);
+            WeaponComponent weapon = wm.get(entity);
+            InputComponent input = im.get(entity);
 
             if(body.dynamicBody.getLinearVelocity().len() > 0.1)
             if(Math.abs(body.dynamicBody.getLinearVelocity().x)
@@ -60,6 +71,36 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
             else
                 sprite.sprite.setRegion(sprite.recentAnim.getKeyFrame(elapsedTime, true));
 
+            if(weapon != null && input != null) {
+                int rotation;
+                switch (input.direction) {
+                    case SOUTH:
+                        rotation = 90;
+                        break;
+                    case EAST:
+                        rotation = 180;
+                        break;
+                    case WEST:
+                        rotation = 0;
+                        break;
+                    default:
+                        rotation = -90;
+                        break;
+                }
+                weapon.weapon.sprite.setRotation(rotation);
+                if (weapon.weapon.getClass().equals(Bow.class)) {
+                    ((Bow) weapon.weapon).arrowSprite.setRotation(rotation);
+                    ((Bow) weapon.weapon).arrowSprite.setOriginCenter();
+                }
+
+                weapon.weapon.sprite.visible = input.weaponDrawn;
+
+                // Update Bow and Arrows
+                if (weapon.weapon.getClass().equals(Bow.class)) {
+                    Bow bow = (Bow) weapon.weapon;
+                    bow.updateArrows(Gdx.graphics.getDeltaTime());
+                }
+            }
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class Bullet extends Rectangle implements Pool.Poolable {
 
+    public int id;
     public Vector2 direction;
     private boolean alive;
 

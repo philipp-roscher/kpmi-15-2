@@ -1,9 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.items.Bow;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -12,6 +8,10 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
+
+import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each
@@ -42,6 +42,7 @@ public class BulletSystem extends ObservingEntitySystem {
     }
 
     public void update(float deltaTime) {
+        // deletes bullets on collision with walls only!
         MapObjects mo = maze.getColliders();
         Rectangle r;
         for(Entity e : entities) {
@@ -51,7 +52,8 @@ public class BulletSystem extends ObservingEntitySystem {
                 Bow bow = (Bow)weapon.weapon;
                 for(MapObject m : mo) {
                     r = ((RectangleMapObject) m).getRectangle();
-                    bow.checkHit(new Rectangle(r.x/32f, r.y/32f, r.width/32f, r.height/32f));
+                    if(bow.checkHit(new Rectangle(r.x/32f, r.y/32f, r.width/32f, r.height/32f)) != -1)
+                        System.out.println("Arrow hit a wall and was removed");
                 }
             }
         }

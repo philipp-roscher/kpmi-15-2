@@ -1,14 +1,5 @@
 package org.sausagepan.prototyp.model;
 
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
-import org.sausagepan.prototyp.model.components.MazeGenerator;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
-
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
@@ -22,6 +13,15 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+
+import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
+import org.sausagepan.prototyp.model.components.MazeGenerator;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 /**
  * Created by georg on 18.10.15.
@@ -62,6 +62,18 @@ public class Maze extends EntitySystem {
         this.world = world;
         // set up map renderer and scale
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
+    }
+    public Maze(Network.MapInformation mapInformation, World world) {
+        this.mapInformation = mapInformation;
+        this.width = mapInformation.width;
+        this.height = mapInformation.height;
+        this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
+        this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
+        this.doorLockerRectangles = new Array<Rectangle>();
+        this.secretWalls = new Array<Body>();
+        generator = new MazeGenerator(width, height);
+        setUpTiledMap(world);
+        this.world = world;
     }
     /* ............................................................................... METHODS .. */
     public void render(OrthographicCamera camera) {
@@ -112,6 +124,7 @@ public class Maze extends EntitySystem {
     	if(!treasureRoomOpen) {
 	        for(Body b : doorLockerBodies)
 	        	world.destroyBody(b);
+            doorLockerBodies.clear();
 	        treasureRoomOpen = true;
     	}
     }
@@ -139,7 +152,10 @@ public class Maze extends EntitySystem {
             body.createFixture(box, 0.0f);
             box.dispose();
             i++;
+
+            doorLockerBodies.add(body);
         }
+        treasureRoomOpen = false;
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */

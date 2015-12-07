@@ -1,21 +1,19 @@
 package org.sausagepan.prototyp.model.components;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
+
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.Array;
 
 /**
- * Created by georg on 29.10.15.
+ * Created by philipp on 05.12.15.
  */
-public class NetworkTransmissionComponent implements Component {
+public class CharacterClassComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public boolean attack = false;
-    public boolean stopAttacking = false;
-    public boolean shoot = false;
-    public Array<Integer> takeKey = new Array<Integer>();
-    public Array<Integer> loseKey = new Array<Integer>();
-
+    public CharacterClass characterClass;
     /* ........................................................................... CONSTRUCTOR .. */
-    
+    public CharacterClassComponent (CharacterClass characterClass) {
+    	this.characterClass = characterClass;
+    }
     /* ............................................................................... METHODS .. */
     
     /* ..................................................................... GETTERS & SETTERS .. */
