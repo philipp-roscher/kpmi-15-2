@@ -1,11 +1,22 @@
 package org.sausagepan.prototyp.managers;
 
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
+import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
-import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
@@ -16,11 +27,6 @@ import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
-
-import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
 
 /**
  * Created by georg on 29.10.15.
@@ -43,6 +49,7 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
     private Server server;
     private GameServer gameServer;
 	private ServerEntityComponentSystem ECS;
+    private ServerNetworkTransmissionComponent ntc;
 	
     /* ........................................................................... CONSTRUCTOR .. */
     public ServerNetworkSystem(ServerEntityComponentSystem ECS, Server server, GameServer gameServer) {
@@ -58,9 +65,23 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
     }
     
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) { }
+    public void addedToEngine(ObservableEngine engine) {
+        ntc = engine.getEntitiesFor(Family.all(ServerNetworkTransmissionComponent.class).get()).
+                get(0).
+                getComponent(ServerNetworkTransmissionComponent.class);
+    }
 
-    public void update(float deltaTime) {        
+    public void update(float deltaTime) {
+        for(Object object : ntc.networkMessagesToProcess) {
+            if( (object instanceof HPUpdateResponse) ||
+                (object instanceof DeleteBulletResponse)
+            )
+                server.sendToAllTCP(object);
+            
+            if(object instanceof ShootResponse)
+            	server.sendToAllUDP(object);
+        }
+
         for(NetworkMessage nm : networkMessages) {
         	Connection connection = nm.connection;
         	Object object = nm.object;
@@ -71,15 +92,28 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
         		connection.sendTCP(gameServer.getMap());
         		ECS.addNewCharacter(request.playerId, gameServer.getTeamAssignments().get(request.playerId), request.clientClass);
         		NewHeroResponse response = new NewHeroResponse(request.playerId, gameServer.getTeamAssignments().get(request.playerId), request.clientClass);
-        		server.sendToAllUDP(response);
+        		server.sendToAllTCP(response);
         		//updateLastAccess(request.playerId);
         	}
         	
         	if (object instanceof PositionUpdate) {
-			   // System.out.println("PositionUpdate eingegangen");
-			
-			   PositionUpdate request = (PositionUpdate)object;
-			   ECS.updatePosition(request.playerId, request.position);
+        	    // System.out.println("PositionUpdate eingegangen");
+                PositionUpdate request = (PositionUpdate)object;
+
+                ServerCharacterEntity character = ECS.getCharacter(request.playerId);
+                if(character != null) {
+                    character.getComponent(DynamicBodyComponent.class)
+                            .dynamicBody
+                            .setTransform(request.position.position, 0f);
+                    character.getComponent(DynamicBodyComponent.class)
+                            .dynamicBody
+                            .setLinearVelocity(request.position.velocity);
+                    character.getComponent(DynamicBodyComponent.class)
+                            .direction = request.position.bodyDirection;
+
+                    if (request.position.direction != null)
+                        character.getComponent(InputComponent.class).direction = request.position.direction;
+                }
         	}
 
 		    if (object instanceof FullGameStateRequest) {
@@ -92,16 +126,22 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
            if (object instanceof AttackRequest) {
 			   AttackRequest request = (AttackRequest)object;
 			   server.sendToAllUDP(new AttackResponse(request.playerId, request.stop));
+
+               ServerCharacterEntity character = ECS.getCharacter(request.playerId);
+			   if(character != null) {
+                   if(request.stop)
+                       character.getComponent(InputComponent.class).weaponDrawn = false;
+
+                   character.getComponent(WeaponComponent.class).weapon.justUsed = !request.stop;
+               }
            }
            
            if (object instanceof ShootRequest) {
         	   ShootRequest request = (ShootRequest) object;
-        	   server.sendToAllUDP(new ShootResponse(request.playerId, request.position, request.direction));
-           }
-           
-           if (object instanceof HPUpdateRequest) {
-        	   HPUpdateRequest request = (HPUpdateRequest) object;
-        	   server.sendToAllTCP(new HPUpdateResponse(request.playerId, request.HP));
+               ServerCharacterEntity character = ECS.getCharacter(request.playerId);
+               if(character != null) {
+                   character.getComponent(WeaponComponent.class).weapon.justUsed = true;
+               }
            }
 
            if (object instanceof TakeKeyRequest) {
@@ -116,6 +156,8 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
 				server.sendToAllTCP(new LoseKeyResponse(request.id, request.keySection, request.x, request.y));
            }
         }
+
+        ntc.networkMessagesToProcess.clear();
         networkMessages.clear();
     }
     /* ..................................................................... GETTERS & SETTERS .. */

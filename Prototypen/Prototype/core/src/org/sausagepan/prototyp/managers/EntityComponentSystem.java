@@ -1,6 +1,12 @@
 package org.sausagepan.prototyp.managers;
 
-import java.util.HashMap;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
@@ -21,15 +27,9 @@ import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
-import box2dLight.RayHandler;
+import java.util.HashMap;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import box2dLight.RayHandler;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -94,19 +94,12 @@ public class EntityComponentSystem {
     }
 
     /* ............................................................................... METHODS .. */
-    private void setUpEntitySystems() { 
-        //TODO: port this
-    	// Movement System
-        //MovementSystem movementSystem = new MovementSystem(world);
-        //movementSystem.addedToEngine(engine);
-        //engine.addEntityListener(Family.all(DynamicBodyComponent.class).get(), movementSystem);
-
+    private void setUpEntitySystems() {
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
         spriteSystem.addedToEngine(engine);
         engine.addEntityListener(EntityFamilies.spriteFamily, spriteSystem);
 
-        //TODO: port updateArrows();
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
         weaponSystem.addedToEngine(engine);
@@ -122,11 +115,10 @@ public class EntityComponentSystem {
         characterSpriteSystem.addedToEngine(engine);
         engine.subscribe(characterSpriteSystem);
 
-        //TODO: port this
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
         positionSynchroSystem.addedToEngine(engine);
-        engine.subscribe(positionSynchroSystem);
+        engine.addEntityListener(EntityFamilies.positionSynchroFamily, positionSynchroSystem);
 
         // Network System
         NetworkSystem networkSystem = new NetworkSystem(this);
@@ -140,19 +132,11 @@ public class EntityComponentSystem {
         engine.subscribe(visualDebuggingSystem);
 
         //TODO: port this
-        // Battle System
-        BattleSystem battleSystem = new BattleSystem();
-        battleSystem.addedToEngine(engine);
-        engine.addEntityListener(EntityFamilies.attackerFamily, battleSystem);
-        engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
-
-        //TODO: port this
         //Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze);
         inventorySystem.addedToEngine(engine);
         engine.subscribe(inventorySystem);
 
-        //TODO: port this
         // Bullet System
         BulletSystem bulletSystem = new BulletSystem(engine, maze);
         bulletSystem.addedToEngine(engine);
@@ -184,7 +168,6 @@ public class EntityComponentSystem {
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(networkSystem);
         this.engine.addSystem(visualDebuggingSystem);
-        this.engine.addSystem(battleSystem);
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);

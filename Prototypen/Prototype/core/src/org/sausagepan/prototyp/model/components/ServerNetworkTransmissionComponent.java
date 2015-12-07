@@ -4,15 +4,14 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Created by georg on 29.10.15.
+ * Created by philipp on 07.12.15.
+ * Component that is used for communication between systems,
+ * holds a list of network messages which are to be processed by the ServerNetworkSystem
  */
-public class NetworkTransmissionComponent implements Component {
+public class ServerNetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public boolean attack = false;
-    public boolean stopAttacking = false;
-    public boolean shoot = false;
-    public Array<Integer> takeKey = new Array<Integer>();
-    public Array<Integer> loseKey = new Array<Integer>();
+
+    public Array<Object> networkMessagesToProcess = new Array<Object>();
 
     /* ........................................................................... CONSTRUCTOR .. */
     

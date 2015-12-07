@@ -1,5 +1,11 @@
 package org.sausagepan.prototyp.managers;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.physics.box2d.World;
+
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.MazeObjectType;
@@ -29,12 +35,6 @@ import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 
 import box2dLight.RayHandler;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * This class creates and returns {@link Entity}s for use in the game world
@@ -222,23 +222,23 @@ public class EntityFactory {
         // Add class specific components
         switch(characterClass) {
             case KNIGHT_M:
-                //characterEntity.add(new WeaponComponent(itemFactory.createSmallSword()));
+                characterEntity.add(new WeaponComponent(itemFactory.createSmallSword()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case FIGHTER_M:
-                //characterEntity.add(new WeaponComponent(itemFactory.createBoxerGlove(ItemType.GLOVE_RED)));
+                characterEntity.add(new WeaponComponent(itemFactory.createBoxerGlove(ItemType.GLOVE_RED)));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case ARCHER_F:
-                //characterEntity.add(new WeaponComponent(itemFactory.createBow()));
+                characterEntity.add(new WeaponComponent(itemFactory.createBow()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case SHAMAN_M:
-                //characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case DRAGON:
-                //characterEntity.add(new WeaponComponent(itemFactory.createFireBreather()));
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
                 //has to be *2 here and added in DynamicBodyComponent
                 break;

@@ -1,6 +1,10 @@
 package org.sausagepan.prototyp.network;
 
-import java.util.HashMap;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.EndPoint;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.Damagetype;
@@ -10,11 +14,7 @@ import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.MapFactoryObject;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.EndPoint;
+import java.util.HashMap;
 
 public class Network {
 	public static final int TCPPort = 49078;
@@ -32,11 +32,11 @@ public class Network {
 		kryo.register(AttackResponse.class);
 		kryo.register(ShootRequest.class);
 		kryo.register(ShootResponse.class);
-		kryo.register(HPUpdateRequest.class);
 		kryo.register(HPUpdateResponse.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(FullGameStateRequest.class);
 		kryo.register(FullGameStateResponse.class);
+        kryo.register(DeleteBulletResponse.class);
 		kryo.register(TakeKeyRequest.class);
 		kryo.register(TakeKeyResponse.class);
 		kryo.register(LoseKeyRequest.class);
@@ -65,13 +65,15 @@ public class Network {
 	public static class NetworkPosition {
 		public Vector2 position;
 	    public Vector2 velocity;
+		public Vector2 bodyDirection;
 	    public Direction direction;
 	    public boolean moving;
 		
 		public NetworkPosition() {}
-		public NetworkPosition(Vector2 position, Vector2 velocity, Direction direction, boolean moving) {
+		public NetworkPosition(Vector2 position, Vector2 velocity, Vector2 bodyDirection, Direction direction, boolean moving) {
 			this.position = position;
 			this.velocity = velocity;
+            this.bodyDirection = bodyDirection;
 			this.direction = direction;
 			this.moving = moving;
 		}
@@ -140,14 +142,10 @@ public class Network {
 	
 	public static class ShootRequest {
 		public int playerId;
-		public Vector2 position;
-		public Vector2 direction;
 
 		public ShootRequest() { }
-		public ShootRequest(int playerId, Vector2 position, Vector2 direction) {
+		public ShootRequest(int playerId) {
 			this.playerId = playerId;
-			this.position = position;
-			this.direction = direction;
 		}
 	}
 	
@@ -155,33 +153,26 @@ public class Network {
 		public int playerId;
 		public Vector2 position;
 		public Vector2 direction;
+        public int bulletId;
 
 		public ShootResponse() { }
-		public ShootResponse(int playerId, Vector2 position, Vector2 direction) {
+		public ShootResponse(int playerId, Vector2 position, Vector2 direction, int bulletId) {
 			this.playerId = playerId;
 			this.position = position;
 			this.direction = direction;
+            this.bulletId = bulletId;
 		}
-	}
-	
-	public static class HPUpdateRequest {
-		public int playerId;
-		public int HP;
-
-		public HPUpdateRequest() { }
-		public HPUpdateRequest(int playerId, int HP) {
-			this.playerId = playerId;
-			this.HP = HP;
-		}		
 	}
 	
 	public static class HPUpdateResponse {
 		public int playerId;
+        public boolean isHuman;
 		public int HP;
 
 		public HPUpdateResponse() { }
-		public HPUpdateResponse(int playerId, int HP) {
+		public HPUpdateResponse(int playerId, boolean isHuman, int HP) {
 			this.playerId = playerId;
+            this.isHuman = isHuman;
 			this.HP = HP;
 		}		
 	}
@@ -209,6 +200,17 @@ public class Network {
 			this.teamAssignments = teamAssignments;
 		}
 	}
+
+    public static class DeleteBulletResponse {
+        public int playerId;
+        public int bulletId;
+
+        public DeleteBulletResponse() { }
+        public DeleteBulletResponse(int playerId, int bulletId) {
+            this.playerId = playerId;
+            this.bulletId = bulletId;
+        }
+    }
 	
 	public static class TakeKeyRequest {
 		public int id;

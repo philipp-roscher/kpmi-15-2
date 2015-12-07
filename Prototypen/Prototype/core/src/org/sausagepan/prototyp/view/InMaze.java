@@ -1,20 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import org.sausagepan.prototyp.KPMIPrototype;
-import org.sausagepan.prototyp.Utils.UnitConverter;
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.enums.PlayerAction;
-import org.sausagepan.prototyp.managers.EntityComponentSystem;
-import org.sausagepan.prototyp.model.GlobalSettings;
-import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.network.MonsterListener;
-import org.sausagepan.prototyp.network.Network.AttackRequest;
-import org.sausagepan.prototyp.network.Network.MapInformation;
-
-import box2dLight.RayHandler;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -31,6 +16,19 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.Utils.UnitConverter;
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.managers.EntityComponentSystem;
+import org.sausagepan.prototyp.model.GlobalSettings;
+import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.network.MonsterListener;
+import org.sausagepan.prototyp.network.Network.MapInformation;
+
+import box2dLight.RayHandler;
 
 /**
  * Screen for all ingame action. Here everything is rendered to the screen
@@ -220,21 +218,6 @@ public class InMaze implements Screen {
     }
 
     /* ..................................................................... GAME LOOP METHODS .. */
-
-    /**
-     * Observes player instance for submitting stuff to the server
-     */
-    public void update(PlayerAction action) {
-        switch(action) {
-            case ATTACK:
-                game.client.sendUDP(new AttackRequest(game.clientId, false));
-                break;
-            case ATTACK_STOP:
-                game.client.sendUDP(new AttackRequest(game.clientId, true));
-                break;
-            default: break;
-        }
-    }
 
     private void updateCamera() {
         // project to camera

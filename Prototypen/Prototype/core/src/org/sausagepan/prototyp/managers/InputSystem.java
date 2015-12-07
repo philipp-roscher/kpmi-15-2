@@ -1,12 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import org.sausagepan.prototyp.enums.Direction;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -17,6 +10,13 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
  * Created by georg on 28.10.15.
@@ -136,7 +136,7 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
                 case Input.Keys.DOWN:   input.direction = Direction.SOUTH;break;
                 case Input.Keys.A:
                     input.weaponDrawn = true;
-                    System.out.println("Attacking!");
+                    //System.out.println("Attacking!");
                     weapon.weapon.justUsed = true;
                     break;
                 default:break;
@@ -150,10 +150,11 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     public boolean keyUp(int keycode) {
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
-            NetworkComponent network = nm.get(entity);
             NetworkTransmissionComponent ntc = ntm.get(entity);
+            WeaponComponent weapon = wm.get(entity);
             if (keycode == Input.Keys.A) {
             	input.weaponDrawn = false;
+            	weapon.weapon.justUsed = false;
             	ntc.stopAttacking = true;
             }
         }

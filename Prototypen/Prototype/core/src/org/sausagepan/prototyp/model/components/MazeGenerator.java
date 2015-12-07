@@ -1,12 +1,5 @@
 package org.sausagepan.prototyp.model.components;
 
-import java.util.LinkedList;
-import java.util.Map;
-
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.MapItem;
-
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -17,6 +10,13 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.items.MapItem;
+
+import java.util.LinkedList;
+import java.util.Map;
 
 
 /**
@@ -331,10 +331,8 @@ public class MazeGenerator {
 				objectLayer = map.getLayers().get("mapObjects");
 
 				for (MapObject mo : objectLayer.getObjects()) {
-                    System.out.print(mo.getName());
                     // Create Monsters .................................................... MONSTERS
                     if(mo.getName().equals("monster")) {
-                        System.out.print("ma");
                         MapMonsterObject monster = new MapMonsterObject(
                                 new Vector2(
                                         mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,

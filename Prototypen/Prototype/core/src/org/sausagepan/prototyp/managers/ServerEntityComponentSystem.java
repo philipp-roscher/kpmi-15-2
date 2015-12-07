@@ -1,6 +1,11 @@
 package org.sausagepan.prototyp.managers;
 
-import java.util.HashMap;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.World;
+import com.esotericsoftware.kryonet.Server;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.Maze;
@@ -11,6 +16,7 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
@@ -26,12 +32,7 @@ import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.World;
-import com.esotericsoftware.kryonet.Server;
+import java.util.HashMap;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -72,6 +73,10 @@ public class ServerEntityComponentSystem {
         this.server = server;
         this.gameServer = gameServer;
 
+        Entity networkEntity = new Entity();
+        networkEntity.add(new ServerNetworkTransmissionComponent());
+        engine.addEntity(networkEntity);
+
         setUpMonsters();
         setUpItems();
 
@@ -94,7 +99,7 @@ public class ServerEntityComponentSystem {
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
         positionSynchroSystem.addedToEngine(engine);
-        engine.subscribe(positionSynchroSystem);
+        engine.addEntityListener(EntityFamilies.positionSynchroFamily, positionSynchroSystem);
 
         // Battle System
         BattleSystem battleSystem = new BattleSystem();
@@ -119,6 +124,7 @@ public class ServerEntityComponentSystem {
 
         // Network System
         ServerNetworkSystem networkSystem = new ServerNetworkSystem(this, server, gameServer);
+        networkSystem.addedToEngine(engine);
         
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
@@ -137,6 +143,7 @@ public class ServerEntityComponentSystem {
         for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
             // Using factory method for creating monsters
         	MonsterEntity monster = entityFactory.createMonster(mapObject);
+            monster.add(new IdComponent(i));
         	monsters.put(i++, monster);
             this.engine.addEntity(monster);
         }
@@ -231,6 +238,7 @@ public class ServerEntityComponentSystem {
 		    np.direction  = character.getValue().getComponent(InputComponent.class).direction;
 		    np.velocity   = character.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getLinearVelocity();
 		    np.position   = character.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getPosition();
+            np.bodyDirection    = character.getValue().getComponent(DynamicBodyComponent.class).direction;
 			characters.put(
 					character.getKey(),
 					np
@@ -253,18 +261,6 @@ public class ServerEntityComponentSystem {
 		result.monsters = monsters;
 		
 		return result;
-	}
-
-	public void updatePosition(int playerId, NetworkPosition position) {
-		ServerCharacterEntity character = characters.get(playerId);
-	    character.getComponent(DynamicBodyComponent.class)
-        											.dynamicBody
-        											.setTransform(position.position, 0f);
-	    character.getComponent(DynamicBodyComponent.class)
-        											.dynamicBody
-        											.setLinearVelocity(position.velocity);
-	    if(position.direction != null)
-	    	character.getComponent(InputComponent.class).direction = position.direction;
 	}
 
 	public FullGameStateResponse generateFullGameStateResponse() {

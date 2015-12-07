@@ -1,7 +1,12 @@
 package org.sausagepan.prototyp.managers;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
@@ -18,11 +23,11 @@ import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
+import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
-import org.sausagepan.prototyp.network.Network.HPUpdateRequest;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
 import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
@@ -34,13 +39,8 @@ import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * Created by georg on 29.10.15.
@@ -95,18 +95,20 @@ public class NetworkSystem extends ObservingEntitySystem{
             posUpdate.position.direction  = input.direction;
             posUpdate.position.velocity   = body.dynamicBody.getLinearVelocity();
             posUpdate.position.position   = body.dynamicBody.getPosition();
+            posUpdate.position.bodyDirection = body.direction;
             network.client.sendUDP(posUpdate);
             
             // send AttackRequest
-            if(weapon.weapon.justUsed) {
+            if(ntc.attack) {
             	network.client.sendUDP(new AttackRequest(network.id, false));
+                ntc.attack = false;
             }
             if(ntc.stopAttacking) {
             	network.client.sendUDP(new AttackRequest(network.id, true));
             	ntc.stopAttacking = false;
             }
             if(ntc.shoot) {
-            	network.client.sendUDP(new ShootRequest(network.id,body.dynamicBody.getPosition(),body.direction));
+            	network.client.sendUDP(new ShootRequest(network.id));
             	ntc.shoot = false;
             }
             if(ntc.takeKey.size != 0) {
@@ -120,12 +122,6 @@ public class NetworkSystem extends ObservingEntitySystem{
             		network.client.sendTCP(new LoseKeyRequest(network.id, i, posUpdate.position.position.x, posUpdate.position.position.y));
             	
             	ntc.loseKey.clear();
-            }
-            if(ntc.HPUpdates.size != 0) {
-            	for(HPUpdateRequest i : ntc.HPUpdates)
-            		network.client.sendTCP(i);
-            	
-            	ntc.HPUpdates.clear();
             }
         }
         
@@ -160,7 +156,8 @@ public class NetworkSystem extends ObservingEntitySystem{
                                 (object instanceof ShootResponse) ||
                                 (object instanceof HPUpdateResponse) ||
                                 (object instanceof LoseKeyResponse) ||
-                                (object instanceof TakeKeyResponse)) {
+                                (object instanceof TakeKeyResponse) ||
+                                (object instanceof DeleteBulletResponse)) {
                             //System.out.println( object.getClass() +" empfangen");
                             NetworkSystem.this.networkMessages.add(object);
                         }
@@ -192,6 +189,8 @@ public class NetworkSystem extends ObservingEntitySystem{
                 			character.getComponent(DynamicBodyComponent.class)
                                     .dynamicBody
                                     .setLinearVelocity(e.getValue().velocity);
+                            character.getComponent(DynamicBodyComponent.class).direction = e.getValue().bodyDirection;
+
                 			if(e.getValue().direction != null)
                 				character.getComponent(InputComponent.class).direction
                                         = e.getValue().direction;
@@ -227,19 +226,23 @@ public class NetworkSystem extends ObservingEntitySystem{
 
             if (object instanceof ShootResponse) {
                 ShootResponse result = (ShootResponse) object;
-                if(result.playerId != posUpdate.playerId) {
-                    CharacterEntity character = ECS.getCharacter(result.playerId);
-                    if(character != null)
-                    	((Bow)character.getComponent(WeaponComponent.class).weapon).shoot(result.position, result.direction);
-                }
+
+                CharacterEntity character = ECS.getCharacter(result.playerId);
+                if(character != null)
+                    ((Bow)character.getComponent(WeaponComponent.class).weapon).shoot(result.position, result.direction, result.bulletId);
             }
 
             if (object instanceof HPUpdateResponse) {
                 HPUpdateResponse result = (HPUpdateResponse) object;
-                CharacterEntity character = ECS.getCharacter(result.playerId);
+                Entity character;
 
-        		if(character != null)
-        			character.getComponent(HealthComponent.class).HP = result.HP;	
+                if(result.isHuman)
+                    character = ECS.getCharacter(result.playerId);
+                else
+                    character = ECS.getMonster(result.playerId);
+
+                if(character != null)
+                    character.getComponent(HealthComponent.class).HP = result.HP;
             }
 
             if (object instanceof LoseKeyResponse) {
@@ -261,6 +264,15 @@ public class NetworkSystem extends ObservingEntitySystem{
                                 .pickUpItem(ECS.getItemFactory().createKeyFragment(result.keySection), 1);
             		}
             	}
+            }
+
+            if (object instanceof DeleteBulletResponse) {
+                DeleteBulletResponse result = (DeleteBulletResponse) object;
+
+                CharacterEntity character = ECS.getCharacter(result.playerId);
+                if(character != null) {
+                    ((Bow)character.getComponent(WeaponComponent.class).weapon).deleteBullet(result.bulletId);
+                }
             }
         }
 
