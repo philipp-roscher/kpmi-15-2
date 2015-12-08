@@ -50,16 +50,8 @@ public class Maze extends EntitySystem {
     /* ........................................................................... CONSTRUCTOR .. */
 
     public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager) {
-        this.mapInformation = mapInformation;
-        this.width = mapInformation.width;
-        this.height = mapInformation.height;
-        this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
-        this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
-        this.doorLockerRectangles = new Array<Rectangle>();
-        this.secretWalls = new Array<Body>();
-        generator = new MazeGenerator(width, height);
-        setUpTiledMap(world);
-        this.world = world;
+        this(mapInformation, world);
+        
         // set up map renderer and scale
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
     }

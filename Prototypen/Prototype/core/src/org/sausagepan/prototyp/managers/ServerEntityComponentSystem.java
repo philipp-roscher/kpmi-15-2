@@ -215,9 +215,9 @@ public class ServerEntityComponentSystem {
 
 	public void deleteCharacter(int id) {
 		if(characters.get(id) != null) {
-//			System.out.println("Character wird gelöscht: " +id);
 			engine.removeEntity(this.characters.get(id));
 			this.characters.remove(id);
+            gameServer.deleteCharacter(id);
 		}
 	}
 

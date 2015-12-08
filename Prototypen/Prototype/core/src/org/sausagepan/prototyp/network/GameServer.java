@@ -1,17 +1,14 @@
 package org.sausagepan.prototyp.network;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 
 import org.sausagepan.prototyp.managers.ServerEntityComponentSystem;
 import org.sausagepan.prototyp.model.ServerSettings;
-import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
@@ -19,12 +16,10 @@ import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GameServer implements ApplicationListener {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
@@ -34,33 +29,25 @@ public class GameServer implements ApplicationListener {
 	private static ServerEntityComponentSystem ECS;
 	private static long lastUpdate;
 	private static float delta;
-	
-	// saves the last time each client was active, used for kicking inactive clients
-	private static HashMap<Integer,Long> lastAccess;
+
 	// container for deleted clients
 	private static ArrayList<Integer> toDelete = new ArrayList<Integer>();
 	// contains the constellation of the individual tiles
 	private static MapInformation map;
-	//HashMap to save ClientIds,TeamIds
+	// HashMap to save ClientIds,TeamIds
 	private static HashMap<Integer,Integer> teamAssignments;
 	// manages the characters
     private List<Integer> roomList;
 
-	//to count active Clients in Session
+	// to count active Clients in Session
     private static int clientCount;
-	//maximal Number of Clients per Session
+	// maximum Number of Clients per Session
 	private int maxClients = ServerSettings.MANDATORY_CLIENTS;
 	
 	public void create () {
-        this.roomList = new LinkedList<Integer>();
-        for(int i=1; i <= ServerSettings.MAZE_AREAS; i++) roomList.add(i);
-
 		clientCount = 0;
 		teamAssignments = new HashMap<Integer, Integer>();
 		setupMap(ServerSettings.MAZE_WIDTH, ServerSettings.MAZE_HEIGHT);
-
-		ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-		executor.scheduleAtFixedRate(deleteOldClients, 0, 1, TimeUnit.SECONDS);
 
 		try {
 			server = new Server();
@@ -85,33 +72,13 @@ public class GameServer implements ApplicationListener {
 					//increase ClientCount and send to all clients via TCP
 					clientCount++;
 					System.out.println("clientCount at: "+clientCount);
-					GameClientCount GameClientCount = new GameClientCount();
-					GameClientCount.count = clientCount;
-					server.sendToAllTCP(GameClientCount);
+					GameClientCount gameClientCount = new GameClientCount();
+					gameClientCount.count = clientCount;
+					server.sendToAllTCP(gameClientCount);
 					//assignTeamId
 					assignTeam(idAssignment.id);
 
 		        }
-		        
-				public void disconnected (Connection connection) {
-					//connection.id is (at the moment) identical to the ID in ClientIds
-					int id = connection.getID();
-					//only happens if it wasn't deleted with "deleteOldClients" beforehand
-					if (ECS.getCharacter(id) != null) {
-						ECS.deleteCharacter(id);
-						lastAccess.remove(id);
-						teamAssignments.remove(id);
-						server.sendToAllUDP(new DeleteHeroResponse(id));
-						System.out.println("Automatically deleted Player "+connection);
-
-						//decrease clientCount and send to all clients via TCP
-						clientCount--;
-						System.out.println("clientCount at: " + clientCount);
-						GameClientCount GameClientCount = new GameClientCount();
-						GameClientCount.count = clientCount;
-						server.sendToAllTCP(clientCount);
-					}
-				}
 		     });
 		    
 			ECS = new ServerEntityComponentSystem(map, server, this);
@@ -145,18 +112,13 @@ public class GameServer implements ApplicationListener {
 		stop();
 	}
 	
-	// saves current timestamp for a players last activity
-	public static void updateLastAccess(int clientId) {
-		lastAccess.put(clientId, System.nanoTime());
-	}
-	
 	public static void sendGameState() {
 		GameStateResponse response = new GameStateResponse();
 		response = ECS.getGameState();
 		server.sendToAllUDP(response);
 	}
 	
-	// sends current positions of all characters to all clients, is executed a defined amount of times per second
+	//  updates ECS and sends current positions of all characters to all clients, is executed a defined amount of times per second
 	public static void updateGameState() {
 		ECS.update(delta);
 		if(clientCount > 0) {
@@ -165,41 +127,11 @@ public class GameServer implements ApplicationListener {
 		}
 	}
 	
-	// deletes all characters that haven't been active in the last x seconds
-	static Runnable deleteOldClients = new Runnable() {
-	    public void run() {
-	    	//System.out.println("Trying to remove old clients...");
-	        for(Map.Entry<Integer,Long> ltime : lastAccess.entrySet())
-	        {
-	        	if( (System.nanoTime() - ltime.getValue())/1e6 > timeoutMs ) {
-	        		int id = ltime.getKey();
-					//only happens if it wasn't deleted with "disconnected" beforehand
-					if (ECS.getCharacter(id) != null) {
-						ECS.deleteCharacter(id);
-						teamAssignments.remove(id);
-						toDelete.add(id);
-						server.sendToAllUDP(new DeleteHeroResponse(id));
-						System.out.println("Automatically deleted Player "+ltime.getKey());
-
-						//decrease clientCount and send to all clients via TCP
-						clientCount--;
-						System.out.println("clientCount at: "+clientCount);
-						GameClientCount GameClientCount = new GameClientCount();
-						GameClientCount.count = clientCount;
-						server.sendToAllTCP(clientCount);
-					}
-	        	}
-	        }
-	        
-	        for(int id : toDelete)
-	        	lastAccess.remove(id);
-	        
-	        toDelete.clear();
-	    }
-	};
-	
 	// generates random map with given width and height
 	public void setupMap(int width, int height) {
+        this.roomList = new LinkedList<Integer>();
+        for(int i=1; i <= ServerSettings.MAZE_AREAS; i++) roomList.add(i);
+
 		map = new MapInformation();
 		map.height = height;
 		map.width = width;
@@ -271,4 +203,15 @@ public class GameServer implements ApplicationListener {
 	public HashMap<Integer,Integer> getTeamAssignments() {
 		return teamAssignments;
 	}
+
+    public void deleteCharacter(int id) {
+        teamAssignments.remove(id);
+
+        //decrease clientCount and send to all clients via TCP
+        clientCount--;
+        System.out.println("clientCount at: " + clientCount);
+        GameClientCount gameClientCount = new GameClientCount();
+        gameClientCount.count = clientCount;
+        server.sendToAllTCP(gameClientCount);
+    }
 }

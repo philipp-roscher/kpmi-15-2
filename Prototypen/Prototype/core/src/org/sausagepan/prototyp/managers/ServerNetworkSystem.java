@@ -15,18 +15,15 @@ import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
+import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
-import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
-import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
-import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 
 /**
  * Created by georg on 29.10.15.
@@ -43,6 +40,8 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
 			this.object = object;
 		}
 	}
+
+    class DisconnectionMessage { }
 	
     /* ............................................................................ ATTRIBUTES .. */
     private Array<NetworkMessage> networkMessages = new Array<NetworkMessage>();
@@ -61,6 +60,10 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
         	public void received(Connection connection, Object object) {
         		networkMessages.add(new NetworkMessage(connection, object));
         	}
+
+            public void disconnected(Connection connection) {
+                networkMessages.add(new NetworkMessage(connection, new DisconnectionMessage()));
+            }
         });
     }
     
@@ -85,7 +88,15 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
         for(NetworkMessage nm : networkMessages) {
         	Connection connection = nm.connection;
         	Object object = nm.object;
-        	
+
+            // handle disconnection messages
+            if (object instanceof DisconnectionMessage) {
+                int id = connection.getID();
+                ECS.deleteCharacter(id);
+
+                server.sendToAllTCP(new DeleteHeroResponse(id));
+            }
+
         	if (object instanceof NewHeroRequest) {
         		NewHeroRequest request = (NewHeroRequest) object;
         		System.out.println("New Hero (ID " + request.playerId + "): " + request.clientClass);
@@ -129,9 +140,6 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
 
                ServerCharacterEntity character = ECS.getCharacter(request.playerId);
 			   if(character != null) {
-                   if(request.stop)
-                       character.getComponent(InputComponent.class).weaponDrawn = false;
-
                    character.getComponent(WeaponComponent.class).weapon.justUsed = !request.stop;
                }
            }
@@ -144,7 +152,7 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
                }
            }
 
-           if (object instanceof TakeKeyRequest) {
+           /* if (object instanceof TakeKeyRequest) {
         	   	System.out.println("TakeKeyResponse");
         	   	TakeKeyRequest request = (TakeKeyRequest) object;
         	   	server.sendToAllTCP(new TakeKeyResponse(request.id, request.keySection));
@@ -154,7 +162,7 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
 				System.out.println("LoseKeyResponse");
 				LoseKeyRequest request = (LoseKeyRequest) object;
 				server.sendToAllTCP(new LoseKeyResponse(request.id, request.keySection, request.x, request.y));
-           }
+           } */
         }
 
         ntc.networkMessagesToProcess.clear();
