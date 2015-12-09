@@ -193,7 +193,6 @@ public class EntityComponentSystem {
         	MonsterEntity monster = entityFactory.createMonster(mapObject.getValue());
         	monsters.put(mapObject.getKey(), monster);
             this.engine.addEntity(monster);
-            maze.addCharacterSpriteComponent(monster.getComponent(CharacterSpriteComponent.class));
         }
         // TODO
     }
@@ -278,8 +277,6 @@ public class EntityComponentSystem {
         
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);
-        maze.addCharacterSpriteComponent(newCharacter.getComponent(CharacterSpriteComponent.class));
-        maze.addWeaponComponent(newCharacter.getComponent(WeaponComponent.class));
         return newCharacter;
 	}
 
