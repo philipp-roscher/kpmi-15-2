@@ -15,6 +15,7 @@ import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
+import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -293,11 +294,11 @@ public class EntityComponentSystem {
     }
 
 	public void deleteCharacter(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character wird gelöscht: " +id);
-			maze.removeCharacterSpriteComponent(characters.get(id).getComponent(CharacterSpriteComponent.class));
-            maze.removeWeaponComponent(characters.get(id).getComponent(WeaponComponent.class));
-			engine.removeEntity(this.characters.get(id));
+		CharacterEntity character = characters.get(id);
+		if(character != null) {
+			world.destroyBody(character.getComponent(DynamicBodyComponent.class).dynamicBody);
+			character.getComponent(LightComponent.class).spriteLight.remove();
+			engine.removeEntity(character);
 			this.characters.remove(id);
 		}
 	}

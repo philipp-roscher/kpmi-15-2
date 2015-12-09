@@ -214,8 +214,10 @@ public class ServerEntityComponentSystem {
     }
 
 	public void deleteCharacter(int id) {
-		if(characters.get(id) != null) {
-			engine.removeEntity(this.characters.get(id));
+		ServerCharacterEntity character = characters.get(id);
+		if(character != null) {
+			world.destroyBody(character.getComponent(DynamicBodyComponent.class).dynamicBody);
+			engine.removeEntity(character);
 			this.characters.remove(id);
             gameServer.deleteCharacter(id);
 		}
