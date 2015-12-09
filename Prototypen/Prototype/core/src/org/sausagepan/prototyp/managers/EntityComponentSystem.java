@@ -307,13 +307,18 @@ public class EntityComponentSystem {
 		}
 	}
 	
-	public void deleteMonster(int id) {
+	public void deleteMonster(int id, boolean finalDeletion) {
 		MonsterEntity monster = monsters.get(id);
 		if(monster != null) {
-			world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
-			// don't remove entity (?) so that sprite can stay on the ground
-			// engine.removeEntity(monster);
-			this.monsters.remove(id);
+			if(!finalDeletion) {
+				// delete body only
+				world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);	
+			}
+			else {
+				// completely delete entity
+				engine.removeEntity(monster);
+				this.monsters.remove(id);
+			}
 		}
 	}
 

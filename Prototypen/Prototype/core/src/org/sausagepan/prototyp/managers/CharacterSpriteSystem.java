@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
@@ -40,6 +41,8 @@ public class CharacterSpriteSystem extends EntitySystem implements EntityListene
     		= ComponentMapper.getFor(CharacterSpriteComponent.class);
     private ComponentMapper<HealthComponent> hm
             = ComponentMapper.getFor(HealthComponent.class);
+    private ComponentMapper<IsDeadComponent> isdm
+    		= ComponentMapper.getFor(IsDeadComponent.class);
 
     /* ........................................................................... CONSTRUCTOR .. */
     public CharacterSpriteSystem(EntityComponentSystem ECS) {
@@ -62,10 +65,18 @@ public class CharacterSpriteSystem extends EntitySystem implements EntityListene
 
             // Rotate monster sprites and remove them if their health drops to 0
             if(entity.getClass().equals(MonsterEntity.class) && hm.get(entity).HP == 0) {
-                if(sm.get(entity).sprite.getRotation() != 90) {
+            	IsDeadComponent isDead = isdm.get(entity);
+                if(isDead == null) {
+                	// rotate and remove body
                 	sm.get(entity).sprite.rotate(90);
 	                sm.get(entity).sprite.setOriginCenter();
-	                ECS.deleteMonster(entity.getComponent(IdComponent.class).id);
+	                entity.add(new IsDeadComponent(System.currentTimeMillis()));
+	                ECS.deleteMonster(entity.getComponent(IdComponent.class).id, false);
+                } else {
+                	// completely delete entity after 2 seconds 
+                	if ((System.currentTimeMillis() - isDead.deathTime) > 2000) {
+    	                ECS.deleteMonster(entity.getComponent(IdComponent.class).id, true);
+                	}
                 }
             }
 
