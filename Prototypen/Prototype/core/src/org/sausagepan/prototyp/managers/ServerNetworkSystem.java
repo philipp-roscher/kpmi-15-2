@@ -96,10 +96,11 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
 
             // handle disconnection messages
             if (object instanceof DisconnectionMessage) {
-                int id = connection.getID();
-                ECS.deleteCharacter(id);
-
-                server.sendToAllTCP(new DeleteHeroResponse(id));
+            	int id = connection.getID();
+            	
+            	System.out.println("Player " + id + " has disconnected");
+            	ECS.deleteCharacter(id);
+            	server.sendToAllTCP(new DeleteHeroResponse(id));
             }
 
         	if (object instanceof NewHeroRequest) {

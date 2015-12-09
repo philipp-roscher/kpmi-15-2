@@ -52,8 +52,9 @@ public class BulletSystem extends ObservingEntitySystem {
                 Bow bow = (Bow)weapon.weapon;
                 for(MapObject m : mo) {
                     r = ((RectangleMapObject) m).getRectangle();
-                    if(bow.checkHit(new Rectangle(r.x/32f, r.y/32f, r.width/32f, r.height/32f)) != -1)
-                        System.out.println("Arrow hit a wall and was removed");
+                    /* if(bow.checkHit(new Rectangle(r.x/32f, r.y/32f, r.width/32f, r.height/32f)) != -1)
+                        System.out.println("Arrow hit a wall and was removed"); */
+                    bow.checkHit(new Rectangle(r.x/32f, r.y/32f, r.width/32f, r.height/32f));
                 }
             }
         }

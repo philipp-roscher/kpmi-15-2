@@ -164,14 +164,13 @@ public class GameServer implements ApplicationListener {
 		int Team1 = 0;
 		int Team2 = 0;
 
-		for (int i=1; i<=clientCount; i++) {
-			//System.out.println("Checking TeamId with ClientId: "+ i + " Result: "+ teamAssignments.get(i));
-			//read TeamIds and count them
-			if (teamAssignments.get(i) != null) {
-				if (teamAssignments.get(i) == 0){ Team0++; }
-				if (teamAssignments.get(i) == 1){ Team1++; }
-				if (teamAssignments.get(i) == 2){ Team2++; }
-			}
+		for (HashMap.Entry<Integer,Integer> teamAssignment : teamAssignments.entrySet()) {
+				if (teamAssignment.getValue() == 0)
+					Team0++;
+				if (teamAssignment.getValue() == 1)
+					Team1++;
+				if (teamAssignment.getValue() == 2)
+					Team2++;
 		}
 		System.out.println("Team0: "+Team0+" - Team1: "+Team1+" - Team2: "+Team2);
 
