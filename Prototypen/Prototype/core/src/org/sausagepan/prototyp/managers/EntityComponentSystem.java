@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -24,6 +25,7 @@ import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
+import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
@@ -113,10 +115,12 @@ public class EntityComponentSystem {
         engine.subscribe(inputSystem);
 
         // Character Sprite System
-        CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem();
+        CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem(this);
         characterSpriteSystem.addedToEngine(engine);
-        engine.subscribe(characterSpriteSystem);
-
+        engine.addEntityListener(Family.all(
+                CharacterSpriteComponent.class,
+                DynamicBodyComponent.class).get(), characterSpriteSystem);
+        
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
         positionSynchroSystem.addedToEngine(engine);
@@ -191,7 +195,7 @@ public class EntityComponentSystem {
         // Get Objects from Maps Monster Layer and add monster entities there
         for(HashMap.Entry<Integer,MapMonsterObject> mapObject : mapMonsterObjects.entrySet()) {
             // Using factory method for creating monsters
-        	MonsterEntity monster = entityFactory.createMonster(mapObject.getValue());
+        	MonsterEntity monster = entityFactory.createMonster(mapObject.getValue(), mapObject.getKey());
         	monsters.put(mapObject.getKey(), monster);
             this.engine.addEntity(monster);
         }
@@ -300,6 +304,16 @@ public class EntityComponentSystem {
 			character.getComponent(LightComponent.class).spriteLight.remove();
 			engine.removeEntity(character);
 			this.characters.remove(id);
+		}
+	}
+	
+	public void deleteMonster(int id) {
+		MonsterEntity monster = monsters.get(id);
+		if(monster != null) {
+			world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
+			// don't remove entity (?) so that sprite can stay on the ground
+			// engine.removeEntity(monster);
+			this.monsters.remove(id);
 		}
 	}
 

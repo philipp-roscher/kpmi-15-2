@@ -24,6 +24,7 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
+import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
@@ -41,6 +42,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     private ImmutableArray<Entity> victims;
     private ServerNetworkTransmissionComponent ntc;
     private int maxBulletId;
+    private ServerEntityComponentSystem ECS;
 
     private ComponentMapper<HealthComponent> hm
             = ComponentMapper.getFor(HealthComponent.class);
@@ -60,8 +62,9 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     		= ComponentMapper.getFor(NetworkTransmissionComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
-    public BattleSystem() {
-        maxBulletId = 1;
+    public BattleSystem(ServerEntityComponentSystem ECS) {
+        this.maxBulletId = 1;
+        this.ECS = ECS;
     }
 
     /* ............................................................................... METHODS .. */
@@ -116,16 +119,27 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                         if((res = ((Bow)weapon.weapon).checkHit(area.area)) != -1)
                             calculateDamage(weapon, health, v, attacker, res);
                 }
-
-                if(v.getClass().equals(MonsterEntity.class) && hm.get(v).HP == 0) {
-                    sm.get(v).sprite.rotate(90);
-                    sm.get(v).sprite.setOriginCenter();
-                    this.getEngine().removeEntity(v);
-                    System.out.println("Monster killed");
-                }
-
             }
             weapon.weapon.justUsed = false; // usage over, waiting for next attack
+        }
+        
+        // Check if someone has died
+        for(Entity v : victims) {
+        	HealthComponent health = hm.get(v);
+        	if(health.HP == 0) {
+        		if(v.getClass().equals(MonsterEntity.class)) {
+        			// Remove monsters
+        			ECS.deleteMonster(v.getComponent(IdComponent.class).id);        			
+        		} else {
+        			// Reset human player to starting position, refill his health bar
+        			/* DynamicBodyComponent body = dm.get(v);
+        			body.dynamicBody.setTransform(body.startPosition, 0f); */
+        			health.HP = health.initialHP;
+        			ntc.networkMessagesToProcess.add(new YouDiedResponse(v.getComponent(IdComponent.class).id));
+        			ntc.networkMessagesToProcess.add(new HPUpdateResponse(v.getComponent(IdComponent.class).id, true, health.HP));
+        		}
+        			
+        	}
         }
     }
 
@@ -133,7 +147,8 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         if(health.HP - weapon.weapon.strength > 0) health.HP -= weapon.weapon.strength;
         else health.HP = 0;
 
-        ntc.networkMessagesToProcess.add(new HPUpdateResponse(victim.getComponent(IdComponent.class).id, victim.getClass().equals(ServerCharacterEntity.class), health.HP));
+        if(health.HP != 0 || victim.getClass().equals(MonsterEntity.class))
+        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(victim.getComponent(IdComponent.class).id, victim.getClass().equals(ServerCharacterEntity.class), health.HP));
         if(attacker != null && bulletId != -1)
             ntc.networkMessagesToProcess.add(new DeleteBulletResponse(attacker.getComponent(IdComponent.class).id, bulletId));
     }

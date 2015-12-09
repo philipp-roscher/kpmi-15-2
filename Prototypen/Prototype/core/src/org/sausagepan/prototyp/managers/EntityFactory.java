@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.model.components.CharacterClassComponent;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
@@ -70,12 +71,13 @@ public class EntityFactory {
      * Creates a {@link MonsterEntity} for the game world
      * @return
      */
-    public MonsterEntity createMonster(MapMonsterObject mapMonsterObject) {
+    public MonsterEntity createMonster(MapMonsterObject mapMonsterObject, int id) {
         MonsterEntity monster = new MonsterEntity();
         monster.add(new DynamicBodyComponent(world, mapMonsterObject.position, CharacterClass.MONSTER));
         monster.add(new InjurableAreaComponent(
                 mapMonsterObject.position.x, mapMonsterObject.position.y, .8f, 1f));
         //same Team as GM -> no friendly fire
+        monster.add(new IdComponent(id));
         monster.add(new TeamComponent(0));
         monster.add(new SensorBodyComponent(world, mapMonsterObject.position));
 

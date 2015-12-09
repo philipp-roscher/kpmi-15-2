@@ -63,6 +63,7 @@ public class ServerEntityComponentSystem {
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
         this.maze = new Maze(mapInformation, world);
+        maze.openSecretPassages();
 
         this.engine = new ObservableEngine(); // Create Engine
         this.characters = new HashMap<Integer,ServerCharacterEntity>();
@@ -102,7 +103,7 @@ public class ServerEntityComponentSystem {
         engine.addEntityListener(EntityFamilies.positionSynchroFamily, positionSynchroSystem);
 
         // Battle System
-        BattleSystem battleSystem = new BattleSystem();
+        BattleSystem battleSystem = new BattleSystem(this);
         battleSystem.addedToEngine(engine);
         engine.addEntityListener(EntityFamilies.attackerFamily, battleSystem);
         engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
@@ -142,10 +143,11 @@ public class ServerEntityComponentSystem {
         // Get Objects from Maps Monster Layer and add monster entities there
         for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
             // Using factory method for creating monsters
-        	MonsterEntity monster = entityFactory.createMonster(mapObject);
+        	MonsterEntity monster = entityFactory.createMonster(mapObject, i);
             monster.add(new IdComponent(i));
-        	monsters.put(i++, monster);
+        	monsters.put(i, monster);
             this.engine.addEntity(monster);
+            i++;
         }
         // TODO
     }
@@ -213,13 +215,22 @@ public class ServerEntityComponentSystem {
         return characterEntity;
     }
 
-	public void deleteCharacter(int id) {
+    public void deleteCharacter(int id) {
 		ServerCharacterEntity character = characters.get(id);
 		if(character != null) {
 			world.destroyBody(character.getComponent(DynamicBodyComponent.class).dynamicBody);
 			engine.removeEntity(character);
 			this.characters.remove(id);
             gameServer.deleteCharacter(id);
+		}
+	}
+    
+    public void deleteMonster(int id) {
+		MonsterEntity monster = monsters.get(id);
+		if(monster != null) {
+			world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
+			engine.removeEntity(monster);
+			this.monsters.remove(id);
 		}
 	}
 

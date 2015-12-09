@@ -24,6 +24,7 @@ import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
 /**
  * Created by georg on 29.10.15.
@@ -76,13 +77,17 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
 
     public void update(float deltaTime) {
         for(Object object : ntc.networkMessagesToProcess) {
-            if( (object instanceof HPUpdateResponse) ||
+            if ((object instanceof HPUpdateResponse) ||
                 (object instanceof DeleteBulletResponse)
             )
                 server.sendToAllTCP(object);
             
-            if(object instanceof ShootResponse)
+            if (object instanceof ShootResponse)
             	server.sendToAllUDP(object);
+            
+            if (object instanceof YouDiedResponse) {
+            	server.sendToTCP(((YouDiedResponse)object).id, object);
+            }
         }
 
         for(NetworkMessage nm : networkMessages) {

@@ -38,6 +38,7 @@ import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
 import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
+import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -157,7 +158,8 @@ public class NetworkSystem extends ObservingEntitySystem{
                                 (object instanceof HPUpdateResponse) ||
                                 (object instanceof LoseKeyResponse) ||
                                 (object instanceof TakeKeyResponse) ||
-                                (object instanceof DeleteBulletResponse)) {
+                                (object instanceof DeleteBulletResponse) ||
+                                (object instanceof YouDiedResponse)) {
                             //System.out.println( object.getClass() +" empfangen");
                             NetworkSystem.this.networkMessages.add(object);
                         }
@@ -273,6 +275,14 @@ public class NetworkSystem extends ObservingEntitySystem{
                 if(character != null) {
                     ((Bow)character.getComponent(WeaponComponent.class).weapon).deleteBullet(result.bulletId);
                 }
+            }
+            
+            if (object instanceof YouDiedResponse) {
+            	YouDiedResponse result = (YouDiedResponse) object;
+            	if(result.id == posUpdate.playerId) {
+            		DynamicBodyComponent body = ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class);
+            		body.dynamicBody.setTransform(body.startPosition, 0f);
+            	}
             }
         }
 

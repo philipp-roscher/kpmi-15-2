@@ -1,25 +1,32 @@
-package org.sausagepan.prototyp.managers;
+ package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 
 /**
  * Turns and refreshes characters sprite.
  * Created by georg on 28.10.15.
  */
-public class CharacterSpriteSystem extends ObservingEntitySystem {
+public class CharacterSpriteSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime=0;
+    private EntityComponentSystem ECS;
 
     private ComponentMapper<CharacterSpriteComponent> cm
             = ComponentMapper.getFor(CharacterSpriteComponent.class);
@@ -29,11 +36,17 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
             = ComponentMapper.getFor(WeaponComponent.class);
     private ComponentMapper<InputComponent> im
             = ComponentMapper.getFor(InputComponent.class);
+    private ComponentMapper<CharacterSpriteComponent> sm
+    		= ComponentMapper.getFor(CharacterSpriteComponent.class);
+    private ComponentMapper<HealthComponent> hm
+            = ComponentMapper.getFor(HealthComponent.class);
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public CharacterSpriteSystem() {}
+    public CharacterSpriteSystem(EntityComponentSystem ECS) {
+    	this.ECS = ECS;
+    }
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 CharacterSpriteComponent.class,
                 DynamicBodyComponent.class).get());
@@ -46,6 +59,15 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
             DynamicBodyComponent body = dm.get(entity);
             WeaponComponent weapon = wm.get(entity);
             InputComponent input = im.get(entity);
+
+            // Rotate monster sprites and remove them if their health drops to 0
+            if(entity.getClass().equals(MonsterEntity.class) && hm.get(entity).HP == 0) {
+                if(sm.get(entity).sprite.getRotation() != 90) {
+                	sm.get(entity).sprite.rotate(90);
+	                sm.get(entity).sprite.setOriginCenter();
+	                ECS.deleteMonster(entity.getComponent(IdComponent.class).id);
+                }
+            }
 
             if(body.dynamicBody.getLinearVelocity().len() > 0.1)
             if(Math.abs(body.dynamicBody.getLinearVelocity().x)
@@ -102,6 +124,16 @@ public class CharacterSpriteSystem extends ObservingEntitySystem {
                 }
             }
         }
+    }
+    
+    @Override
+    public void entityAdded(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        addedToEngine(this.getEngine());
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

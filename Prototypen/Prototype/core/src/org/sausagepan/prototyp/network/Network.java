@@ -41,6 +41,7 @@ public class Network {
 		kryo.register(TakeKeyResponse.class);
 		kryo.register(LoseKeyRequest.class);
 		kryo.register(LoseKeyResponse.class);
+		kryo.register(YouDiedResponse.class);
 		kryo.register(IDAssignment.class);
 		kryo.register(GameClientCount.class);
 		kryo.register(TeamAssignment.class);
@@ -261,6 +262,15 @@ public class Network {
 			this.keySection = keySection;
 			this.x = x;
 			this.y = y;
+		}
+	}
+	
+	public static class YouDiedResponse {
+		public int id;
+
+		public YouDiedResponse() { }
+		public YouDiedResponse(int id) {
+			this.id = id;
 		}
 	}
 	
