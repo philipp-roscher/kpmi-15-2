@@ -5,7 +5,7 @@ package org.sausagepan.prototyp.model;
  */
 public class ServerSettings {
     public final static int MANDATORY_CLIENTS = 2;
-    public final static int MAZE_AREAS = 26;
+    public final static int MAZE_AREAS = 24;
     public final static int MAZE_WIDTH = 5;
     public final static int MAZE_HEIGHT = 5;
     public final static float TICKRATE = 64;

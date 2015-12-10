@@ -9,10 +9,12 @@ import com.esotericsoftware.kryonet.EndPoint;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.Weapontype;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.MapFactoryObject;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.items.MapItem;
 
 import java.util.HashMap;
 
@@ -51,6 +53,8 @@ public class Network {
         kryo.register(NetworkPosition.class);
         kryo.register(NetworkTransmissionComponent.class);
         kryo.register(MapMonsterObject.class);
+        kryo.register(MapItem.class);
+        kryo.register(ItemType.class);
         kryo.register(MapFactoryObject.class);
         kryo.register(Direction.class);
         kryo.register(Damagetype.class);
@@ -191,13 +195,15 @@ public class Network {
 	
 	public static class FullGameStateResponse {
 		public HashMap<Integer,CharacterClass> heroes;
-		public HashMap<Integer,MapMonsterObject> monsters; 
+		public HashMap<Integer,MapMonsterObject> monsters;
+		public HashMap<Integer,MapItem> items;
 		public HashMap<Integer,Integer> teamAssignments;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer,MapMonsterObject> monsters, HashMap<Integer, Integer> teamAssignments) {
+		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer,MapMonsterObject> monsters, HashMap<Integer,MapItem> items, HashMap<Integer, Integer> teamAssignments) {
 			this.heroes = heroes;
 			this.monsters = monsters;
+			this.items = items;
 			this.teamAssignments = teamAssignments;
 		}
 	}

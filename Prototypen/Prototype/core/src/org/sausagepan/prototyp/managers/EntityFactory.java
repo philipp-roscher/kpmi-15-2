@@ -28,6 +28,7 @@ import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
@@ -111,14 +112,16 @@ public class EntityFactory {
     }
     
     /**
-     * Creates a {@link Entity} for the game world
+     * Creates a {@link ItemEntity} for the game world
+     * @param i 
      * @return
      */
-    public Entity createItem(MapItem mapItem) {
-        Entity itemEntity = new Entity();
+    public ItemEntity createItem(MapItem mapItem, int id) {
+        ItemEntity itemEntity = new ItemEntity();
         Item item = itemFactory.createMapItem(mapItem.type, mapItem.value);
-        itemEntity.add(new ItemComponent(item));
+        itemEntity.add(new ItemComponent(item, mapItem.type, mapItem.value));
         itemEntity.add(new InjurableAreaComponent(mapItem.position.x, mapItem.position.y, 1f, 1f));
+        itemEntity.add(new IdComponent(id));
         SpriteComponent sprite = new SpriteComponent();
         sprite.sprite = new Sprite(item.itemImg);
         sprite.sprite.setPosition(mapItem.position.x-.5f, mapItem.position.y-.5f);

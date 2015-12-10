@@ -5,8 +5,10 @@ import com.badlogic.ashley.core.Family;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -27,6 +29,13 @@ public class EntityFamilies {
             SpriteComponent.class,
             HealthComponent.class,
             TeamComponent.class
+    ).get();
+    
+    public static Family itemFamily = Family.all(
+            ItemComponent.class,
+            SpriteComponent.class,
+            InjurableAreaComponent.class,
+            IdComponent.class
     ).get();
 
     public static Family attackerFamily = Family.all(

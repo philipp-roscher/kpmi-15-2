@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -23,6 +22,7 @@ import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
+import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
@@ -53,7 +53,7 @@ public class EntityComponentSystem {
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
     private HashMap<Integer,MonsterEntity> monsters;
-    private HashMap<Integer,Entity> items;
+    private HashMap<Integer,ItemEntity> items;
 
     private EntityFactory entityFactory;
 
@@ -85,7 +85,7 @@ public class EntityComponentSystem {
         this.engine = new ObservableEngine(); // Create Engine
         this.characters = new HashMap<Integer,CharacterEntity>();
         this.monsters = new HashMap<Integer,MonsterEntity>();
-        this.items = new HashMap<Integer,Entity>();
+        this.items = new HashMap<Integer,ItemEntity>();
         this.localCharacterId = game.clientId;
 
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
@@ -192,20 +192,22 @@ public class EntityComponentSystem {
     }
 
     public void setUpMonsters(HashMap<Integer,MapMonsterObject> mapMonsterObjects) {
-        // Get Objects from Maps Monster Layer and add monster entities there
+        // Get Objects from FullGameStateResponse Monster HashMap and add monster entities there
         for(HashMap.Entry<Integer,MapMonsterObject> mapObject : mapMonsterObjects.entrySet()) {
             // Using factory method for creating monsters
         	MonsterEntity monster = entityFactory.createMonster(mapObject.getValue(), mapObject.getKey());
         	monsters.put(mapObject.getKey(), monster);
             this.engine.addEntity(monster);
         }
-        // TODO
     }
 
-    private void setUpItems() {
-        // Get Objects from Maps Monster Layer and add monster entities there
-        for(MapItem mi : maze.getMapItems()) {
-            this.engine.addEntity(entityFactory.createItem(mi));
+    public void setUpItems(HashMap<Integer,MapItem> mapItems) {
+        // Get Objects from FullGameStateResponse Item HashMap and add item entities there
+        for(HashMap.Entry<Integer,MapItem> mapItem : mapItems.entrySet()) {
+            // Using factory method for creating monsters
+        	ItemEntity item = entityFactory.createItem(mapItem.getValue(), mapItem.getKey());
+        	items.put(mapItem.getKey(), item);
+            this.engine.addEntity(item);
         }
     }
 

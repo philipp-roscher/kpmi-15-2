@@ -146,6 +146,7 @@ public class NetworkSystem extends ObservingEntitySystem{
                 }
                 
                 ECS.setUpMonsters(response.monsters);
+                ECS.setUpItems(response.items);
 
                 nm.get(localEntity).client.addListener(new Listener() {
                     public void received(Connection connection, Object object) {

@@ -20,6 +20,7 @@ import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionCompone
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
+import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
@@ -49,7 +50,7 @@ public class ServerEntityComponentSystem {
     private Maze maze;
     private HashMap<Integer,ServerCharacterEntity> characters;
     private HashMap<Integer,MonsterEntity> monsters;
-    private HashMap<Integer,Entity> items;
+    private HashMap<Integer,ItemEntity> items;
     private GameServer gameServer;
     private Server server;
     private float tickrate = ServerSettings.TICKRATE;
@@ -68,7 +69,7 @@ public class ServerEntityComponentSystem {
         this.engine = new ObservableEngine(); // Create Engine
         this.characters = new HashMap<Integer,ServerCharacterEntity>();
         this.monsters = new HashMap<Integer,MonsterEntity>();
-        this.items = new HashMap<Integer,Entity>();
+        this.items = new HashMap<Integer,ItemEntity>();
 
         this.entityFactory = new EntityFactory(mediaManager, world);
         this.server = server;
@@ -144,7 +145,6 @@ public class ServerEntityComponentSystem {
         for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
             // Using factory method for creating monsters
         	MonsterEntity monster = entityFactory.createMonster(mapObject, i);
-            monster.add(new IdComponent(i));
         	monsters.put(i, monster);
             this.engine.addEntity(monster);
             i++;
@@ -156,8 +156,8 @@ public class ServerEntityComponentSystem {
     	int i = 1;
         // Get Objects from Maps Monster Layer and add monster entities there
         for(MapItem mi : maze.getMapItems()) {
-        	Entity item = entityFactory.createItem(mi);
-        	items.put(i++, entityFactory.createItem(mi));
+        	ItemEntity item = entityFactory.createItem(mi, i);
+        	items.put(i++, item);
             this.engine.addEntity(item);
         }
     }
@@ -278,7 +278,8 @@ public class ServerEntityComponentSystem {
 
 	public FullGameStateResponse generateFullGameStateResponse() {
 		HashMap<Integer,CharacterClass> heroes = new HashMap<Integer,CharacterClass>();
-		HashMap<Integer,MapMonsterObject> monsters = new HashMap<Integer,MapMonsterObject>(); 
+		HashMap<Integer,MapMonsterObject> monsters = new HashMap<Integer,MapMonsterObject>();
+		HashMap<Integer,MapItem> items = new HashMap<Integer,MapItem>();
 		HashMap<Integer,Integer> teamAssignments = new HashMap<Integer,Integer>();
 		
 		for(HashMap.Entry<Integer,ServerCharacterEntity> c : characters.entrySet()) {
@@ -290,6 +291,10 @@ public class ServerEntityComponentSystem {
 			monsters.put(m.getKey(), m.getValue().createClientInformation());
 		}
 		
-		return new FullGameStateResponse(heroes, monsters, teamAssignments);
+		for(HashMap.Entry<Integer,ItemEntity> m : this.items.entrySet()) {
+			items.put(m.getKey(), m.getValue().createClientInformation());
+		}
+		
+		return new FullGameStateResponse(heroes, monsters, items, teamAssignments);
 	}	
 }
