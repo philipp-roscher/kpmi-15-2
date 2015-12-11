@@ -8,11 +8,17 @@ import com.badlogic.ashley.core.Component;
  */
 public class IsDeadComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public final long deathTime;
+    // time when the character died
+	public final long deathTime;
+	// how long the character is marked as dead
+    public final long deathLength;
+    public boolean deathAcknowledged;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public IsDeadComponent(long deathTime) {
+    public IsDeadComponent(long deathTime, long deathLength) {
         this.deathTime = deathTime;
+        this.deathLength = deathLength;
+        this.deathAcknowledged = false;
     };
     
     /* ............................................................................... METHODS .. */

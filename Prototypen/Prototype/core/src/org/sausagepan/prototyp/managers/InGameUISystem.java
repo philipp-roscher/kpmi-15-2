@@ -31,7 +31,7 @@ public class InGameUISystem extends EntitySystem {
     private TextureRegion recentHealthBarImg;
     private TextureRegion attackButton;
     private Array<TextureRegion> keyFragmentImgs;
-    private Boolean[] keyFragmentItems;
+    private boolean[] keyFragmentItems;
     private int HP;
 
     // local entity
@@ -47,7 +47,7 @@ public class InGameUISystem extends EntitySystem {
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         TextureAtlas atlas = media.getTextureAtlasType("IngameUI");
-        keyFragmentItems = new Boolean[3];
+        keyFragmentItems = new boolean[3];
 
         for(int i=0; i<3; i++) {
         	keyFragmentItems[i] = false;

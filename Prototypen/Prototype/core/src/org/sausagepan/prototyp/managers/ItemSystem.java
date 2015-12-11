@@ -63,7 +63,7 @@ public class ItemSystem extends EntitySystem implements EntityListener {
             while (itemIterator.hasNext()) {
                 Entity item = itemIterator.next();
                 if(area.area.overlaps(am.get(item).area)) {
-                    System.out.println("Character "+ entity.getComponent(IdComponent.class).id +" picked up Item: " + itemM.get(item).item.getClass());
+                    System.out.println("Character "+ entity.getComponent(IdComponent.class).id +" picked up Item: " + itemM.get(item).item.getClass() + "(" +item.getComponent(IdComponent.class).id + ")");
                     ntc.networkMessagesToProcess.add(new ItemPickUp(entity.getComponent(IdComponent.class).id, item.getComponent(IdComponent.class).id));
                     
                     // if item is key

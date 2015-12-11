@@ -46,12 +46,7 @@ public class DynamicBodyComponent implements Component {
         this.startPosition = startPosition;
     }
 
-
     /* ............................................................................... METHODS .. */
-    
-    public void resetToStartPosition() {
-    	dynamicBody.setTransform(startPosition, 0f);
-    }
     
     /* ..................................................................... GETTERS & SETTERS .. */
 }

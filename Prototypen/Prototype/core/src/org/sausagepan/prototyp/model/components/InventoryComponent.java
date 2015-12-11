@@ -9,8 +9,8 @@ import com.badlogic.ashley.core.Component;
 public class InventoryComponent implements Component {
 
     /*..................................................................................Attributes*/
-	public Boolean[] ownKeys = new Boolean[3];
-	public Boolean[] teamKeys = new Boolean[3];
+	public boolean[] ownKeys = new boolean[3];
+	public boolean[] teamKeys = new boolean[3];
 
     public boolean needsUpdate;
 

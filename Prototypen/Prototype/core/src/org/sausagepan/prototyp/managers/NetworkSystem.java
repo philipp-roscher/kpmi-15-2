@@ -13,8 +13,10 @@ import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -25,6 +27,7 @@ import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
+import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
@@ -36,6 +39,7 @@ import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
+import org.sausagepan.prototyp.network.Network.NewItem;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
@@ -65,6 +69,8 @@ public class NetworkSystem extends EntitySystem {
     		= ComponentMapper.getFor(InputComponent.class);
     private ComponentMapper<WeaponComponent> wm
     		= ComponentMapper.getFor(WeaponComponent.class);
+    private ComponentMapper<IsDeadComponent> idm
+			= ComponentMapper.getFor(IsDeadComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public NetworkSystem(EntityComponentSystem ECS) {
     	this.ECS = ECS;
@@ -79,16 +85,21 @@ public class NetworkSystem extends EntitySystem {
         DynamicBodyComponent body = dm.get(entity);
         NetworkTransmissionComponent ntc = ntm.get(entity);
         NetworkComponent network = nm.get(entity);
-        WeaponComponent weapon = wm.get(entity);
         InputComponent input = im.get(entity);
+        IsDeadComponent isDead = idm.get(entity);
         
-        // send PositionUpdate (every tick)
-        posUpdate.position.moving     = input.moving;
-        posUpdate.position.direction  = input.direction;
-        posUpdate.position.velocity   = body.dynamicBody.getLinearVelocity();
-        posUpdate.position.position   = body.dynamicBody.getPosition();
-        posUpdate.position.bodyDirection = body.direction;
-        network.client.sendUDP(posUpdate);
+        // send PositionUpdate (every tick) unless dead
+        if(isDead != null) {
+        	if(System.currentTimeMillis() - isDead.deathTime > isDead.deathLength)
+        		entity.remove(IsDeadComponent.class);
+        } else {
+	        posUpdate.position.moving     = input.moving;
+	        posUpdate.position.direction  = input.direction;
+	        posUpdate.position.velocity   = body.dynamicBody.getLinearVelocity();
+	        posUpdate.position.position   = body.dynamicBody.getPosition();
+	        posUpdate.position.bodyDirection = body.direction;
+	        network.client.sendUDP(posUpdate);
+        }
         
         // send AttackRequest
         if(ntc.attack) {
@@ -137,7 +148,8 @@ public class NetworkSystem extends EntitySystem {
                                 (object instanceof HPUpdateResponse) ||
                                 (object instanceof DeleteBulletResponse) ||
                                 (object instanceof YouDiedResponse) ||
-                                (object instanceof ItemPickUp)) {
+                                (object instanceof ItemPickUp) ||
+                                (object instanceof NewItem)) {
                             //System.out.println( object.getClass() +" empfangen");
                             NetworkSystem.this.networkMessages.add(object);
                         }
@@ -236,9 +248,44 @@ public class NetworkSystem extends EntitySystem {
             
             if (object instanceof YouDiedResponse) {
             	YouDiedResponse result = (YouDiedResponse) object;
-            	if(result.id == posUpdate.playerId) {
-            		body.dynamicBody.setTransform(body.startPosition, 0f);
+            	
+            	// remove own keys from character
+            	InventoryComponent inventory = ECS.getCharacter(result.id).getComponent(InventoryComponent.class);
+            	// temp array to store new ownKeys array
+            	boolean[] temp = new boolean[3];
+            	for(int i=0; i<3; i++) {
+                	inventory.ownKeys[i] = false;
+                	temp[i] = false;
+                }
+            	
+            	int teamId = ECS.getCharacter(result.id).getComponent(TeamComponent.class).TeamId;
+            	ImmutableArray<Entity> characters = this.getEngine().getEntitiesFor(EntityFamilies.characterFamily);
+            	for(Entity character : characters) {
+            		if (character.getComponent(TeamComponent.class).TeamId == teamId) {
+            			InventoryComponent teamInventory = character.getComponent(InventoryComponent.class);
+                    	if(teamInventory.getKeyAmount() == 3) teamInventory.needsUpdate = true;
+                    	for(int i=0; i<3; i++)
+                        	temp[i] = temp[i] || teamInventory.ownKeys[i];
+            		}
             	}
+            	
+            	for(Entity character : characters) {
+            		if (character.getComponent(TeamComponent.class).TeamId == teamId) {
+            			character.getComponent(InventoryComponent.class).teamKeys = temp;
+            		}
+            	}
+            	
+            	if(result.id == posUpdate.playerId) {
+            		entity.add(new IsDeadComponent(System.currentTimeMillis(), 5000));
+            		body.dynamicBody.setTransform(body.startPosition, 0f);
+            		network.client.sendTCP(new AcknowledgeDeath(posUpdate.playerId));
+            	}
+            }
+
+            if (object instanceof NewItem) {
+            	NewItem result = (NewItem) object;
+            	System.out.println("New Item: "+result.id+ " : " +result.item.position);
+            	ECS.createItem(result.id, result.item);
             }
             
             if (object instanceof ItemPickUp) {

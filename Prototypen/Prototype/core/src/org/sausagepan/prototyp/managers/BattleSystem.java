@@ -7,12 +7,16 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
 
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -22,10 +26,12 @@ import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.model.items.Sword;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
+import org.sausagepan.prototyp.network.Network.NewItem;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 
@@ -129,14 +135,33 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         			// Remove monsters
         			ECS.deleteMonster(v.getComponent(IdComponent.class).id);        			
         		} else {
+        			DynamicBodyComponent body = dm.get(v);
+        			InventoryComponent inventory = v.getComponent(InventoryComponent.class);
+        			// create new temporary Vector2 that holds old character position
+					Vector2 position = new Vector2(body.dynamicBody.getPosition());
+        			
         			// Reset human player to starting position, refill his health bar
-        			/* DynamicBodyComponent body = dm.get(v);
-        			body.dynamicBody.setTransform(body.startPosition, 0f); */
+        			body.dynamicBody.setTransform(body.startPosition, 0f);
+        			body.dynamicBody.setLinearVelocity(0f, 0f);
         			health.HP = health.initialHP;
+        			
+        			// mark character as dead so that he can't move, prepare network messages
+        			v.add(new IsDeadComponent(System.currentTimeMillis(), 5000));
         			ntc.networkMessagesToProcess.add(new YouDiedResponse(v.getComponent(IdComponent.class).id));
         			ntc.networkMessagesToProcess.add(new HPUpdateResponse(v.getComponent(IdComponent.class).id, true, health.HP));
-        		}
         			
+        			// Drop his keys        			
+        			for(int i=0; i<3; i++) {
+        				if(inventory.ownKeys[i]) {
+        					MapItem mapItem = new MapItem(position, ItemType.KEY, (i+1));
+        					int id = ECS.createItem(mapItem);
+        					NewItem newItem = new NewItem(id, mapItem);
+        					ntc.networkMessagesToProcess.add(newItem);
+        	            	System.out.println("New Item: "+id+ " : " +newItem.item.position);
+        				}
+        				inventory.ownKeys[i] = false;
+        			}
+        		}
         	}
         }
     }

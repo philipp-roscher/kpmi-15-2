@@ -286,6 +286,12 @@ public class EntityComponentSystem {
 		}
 	}
 	
+    public void createItem(int id, MapItem mapItem) {
+    	ItemEntity item = entityFactory.createItem(mapItem, id);
+    	items.put(id, item);
+        this.engine.addEntity(item);
+    }
+    
 	public CharacterEntity getCharacter(int playerId) {
 		return characters.get(playerId);
 	}

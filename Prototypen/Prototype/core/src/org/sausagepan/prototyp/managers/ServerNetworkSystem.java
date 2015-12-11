@@ -10,10 +10,12 @@ import com.esotericsoftware.kryonet.Server;
 
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.network.GameServer;
+import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
@@ -24,6 +26,7 @@ import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
+import org.sausagepan.prototyp.network.Network.NewItem;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
@@ -81,20 +84,19 @@ public class ServerNetworkSystem extends EntitySystem {
         for(Object object : ntc.networkMessagesToProcess) {
             if ((object instanceof HPUpdateResponse) ||
                 (object instanceof DeleteBulletResponse) ||
-                (object instanceof ItemPickUp)
+                (object instanceof ItemPickUp) ||
+                (object instanceof NewItem) ||
+                (object instanceof YouDiedResponse)
             )
                 server.sendToAllTCP(object);
             
             if (object instanceof ShootResponse)
             	server.sendToAllUDP(object);
-            
-            if (object instanceof YouDiedResponse) {
-            	server.sendToTCP(((YouDiedResponse)object).id, object);
-            }
         }
 
         for(NetworkMessage nm : networkMessages) {
-        	Connection connection = nm.connection;
+        	Connection connection =
+        			nm.connection;
         	Object object = nm.object;
 
             // handle disconnection messages
@@ -121,18 +123,27 @@ public class ServerNetworkSystem extends EntitySystem {
                 PositionUpdate request = (PositionUpdate)object;
 
                 ServerCharacterEntity character = ECS.getCharacter(request.playerId);
+                
                 if(character != null) {
-                    character.getComponent(DynamicBodyComponent.class)
-                            .dynamicBody
-                            .setTransform(request.position.position, 0f);
-                    character.getComponent(DynamicBodyComponent.class)
-                            .dynamicBody
-                            .setLinearVelocity(request.position.velocity);
-                    character.getComponent(DynamicBodyComponent.class)
-                            .direction = request.position.bodyDirection;
-
-                    if (request.position.direction != null)
-                        character.getComponent(InputComponent.class).direction = request.position.direction;
+                	// Check if character is dead and therefore not allowed to move
+                	IsDeadComponent id = character.getComponent(IsDeadComponent.class);
+                    if(id != null) {
+                    	if( (System.currentTimeMillis() - id.deathTime > id.deathLength)
+                    			&& id.deathAcknowledged == true)
+                    		character.remove(IsDeadComponent.class);                		
+                    } else {
+	                    character.getComponent(DynamicBodyComponent.class)
+	                            .dynamicBody
+	                            .setTransform(request.position.position, 0f);
+	                    character.getComponent(DynamicBodyComponent.class)
+	                            .dynamicBody
+	                            .setLinearVelocity(request.position.velocity);
+	                    character.getComponent(DynamicBodyComponent.class)
+	                            .direction = request.position.bodyDirection;
+	
+	                    if (request.position.direction != null)
+	                        character.getComponent(InputComponent.class).direction = request.position.direction;
+                    }
                 }
         	}
 
@@ -161,17 +172,14 @@ public class ServerNetworkSystem extends EntitySystem {
                }
            }
 
-           /* if (object instanceof TakeKeyRequest) {
-        	   	System.out.println("TakeKeyResponse");
-        	   	TakeKeyRequest request = (TakeKeyRequest) object;
-        	   	server.sendToAllTCP(new TakeKeyResponse(request.id, request.keySection));
+           if (object instanceof AcknowledgeDeath) {
+        	   AcknowledgeDeath result = (AcknowledgeDeath) object;
+
+               ServerCharacterEntity character = ECS.getCharacter(result.id);
+               if(character != null) {
+                   character.getComponent(IsDeadComponent.class).deathAcknowledged = true;
+               }        	   
            }
-           
-           if (object instanceof LoseKeyRequest) {
-				System.out.println("LoseKeyResponse");
-				LoseKeyRequest request = (LoseKeyRequest) object;
-				server.sendToAllTCP(new LoseKeyResponse(request.id, request.keySection, request.x, request.y));
-           } */
         }
 
         ntc.networkMessagesToProcess.clear();

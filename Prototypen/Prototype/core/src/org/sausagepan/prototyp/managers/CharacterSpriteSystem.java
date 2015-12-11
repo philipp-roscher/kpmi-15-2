@@ -70,11 +70,11 @@ public class CharacterSpriteSystem extends EntitySystem implements EntityListene
                 	// rotate and remove body
                 	sm.get(entity).sprite.rotate(90);
 	                sm.get(entity).sprite.setOriginCenter();
-	                entity.add(new IsDeadComponent(System.currentTimeMillis()));
+	                entity.add(new IsDeadComponent(System.currentTimeMillis(), 2000));
 	                ECS.deleteMonster(entity.getComponent(IdComponent.class).id, false);
                 } else {
                 	// completely delete entity after 2 seconds 
-                	if ((System.currentTimeMillis() - isDead.deathTime) > 2000) {
+                	if ((System.currentTimeMillis() - isDead.deathTime) > isDead.deathLength) {
     	                ECS.deleteMonster(entity.getComponent(IdComponent.class).id, true);
                 	}
                 }

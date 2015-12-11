@@ -40,6 +40,7 @@ public class Network {
 		kryo.register(FullGameStateResponse.class);
         kryo.register(DeleteBulletResponse.class);
 		kryo.register(YouDiedResponse.class);
+		kryo.register(AcknowledgeDeath.class);
 		kryo.register(ItemPickUp.class);
 		kryo.register(NewItem.class);
 		kryo.register(IDAssignment.class);
@@ -244,6 +245,15 @@ public class Network {
 
 		public YouDiedResponse() { }
 		public YouDiedResponse(int id) {
+			this.id = id;
+		}
+	}
+	
+	public static class AcknowledgeDeath {
+		public int id;
+
+		public AcknowledgeDeath() { }
+		public AcknowledgeDeath(int id) {
 			this.id = id;
 		}
 	}

@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -38,6 +39,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     		= ComponentMapper.getFor(NetworkComponent.class);
     private ComponentMapper<NetworkTransmissionComponent> ntm
 			= ComponentMapper.getFor(NetworkTransmissionComponent.class);
+    private ComponentMapper<IsDeadComponent> idm
+			= ComponentMapper.getFor(IsDeadComponent.class);
 
 
     private float ax, ay;
@@ -68,8 +71,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
+            IsDeadComponent isDead = idm.get(entity);
 
-            if(input.moving) move(input.touchPos, body, input);
+            if(input.moving && isDead == null) move(input.touchPos, body, input);
                 /* Keyboard Input */
 //                switch(input.direction) {
 //                    case NORTH: body.dynamicBody.setLinearVelocity(0,5);break;

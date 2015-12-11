@@ -57,6 +57,8 @@ public class ServerEntityComponentSystem {
     private Server server;
     private float tickrate = ServerSettings.TICKRATE;
     private ServerNetworkTransmissionComponent sntc;
+    private float[][] startPositions;
+    private int maxItemId;
     
     private EntityFactory entityFactory;
 
@@ -67,7 +69,9 @@ public class ServerEntityComponentSystem {
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
         this.maze = new Maze(mapInformation, world);
+        this.startPositions = maze.getStartPositions();
         maze.openSecretPassages();
+        this.maxItemId = 1;
 
         this.engine = new Engine(); // Create Engine
         this.characters = new HashMap<Integer,ServerCharacterEntity>();
@@ -151,11 +155,10 @@ public class ServerEntityComponentSystem {
     }
 
     private void setUpItems() {
-    	int i = 1;
         // Get Objects from Maps Monster Layer and add monster entities there
         for(MapItem mi : maze.getMapItems()) {
-        	ItemEntity item = entityFactory.createItem(mi, i);
-        	items.put(i++, item);
+        	ItemEntity item = entityFactory.createItem(mi, maxItemId);
+        	items.put(maxItemId++, item);
             this.engine.addEntity(item);
         }
     }
@@ -187,13 +190,13 @@ public class ServerEntityComponentSystem {
         
         //Set Spawn locations: Game master
         if (newCharacterTeamId == 0) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), clientClass));
         }
         if (newCharacterTeamId == 1) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), clientClass));
         }
         if (newCharacterTeamId == 2) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass));
         }
         
         characters.put(newCharacterId, newCharacter);
@@ -227,7 +230,6 @@ public class ServerEntityComponentSystem {
 		MonsterEntity monster = monsters.get(id);
 		if(monster != null) {
 			world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
-			System.out.println("debug1");
 			engine.removeEntity(monster);
 			this.monsters.remove(id);
 		}
@@ -247,10 +249,11 @@ public class ServerEntityComponentSystem {
         this.engine.addEntity(monster);
     }
     
-    public void createItem(MapItem mapItem, int id) {
-    	ItemEntity item = entityFactory.createItem(mapItem, id);
-    	items.put(id, item);
+    public int createItem(MapItem mapItem) {
+    	ItemEntity item = entityFactory.createItem(mapItem, maxItemId);
+    	items.put(maxItemId, item);
         this.engine.addEntity(item);
+        return maxItemId++;
     }
 
 	public ServerCharacterEntity getCharacter(int playerId) {
