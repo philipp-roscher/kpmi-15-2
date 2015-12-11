@@ -2,19 +2,27 @@ package org.sausagepan.prototyp.managers;
 
 import java.util.Iterator;
 
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.enums.ItemType;
+import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
+import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
+import org.sausagepan.prototyp.model.items.KeyFragmentItem;
+import org.sausagepan.prototyp.model.items.PotionHP;
+import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
+import org.sausagepan.prototyp.network.Network.ItemPickUp;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by georg on 13.11.15.
@@ -32,23 +40,20 @@ public class ItemSystem extends ObservingEntitySystem {
 
     private ImmutableArray<Entity> characters;
     private ImmutableArray<Entity> items;
+    private ServerNetworkTransmissionComponent ntc;
+    private ServerEntityComponentSystem ECS;
     /* ........................................................................... CONSTRUCTOR .. */
-    public ItemSystem() {
+    public ItemSystem(ServerEntityComponentSystem ECS) {
+    	this.ECS = ECS;
     }
     /* ............................................................................... METHODS .. */
     @Override
     public void addedToEngine(ObservableEngine engine) {
-        characters = engine.getEntitiesFor(Family.all(
-                WeaponComponent.class,
-                InventoryComponent.class,
-                TeamComponent.class,
-                DynamicBodyComponent.class,
-                NetworkComponent.class,
-                InjurableAreaComponent.class).get());
-        items = engine.getEntitiesFor(Family.all(
-                ItemComponent.class,
-                SpriteComponent.class,
-                InjurableAreaComponent.class).get());
+        characters = engine.getEntitiesFor(EntityFamilies.serverCharacterFamily);
+        items = engine.getEntitiesFor(EntityFamilies.itemFamily);
+        ntc = engine.getEntitiesFor(Family.all(ServerNetworkTransmissionComponent.class).get()).
+                get(0).
+                getComponent(ServerNetworkTransmissionComponent.class);
     }
 
     public void update(float deltaTime)
@@ -59,13 +64,29 @@ public class ItemSystem extends ObservingEntitySystem {
             Iterator<Entity> itemIterator = items.iterator();
             while (itemIterator.hasNext()) {
                 Entity item = itemIterator.next();
-                // TODO: revisit ItemSystem
-                //SpriteComponent sprite = sm.get(item);
                 if(area.area.overlaps(am.get(item).area)) {
-                    System.out.println("Picked up Item: " + itemM.get(item).item.getClass());
-                    inventory.pickUpItem(itemM.get(item).item, 1);
-                    //tmr.removeSprite(sprite.sprite);
-                    getEngine().removeEntity(item);
+                    System.out.println("Character "+ entity.getComponent(IdComponent.class).id +" picked up Item: " + itemM.get(item).item.getClass());
+                    ntc.networkMessagesToProcess.add(new ItemPickUp(entity.getComponent(IdComponent.class).id, item.getComponent(IdComponent.class).id));
+                    
+                    // if item is key
+					if(itemM.get(item).type == ItemType.KEY) {
+                    	KeyFragmentItem keyFragment = (KeyFragmentItem) itemM.get(item).item;
+                    	// add key to character inventory
+                    	inventory.ownKeys[keyFragment.keyFragmentNr - 1] = true;
+                    	// adding key to team inventory is not needed on server
+					}
+					
+					// if item is potion
+					if(itemM.get(item).type == ItemType.POTION_HP) {
+                    	PotionHP potion = (PotionHP) itemM.get(item).item;
+                    	HealthComponent health = entity.getComponent(HealthComponent.class);
+                    	health.HP += potion.strength;
+                    	// health can't surpass max HP
+                    	if(health.HP > health.initialHP) health.HP = health.initialHP;
+                    	ntc.networkMessagesToProcess.add(new HPUpdateResponse(entity.getComponent(IdComponent.class).id, true, health.HP));
+					}
+                    
+                    ECS.deleteItem(item.getComponent(IdComponent.class).id);
                 }
             }
         }

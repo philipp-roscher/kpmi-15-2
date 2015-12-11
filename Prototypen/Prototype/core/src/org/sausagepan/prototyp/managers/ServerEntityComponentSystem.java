@@ -109,18 +109,13 @@ public class ServerEntityComponentSystem {
         engine.addEntityListener(EntityFamilies.attackerFamily, battleSystem);
         engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
 
-        //Inventory System
-        InventorySystem inventorySystem = new InventorySystem(maze);
-        inventorySystem.addedToEngine(engine);
-        engine.subscribe(inventorySystem);
-
         // Bullet System
         BulletSystem bulletSystem = new BulletSystem(engine, maze);
         bulletSystem.addedToEngine(engine);
         engine.subscribe(bulletSystem);
 
         // Item System
-        ItemSystem itemSystem = new ItemSystem();
+        ItemSystem itemSystem = new ItemSystem(this);
         itemSystem.addedToEngine(engine);
         engine.subscribe(itemSystem);
 
@@ -133,7 +128,6 @@ public class ServerEntityComponentSystem {
         this.engine.addSystem(weaponSystem);
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(battleSystem);
-        this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(itemSystem);
         this.engine.addSystem(networkSystem);
@@ -224,7 +218,7 @@ public class ServerEntityComponentSystem {
             gameServer.deleteCharacter(id);
 		}
 	}
-    
+
     public void deleteMonster(int id) {
 		MonsterEntity monster = monsters.get(id);
 		if(monster != null) {
@@ -233,6 +227,26 @@ public class ServerEntityComponentSystem {
 			this.monsters.remove(id);
 		}
 	}
+
+    public void deleteItem(int id) {
+		ItemEntity item = items.get(id);
+		if(item != null) {
+			engine.removeEntity(item);
+			this.monsters.remove(id);
+		}
+	}
+    
+    public void createMonster(MapMonsterObject mmo, int id) {
+    	MonsterEntity monster = entityFactory.createMonster(mmo, id);
+    	monsters.put(id, monster);
+        this.engine.addEntity(monster);
+    }
+    
+    public void createItem(MapItem mapItem, int id) {
+    	ItemEntity item = entityFactory.createItem(mapItem, id);
+    	items.put(id, item);
+        this.engine.addEntity(item);
+    }
 
 	public ServerCharacterEntity getCharacter(int playerId) {
 		return characters.get(playerId);
@@ -276,6 +290,7 @@ public class ServerEntityComponentSystem {
 		return result;
 	}
 
+	// produces a FullGameStateResponse containing all the needed information to recreate the game state in the clients
 	public FullGameStateResponse generateFullGameStateResponse() {
 		HashMap<Integer,CharacterClass> heroes = new HashMap<Integer,CharacterClass>();
 		HashMap<Integer,MapMonsterObject> monsters = new HashMap<Integer,MapMonsterObject>();

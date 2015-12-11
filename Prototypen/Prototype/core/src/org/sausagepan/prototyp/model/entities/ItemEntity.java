@@ -1,13 +1,8 @@
 package org.sausagepan.prototyp.model.entities;
 
-import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
-import org.sausagepan.prototyp.model.components.CharacterClassComponent;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
-import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.MapItem;
 
 import com.badlogic.ashley.core.Entity;
@@ -16,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Created by georg on 30.10.15.
+ * Created by philipp on 10.12.15.
  */
 public class ItemEntity extends Entity {
     /* ............................................................................ ATTRIBUTES .. */

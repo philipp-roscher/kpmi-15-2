@@ -19,6 +19,7 @@ import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
+import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
@@ -78,7 +79,8 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
     public void update(float deltaTime) {
         for(Object object : ntc.networkMessagesToProcess) {
             if ((object instanceof HPUpdateResponse) ||
-                (object instanceof DeleteBulletResponse)
+                (object instanceof DeleteBulletResponse) ||
+                (object instanceof ItemPickUp)
             )
                 server.sendToAllTCP(object);
             

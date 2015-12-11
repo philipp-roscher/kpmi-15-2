@@ -9,18 +9,23 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
@@ -29,15 +34,12 @@ import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.LoseKeyRequest;
-import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
+import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
-import org.sausagepan.prototyp.network.Network.TakeKeyRequest;
-import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
 import java.util.HashMap;
@@ -112,18 +114,6 @@ public class NetworkSystem extends ObservingEntitySystem{
             	network.client.sendUDP(new ShootRequest(network.id));
             	ntc.shoot = false;
             }
-            if(ntc.takeKey.size != 0) {
-            	for(int i : ntc.takeKey)
-            		network.client.sendTCP(new TakeKeyRequest(network.id, i));
-
-            	ntc.takeKey.clear();
-            }
-            if(ntc.loseKey.size != 0) {
-            	for(int i : ntc.loseKey)
-            		network.client.sendTCP(new LoseKeyRequest(network.id, i, posUpdate.position.position.x, posUpdate.position.position.y));
-            	
-            	ntc.loseKey.clear();
-            }
         }
         
         for(Object object : networkMessages) {
@@ -157,10 +147,9 @@ public class NetworkSystem extends ObservingEntitySystem{
                                 (object instanceof AttackResponse) ||
                                 (object instanceof ShootResponse) ||
                                 (object instanceof HPUpdateResponse) ||
-                                (object instanceof LoseKeyResponse) ||
-                                (object instanceof TakeKeyResponse) ||
                                 (object instanceof DeleteBulletResponse) ||
-                                (object instanceof YouDiedResponse)) {
+                                (object instanceof YouDiedResponse) ||
+                                (object instanceof ItemPickUp)) {
                             //System.out.println( object.getClass() +" empfangen");
                             NetworkSystem.this.networkMessages.add(object);
                         }
@@ -248,27 +237,6 @@ public class NetworkSystem extends ObservingEntitySystem{
                     character.getComponent(HealthComponent.class).HP = result.HP;
             }
 
-            if (object instanceof LoseKeyResponse) {
-                System.out.println("LoseKeyResponse");
-                LoseKeyResponse result = (LoseKeyResponse) object;
-                CharacterEntity character = ECS.getCharacter(result.id);
-        		if(character != null)
-        			character.getComponent(InventoryComponent.class).dropAllItems();
-            }
-
-            if (object instanceof TakeKeyResponse) {
-                System.out.println("TakeKeyResponse");
-                TakeKeyResponse result = (TakeKeyResponse) object;
-                
-                if(result.id != posUpdate.playerId) {
-                    CharacterEntity character = ECS.getCharacter(result.id);
-                    if (character != null) {
-            			character.getComponent(InventoryComponent.class)
-                                .pickUpItem(ECS.getItemFactory().createKeyFragment(result.keySection), 1);
-            		}
-            	}
-            }
-
             if (object instanceof DeleteBulletResponse) {
                 DeleteBulletResponse result = (DeleteBulletResponse) object;
 
@@ -285,6 +253,29 @@ public class NetworkSystem extends ObservingEntitySystem{
             		body.dynamicBody.setTransform(body.startPosition, 0f);
             	}
             }
+            
+            if (object instanceof ItemPickUp) {
+            	ItemPickUp result = (ItemPickUp) object;
+
+				if(ECS.getItem(result.itemId).getComponent(ItemComponent.class).type == ItemType.KEY) {
+                	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
+                	// add key to character inventory
+                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;
+                	
+                	// add key to team inventory of all team members
+                	int teamId = ECS.getCharacter(result.playerId).getComponent(TeamComponent.class).TeamId;
+                	ImmutableArray<Entity> characters = this.getEngine().getEntitiesFor(EntityFamilies.characterFamily);
+                	for(Entity character : characters) {
+                		if (character.getComponent(TeamComponent.class).TeamId == teamId) {
+                			InventoryComponent inventory = character.getComponent(InventoryComponent.class);
+                        	inventory.teamKeys[keyFragment.keyFragmentNr - 1] = true;
+                        	if(inventory.getKeyAmount() == 3) inventory.needsUpdate = true;
+                		}
+                	}                    	
+				}
+                
+                ECS.deleteItem(result.itemId);
+            }
         }
 
         networkMessages.clear();
@@ -292,7 +283,7 @@ public class NetworkSystem extends ObservingEntitySystem{
     
     // sets up the system for communication, adds listener
     public void setupSystem() {
-    	localEntity = entities.get(0);
+    	localEntity = ECS.getLocalCharacterEntity();
         NetworkComponent network = nm.get(localEntity);
         posUpdate.playerId = network.id;
         posUpdate.position = new NetworkPosition();

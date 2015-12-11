@@ -39,11 +39,9 @@ public class Network {
 		kryo.register(FullGameStateRequest.class);
 		kryo.register(FullGameStateResponse.class);
         kryo.register(DeleteBulletResponse.class);
-		kryo.register(TakeKeyRequest.class);
-		kryo.register(TakeKeyResponse.class);
-		kryo.register(LoseKeyRequest.class);
-		kryo.register(LoseKeyResponse.class);
 		kryo.register(YouDiedResponse.class);
+		kryo.register(ItemPickUp.class);
+		kryo.register(NewItem.class);
 		kryo.register(IDAssignment.class);
 		kryo.register(GameClientCount.class);
 		kryo.register(TeamAssignment.class);
@@ -219,58 +217,28 @@ public class Network {
         }
     }
 	
-	public static class TakeKeyRequest {
-		public int id;
-		public int keySection;
-		
-		public TakeKeyRequest() { }
-		public TakeKeyRequest(int id, int keySection) {
-			this.id = id;
-			this.keySection = keySection;
-		}
-	}
-	
-	public static class TakeKeyResponse {
-		public int id;
-		public int keySection;
-		
-		public TakeKeyResponse() { }
-		public TakeKeyResponse(int id, int keySection) {
-			this.id = id;
-			this.keySection = keySection;
-		}
-	}
-	
-	public static class LoseKeyRequest {
-		public int id;
-		public int keySection;
-		public float x;
-		public float y;
-		
-		public LoseKeyRequest() { }
-		public LoseKeyRequest(int id, int keySection, float x, float y) {
-			this.id = id;
-			this.keySection = keySection;
-			this.x = x;
-			this.y = y;
-		}
-	}
-	
-	public static class LoseKeyResponse {
-		public int id;
-		public int keySection;
-		public float x;
-		public float y;
-		
-		public LoseKeyResponse() { }
-		public LoseKeyResponse(int id, int keySection, float x, float y) {
-			this.id = id;
-			this.keySection = keySection;
-			this.x = x;
-			this.y = y;
-		}
-	}
-	
+    public static class ItemPickUp {
+        public int playerId;
+        public int itemId;
+
+        public ItemPickUp() { }
+        public ItemPickUp(int playerId, int itemId) {
+            this.playerId = playerId;
+            this.itemId = itemId;
+        }
+    }
+
+    public static class NewItem {
+        public int id;
+        public MapItem item;
+
+        public NewItem() { }
+        public NewItem(int id, MapItem item) {
+            this.id = id;
+            this.item = item;
+        }
+    }
+
 	public static class YouDiedResponse {
 		public int id;
 

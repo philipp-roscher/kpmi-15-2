@@ -165,6 +165,7 @@ public class EntityFactory {
         // Add Components
         characterEntity.add(new InputComponent());
         characterEntity.add(new LightComponent(rayHandler));
+        characterEntity.add(new CharacterClassComponent(characterClass));
 
         // Add components which are equal for all classes
         characterEntity.add(new HealthComponent(100));

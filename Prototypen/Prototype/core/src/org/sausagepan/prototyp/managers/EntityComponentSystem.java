@@ -19,13 +19,11 @@ import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
-import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
@@ -139,9 +137,7 @@ public class EntityComponentSystem {
 
         //TODO: port this
         //Inventory System
-        InventorySystem inventorySystem = new InventorySystem(maze);
-        inventorySystem.addedToEngine(engine);
-        engine.subscribe(inventorySystem);
+        InventorySystem inventorySystem = new InventorySystem(maze, getLocalCharacterEntity());
 
         // Bullet System
         BulletSystem bulletSystem = new BulletSystem(engine, maze);
@@ -154,19 +150,12 @@ public class EntityComponentSystem {
         inGameUISystem.addedToEngine(engine);
         engine.subscribe(inGameUISystem);
 
-        //TODO: port this
-        // Item System
-        ItemSystem itemSystem = new ItemSystem();
-        itemSystem.addedToEngine(engine);
-        engine.subscribe(itemSystem);
-
         // Light System
         LightSystem lightSystem = new LightSystem(rayHandler);
         lightSystem.addedToEngine(engine);
         engine.subscribe(lightSystem);
 
         // Adding them to the Engine
-        //this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
         this.engine.addSystem(weaponSystem);
         this.engine.addSystem(characterSpriteSystem);
@@ -177,7 +166,6 @@ public class EntityComponentSystem {
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
-        this.engine.addSystem(itemSystem);
         this.engine.addSystem(lightSystem);
     }
 
@@ -324,12 +312,24 @@ public class EntityComponentSystem {
 		}
 	}
 
+	public void deleteItem(int id) {
+		ItemEntity item = items.get(id);
+		if(item != null) {
+			engine.removeEntity(item);
+			this.items.remove(id);
+		}
+	}
+	
 	public CharacterEntity getCharacter(int playerId) {
 		return characters.get(playerId);
 	}
 
 	public MonsterEntity getMonster(Integer key) {
 		return monsters.get(key);
+	}
+	
+	public ItemEntity getItem(Integer key) {
+		return items.get(key);
 	}
 	
 	public void setupNetworkSystem() {

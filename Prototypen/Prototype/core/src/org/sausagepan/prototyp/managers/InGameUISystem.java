@@ -5,7 +5,6 @@ import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -31,7 +30,7 @@ public class InGameUISystem extends ObservingEntitySystem {
     private TextureRegion recentHealthBarImg;
     private TextureRegion attackButton;
     private Array<TextureRegion> keyFragmentImgs;
-    private Array<KeyFragmentItem> keyFragmentItems;
+    private Boolean[] keyFragmentItems;
     private int HP;
 
     private ImmutableArray<Entity> entities;
@@ -46,7 +45,11 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
         TextureAtlas atlas = media.getTextureAtlasType("IngameUI");
-        this.keyFragmentItems = new Array<KeyFragmentItem>();
+        keyFragmentItems = new Boolean[3];
+
+        for(int i=0; i<3; i++) {
+        	keyFragmentItems[i] = false;
+        }
 
         // Get health bar Images
         this.healthBarImages = new Array<TextureRegion>();
@@ -83,14 +86,15 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.batch.draw(characterImg, 16, 400, 64, 64);
         this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
         this.batch.draw(attackButton, 32, 32, 48, 48);
+        
         batch.draw(keyFragmentImgs.get(0), 690, 429);
-        for(KeyFragmentItem kf : keyFragmentItems) {
-            switch(kf.keyFragmentNr) {
-                case 1: batch.draw(keyFragmentImgs.get(1), 691, 430); break;
-                case 2: batch.draw(keyFragmentImgs.get(2), 723, 430); break;
-                case 3: batch.draw(keyFragmentImgs.get(3), 755, 430); break;
-            }
-        }
+        if(keyFragmentItems[0])
+        	batch.draw(keyFragmentImgs.get(1), 691, 430);
+        if(keyFragmentItems[1])
+        	batch.draw(keyFragmentImgs.get(2), 723, 430);
+        if(keyFragmentItems[2])
+        	batch.draw(keyFragmentImgs.get(3), 755, 430);
+        
         this.batch.end();
         this.camera.update();
     }
@@ -110,7 +114,7 @@ public class InGameUISystem extends ObservingEntitySystem {
             HP = MathUtils.roundPositive((float) health.HP/(health.initialHP)*10)+1;
             recentHealthBarImg = healthBarImages.get(HP);
             InventoryComponent inventory = im.get(entity);
-            this.keyFragmentItems = inventory.keyFragments;
+            this.keyFragmentItems = inventory.teamKeys;
         }
     }
     /* ..................................................................... GETTERS & SETTERS .. */
