@@ -57,10 +57,14 @@ public class EntityFamilies {
     
     public static Family monsterFamily = Family.all(
             DynamicBodyComponent.class,
-            SpriteComponent.class,
+            InjurableAreaComponent.class,
+            IdComponent.class,
+            TeamComponent.class,
             HealthComponent.class,
-            TeamComponent.class
-    ).get();
+            CharacterClassComponent.class
+    ).exclude(
+    		InventoryComponent.class
+	).get();
     
     public static Family itemFamily = Family.all(
             ItemComponent.class,

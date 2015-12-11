@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.managers;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,11 +15,14 @@ import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
+import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.ItemEntity;
@@ -40,7 +44,7 @@ import box2dLight.RayHandler;
  */
 public class EntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
-    private ObservableEngine engine;
+    private Engine engine;
     private World world;
     private MediaManager mediaManager;
     private ItemFactory itemFactory;
@@ -80,7 +84,7 @@ public class EntityComponentSystem {
         this.characterClass = characterClass;
         this.TeamId = TeamId;
 
-        this.engine = new ObservableEngine(); // Create Engine
+        this.engine = new Engine(); // Create Engine
         this.characters = new HashMap<Integer,CharacterEntity>();
         this.monsters = new HashMap<Integer,MonsterEntity>();
         this.items = new HashMap<Integer,ItemEntity>();
@@ -105,12 +109,11 @@ public class EntityComponentSystem {
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
         weaponSystem.addedToEngine(engine);
-        engine.subscribe(weaponSystem);
+        engine.addEntityListener(Family.all(WeaponComponent.class,NetworkTransmissionComponent.class).get(), weaponSystem);
 
         // Input System
         InputSystem inputSystem = new InputSystem(viewport);
         inputSystem.addedToEngine(engine);
-        engine.subscribe(inputSystem);
 
         // Character Sprite System
         CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem(this);
@@ -127,33 +130,25 @@ public class EntityComponentSystem {
         // Network System
         NetworkSystem networkSystem = new NetworkSystem(this);
         networkSystem.addedToEngine(engine);
-        engine.subscribe(networkSystem);
 
         // Debugging System
         VisualDebuggingSystem visualDebuggingSystem
                 = new VisualDebuggingSystem(shpRend, camera, maze);
         visualDebuggingSystem.addedToEngine(engine);
-        engine.subscribe(visualDebuggingSystem);
+        engine.addEntityListener(Family.all(HealthComponent.class,DynamicBodyComponent.class,InjurableAreaComponent.class).get(), visualDebuggingSystem);
 
-        //TODO: port this
-        //Inventory System
+        // Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze, getLocalCharacterEntity());
 
         // Bullet System
-        BulletSystem bulletSystem = new BulletSystem(engine, maze);
+        BulletSystem bulletSystem = new BulletSystem(maze);
         bulletSystem.addedToEngine(engine);
-        engine.subscribe(bulletSystem);
+        engine.addEntityListener(Family.all(WeaponComponent.class).get(), bulletSystem);
 
         // Ingame UI System
         InGameUISystem inGameUISystem
                 = new InGameUISystem(mediaManager, characterClass);
         inGameUISystem.addedToEngine(engine);
-        engine.subscribe(inGameUISystem);
-
-        // Light System
-        LightSystem lightSystem = new LightSystem(rayHandler);
-        lightSystem.addedToEngine(engine);
-        engine.subscribe(lightSystem);
 
         // Adding them to the Engine
         this.engine.addSystem(spriteSystem);
@@ -166,7 +161,6 @@ public class EntityComponentSystem {
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
-        this.engine.addSystem(lightSystem);
     }
 
     public void setUpMazeLights() {
@@ -217,42 +211,26 @@ public class EntityComponentSystem {
      */
     private void setUpLocalCharacterEntity() {
         // Create Entity
-        this.localCharacter = setUpCharacterEntity(characterClass);
+        this.localCharacter = addNewCharacter(localCharacterId, TeamId, characterClass);
 
-        // Add Components
-        localCharacter.add(new NetworkTransmissionComponent());
-        localCharacter.add(new TeamComponent(TeamId));
+        // Add NetworkComponent
         localCharacter.add(new NetworkComponent());
-        localCharacter.add(new IdComponent(localCharacterId));
-
-        //Set Spawn locations: Game master
-        if (TeamId == 0) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), characterClass));
-        }
-        if (TeamId == 1) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), characterClass));
-        }
-        if (TeamId == 2) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), characterClass));
-        }
-
+        
         // opens passages for game master
         if(characterClass == CharacterClass.DRAGON) maze.openSecretPassages();
-        
-        characters.put(localCharacterId, localCharacter);
-        this.engine.addEntity(localCharacter);
     }
 
     /**
-     * Adds other (network-) players characters to the world
+     * Adds players characters to the world
      * @param newCharacterId
+     * @param newCharacterTeamId
      * @param clientClass
      * @return
      */
 	public CharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, CharacterClass clientClass) {		
 		System.out.println(newCharacterId + ", " + newCharacterTeamId + ", " + clientClass);
 		// Create Entity
-        CharacterEntity newCharacter = setUpCharacterEntity(clientClass);
+        CharacterEntity newCharacter = entityFactory.createCharacter(clientClass);
 
         // Add Components
         newCharacter.add(new NetworkTransmissionComponent());
@@ -274,18 +252,6 @@ public class EntityComponentSystem {
         this.engine.addEntity(newCharacter);
         return newCharacter;
 	}
-
-    /**
-     * Creates a generic {@link CharacterEntity} without {@link NetworkComponent} or
-     * {@link NetworkTransmissionComponent}
-     * @return
-     */
-    private CharacterEntity setUpCharacterEntity(CharacterClass characterClass) {
-        // Create Entity
-        CharacterEntity characterEntity = entityFactory.createCharacter(characterClass);
-
-        return characterEntity;
-    }
 
 	public void deleteCharacter(int id) {
 		CharacterEntity character = characters.get(id);

@@ -1,8 +1,9 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -10,13 +11,11 @@ import com.esotericsoftware.kryonet.Listener;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
-import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -48,13 +47,12 @@ import java.util.Map.Entry;
 /**
  * Created by georg on 29.10.15.
  */
-public class NetworkSystem extends ObservingEntitySystem{
+public class NetworkSystem extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
-    private ImmutableArray<Entity> entities;
+    private Entity entity;
     private PositionUpdate posUpdate = new PositionUpdate();
     private Array<Object> networkMessages = new Array<Object>();
 	
-	private Entity localEntity;
 	private EntityComponentSystem ECS;
 	
     private ComponentMapper<DynamicBodyComponent> dm
@@ -71,49 +69,39 @@ public class NetworkSystem extends ObservingEntitySystem{
     public NetworkSystem(EntityComponentSystem ECS) {
     	this.ECS = ECS;
     }
+    
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
-        entities = engine.getEntitiesFor(Family.all(
-                DynamicBodyComponent.class,
-                InputComponent.class,
-                CharacterSpriteComponent.class,
-                LightComponent.class,
-                NetworkTransmissionComponent.class,
-                NetworkComponent.class).get());
-				
-        if(entities.size() != 1)
-        	System.err.println("Entities: "+ entities.size());
+    public void addedToEngine(Engine engine) {
+        entity = ECS.getLocalCharacterEntity();
     }
 
     public void update(float deltaTime) {        
-        for (Entity entity : entities) {
-            DynamicBodyComponent body = dm.get(entity);
-            NetworkTransmissionComponent ntc = ntm.get(entity);
-            NetworkComponent network = nm.get(entity);
-            WeaponComponent weapon = wm.get(entity);
-            InputComponent input = im.get(entity);
-            
-            // send PositionUpdate (every tick)
-            posUpdate.position.moving     = input.moving;
-            posUpdate.position.direction  = input.direction;
-            posUpdate.position.velocity   = body.dynamicBody.getLinearVelocity();
-            posUpdate.position.position   = body.dynamicBody.getPosition();
-            posUpdate.position.bodyDirection = body.direction;
-            network.client.sendUDP(posUpdate);
-            
-            // send AttackRequest
-            if(ntc.attack) {
-            	network.client.sendUDP(new AttackRequest(network.id, false));
-                ntc.attack = false;
-            }
-            if(ntc.stopAttacking) {
-            	network.client.sendUDP(new AttackRequest(network.id, true));
-            	ntc.stopAttacking = false;
-            }
-            if(ntc.shoot) {
-            	network.client.sendUDP(new ShootRequest(network.id));
-            	ntc.shoot = false;
-            }
+        DynamicBodyComponent body = dm.get(entity);
+        NetworkTransmissionComponent ntc = ntm.get(entity);
+        NetworkComponent network = nm.get(entity);
+        WeaponComponent weapon = wm.get(entity);
+        InputComponent input = im.get(entity);
+        
+        // send PositionUpdate (every tick)
+        posUpdate.position.moving     = input.moving;
+        posUpdate.position.direction  = input.direction;
+        posUpdate.position.velocity   = body.dynamicBody.getLinearVelocity();
+        posUpdate.position.position   = body.dynamicBody.getPosition();
+        posUpdate.position.bodyDirection = body.direction;
+        network.client.sendUDP(posUpdate);
+        
+        // send AttackRequest
+        if(ntc.attack) {
+        	network.client.sendUDP(new AttackRequest(network.id, false));
+            ntc.attack = false;
+        }
+        if(ntc.stopAttacking) {
+        	network.client.sendUDP(new AttackRequest(network.id, true));
+        	ntc.stopAttacking = false;
+        }
+        if(ntc.shoot) {
+        	network.client.sendUDP(new ShootRequest(network.id));
+        	ntc.shoot = false;
         }
         
         for(Object object : networkMessages) {
@@ -138,7 +126,7 @@ public class NetworkSystem extends ObservingEntitySystem{
                 ECS.setUpMonsters(response.monsters);
                 ECS.setUpItems(response.items);
 
-                nm.get(localEntity).client.addListener(new Listener() {
+                nm.get(entity).client.addListener(new Listener() {
                     public void received(Connection connection, Object object) {
                         if ((object instanceof NewHeroResponse) ||
                                 (object instanceof DeleteHeroResponse) ||
@@ -249,7 +237,6 @@ public class NetworkSystem extends ObservingEntitySystem{
             if (object instanceof YouDiedResponse) {
             	YouDiedResponse result = (YouDiedResponse) object;
             	if(result.id == posUpdate.playerId) {
-            		DynamicBodyComponent body = ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class);
             		body.dynamicBody.setTransform(body.startPosition, 0f);
             	}
             }
@@ -283,8 +270,7 @@ public class NetworkSystem extends ObservingEntitySystem{
     
     // sets up the system for communication, adds listener
     public void setupSystem() {
-    	localEntity = ECS.getLocalCharacterEntity();
-        NetworkComponent network = nm.get(localEntity);
+        NetworkComponent network = nm.get(entity);
         posUpdate.playerId = network.id;
         posUpdate.position = new NetworkPosition();
         network.client.addListener(new Listener() {

@@ -1,7 +1,9 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
@@ -21,7 +23,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 /**
  * Created by georg on 28.10.15.
  */
-public class InputSystem extends ObservingEntitySystem implements InputProcessor {
+public class InputSystem extends EntitySystem implements InputProcessor {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime = 0;
@@ -53,7 +55,7 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     }
     
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,
                 InputComponent.class,

@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
@@ -43,7 +44,7 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
     Update method should synchronize positions of components
 
      */
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(EntityFamilies.positionSynchroFamily);
     }
 

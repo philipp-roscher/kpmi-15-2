@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.managers;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.ItemEntity;
@@ -38,12 +40,12 @@ import java.util.HashMap;
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
  * and {@link com.badlogic.ashley.core.EntitySystem}s and the
- * {@link com.badlogic.ashley.core.Engine} as well.
- * Created by georg on 29.10.15.
+ * {@link com.badlogic.ashley.core.Engine} on the server.
+ * Created by philipp on 01.12.15.
  */
 public class ServerEntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
-    private ObservableEngine engine;
+    private Engine engine;
     private World world;
     private ItemFactory itemFactory;
     private MediaManager mediaManager;
@@ -54,6 +56,7 @@ public class ServerEntityComponentSystem {
     private GameServer gameServer;
     private Server server;
     private float tickrate = ServerSettings.TICKRATE;
+    private ServerNetworkTransmissionComponent sntc;
     
     private EntityFactory entityFactory;
 
@@ -66,7 +69,7 @@ public class ServerEntityComponentSystem {
         this.maze = new Maze(mapInformation, world);
         maze.openSecretPassages();
 
-        this.engine = new ObservableEngine(); // Create Engine
+        this.engine = new Engine(); // Create Engine
         this.characters = new HashMap<Integer,ServerCharacterEntity>();
         this.monsters = new HashMap<Integer,MonsterEntity>();
         this.items = new HashMap<Integer,ItemEntity>();
@@ -76,7 +79,8 @@ public class ServerEntityComponentSystem {
         this.gameServer = gameServer;
 
         Entity networkEntity = new Entity();
-        networkEntity.add(new ServerNetworkTransmissionComponent());
+        sntc = new ServerNetworkTransmissionComponent();
+        networkEntity.add(sntc);
         engine.addEntity(networkEntity);
 
         setUpMonsters();
@@ -91,12 +95,11 @@ public class ServerEntityComponentSystem {
         // Movement System
         MovementSystem movementSystem = new MovementSystem(world);
         movementSystem.addedToEngine(engine);
-        engine.addEntityListener(Family.all(DynamicBodyComponent.class).get(), movementSystem);
+        engine.addEntityListener(EntityFamilies.monsterFamily, movementSystem);
 
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
         weaponSystem.addedToEngine(engine);
-        engine.subscribe(weaponSystem);
 
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
@@ -110,14 +113,15 @@ public class ServerEntityComponentSystem {
         engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
 
         // Bullet System
-        BulletSystem bulletSystem = new BulletSystem(engine, maze);
+        BulletSystem bulletSystem = new BulletSystem(maze);
         bulletSystem.addedToEngine(engine);
-        engine.subscribe(bulletSystem);
+        engine.addEntityListener(Family.all(WeaponComponent.class).get(), bulletSystem);
 
         // Item System
         ItemSystem itemSystem = new ItemSystem(this);
         itemSystem.addedToEngine(engine);
-        engine.subscribe(itemSystem);
+        engine.addEntityListener(EntityFamilies.serverCharacterFamily, itemSystem);
+        engine.addEntityListener(EntityFamilies.itemFamily, itemSystem);
 
         // Network System
         ServerNetworkSystem networkSystem = new ServerNetworkSystem(this, server, gameServer);
@@ -125,12 +129,12 @@ public class ServerEntityComponentSystem {
         
         // Adding them to the Engine
         this.engine.addSystem(movementSystem);
+        this.engine.addSystem(networkSystem);
+        this.engine.addSystem(battleSystem);
         this.engine.addSystem(weaponSystem);
         this.engine.addSystem(positionSynchroSystem);
-        this.engine.addSystem(battleSystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(itemSystem);
-        this.engine.addSystem(networkSystem);
     }
 
     private void setUpMonsters() {
@@ -223,6 +227,7 @@ public class ServerEntityComponentSystem {
 		MonsterEntity monster = monsters.get(id);
 		if(monster != null) {
 			world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
+			System.out.println("debug1");
 			engine.removeEntity(monster);
 			this.monsters.remove(id);
 		}
@@ -255,6 +260,10 @@ public class ServerEntityComponentSystem {
     /* ..................................................................... GETTERS & SETTERS .. */    
     public ItemFactory getItemFactory() {
     	return itemFactory;
+    }
+    
+    public ServerNetworkTransmissionComponent getSNTC() {
+    	return sntc;
     }
 
 	public GameStateResponse getGameState() {

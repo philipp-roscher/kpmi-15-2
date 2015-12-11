@@ -1,7 +1,10 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.maps.MapObject;
@@ -18,11 +21,10 @@ import org.sausagepan.prototyp.model.items.Bow;
  * other.
  * Created by Georg on 26.06.2015.
  */
-public class BulletSystem extends ObservingEntitySystem {
+public class BulletSystem extends EntitySystem implements EntityListener {
 
 
     /* ............................................................................ ATTRIBUTES .. */
-    private ObservableEngine engine;
     private Maze maze;
 
     private ImmutableArray<Entity> entities;
@@ -30,14 +32,13 @@ public class BulletSystem extends ObservingEntitySystem {
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
 
-    BulletSystem(ObservableEngine engine, Maze maze) {
-        this.engine = engine;
+    BulletSystem(Maze maze) {
         this.maze = maze;
     }
 
     /* ............................................................................... METHODS .. */
 
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(WeaponComponent.class).get());
     }
 
@@ -59,6 +60,16 @@ public class BulletSystem extends ObservingEntitySystem {
             }
         }
     }
+
+	@Override
+	public void entityAdded(Entity entity) {
+		addedToEngine(this.getEngine());
+	}
+
+	@Override
+	public void entityRemoved(Entity entity) {
+		addedToEngine(this.getEngine());		
+	}
 
     /* ..................................................................... GETTERS & SETTERS .. */
 

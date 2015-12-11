@@ -10,7 +10,10 @@ import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
@@ -24,7 +27,7 @@ import com.badlogic.gdx.math.Rectangle;
 /**
  * Created by georg on 31.10.15.
  */
-public class VisualDebuggingSystem extends ObservingEntitySystem {
+public class VisualDebuggingSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private ShapeRenderer shapeRenderer;
@@ -50,7 +53,7 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
         this.maze = maze;
     }
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 HealthComponent.class,
                 DynamicBodyComponent.class,
@@ -124,6 +127,16 @@ public class VisualDebuggingSystem extends ObservingEntitySystem {
                 );
             }
         }
+    }
+    
+    @Override
+    public void entityAdded(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        addedToEngine(this.getEngine());
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

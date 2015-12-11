@@ -10,24 +10,23 @@ import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
-import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
-import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 import org.sausagepan.prototyp.model.items.PotionHP;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.ItemPickUp;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by georg on 13.11.15.
  */
-public class ItemSystem extends ObservingEntitySystem {
+public class ItemSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ComponentMapper<InventoryComponent> im
             = ComponentMapper.getFor(InventoryComponent.class);
@@ -45,15 +44,14 @@ public class ItemSystem extends ObservingEntitySystem {
     /* ........................................................................... CONSTRUCTOR .. */
     public ItemSystem(ServerEntityComponentSystem ECS) {
     	this.ECS = ECS;
+    	ntc = ECS.getSNTC();
     }
+    
     /* ............................................................................... METHODS .. */
     @Override
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         characters = engine.getEntitiesFor(EntityFamilies.serverCharacterFamily);
         items = engine.getEntitiesFor(EntityFamilies.itemFamily);
-        ntc = engine.getEntitiesFor(Family.all(ServerNetworkTransmissionComponent.class).get()).
-                get(0).
-                getComponent(ServerNetworkTransmissionComponent.class);
     }
 
     public void update(float deltaTime)
@@ -90,6 +88,16 @@ public class ItemSystem extends ObservingEntitySystem {
                 }
             }
         }
+    }
+    
+    @Override
+    public void entityAdded(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        addedToEngine(this.getEngine());
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

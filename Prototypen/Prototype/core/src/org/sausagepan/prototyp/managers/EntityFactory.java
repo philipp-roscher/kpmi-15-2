@@ -108,7 +108,7 @@ public class EntityFactory {
         monster.add(new CharacterSpriteComponent(tex, CharacterClass.MONSTER));
         monster.add(new CharacterClassComponent(mapMonsterObject.characterClass));
 
-        return  monster;
+        return monster;
     }
     
     /**

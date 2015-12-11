@@ -1,7 +1,10 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 
@@ -13,7 +16,7 @@ import org.sausagepan.prototyp.model.items.Sword;
 /**
  * Created by georg on 22.10.15.
  */
-public class WeaponSystem extends ObservingEntitySystem {
+public class WeaponSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     /* ........................................................................... CONSTRUCTOR .. */
@@ -26,7 +29,7 @@ public class WeaponSystem extends ObservingEntitySystem {
     public WeaponSystem() {}
 
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 WeaponComponent.class,
                 NetworkTransmissionComponent.class).get());
@@ -49,10 +52,16 @@ public class WeaponSystem extends ObservingEntitySystem {
             }
         }
     }
-
-    /* ........................................................................... CONSTRUCTOR .. */
     
-    /* ............................................................................... METHODS .. */
+    @Override
+    public void entityAdded(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
     
     /* ..................................................................... GETTERS & SETTERS .. */
 }

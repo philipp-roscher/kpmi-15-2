@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -28,10 +30,9 @@ import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
 /**
- * Created by georg on 29.10.15.
+ * Created by philipp on 06.12.15.
  */
-// TODO IMPLEMENT	
-public class ServerNetworkSystem extends ObservingEntitySystem{
+public class ServerNetworkSystem extends EntitySystem {
 	/* ............................................................................... CLASSES .. */
 	class NetworkMessage {
 		Connection connection;
@@ -70,7 +71,7 @@ public class ServerNetworkSystem extends ObservingEntitySystem{
     }
     
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         ntc = engine.getEntitiesFor(Family.all(ServerNetworkTransmissionComponent.class).get()).
                 get(0).
                 getComponent(ServerNetworkTransmissionComponent.class);

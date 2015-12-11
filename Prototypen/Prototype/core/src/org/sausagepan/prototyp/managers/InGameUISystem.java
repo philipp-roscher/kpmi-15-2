@@ -7,9 +7,10 @@ import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +22,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Created by georg on 11.11.15.
  */
-public class InGameUISystem extends ObservingEntitySystem {
+public class InGameUISystem extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     private OrthographicCamera camera;
     private Batch batch;
@@ -33,7 +34,8 @@ public class InGameUISystem extends ObservingEntitySystem {
     private Boolean[] keyFragmentItems;
     private int HP;
 
-    private ImmutableArray<Entity> entities;
+    // local entity
+    private Entity entity;
 
     private ComponentMapper<HealthComponent> hm
             = ComponentMapper.getFor(HealthComponent.class);
@@ -100,22 +102,20 @@ public class InGameUISystem extends ObservingEntitySystem {
     }
 
     @Override
-    public void addedToEngine(ObservableEngine engine) {
-        entities = engine.getEntitiesFor(Family.all(
+    public void addedToEngine(Engine engine) {
+        entity = engine.getEntitiesFor(Family.all(
                 HealthComponent.class,
                 InputComponent.class,
                 NetworkComponent.class,
-                InventoryComponent.class).get());
+                InventoryComponent.class).get()).get(0);
     }
 
     public void update(float deltaTime) {
-        for (Entity entity : entities) {
-            HealthComponent health = hm.get(entity);
-            HP = MathUtils.roundPositive((float) health.HP/(health.initialHP)*10)+1;
-            recentHealthBarImg = healthBarImages.get(HP);
-            InventoryComponent inventory = im.get(entity);
-            this.keyFragmentItems = inventory.teamKeys;
-        }
+        HealthComponent health = hm.get(entity);
+        HP = MathUtils.roundPositive((float) health.HP/(health.initialHP)*10)+1;
+        recentHealthBarImg = healthBarImages.get(HP);
+        InventoryComponent inventory = im.get(entity);
+        this.keyFragmentItems = inventory.teamKeys;
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

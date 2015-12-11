@@ -65,15 +65,13 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     public BattleSystem(ServerEntityComponentSystem ECS) {
         this.maxBulletId = 1;
         this.ECS = ECS;
+        ntc = ECS.getSNTC();
     }
 
     /* ............................................................................... METHODS .. */
     public void addedToEngine(Engine engine) {
         attackers = engine.getEntitiesFor(EntityFamilies.attackerFamily);
         victims = engine.getEntitiesFor(EntityFamilies.victimFamily);
-        ntc = engine.getEntitiesFor(Family.all(ServerNetworkTransmissionComponent.class).get()).
-                get(0).
-                getComponent(ServerNetworkTransmissionComponent.class);
     }
 
     public void update(float deltaTime) {
