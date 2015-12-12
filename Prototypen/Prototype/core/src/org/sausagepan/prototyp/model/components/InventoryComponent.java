@@ -12,7 +12,7 @@ public class InventoryComponent implements Component {
 	public boolean[] ownKeys = new boolean[3];
 	public boolean[] teamKeys = new boolean[3];
 
-    public boolean needsUpdate;
+    public boolean treasureRoomOpen;
 
     /*................................................................................Constructors*/
     public InventoryComponent()
@@ -21,6 +21,8 @@ public class InventoryComponent implements Component {
         	ownKeys[i] = false;
         	teamKeys[i] = false;
         }
+        
+        treasureRoomOpen = false;
     }
 
 	public int getKeyAmount() {

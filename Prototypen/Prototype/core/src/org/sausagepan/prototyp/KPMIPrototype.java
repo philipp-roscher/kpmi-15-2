@@ -1,19 +1,20 @@
 package org.sausagepan.prototyp;
 
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.network.Network.GameClientCount;
-import org.sausagepan.prototyp.network.Network.IDAssignment;
-import org.sausagepan.prototyp.network.Network.MaxClients;
-import org.sausagepan.prototyp.network.Network.TeamAssignment;
-import org.sausagepan.prototyp.view.MainMenuScreen;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.network.Network.GameClientCount;
+import org.sausagepan.prototyp.network.Network.GameStart;
+import org.sausagepan.prototyp.network.Network.IDAssignment;
+import org.sausagepan.prototyp.network.Network.MaxClients;
+import org.sausagepan.prototyp.network.Network.TeamAssignment;
+import org.sausagepan.prototyp.view.MainMenuScreen;
 
 public class KPMIPrototype extends Game {
 	
@@ -30,6 +31,8 @@ public class KPMIPrototype extends Game {
 	//counts players on server
 	public int clientCount;
 
+	public boolean gameReady = false;
+
 	public int TeamId;
 	public boolean TeamAssignmentReceived = false;
 
@@ -39,7 +42,6 @@ public class KPMIPrototype extends Game {
 		batch = new SpriteBatch();
 		font  = new BitmapFont();
 		mediaManager = new MediaManager();
-
 
 		// Client starten
 		client = new Client();
@@ -59,6 +61,8 @@ public class KPMIPrototype extends Game {
 				if (object instanceof GameClientCount) {
 					GameClientCount result = (GameClientCount) object;
 					clientCount = result.count;
+					if(result.gameReady)
+                        gameReady = result.gameReady;
 				}
 				
 				//receives Team ID
@@ -72,6 +76,11 @@ public class KPMIPrototype extends Game {
 				if(object instanceof MaxClients) {
 					MaxClients result = (MaxClients) object;
 					maxClients = result.count;
+				}
+
+				//receives game start notifier
+				if(object instanceof GameStart) {
+					gameReady = true;
 				}
 			}
 		});

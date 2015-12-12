@@ -36,7 +36,7 @@ import box2dLight.RayHandler;
 public class InMaze implements Screen {
 	
 	/* ............................................................................ ATTRIBUTES .. */
-	final   KPMIPrototype game;
+	private KPMIPrototype game;
 
     // Renderers and Cameras
     private Box2DDebugRenderer debugRenderer;   // a debugging renderer
@@ -59,7 +59,7 @@ public class InMaze implements Screen {
     private Maze maze;
 
     // Physics
-    private final World world;    	// create a box2d world which calculates all physics
+    private World world;    	// create a box2d world which calculates all physics
     public RayHandler rayHandler;   // handles rays of light
 
 
@@ -68,8 +68,8 @@ public class InMaze implements Screen {
      * Creates an in game object for rendering in game action
      * @param game the game main class itself
      */
-	public InMaze(final KPMIPrototype game, final World world, final RayHandler rayHandler,
-                  final MapInformation mapInformation, CharacterClass clientClass, int TeamId) {
+	public InMaze(KPMIPrototype game, World world, RayHandler rayHandler,
+                  MapInformation mapInformation, CharacterClass clientClass, int TeamId) {
 
         Box2D.init(); // initialize Box2D
 		this.game = game;
@@ -85,7 +85,7 @@ public class InMaze implements Screen {
 
 
         // Tiled Map ...............................................................................
-        this.maze = new Maze(mapInformation, world, game.mediaManager);
+        this.maze = new Maze(mapInformation, world, game.mediaManager, game.gameReady);
 
 
         // Entity-Component-System ........................................................... START

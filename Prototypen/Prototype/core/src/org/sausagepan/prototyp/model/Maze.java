@@ -39,6 +39,7 @@ public class Maze extends EntitySystem {
     private Array<MapItem> mapItems;
     private Array<MapMonsterObject> mapMonsterObjects;
     private World world;
+    private Array<Body> entranceDoorBodies;
     private Array<Body> doorLockerBodies;
     private Array<BodyDef> doorLockerBodyDefs;
     private Array<Rectangle> doorLockerRectangles;
@@ -47,16 +48,17 @@ public class Maze extends EntitySystem {
 
     /* ........................................................................... CONSTRUCTOR .. */
 
-    public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager) {
-        this(mapInformation, world);
+    public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager, boolean gameReady) {
+        this(mapInformation, world, gameReady);
         
         // set up map renderer and scale
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
     }
-    public Maze(Network.MapInformation mapInformation, World world) {
+    public Maze(Network.MapInformation mapInformation, World world, boolean gameReady) {
         this.mapInformation = mapInformation;
         this.width = mapInformation.width;
         this.height = mapInformation.height;
+        this.entranceDoorBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
         this.doorLockerRectangles = new Array<Rectangle>();
@@ -64,6 +66,9 @@ public class Maze extends EntitySystem {
         generator = new MazeGenerator(width, height);
         setUpTiledMap(world);
         this.world = world;
+
+        if(gameReady)
+            openEntranceDoors();
     }
     /* ............................................................................... METHODS .. */
     public void render(OrthographicCamera camera) {
@@ -96,6 +101,12 @@ public class Maze extends EntitySystem {
                 doorLockerBodies.add(groundBody);
                 doorLockerBodyDefs.add(groundBodyDef);
             }
+
+            // Look for door objects
+            if(mo.getName().equals("entranceDoor")) {
+                entranceDoorBodies.add(groundBody);
+            }
+
             // List Game Masters secret passages
             if(mo.getName() != null && mo.getName().equals("secretWall"))
                 secretWalls.add(groundBody);
@@ -146,6 +157,11 @@ public class Maze extends EntitySystem {
             doorLockerBodies.add(body);
         }
         treasureRoomOpen = false;
+    }
+
+    public void openEntranceDoors() {
+        for(Body b : entranceDoorBodies)
+            world.destroyBody(b);
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */

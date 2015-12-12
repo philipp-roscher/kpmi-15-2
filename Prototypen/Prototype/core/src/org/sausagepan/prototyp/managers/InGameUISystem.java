@@ -1,11 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.model.components.HealthComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -13,11 +7,19 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+
+import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 
 /**
  * Created by georg on 11.11.15.
@@ -33,6 +35,8 @@ public class InGameUISystem extends EntitySystem {
     private Array<TextureRegion> keyFragmentImgs;
     private boolean[] keyFragmentItems;
     private int HP;
+    private KPMIPrototype game;
+    private BitmapFont font;
 
     // local entity
     private Entity entity;
@@ -43,11 +47,13 @@ public class InGameUISystem extends EntitySystem {
             = ComponentMapper.getFor(InventoryComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
 
-    public InGameUISystem(MediaManager media, CharacterClass characterClass) {
+    public InGameUISystem(MediaManager media, CharacterClass characterClass, KPMIPrototype game) {
         this.batch = new SpriteBatch();
+        this.font = new BitmapFont();
         this.camera = new OrthographicCamera();
         TextureAtlas atlas = media.getTextureAtlasType("IngameUI");
         keyFragmentItems = new boolean[3];
+        this.game = game;
 
         for(int i=0; i<3; i++) {
         	keyFragmentItems[i] = false;
@@ -96,7 +102,13 @@ public class InGameUISystem extends EntitySystem {
         	batch.draw(keyFragmentImgs.get(2), 723, 430);
         if(keyFragmentItems[2])
         	batch.draw(keyFragmentImgs.get(3), 755, 430);
-        
+
+        if(!game.gameReady) {
+            font.setColor(1, 0, 0, 1);
+            font.draw(batch, "Waiting for players... " + game.clientCount + "/" + game.maxClients, 630, 20);
+            font.setColor(1, 1, 1, 1);
+        }
+
         this.batch.end();
         this.camera.update();
     }

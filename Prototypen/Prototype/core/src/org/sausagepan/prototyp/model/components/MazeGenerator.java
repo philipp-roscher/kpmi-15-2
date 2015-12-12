@@ -158,15 +158,15 @@ public class MazeGenerator {
 				(int) Math.floor(mazeHeight / 2f) * 32 * 32 - 25 * 32
 				);
 		listOfWalls.add(topLeft);
-		
-		Rectangle topRight = new Rectangle(
-				(mazeWidth + 1) * 32 * 32,
-				(int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 58 * 32,
-				32,
-				(int) Math.floor(mazeHeight / 2f) * 32 * 32 - 25 * 32
-				);
-		listOfWalls.add(topRight);
-		
+
+        Rectangle doorLeft = new Rectangle(
+                32 * 31 + 30,
+                (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 55 * 32,
+                2,
+                3*32
+        );
+        listOfWalls.add(doorLeft);
+
 		Rectangle downLeft = new Rectangle(
 				32 * 31,
 				32 * 32,
@@ -174,8 +174,24 @@ public class MazeGenerator {
 				(int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 23 * 32
 				);
 		listOfWalls.add(downLeft);
-		
-		Rectangle downRight = new Rectangle(
+
+        Rectangle topRight = new Rectangle(
+                (mazeWidth + 1) * 32 * 32,
+                (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 58 * 32,
+                32,
+                (int) Math.floor(mazeHeight / 2f) * 32 * 32 - 25 * 32
+        );
+        listOfWalls.add(topRight);
+
+        Rectangle doorRight = new Rectangle(
+                (mazeWidth + 1) * 32 * 32,
+                (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 55 * 32,
+                2,
+                3*32
+        );
+        listOfWalls.add(doorRight);
+
+        Rectangle downRight = new Rectangle(
 				(mazeWidth + 1) * 32 * 32,
 				32*32,
 				32,
@@ -190,6 +206,14 @@ public class MazeGenerator {
 				32
 				);
 		listOfWalls.add(underneathLeft);
+
+        Rectangle doorBottom = new Rectangle(
+                (int) Math.ceil (mazeWidth / 2f) * 32 * 32 + 15*32,
+                32 * 31 + 30,
+                2*32,
+                2
+        );
+        listOfWalls.add(doorBottom);
 		
 		Rectangle underneathRight = new Rectangle(
 				(int) Math.ceil (mazeWidth / 2f) * 32 * 32 + 32 * 32,
@@ -201,8 +225,11 @@ public class MazeGenerator {
 		
 		for(Rectangle x : listOfWalls){
 			RectangleMapObject help = new RectangleMapObject();
-		
 			help.getRectangle().set(x);
+
+            if(x.equals(doorBottom) || x.equals(doorLeft) || x.equals(doorRight))
+                help.setName("entranceDoor");
+
 			colliderWalls.getObjects().add(help);
 		}
 		

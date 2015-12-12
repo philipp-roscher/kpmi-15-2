@@ -13,7 +13,6 @@ import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
-import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
@@ -24,6 +23,7 @@ import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
+import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
@@ -34,6 +34,7 @@ import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
+import org.sausagepan.prototyp.network.Network.GameStart;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.ItemPickUp;
@@ -122,16 +123,15 @@ public class NetworkSystem extends EntitySystem {
                 //System.out.println("FullGameStateResponse");
                 FullGameStateResponse response = (FullGameStateResponse) object;
 
-            	HashMap<Integer,CharacterClass> otherCharacters = response.heroes;
+            	HashMap<Integer,MapCharacterObject> characters = response.characters;
 
-                if (otherCharacters.containsKey(posUpdate.playerId))
-                    otherCharacters.remove(posUpdate.playerId);
+                if (characters.containsKey(posUpdate.playerId))
+                    characters.remove(posUpdate.playerId);
 
-                for(Entry<Integer,CharacterClass> e : otherCharacters.entrySet()) {
+                for(Entry<Integer,MapCharacterObject> e : characters.entrySet()) {
                     Integer heroId = e.getKey();
-                    CharacterClass clientClass = e.getValue();
-                    int teamId = response.teamAssignments.get(heroId);
-                    ECS.addNewCharacter(heroId, teamId, clientClass);
+                    MapCharacterObject character = e.getValue();
+                    ECS.addNewCharacter(heroId, character);
                 }
                 
                 ECS.setUpMonsters(response.monsters);
@@ -149,7 +149,8 @@ public class NetworkSystem extends EntitySystem {
                                 (object instanceof DeleteBulletResponse) ||
                                 (object instanceof YouDiedResponse) ||
                                 (object instanceof ItemPickUp) ||
-                                (object instanceof NewItem)) {
+                                (object instanceof NewItem) ||
+                                (object instanceof GameStart)) {
                             //System.out.println( object.getClass() +" empfangen");
                             NetworkSystem.this.networkMessages.add(object);
                         }
@@ -251,29 +252,9 @@ public class NetworkSystem extends EntitySystem {
             	
             	// remove own keys from character
             	InventoryComponent inventory = ECS.getCharacter(result.id).getComponent(InventoryComponent.class);
-            	// temp array to store new ownKeys array
-            	boolean[] temp = new boolean[3];
             	for(int i=0; i<3; i++) {
                 	inventory.ownKeys[i] = false;
-                	temp[i] = false;
                 }
-            	
-            	int teamId = ECS.getCharacter(result.id).getComponent(TeamComponent.class).TeamId;
-            	ImmutableArray<Entity> characters = this.getEngine().getEntitiesFor(EntityFamilies.characterFamily);
-            	for(Entity character : characters) {
-            		if (character.getComponent(TeamComponent.class).TeamId == teamId) {
-            			InventoryComponent teamInventory = character.getComponent(InventoryComponent.class);
-                    	if(teamInventory.getKeyAmount() == 3) teamInventory.needsUpdate = true;
-                    	for(int i=0; i<3; i++)
-                        	temp[i] = temp[i] || teamInventory.ownKeys[i];
-            		}
-            	}
-            	
-            	for(Entity character : characters) {
-            		if (character.getComponent(TeamComponent.class).TeamId == teamId) {
-            			character.getComponent(InventoryComponent.class).teamKeys = temp;
-            		}
-            	}
             	
             	if(result.id == posUpdate.playerId) {
             		entity.add(new IsDeadComponent(System.currentTimeMillis(), 5000));
@@ -292,23 +273,16 @@ public class NetworkSystem extends EntitySystem {
             	ItemPickUp result = (ItemPickUp) object;
 
 				if(ECS.getItem(result.itemId).getComponent(ItemComponent.class).type == ItemType.KEY) {
-                	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
                 	// add key to character inventory
-                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;
-                	
-                	// add key to team inventory of all team members
-                	int teamId = ECS.getCharacter(result.playerId).getComponent(TeamComponent.class).TeamId;
-                	ImmutableArray<Entity> characters = this.getEngine().getEntitiesFor(EntityFamilies.characterFamily);
-                	for(Entity character : characters) {
-                		if (character.getComponent(TeamComponent.class).TeamId == teamId) {
-                			InventoryComponent inventory = character.getComponent(InventoryComponent.class);
-                        	inventory.teamKeys[keyFragment.keyFragmentNr - 1] = true;
-                        	if(inventory.getKeyAmount() == 3) inventory.needsUpdate = true;
-                		}
-                	}                    	
+                	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
+                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;               	
 				}
                 
                 ECS.deleteItem(result.itemId);
+            }
+
+            if(object instanceof GameStart) {
+                ECS.getMaze().openEntranceDoors();
             }
         }
 

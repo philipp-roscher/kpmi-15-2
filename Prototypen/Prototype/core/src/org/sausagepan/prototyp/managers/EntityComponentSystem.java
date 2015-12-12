@@ -18,6 +18,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -26,6 +27,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.ItemEntity;
+import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
@@ -56,6 +58,7 @@ public class EntityComponentSystem {
     private HashMap<Integer,CharacterEntity> characters;
     private HashMap<Integer,MonsterEntity> monsters;
     private HashMap<Integer,ItemEntity> items;
+    private KPMIPrototype game;
 
     private EntityFactory entityFactory;
 
@@ -72,6 +75,7 @@ public class EntityComponentSystem {
             KPMIPrototype game, World world, Viewport viewport, RayHandler rayHandler, Maze maze,
             OrthographicCamera camera, CharacterClass characterClass, int TeamId) {
 
+    	this.game = game;
         this.mediaManager = game.mediaManager;
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = world;
@@ -139,6 +143,8 @@ public class EntityComponentSystem {
 
         // Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze, getLocalCharacterEntity());
+        inventorySystem.addedToEngine(engine);
+        engine.addEntityListener(EntityFamilies.characterFamily, inventorySystem);
 
         // Bullet System
         BulletSystem bulletSystem = new BulletSystem(maze);
@@ -147,7 +153,7 @@ public class EntityComponentSystem {
 
         // Ingame UI System
         InGameUISystem inGameUISystem
-                = new InGameUISystem(mediaManager, characterClass);
+                = new InGameUISystem(mediaManager, characterClass, game);
         inGameUISystem.addedToEngine(engine);
 
         // Adding them to the Engine
@@ -252,6 +258,13 @@ public class EntityComponentSystem {
         this.engine.addEntity(newCharacter);
         return newCharacter;
 	}
+	
+	public void addNewCharacter(Integer heroId, MapCharacterObject character) {
+		CharacterEntity newCharacter = addNewCharacter(heroId, character.teamId, character.characterClass);
+		newCharacter.getComponent(HealthComponent.class).HP = character.health;
+		newCharacter.getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(character.position, 0f);
+		newCharacter.getComponent(InventoryComponent.class).ownKeys = character.ownKeys;
+	}
 
 	public void deleteCharacter(int id) {
 		CharacterEntity character = characters.get(id);
@@ -320,5 +333,9 @@ public class EntityComponentSystem {
     public InputProcessor getInputProcessor() {
         InputSystem inputSystem = this.engine.getSystem(InputSystem.class);
         return inputSystem;
+    }
+
+    public Maze getMaze() {
+        return maze;
     }
 }
