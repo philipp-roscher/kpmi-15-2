@@ -110,12 +110,15 @@ public class ServerNetworkSystem extends EntitySystem {
 
         	if (object instanceof NewHeroRequest) {
         		NewHeroRequest request = (NewHeroRequest) object;
-        		System.out.println("New Hero (ID " + request.playerId + "): " + request.clientClass);
-        		connection.sendTCP(gameServer.getMap());
-        		ECS.addNewCharacter(request.playerId, gameServer.getTeamAssignments().get(request.playerId), request.clientClass);
-        		NewHeroResponse response = new NewHeroResponse(request.playerId, gameServer.getTeamAssignments().get(request.playerId), request.clientClass);
-        		server.sendToAllTCP(response);
-        		//updateLastAccess(request.playerId);
+
+                // check if server is full
+                if(gameServer.clientCount <= gameServer.maxClients) {
+                    System.out.println("New Hero (ID " + request.playerId + "): " + request.clientClass);
+                    connection.sendTCP(gameServer.getMap());
+                    ECS.addNewCharacter(request.playerId, gameServer.getTeamAssignments().get(request.playerId), request.clientClass);
+                    NewHeroResponse response = new NewHeroResponse(request.playerId, gameServer.getTeamAssignments().get(request.playerId), request.clientClass);
+                    server.sendToAllTCP(response);
+                }
         	}
         	
         	if (object instanceof PositionUpdate) {

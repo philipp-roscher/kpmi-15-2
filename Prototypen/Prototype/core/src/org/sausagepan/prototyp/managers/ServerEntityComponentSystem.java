@@ -23,6 +23,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.ItemEntity;
+import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
@@ -68,7 +69,7 @@ public class ServerEntityComponentSystem {
         this.mediaManager = new MediaManager();
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
-        this.maze = new Maze(mapInformation, world);
+        this.maze = new Maze(mapInformation, world, gameServer.gameReady);
         this.startPositions = maze.getStartPositions();
         maze.openSecretPassages();
         this.maxItemId = 1;
@@ -239,7 +240,7 @@ public class ServerEntityComponentSystem {
 		ItemEntity item = items.get(id);
 		if(item != null) {
 			engine.removeEntity(item);
-			this.monsters.remove(id);
+			this.items.remove(id);
 		}
 	}
     
@@ -304,14 +305,12 @@ public class ServerEntityComponentSystem {
 
 	// produces a FullGameStateResponse containing all the needed information to recreate the game state in the clients
 	public FullGameStateResponse generateFullGameStateResponse() {
-		HashMap<Integer,CharacterClass> heroes = new HashMap<Integer,CharacterClass>();
+		HashMap<Integer,MapCharacterObject> characters = new HashMap<Integer,MapCharacterObject>();
 		HashMap<Integer,MapMonsterObject> monsters = new HashMap<Integer,MapMonsterObject>();
 		HashMap<Integer,MapItem> items = new HashMap<Integer,MapItem>();
-		HashMap<Integer,Integer> teamAssignments = new HashMap<Integer,Integer>();
 		
-		for(HashMap.Entry<Integer,ServerCharacterEntity> c : characters.entrySet()) {
-			heroes.put(c.getKey(), c.getValue().getComponent(CharacterClassComponent.class).characterClass);
-			teamAssignments.put(c.getKey(), c.getValue().getComponent(TeamComponent.class).TeamId);
+		for(HashMap.Entry<Integer,ServerCharacterEntity> c : this.characters.entrySet()) {
+			characters.put(c.getKey(), c.getValue().createClientInformation());
 		}
 		
 		for(HashMap.Entry<Integer,MonsterEntity> m : this.monsters.entrySet()) {
@@ -322,6 +321,6 @@ public class ServerEntityComponentSystem {
 			items.put(m.getKey(), m.getValue().createClientInformation());
 		}
 		
-		return new FullGameStateResponse(heroes, monsters, items, teamAssignments);
+		return new FullGameStateResponse(characters, monsters, items);
 	}	
 }

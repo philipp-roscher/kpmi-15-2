@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Server;
 import org.sausagepan.prototyp.managers.ServerEntityComponentSystem;
 import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
+import org.sausagepan.prototyp.network.Network.GameStart;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.MapInformation;
@@ -23,29 +24,31 @@ import java.util.List;
 
 public class GameServer implements ApplicationListener {
 	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
-	private static final int timeoutMs = ServerSettings.TIMEOUT_MS;
+	private final int timeoutMs = ServerSettings.TIMEOUT_MS;
 	
-	private static Server server;
-	private static ServerEntityComponentSystem ECS;
-	private static long lastUpdate;
-	private static float delta;
+	private Server server;
+	private ServerEntityComponentSystem ECS;
+	private long lastUpdate;
+	private float delta;
 
 	// container for deleted clients
-	private static ArrayList<Integer> toDelete = new ArrayList<Integer>();
+	private ArrayList<Integer> toDelete = new ArrayList<Integer>();
 	// contains the constellation of the individual tiles
-	private static MapInformation map;
+	private MapInformation map;
 	// HashMap to save ClientIds,TeamIds
-	private static HashMap<Integer,Integer> teamAssignments;
+	private HashMap<Integer,Integer> teamAssignments;
 	// manages the characters
     private List<Integer> roomList;
 
 	// to count active Clients in Session
-    private static int clientCount;
+    public int clientCount;
 	// maximum Number of Clients per Session
-	private int maxClients = ServerSettings.MANDATORY_CLIENTS;
+	public int maxClients = ServerSettings.MANDATORY_CLIENTS;
+	public boolean gameReady;
 	
 	public void create () {
 		clientCount = 0;
+		gameReady = false;
 		teamAssignments = new HashMap<Integer, Integer>();
 		setupMap(ServerSettings.MAZE_WIDTH, ServerSettings.MAZE_HEIGHT);
 
@@ -74,7 +77,14 @@ public class GameServer implements ApplicationListener {
 					System.out.println("clientCount at: "+clientCount);
 					GameClientCount gameClientCount = new GameClientCount();
 					gameClientCount.count = clientCount;
+					gameClientCount.gameReady = gameReady;
+                    System.out.println(gameReady);
 					server.sendToAllTCP(gameClientCount);
+
+					if(clientCount == maxClients && !gameReady) {
+                        gameReady = true;
+						server.sendToAllTCP(new GameStart());
+					}
 					//assignTeamId
 					assignTeam(idAssignment.id);
 
@@ -112,14 +122,14 @@ public class GameServer implements ApplicationListener {
 		stop();
 	}
 	
-	public static void sendGameState() {
+	public void sendGameState() {
 		GameStateResponse response = new GameStateResponse();
 		response = ECS.getGameState();
 		server.sendToAllUDP(response);
 	}
 	
 	//  updates ECS and sends current positions of all characters to all clients, is executed a defined amount of times per second
-	public static void updateGameState() {
+	public void updateGameState() {
 		ECS.update(delta);
 		if(clientCount > 0) {
 			// System.out.println(new java.util.Date() + " - "+ ++i +" - GameState an Clients geschickt ");

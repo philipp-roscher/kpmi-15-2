@@ -12,6 +12,7 @@ import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.Weapontype;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MapFactoryObject;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
@@ -36,6 +37,7 @@ public class Network {
 		kryo.register(ShootResponse.class);
 		kryo.register(HPUpdateResponse.class);
 		kryo.register(GameStateResponse.class);
+		kryo.register(GameStart.class);
 		kryo.register(FullGameStateRequest.class);
 		kryo.register(FullGameStateResponse.class);
         kryo.register(DeleteBulletResponse.class);
@@ -51,6 +53,7 @@ public class Network {
 
         kryo.register(NetworkPosition.class);
         kryo.register(NetworkTransmissionComponent.class);
+        kryo.register(MapCharacterObject.class);
         kryo.register(MapMonsterObject.class);
         kryo.register(MapItem.class);
         kryo.register(ItemType.class);
@@ -61,6 +64,7 @@ public class Network {
 		kryo.register(Rectangle.class);
 		kryo.register(Vector2.class);
 		kryo.register(Vector3.class);
+		kryo.register(boolean[].class);
         kryo.register(HashMap.class);
 		kryo.register(CharacterClass.class);
 	}
@@ -187,23 +191,25 @@ public class Network {
 		
 		public GameStateResponse() { }
 	}
-	
+
+	public static class GameStart {
+		public GameStart() { }
+	}
+
 	public static class FullGameStateRequest {
 		public FullGameStateRequest() { }
 	}
 	
 	public static class FullGameStateResponse {
-		public HashMap<Integer,CharacterClass> heroes;
+		public HashMap<Integer,MapCharacterObject> characters;
 		public HashMap<Integer,MapMonsterObject> monsters;
 		public HashMap<Integer,MapItem> items;
-		public HashMap<Integer,Integer> teamAssignments;
 		
 		public FullGameStateResponse() { }
-		public FullGameStateResponse(HashMap<Integer,CharacterClass> heroes, HashMap<Integer,MapMonsterObject> monsters, HashMap<Integer,MapItem> items, HashMap<Integer, Integer> teamAssignments) {
-			this.heroes = heroes;
+		public FullGameStateResponse(HashMap<Integer,MapCharacterObject> characters, HashMap<Integer,MapMonsterObject> monsters, HashMap<Integer,MapItem> items) {
+			this.characters = characters;
 			this.monsters = monsters;
 			this.items = items;
-			this.teamAssignments = teamAssignments;
 		}
 	}
 
@@ -266,6 +272,7 @@ public class Network {
 
 	public static class GameClientCount {
 		public int count;
+		public boolean gameReady;
 
 		public GameClientCount() { }
 	}

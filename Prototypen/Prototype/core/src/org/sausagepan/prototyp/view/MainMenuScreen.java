@@ -1,15 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import java.util.Random;
-
-import org.sausagepan.prototyp.KPMIPrototype;
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.network.Network.MapInformation;
-import org.sausagepan.prototyp.network.Network.NewHeroRequest;
-
-import box2dLight.RayHandler;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.Screen;
@@ -23,10 +13,20 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.network.Network.MapInformation;
+import org.sausagepan.prototyp.network.Network.NewHeroRequest;
+
+import java.util.Random;
+
+import box2dLight.RayHandler;
+
 public class MainMenuScreen implements Screen {
 	
 	/* ........................................................ ATTRIBUTES .. */
-	final KPMIPrototype game;
+	KPMIPrototype game;
 	public OrthographicCamera camera;
 	public Viewport viewport;
 	private Texture bgImg;
@@ -37,8 +37,8 @@ public class MainMenuScreen implements Screen {
 	private Texture SelDragonRed;
 
 	private int connectionStatus;
-	private final World world;
-    private final RayHandler rayHandler;
+	private World world;
+    private RayHandler rayHandler;
     private MapInformation mapInformation;
 	String serverIp;
 
@@ -51,7 +51,7 @@ public class MainMenuScreen implements Screen {
 
 	
 	/* ...................................................... CONSTRUCTORS .. */
-	public MainMenuScreen(final KPMIPrototype game) {
+	public MainMenuScreen(KPMIPrototype game) {
 		this.game  = game;
 		this.world = new World(new Vector2(0,0), true);
         this.rayHandler = new RayHandler(world);
@@ -85,11 +85,6 @@ public class MainMenuScreen implements Screen {
 	/* ................................................................................................... METHODS .. */
 
 	public void setUpGame() {
-//		BattleSystem bs = new BattleSystem();
- 	   	System.out.println(mapInformation.height + " " + mapInformation.width);
-
-		System.out.println("Assigned teamId is: "+game.TeamId);
-
 		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, clientClass, game.TeamId));
 	}
 
@@ -180,9 +175,12 @@ public class MainMenuScreen implements Screen {
 				
 				@Override
 				public void input(String text) {
+                    // avoid connecting multiple times
+                    if(connectionStatus == 1) return;
+
 					// trim IP to remove unnecessary whitepaces (sometimes created by android auto-correct)
 					text = text.trim();
-					
+
 					Gdx.app.log("ServerConnector", "Attempting Connection to: "+ text);
 					try {
 						connectionStatus = 1;
@@ -216,7 +214,7 @@ public class MainMenuScreen implements Screen {
 				}
 
 				//send Hero/Client info to server after class Selection
-				if(!heroRequestSent && clientSel) {
+				if(!heroRequestSent && clientSel && game.clientCount <= game.maxClients) {
 					game.client.sendTCP(
 							new NewHeroRequest(
 									game.clientId,
@@ -227,6 +225,7 @@ public class MainMenuScreen implements Screen {
 				}
 			}
 
+			/*
 			//too few clients
 			if(game.clientCount < game.maxClients) {
 				game.batch.begin();
@@ -248,7 +247,7 @@ public class MainMenuScreen implements Screen {
 				if (mapInformationReceived) {
 					setUpGame();
 				}
-			}
+			} */
 
 			//too many players
 			if(game.clientCount > game.maxClients) {
@@ -257,7 +256,11 @@ public class MainMenuScreen implements Screen {
 				game.font.draw(game.batch, "Sorry, server is already full!"+game.clientCount+"/"+game.maxClients, 320, 380);
 				game.font.setColor(1, 1, 1, 1);
 				game.batch.end();
-			}
+			} else {
+                if (mapInformationReceived) {
+                    setUpGame();
+                }
+            }
 			dispose();
 		}
 		
