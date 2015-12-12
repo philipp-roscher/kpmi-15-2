@@ -10,7 +10,9 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.ai.steer.behaviors.Seek;
 
 /**
  * Created by georg on 21.10.15.
@@ -20,6 +22,7 @@ public class MovementSystem extends EntitySystem implements EntityListener {
     private ImmutableArray<Entity> entities;
     private float elapsedTime;
     private World world;
+    private Seek seek;
     /* ........................................................................... CONSTRUCTOR .. */
 
 

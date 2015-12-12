@@ -196,7 +196,19 @@ public class EntityFactory {
             case SHAMAN_M:
                 characterEntity.add(new CharacterSpriteComponent(media.getTextureAtlas(
                         "textures/spritesheets/characters/shaman_m.pack"), characterClass));
-                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case WITCH_F:
+                characterEntity.add(new CharacterSpriteComponent(media.getTextureAtlas(
+                        "textures/spritesheets/characters/witch_f.pack"), characterClass));
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case NINJA_F:
+                characterEntity.add(new CharacterSpriteComponent(media.getTextureAtlas(
+                        "textures/spritesheets/characters/ninja_f.pack"), characterClass));
+                characterEntity.add(new WeaponComponent(itemFactory.createBow())); //TODO: weapon
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case DRAGON:

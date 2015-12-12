@@ -105,34 +105,37 @@ public class MainMenuScreen implements Screen {
 		//Teams
 		else {
 			Random ran = new Random();
-			int x = ran.nextInt(4);                                        //TODO: raise number according to available character sheets!!!!
+			int x = ran.nextInt(6);                                        //TODO: raise number according to available character sheets!!!!
 
 			//System.out.println("random number = "+x);
 
 			switch (x) {
 				case 0: {
 					clientClass = CharacterClass.KNIGHT_M;
-					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 1: {
 					clientClass = CharacterClass.ARCHER_F;
-					game.batch.draw(SelArcherF, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 2: {
 					clientClass = CharacterClass.SHAMAN_M;
-					game.batch.draw(SelShamanM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 3: {
 					clientClass = CharacterClass.FIGHTER_M;
-					game.batch.draw(SelFighterM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+					break;
+				}
+				case 4: {
+					clientClass = CharacterClass.WITCH_F;
+					break;
+				}
+				case 5: {
+					clientClass = CharacterClass.NINJA_F;
 					break;
 				}
 				default: {
 					clientClass = CharacterClass.KNIGHT_M;
-					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 			}
