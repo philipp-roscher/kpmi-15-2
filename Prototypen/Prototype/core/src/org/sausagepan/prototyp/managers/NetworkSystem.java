@@ -4,12 +4,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
@@ -19,10 +17,8 @@ import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
-import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
@@ -68,8 +64,6 @@ public class NetworkSystem extends EntitySystem {
     		= ComponentMapper.getFor(NetworkComponent.class);
     private ComponentMapper<InputComponent> im
     		= ComponentMapper.getFor(InputComponent.class);
-    private ComponentMapper<WeaponComponent> wm
-    		= ComponentMapper.getFor(WeaponComponent.class);
     private ComponentMapper<IsDeadComponent> idm
 			= ComponentMapper.getFor(IsDeadComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
@@ -140,7 +134,6 @@ public class NetworkSystem extends EntitySystem {
                 nm.get(entity).client.addListener(new Listener() {
                     public void received(Connection connection, Object object) {
                         if ((object instanceof NewHeroResponse) ||
-                                (object instanceof DeleteHeroResponse) ||
                                 (object instanceof DeleteHeroResponse) ||
                                 (object instanceof GameStateResponse) ||
                                 (object instanceof AttackResponse) ||

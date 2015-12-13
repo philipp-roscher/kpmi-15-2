@@ -64,9 +64,7 @@ public class Bow extends WeaponItem {
      * Move Arrows around
      */
     public void updateArrows(float delta) {
-        Iterator<Bullet> i = activeArrows.iterator();
-        while (i.hasNext()) {
-            Bullet b = i.next();
+        for(Bullet b : activeArrows) {
             b.x += delta * b.direction.x;
             b.y += delta * b.direction.y;
         }

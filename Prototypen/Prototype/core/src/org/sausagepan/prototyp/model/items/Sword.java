@@ -21,8 +21,7 @@ public class Sword extends WeaponItem {
         /*System.out.println(this.damageArea.overlaps(hittableArea));
         System.out.println(hittableArea);
         System.out.println(damageArea);*/
-        if(this.damageArea.overlaps(hittableArea)) return true;
-        else return false;
+        return this.damageArea.overlaps(hittableArea);
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

@@ -1,8 +1,5 @@
 package org.sausagepan.prototyp.network;
 
-import org.mockito.Mockito;
-import org.sausagepan.prototyp.model.ServerSettings;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
@@ -12,16 +9,17 @@ import com.badlogic.gdx.backends.headless.HeadlessNet;
 import com.badlogic.gdx.backends.headless.mock.graphics.MockGraphics;
 import com.badlogic.gdx.graphics.GL20;
 
+import org.mockito.Mockito;
+import org.sausagepan.prototyp.model.ServerSettings;
+
 public class ServerLauncher {
 	public static void main (String[] arg) {
 		// Load gdx stuff
 		HeadlessNativesLoader.load();
-		MockGraphics mockGraphics = new MockGraphics();
-		Gdx.graphics = mockGraphics;
-		HeadlessNet headlessNet = new HeadlessNet();
-		Gdx.net = headlessNet;
-		HeadlessFiles headlessFiles = new HeadlessFiles();
-		Gdx.files = headlessFiles;
+
+		Gdx.graphics = new MockGraphics();
+		Gdx.net = new HeadlessNet();
+		Gdx.files = new HeadlessFiles();
 		Gdx.gl = Mockito.mock(GL20.class);
 		
 		// Create new configuration

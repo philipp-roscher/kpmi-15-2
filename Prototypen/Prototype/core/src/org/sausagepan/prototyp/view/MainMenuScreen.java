@@ -30,11 +30,6 @@ public class MainMenuScreen implements Screen {
 	public OrthographicCamera camera;
 	public Viewport viewport;
 	private Texture bgImg;
-	private Texture SelArcherF;
-	private Texture SelKnightM;
-	private Texture SelFighterM;
-	private Texture SelShamanM;
-	private Texture SelDragonRed;
 
 	private int connectionStatus;
 	private World world;
@@ -62,11 +57,6 @@ public class MainMenuScreen implements Screen {
 		connectionStatus = 0;
 		
 		this.bgImg = game.mediaManager.getMainMenuBackgroundImg();
-		this.SelArcherF = game.mediaManager.getSelectionArcherFBig();
-		this.SelDragonRed = game.mediaManager.getSelectionDragonRedBig();
-		this.SelFighterM = game.mediaManager.getSelectionFighterMBig();
-		this.SelKnightM = game.mediaManager.getSelectionKnightMBig();
-		this.SelShamanM = game.mediaManager.getSelectionShamanMBig();
 
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
@@ -94,7 +84,6 @@ public class MainMenuScreen implements Screen {
 		game.batch.begin();
 		//GameMaster
 		if (game.TeamId == 0) {
-			game.batch.draw(SelDragonRed, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 			clientClass = CharacterClass.DRAGON;
 		}
 		//Teams
@@ -203,7 +192,7 @@ public class MainMenuScreen implements Screen {
 			}, "Bitte Server-IP eingeben", "127.0.0.1", "");
 		}
 
-		if(game.connected == true && game.clientId != 0) {
+		if(game.connected && game.clientId != 0) {
 
 
 			if (game.TeamAssignmentReceived) {

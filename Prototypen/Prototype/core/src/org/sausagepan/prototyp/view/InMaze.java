@@ -52,7 +52,6 @@ public class InMaze implements Screen {
 	// Media
 	private Music   bgMusic;
 	private float   elapsedTime    = 0;
-	private int     elapsedTimeSec = 0;
 	private float   disconnectTime = 0;
 	private float   timeOut        = 5;
 

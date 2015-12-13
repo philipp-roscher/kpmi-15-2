@@ -19,7 +19,7 @@ public class IsDeadComponent implements Component {
         this.deathTime = deathTime;
         this.deathLength = deathLength;
         this.deathAcknowledged = false;
-    };
+    }
     
     /* ............................................................................... METHODS .. */
     

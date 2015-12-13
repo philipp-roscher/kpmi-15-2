@@ -28,8 +28,6 @@ public class Maze extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     //Tiled Map for map creation and collision detection
     private Network.MapInformation mapInformation;
-    private int width;
-    private int height;
     private MazeGenerator generator;
     private TiledMap tiledMap;         // contains the layers of the tiled map
     private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
@@ -56,14 +54,12 @@ public class Maze extends EntitySystem {
     }
     public Maze(Network.MapInformation mapInformation, World world, boolean gameReady) {
         this.mapInformation = mapInformation;
-        this.width = mapInformation.width;
-        this.height = mapInformation.height;
         this.entranceDoorBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
         this.doorLockerRectangles = new Array<Rectangle>();
         this.secretWalls = new Array<Body>();
-        generator = new MazeGenerator(width, height);
+        generator = new MazeGenerator(mapInformation.width, mapInformation.height);
         setUpTiledMap(world);
         this.world = world;
 

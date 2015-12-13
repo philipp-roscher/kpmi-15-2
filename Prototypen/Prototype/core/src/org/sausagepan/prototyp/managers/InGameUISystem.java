@@ -34,7 +34,6 @@ public class InGameUISystem extends EntitySystem {
     private TextureRegion attackButton;
     private Array<TextureRegion> keyFragmentImgs;
     private boolean[] keyFragmentItems;
-    private int HP;
     private KPMIPrototype game;
     private BitmapFont font;
 
@@ -124,8 +123,7 @@ public class InGameUISystem extends EntitySystem {
 
     public void update(float deltaTime) {
         HealthComponent health = hm.get(entity);
-        HP = MathUtils.roundPositive((float) health.HP/(health.initialHP)*10)+1;
-        recentHealthBarImg = healthBarImages.get(HP);
+        recentHealthBarImg = healthBarImages.get(MathUtils.roundPositive((float) health.HP/(health.initialHP)*10)+1);
         InventoryComponent inventory = im.get(entity);
         this.keyFragmentItems = inventory.teamKeys;
     }

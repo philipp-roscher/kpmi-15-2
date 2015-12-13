@@ -11,7 +11,6 @@ import com.esotericsoftware.kryonet.Server;
 
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
@@ -155,7 +154,7 @@ public class ServerNetworkSystem extends EntitySystem {
                 	IsDeadComponent id = character.getComponent(IsDeadComponent.class);
                     if(id != null) {
                     	if( (System.currentTimeMillis() - id.deathTime > id.deathLength)
-                    			&& id.deathAcknowledged == true)
+                    			&& id.deathAcknowledged)
                     		character.remove(IsDeadComponent.class);                		
                     } else {
 	                    character.getComponent(DynamicBodyComponent.class)

@@ -27,7 +27,6 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 public class InputSystem extends EntitySystem implements InputProcessor {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
-    private float elapsedTime = 0;
 
     private ComponentMapper<DynamicBodyComponent> pm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
@@ -35,15 +34,11 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             = ComponentMapper.getFor(InputComponent.class);
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
-    private ComponentMapper<NetworkComponent> nm
-    		= ComponentMapper.getFor(NetworkComponent.class);
     private ComponentMapper<NetworkTransmissionComponent> ntm
 			= ComponentMapper.getFor(NetworkTransmissionComponent.class);
     private ComponentMapper<IsDeadComponent> idm
 			= ComponentMapper.getFor(IsDeadComponent.class);
 
-
-    private float ax, ay;
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
 
@@ -67,7 +62,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     }
 
     public void update(float deltaTime) {
-        elapsedTime += deltaTime;
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
@@ -103,8 +97,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         }
 
         // split up velocity vector in x and y component
-        ax = (-1)*(body.dynamicBody.getPosition().x-touchPos.x);
-        ay = (-1)*(body.dynamicBody.getPosition().y-touchPos.y);
+        float ax = (-1)*(body.dynamicBody.getPosition().x-touchPos.x);
+        float ay = (-1)*(body.dynamicBody.getPosition().y-touchPos.y);
 
         directionVector.x = ax;
         directionVector.y = ay;

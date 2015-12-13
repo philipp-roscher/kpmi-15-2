@@ -49,7 +49,6 @@ public class ServerEntityComponentSystem {
     private Engine engine;
     private World world;
     private ItemFactory itemFactory;
-    private MediaManager mediaManager;
     private Maze maze;
     private HashMap<Integer,ServerCharacterEntity> characters;
     private HashMap<Integer,MonsterEntity> monsters;
@@ -66,7 +65,7 @@ public class ServerEntityComponentSystem {
     /* ........................................................................... CONSTRUCTOR .. */
     public ServerEntityComponentSystem(MapInformation mapInformation, Server server, GameServer gameServer) {
     	Box2D.init();
-        this.mediaManager = new MediaManager();
+        MediaManager mediaManager = new MediaManager();
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
         this.maze = new Maze(mapInformation, world, gameServer.gameReady);
@@ -212,9 +211,7 @@ public class ServerEntityComponentSystem {
      */
     private ServerCharacterEntity setUpCharacterEntity(CharacterClass characterClass) {
         // Create Entity
-        ServerCharacterEntity characterEntity = entityFactory.createServerCharacter(characterClass);
-
-        return characterEntity;
+        return entityFactory.createServerCharacter(characterClass);
     }
 
     public void deleteCharacter(int id) {

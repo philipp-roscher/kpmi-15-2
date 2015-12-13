@@ -62,7 +62,7 @@ public class KPMIPrototype extends Game {
 					GameClientCount result = (GameClientCount) object;
 					clientCount = result.count;
 					if(result.gameReady)
-                        gameReady = result.gameReady;
+                        gameReady = true;
 				}
 				
 				//receives Team ID

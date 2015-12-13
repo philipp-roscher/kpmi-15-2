@@ -1,14 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import org.sausagepan.prototyp.graphics.EntitySprite;
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.model.Bullet;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
-import org.sausagepan.prototyp.model.components.SpriteComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.items.Bow;
-
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -16,6 +7,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
+
+import org.sausagepan.prototyp.graphics.EntitySprite;
+import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.model.Bullet;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
+import org.sausagepan.prototyp.model.components.SpriteComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
 
 
 /**
@@ -31,8 +30,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     private Array<WeaponComponent> weaponComponents;
     private Array<EntitySprite> entitySprites;
     private int drawSpritesAfterLayer = 3;
-    private MediaManager media;
-    private BitmapFont font;
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
@@ -44,8 +41,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         characterSpriteComponents = new Array<CharacterSpriteComponent>();
         weaponComponents = new Array<WeaponComponent>();
         entitySprites = new Array<EntitySprite>();
-        this.media = media;
-        this.font = new BitmapFont();
     }
 
 

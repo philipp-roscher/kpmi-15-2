@@ -9,7 +9,6 @@ import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 import org.sausagepan.prototyp.model.items.PotionHP;
@@ -34,8 +33,6 @@ public class ItemSystem extends EntitySystem implements EntityListener {
             = ComponentMapper.getFor(ItemComponent.class);
     private ComponentMapper<InjurableAreaComponent> am
             = ComponentMapper.getFor(InjurableAreaComponent.class);
-    private ComponentMapper<SpriteComponent> sm
-            = ComponentMapper.getFor(SpriteComponent.class);
 
     private ImmutableArray<Entity> characters;
     private ImmutableArray<Entity> items;

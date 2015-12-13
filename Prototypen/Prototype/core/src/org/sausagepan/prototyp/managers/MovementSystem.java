@@ -1,18 +1,17 @@
 package org.sausagepan.prototyp.managers;
 
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.entities.EntityFamilies;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.ai.steer.behaviors.Seek;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.World;
+
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 
 /**
  * Created by georg on 21.10.15.
@@ -21,7 +20,6 @@ public class MovementSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
     private float elapsedTime;
-    private World world;
     private Seek seek;
     /* ........................................................................... CONSTRUCTOR .. */
 
@@ -30,7 +28,6 @@ public class MovementSystem extends EntitySystem implements EntityListener {
             = ComponentMapper.getFor(DynamicBodyComponent.class);
 
     public MovementSystem(World world) {
-    	this.world = world;
     	this.elapsedTime = 0;
     }
 

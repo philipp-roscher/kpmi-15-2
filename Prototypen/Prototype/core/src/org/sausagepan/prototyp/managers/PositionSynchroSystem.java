@@ -37,7 +37,7 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
     private ComponentMapper<InjurableAreaComponent> jm
             = ComponentMapper.getFor(InjurableAreaComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
-    public PositionSynchroSystem() {};
+    public PositionSynchroSystem() {}
 
     /* ............................................................................... METHODS .. */
     /*

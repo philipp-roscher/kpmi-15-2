@@ -14,7 +14,7 @@ public class HealthComponent implements Component {
     public HealthComponent(int HP) {
         this.HP = HP;
         this.initialHP = HP;
-    };
+    }
     
     /* ............................................................................... METHODS .. */
     

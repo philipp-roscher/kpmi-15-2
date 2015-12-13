@@ -13,7 +13,7 @@ public class TeamComponent implements Component {
     /* ........................................................................... CONSTRUCTOR .. */
     public TeamComponent(int Id) {
         this.TeamId = Id;
-    };
+    }
     
     /* ............................................................................... METHODS .. */
     

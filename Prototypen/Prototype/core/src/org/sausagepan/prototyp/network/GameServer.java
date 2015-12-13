@@ -11,34 +11,25 @@ import org.sausagepan.prototyp.managers.ServerEntityComponentSystem;
 import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.GameStart;
-import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class GameServer implements ApplicationListener {
-	// Zeit in Millisekunden, bevor ein inaktiver Spieler automatisch gel�scht wird
-	private final int timeoutMs = ServerSettings.TIMEOUT_MS;
-	
 	private Server server;
 	private ServerEntityComponentSystem ECS;
 	private long lastUpdate;
 	private float delta;
 
-	// container for deleted clients
-	private ArrayList<Integer> toDelete = new ArrayList<Integer>();
 	// contains the constellation of the individual tiles
 	private MapInformation map;
 	// HashMap to save ClientIds,TeamIds
 	private HashMap<Integer,Integer> teamAssignments;
-	// manages the characters
-    private List<Integer> roomList;
 
 	// to count active Clients in Session
     public int clientCount;
@@ -124,9 +115,7 @@ public class GameServer implements ApplicationListener {
 	}
 	
 	public void sendGameState() {
-		GameStateResponse response = new GameStateResponse();
-		response = ECS.getGameState();
-		server.sendToAllUDP(response);
+		server.sendToAllUDP(ECS.getGameState());
 	}
 	
 	//  updates ECS and sends current positions of all characters to all clients, is executed a defined amount of times per second
@@ -140,7 +129,7 @@ public class GameServer implements ApplicationListener {
 	
 	// generates random map with given width and height
 	public void setupMap(int width, int height) {
-        this.roomList = new LinkedList<Integer>();
+		List<Integer> roomList = new LinkedList<Integer>();
         for(int i=1; i <= ServerSettings.MAZE_AREAS; i++) roomList.add(i);
 
 		map = new MapInformation();

@@ -13,7 +13,7 @@ public class IdComponent implements Component {
     /* ........................................................................... CONSTRUCTOR .. */
     public IdComponent(int id) {
         this.id = id;
-    };
+    }
     
     /* ............................................................................... METHODS .. */
     

@@ -52,7 +52,6 @@ public class EntityComponentSystem {
     private ItemFactory itemFactory;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private RayHandler rayHandler;
     private Maze maze;
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
@@ -81,7 +80,6 @@ public class EntityComponentSystem {
         this.world = world;
         this.camera = camera;
         this.viewport = viewport;
-        this.rayHandler = rayHandler;
         this.maze = maze;
         this.startPositions = maze.getStartPositions();
         this.shpRend = new ShapeRenderer();
@@ -331,8 +329,7 @@ public class EntityComponentSystem {
     }
 
     public InputProcessor getInputProcessor() {
-        InputSystem inputSystem = this.engine.getSystem(InputSystem.class);
-        return inputSystem;
+        return this.engine.getSystem(InputSystem.class);
     }
 
     public Maze getMaze() {
