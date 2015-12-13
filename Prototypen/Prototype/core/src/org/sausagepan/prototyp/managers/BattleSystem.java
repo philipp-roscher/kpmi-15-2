@@ -5,22 +5,17 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.ServerSettings;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
-import org.sausagepan.prototyp.model.components.MagicComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -30,12 +25,12 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.model.items.Sword;
-import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
-import org.sausagepan.prototyp.network.Network.NewItem;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
+import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
+import org.sausagepan.prototyp.network.Network.NewItem;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each
@@ -101,7 +96,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                         // Handle Sword
                         if(weapon.weapon.getClass().equals(Sword.class))
                             if (((Sword)weapon.weapon).checkHit(area.area))
-                                calculateDamage(weapon, health, v, null, -1);
+                                calculateDamage(weapon, health, v, attacker, -1);
 
                         // Handle Bow
                         if(weapon.weapon.getClass().equals(Bow.class)) {
@@ -163,7 +158,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
 
     public void calculateDamage(WeaponComponent weapon, HealthComponent health, Entity victim, Entity attacker, int bulletId) {
         // delete bullet if it hit
-        if(attacker != null && bulletId != -1)
+        if(bulletId != -1)
             ntc.networkMessagesToProcess.add(new DeleteBulletResponse(attacker.getComponent(IdComponent.class).id, bulletId));
         
         // no damage if they are in the same team and friendly fire is turned off
