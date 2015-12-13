@@ -10,6 +10,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 
 import org.sausagepan.prototyp.enums.ItemType;
+import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
@@ -21,6 +22,7 @@ import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
@@ -52,20 +54,14 @@ public class BattleSystem extends EntitySystem implements EntityListener {
 
     private ComponentMapper<HealthComponent> hm
             = ComponentMapper.getFor(HealthComponent.class);
-    private ComponentMapper<MagicComponent> mm
-            = ComponentMapper.getFor(MagicComponent.class);
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
     private ComponentMapper<DynamicBodyComponent> dm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
     private ComponentMapper<InjurableAreaComponent> jm
             = ComponentMapper.getFor(InjurableAreaComponent.class);
-    private ComponentMapper<CharacterSpriteComponent> sm
-            = ComponentMapper.getFor(CharacterSpriteComponent.class);
-    private ComponentMapper<NetworkComponent> nm
-    		= ComponentMapper.getFor(NetworkComponent.class);
-    private ComponentMapper<NetworkTransmissionComponent> ntm
-    		= ComponentMapper.getFor(NetworkTransmissionComponent.class);
+    private ComponentMapper<TeamComponent> tm
+            = ComponentMapper.getFor(TeamComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
     public BattleSystem(ServerEntityComponentSystem ECS) {
@@ -157,7 +153,6 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         					int id = ECS.createItem(mapItem);
         					NewItem newItem = new NewItem(id, mapItem);
         					ntc.networkMessagesToProcess.add(newItem);
-        	            	System.out.println("New Item: "+id+ " : " +newItem.item.position);
         				}
         				inventory.ownKeys[i] = false;
         			}
@@ -167,13 +162,20 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     }
 
     public void calculateDamage(WeaponComponent weapon, HealthComponent health, Entity victim, Entity attacker, int bulletId) {
-        if(health.HP - weapon.weapon.strength > 0) health.HP -= weapon.weapon.strength;
-        else health.HP = 0;
-
-        if(health.HP != 0 || victim.getClass().equals(MonsterEntity.class))
-        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(victim.getComponent(IdComponent.class).id, victim.getClass().equals(ServerCharacterEntity.class), health.HP));
+        // delete bullet if it hit
         if(attacker != null && bulletId != -1)
             ntc.networkMessagesToProcess.add(new DeleteBulletResponse(attacker.getComponent(IdComponent.class).id, bulletId));
+        
+        // no damage if they are in the same team and friendly fire is turned off
+    	if(!ServerSettings.FRIENDLY_FIRE && (tm.get(attacker).TeamId == tm.get(victim).TeamId))
+        	return;
+    	
+    	if(health.HP - weapon.weapon.strength > 0) health.HP -= weapon.weapon.strength;
+        else health.HP = 0;
+
+    	// send HPUpdate unless a human character died (separate handling above)
+        if(health.HP != 0 || victim.getClass().equals(MonsterEntity.class))
+        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(victim.getComponent(IdComponent.class).id, victim.getClass().equals(ServerCharacterEntity.class), health.HP));
     }
 
     @Override

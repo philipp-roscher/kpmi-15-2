@@ -96,6 +96,7 @@ public class GameServer implements ApplicationListener {
 		    lastUpdate = System.nanoTime();
 		} catch (Exception e) {
 			e.printStackTrace();
+			stop();
 		}
 	}
 

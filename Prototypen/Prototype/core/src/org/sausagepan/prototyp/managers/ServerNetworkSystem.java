@@ -124,7 +124,6 @@ public class ServerNetworkSystem extends EntitySystem {
     					int itemId = ECS.createItem(mapItem);
     					NewItem newItem = new NewItem(itemId, mapItem);
     					ntc.networkMessagesToProcess.add(newItem);
-    	            	System.out.println("New Item: "+itemId+ " : " +newItem.item.position);
     				}
     			}
 

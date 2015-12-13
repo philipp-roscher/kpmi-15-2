@@ -108,6 +108,10 @@ public class EntityFactory {
         monster.add(new CharacterSpriteComponent(tex, CharacterClass.MONSTER));
         monster.add(new CharacterClassComponent(mapMonsterObject.characterClass));
 
+        if(GlobalSettings.DEBUGGING_ACTIVE)
+            System.out.println(
+                    "Monster (ID " + id + "): " + mapMonsterObject.characterClass + " " + mapMonsterObject.position);
+        
         return monster;
     }
     
@@ -130,7 +134,7 @@ public class EntityFactory {
         itemEntity.add(sprite);
         if(GlobalSettings.DEBUGGING_ACTIVE)
             System.out.println(
-                    "Item: " + mapItem.type + " " + mapItem.value + " " + mapItem.position);
+                    "Item (ID " + id + "): " + mapItem.type + " " + mapItem.value + " " + mapItem.position);
 
         return itemEntity;
     }
