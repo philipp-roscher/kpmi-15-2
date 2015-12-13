@@ -255,6 +255,14 @@ public class EntityFactory {
                 characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
+            case WITCH_F:
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
+            case NINJA_F:
+                characterEntity.add(new WeaponComponent(itemFactory.createBow())); //TODO: weapon
+                characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
+                break;
             case DRAGON:
                 characterEntity.add(new WeaponComponent(itemFactory.createFireBreather()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));

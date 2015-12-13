@@ -3,17 +3,22 @@ package org.sausagepan.prototyp.managers;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
+import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
@@ -93,6 +98,7 @@ public class ServerNetworkSystem extends EntitySystem {
             if (object instanceof ShootResponse)
             	server.sendToAllUDP(object);
         }
+        ntc.networkMessagesToProcess.clear();
 
         for(NetworkMessage nm : networkMessages) {
         	Connection connection =
@@ -104,6 +110,24 @@ public class ServerNetworkSystem extends EntitySystem {
             	int id = connection.getID();
             	
             	System.out.println("Player " + id + " has disconnected");
+            	
+            	ServerCharacterEntity character = ECS.getCharacter(id);
+            	DynamicBodyComponent body = character.getComponent(DynamicBodyComponent.class);
+    			InventoryComponent inventory = character.getComponent(InventoryComponent.class);
+    			// create new temporary Vector2 that holds old character position
+				Vector2 position = new Vector2(body.dynamicBody.getPosition());
+    			
+    			// Drop his keys        			
+    			for(int i=0; i<3; i++) {
+    				if(inventory.ownKeys[i]) {
+    					MapItem mapItem = new MapItem(position, ItemType.KEY, (i+1));
+    					int itemId = ECS.createItem(mapItem);
+    					NewItem newItem = new NewItem(itemId, mapItem);
+    					ntc.networkMessagesToProcess.add(newItem);
+    	            	System.out.println("New Item: "+itemId+ " : " +newItem.item.position);
+    				}
+    			}
+
             	ECS.deleteCharacter(id);
             	server.sendToAllTCP(new DeleteHeroResponse(id));
             }
@@ -185,7 +209,6 @@ public class ServerNetworkSystem extends EntitySystem {
            }
         }
 
-        ntc.networkMessagesToProcess.clear();
         networkMessages.clear();
     }
     /* ..................................................................... GETTERS & SETTERS .. */
