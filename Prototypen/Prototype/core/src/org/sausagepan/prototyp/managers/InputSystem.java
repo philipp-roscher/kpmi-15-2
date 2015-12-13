@@ -8,10 +8,18 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import org.sausagepan.prototyp.enums.Direction;
@@ -42,14 +50,49 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
 
+    private Stage stage;
+    private final ImageButton fightButton;
+    private boolean attackButtonPressed = false;
+
+    private InputMultiplexer inputMultiplexer;
+
     private Viewport viewport;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public InputSystem(Viewport viewport) {
+    public InputSystem(Viewport viewport, MediaManager media) {
         this.directionVector = new Vector2();
         this.normDirectionVector = new Vector2();
         this.viewport = viewport;
-        Gdx.input.setInputProcessor(this);
+
+        // Scene2D
+        FitViewport fit = new FitViewport(800,480);
+
+        this.stage = new Stage(fit);
+
+        // Buttons .................................................................................
+        ImageButton.ImageButtonStyle fightButtonStyle = new ImageButton.ImageButtonStyle();
+        Skin skin = new Skin(media.getTextureAtlasType("IngameUI"));
+        fightButtonStyle.up = skin.getDrawable("attackButton");
+        fightButtonStyle.down = skin.getDrawable("attackButton");
+        fightButtonStyle.over = skin.getDrawable("attackButton");
+        fightButtonStyle.pressedOffsetY = -1;
+        fightButton = new ImageButton(fightButtonStyle);
+        fightButton.setWidth(64f);
+        fightButton.setHeight(64f);
+        fightButton.setPosition(36, 36);
+
+        fightButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                attackButtonPressed = true;
+            }
+        });
+
+        stage.addActor(fightButton);
+
+        inputMultiplexer = new InputMultiplexer(stage, this);
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
     
     /* ............................................................................... METHODS .. */
@@ -66,6 +109,16 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
+            WeaponComponent weapon = wm.get(entity);
+            NetworkComponent network = nm.get(entity);
+
+            // Attack Button
+            if(attackButtonPressed) {
+                input.weaponDrawn = true;
+                attackButtonPressed = false;
+                weapon.weapon.justUsed = true;
+                network.attack();
+            }
 
             if(input.moving) move(input.touchPos, body, input);
                 /* Keyboard Input */
@@ -168,6 +221,12 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        for (Entity entity : entities) {
+            InputComponent input = im.get(entity);
+            input.touchPos.x = screenX;
+            input.touchPos.y = screenY;
+            viewport.unproject(input.touchPos);
+        }
         return touchDragged(screenX,screenY,pointer);
     }
 
@@ -201,5 +260,13 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     public boolean scrolled(int amount) {
         return false;
     }
+
+    public void draw() {
+        this.stage.draw();
+    }
     /* ..................................................................... GETTERS & SETTERS .. */
+
+    public void setInputProcessor() {
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
 }

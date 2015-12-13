@@ -26,7 +26,7 @@ public class MonsterListener implements ContactListener {
         System.out.println(B.getBody().getUserData());
 
         System.out.println(A.getBody().getUserData());
-        
+
 
         //start following client
         System.out.println("Monster detected Client!");

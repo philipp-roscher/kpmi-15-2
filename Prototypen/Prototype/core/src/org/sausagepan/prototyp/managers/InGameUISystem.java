@@ -82,7 +82,7 @@ public class InGameUISystem extends ObservingEntitySystem {
         this.batch.begin();
         this.batch.draw(characterImg, 16, 400, 64, 64);
         this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
-        this.batch.draw(attackButton, 32, 32, 48, 48);
+//        this.batch.draw(attackButton, 32, 32, 48, 48);
         batch.draw(keyFragmentImgs.get(0), 690, 429);
         for(KeyFragmentItem kf : keyFragmentItems) {
             switch(kf.keyFragmentNr) {

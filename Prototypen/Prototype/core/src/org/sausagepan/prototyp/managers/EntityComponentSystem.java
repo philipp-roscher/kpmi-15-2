@@ -120,7 +120,7 @@ public class EntityComponentSystem {
         engine.subscribe(weaponSystem);
 
         // Input System
-        InputSystem inputSystem = new InputSystem(viewport);
+        InputSystem inputSystem = new InputSystem(viewport, mediaManager);
         inputSystem.addedToEngine(engine);
         engine.subscribe(inputSystem);
 
@@ -230,6 +230,7 @@ public class EntityComponentSystem {
 
     public void draw() {
         this.engine.getSystem(InGameUISystem.class).draw();
+        this.engine.getSystem(InputSystem.class).draw();
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
@@ -390,8 +391,8 @@ public class EntityComponentSystem {
         return localCharacter;
     }
 
-    public InputProcessor getInputProcessor() {
+    public void setInputProcessor() {
         InputSystem inputSystem = this.engine.getSystem(InputSystem.class);
-        return inputSystem;
+        inputSystem.setInputProcessor();
     }
 }
