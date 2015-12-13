@@ -51,7 +51,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
     private Stage stage;
     private final ImageButton fightButton;
-    private boolean attackButtonPressed = false;
 
     private InputMultiplexer inputMultiplexer;
 
@@ -82,8 +81,14 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
         fightButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                attackButtonPressed = true;
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputSystem.this.keyDown(Input.Keys.A);
+                return true;
+            }
+            
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                InputSystem.this.keyUp(Input.Keys.A);
             }
         });
 
@@ -107,16 +112,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
-            WeaponComponent weapon = wm.get(entity);
-            NetworkTransmissionComponent network = ntm.get(entity);
-
-            // Attack Button
-            if(attackButtonPressed) {
-                input.weaponDrawn = true;
-                attackButtonPressed = false;
-                weapon.weapon.justUsed = true;
-                network.attack = true;
-            }
             IsDeadComponent isDead = idm.get(entity);
 
             if(input.moving && isDead == null) move(input.touchPos, body, input);

@@ -2,7 +2,6 @@ package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;

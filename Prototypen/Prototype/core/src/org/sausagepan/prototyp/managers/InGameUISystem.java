@@ -31,7 +31,6 @@ public class InGameUISystem extends EntitySystem {
     private Array<TextureRegion> healthBarImages;
     private TextureRegion characterImg;
     private TextureRegion recentHealthBarImg;
-    private TextureRegion attackButton;
     private Array<TextureRegion> keyFragmentImgs;
     private boolean[] keyFragmentItems;
     private KPMIPrototype game;
@@ -67,8 +66,6 @@ public class InGameUISystem extends EntitySystem {
         this.keyFragmentImgs = new Array<TextureRegion>();
         for(int i=0; i<4; i++)
             this.keyFragmentImgs.add(atlas.findRegion("key", i));
-
-        this.attackButton = atlas.findRegion("attackButton");
 
         switch(characterClass) {
             case KNIGHT_M:this.characterImg = atlas.findRegion("face_knight");break;
