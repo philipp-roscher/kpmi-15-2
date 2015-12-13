@@ -18,11 +18,10 @@ public class Sword extends WeaponItem {
     }
     /* ............................................................................... METHODS .. */
     public boolean checkHit(Rectangle hittableArea) {
-        System.out.println(this.damageArea.overlaps(hittableArea));
+        /*System.out.println(this.damageArea.overlaps(hittableArea));
         System.out.println(hittableArea);
-        System.out.println(damageArea);
-        if(this.damageArea.overlaps(hittableArea)) return true;
-        else return false;
+        System.out.println(damageArea);*/
+        return this.damageArea.overlaps(hittableArea);
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

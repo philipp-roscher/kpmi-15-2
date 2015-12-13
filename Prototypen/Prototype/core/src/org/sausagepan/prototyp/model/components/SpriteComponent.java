@@ -2,7 +2,6 @@ package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Created by georg on 21.10.15.

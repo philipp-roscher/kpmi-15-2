@@ -1,13 +1,13 @@
 package org.sausagepan.prototyp.model.components;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ArrayMap;
-
-import org.sausagepan.prototyp.enums.CharacterClass;
 
 /**
  * Created by georg on 28.10.15.

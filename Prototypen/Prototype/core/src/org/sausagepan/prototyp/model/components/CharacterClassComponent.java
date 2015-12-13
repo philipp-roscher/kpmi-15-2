@@ -1,20 +1,19 @@
 package org.sausagepan.prototyp.model.components;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
+
 import com.badlogic.ashley.core.Component;
 
 /**
- * Created by sara on 4.11.15.
- * TeamComponent, for all Characters and living Entities
+ * Created by philipp on 05.12.15.
  */
-public class TeamComponent implements Component {
+public class CharacterClassComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public final int TeamId;
-
+    public CharacterClass characterClass;
     /* ........................................................................... CONSTRUCTOR .. */
-    public TeamComponent(int Id) {
-        this.TeamId = Id;
+    public CharacterClassComponent (CharacterClass characterClass) {
+    	this.characterClass = characterClass;
     }
-    
     /* ............................................................................... METHODS .. */
     
     /* ..................................................................... GETTERS & SETTERS .. */

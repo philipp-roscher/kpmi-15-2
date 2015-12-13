@@ -1,24 +1,22 @@
 package org.sausagepan.prototyp.model.components;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
+
+import java.util.LinkedList;
+import java.util.Map;
 
 
 /**
@@ -27,8 +25,8 @@ import org.sausagepan.prototyp.model.items.MapItem;
 public class MazeGenerator {
 
     /* ................................................................................................ ATTRIBUTES .. */
-	int mazeHeight = 5; // grid height for generated tiled map
-	int mazeWidth  = 5; // grid width for generated tiled map
+	int mazeHeight; // grid height for generated tiled map
+	int mazeWidth; // grid width for generated tiled map
 	
 	TiledMap    tiledMap;   // containing one of the tiled maps
 	TiledMap    map;        // taking the new map merged from several other tiled maps
@@ -56,7 +54,9 @@ public class MazeGenerator {
      * Factory for generating tiled maps from multiple given tiled maps by merging them into one according to a
      * randomly created grid
      */
-	public MazeGenerator(){
+	public MazeGenerator(int width, int height){
+		this.mazeWidth = width;
+		this.mazeHeight = height;
 
         this.map = new TiledMap();
 
@@ -87,13 +87,16 @@ public class MazeGenerator {
 	private void generateMazeFromGrid(Map<Vector2, Integer> entries){
 
 		map = new TiledMap();   // initialize new map
+		int k;
 		
 		// for each maze cell do
-		for(int i = mazeHeight; i > 0; i--)
-			for(int j = mazeWidth; j > 0; j--){
-				if (i == (int) Math.ceil(mazeHeight / 2) && j == (int) Math.ceil(mazeWidth / 2))
-					addTreasure();	// treasure cave
-				else addNewMazeCell("tilemaps/maze" + entries.get(new Vector2(i, j)) + ".tmx", i, j);
+		for(int i = mazeWidth; i > 0; i--)
+			for(int j = mazeHeight; j > 0; j--){
+				k = entries.get(new Vector2(i, j));
+				if (k == -1)
+					addNewMazeCell("tilemaps/treasureRoom.tmx", i, j); // treasure cave
+				else
+					addNewMazeCell("tilemaps/maze" + k + ".tmx", i, j);
 			}				
 
 		addSafeZone();  // safe spawning zone	
@@ -114,32 +117,25 @@ public class MazeGenerator {
      */
 	private void addSafeZone(){
 		// Game Masters Spawn Room
-		addNewMazeCell("tilemaps/spawnRoomDragon.tmx", (int) Math.ceil(mazeWidth / 2), 0);
-		positions[0][0] =  (int) Math.ceil(mazeWidth / 2) * 32 * 32 + 16 * 32;
+		addNewMazeCell("tilemaps/spawnRoomDragon.tmx", (int) Math.ceil(mazeWidth / 2f), 0);
+		positions[0][0] =  (int) Math.ceil(mazeWidth / 2f) * 32 * 32 + 16 * 32;
 		positions[0][1] =  16 * 32;
 
 		// Team Reds Spawn Room
-		addNewMazeCell("tilemaps/spawnRoomTeamRed.tmx", 0, (int) Math.ceil(mazeHeight / 2) + 1);
+		addNewMazeCell("tilemaps/spawnRoomTeamRed.tmx", 0, (int) Math.ceil(mazeHeight / 2f) + 1);
 		positions[1][0] =  16 * 32;
-		positions[1][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
+		positions[1][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
 		positions[2][0] =  16 * 32;
-		positions[2][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 17 * 32;
+		positions[2][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
 
 		// Team Blues Spawn Room
 		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx",
-                mazeWidth + 1, (int) Math.ceil(mazeHeight / 2) + 1);
-		positions[3][0] =  mazeWidth * 32 * 32 + 16 * 32;
-		positions[3][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32;
-		positions[4][0] =  mazeWidth * 32 * 32 + 16 * 32;
-		positions[4][1] =  (int) Math.ceil(mazeHeight / 2) * 32 * 32 + 17 * 32;
+                mazeWidth + 1, (int) Math.ceil(mazeHeight / 2f) + 1);
+		positions[3][0] =  mazeWidth * 32 * 32 + 48 * 32;
+		positions[3][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
+		positions[4][0] =  mazeWidth * 32 * 32 + 48 * 32;
+		positions[4][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
 		
-	}
-	
-	/**
-	 * Adds the treasury
-	 */
-	private void addTreasure(){
-		addNewMazeCell("tilemaps/treasureRoom.tmx", (int) Math.ceil(mazeWidth / 2), (int) Math.ceil(mazeHeight / 2));
 	}
 	
 	/**
@@ -157,56 +153,83 @@ public class MazeGenerator {
 		
 		Rectangle topLeft = new Rectangle(
 				32 * 31,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 2 * 32 * 32,
+				(int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 58 * 32,
 				32,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
+				(int) Math.floor(mazeHeight / 2f) * 32 * 32 - 25 * 32
 				);
 		listOfWalls.add(topLeft);
-		
-		Rectangle topRight = new Rectangle(
-				(mazeWidth + 1) * 32 * 32,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 2 * 32 * 32,
-				32,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
-				);
-		listOfWalls.add(topRight);
-		
+
+        Rectangle doorLeft = new Rectangle(
+                32 * 31 + 30,
+                (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 55 * 32,
+                2,
+                3*32
+        );
+        listOfWalls.add(doorLeft);
+
 		Rectangle downLeft = new Rectangle(
 				32 * 31,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 32 * 32,
+				32 * 32,
 				32,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
+				(int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 23 * 32
 				);
 		listOfWalls.add(downLeft);
-		
-		Rectangle downRight = new Rectangle(
+
+        Rectangle topRight = new Rectangle(
+                (mazeWidth + 1) * 32 * 32,
+                (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 58 * 32,
+                32,
+                (int) Math.floor(mazeHeight / 2f) * 32 * 32 - 25 * 32
+        );
+        listOfWalls.add(topRight);
+
+        Rectangle doorRight = new Rectangle(
+                (mazeWidth + 1) * 32 * 32,
+                (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 55 * 32,
+                2,
+                3*32
+        );
+        listOfWalls.add(doorRight);
+
+        Rectangle downRight = new Rectangle(
 				(mazeWidth + 1) * 32 * 32,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 - 32 * 32,
+				32*32,
 				32,
-				(int) Math.ceil(mazeHeight / 2) * 32 * 32 + 16 * 32
+				(int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 23 * 32
 				);
 		listOfWalls.add(downRight);
 		
 		Rectangle underneathLeft = new Rectangle(
 				32 * 32,
 				32 * 31,
-				(int) Math.ceil (mazeWidth / 2) * 32 * 32 - 32 * 32,
+				(int) Math.ceil (mazeWidth / 2f) * 32 * 32 - 32 * 32,
 				32
 				);
 		listOfWalls.add(underneathLeft);
+
+        Rectangle doorBottom = new Rectangle(
+                (int) Math.ceil (mazeWidth / 2f) * 32 * 32 + 15*32,
+                32 * 31 + 30,
+                2*32,
+                2
+        );
+        listOfWalls.add(doorBottom);
 		
 		Rectangle underneathRight = new Rectangle(
-				(int) Math.ceil (mazeWidth / 2) * 32 * 32 + 32 * 32,
+				(int) Math.ceil (mazeWidth / 2f) * 32 * 32 + 32 * 32,
 				32 * 31,
-				(int) Math.ceil (mazeWidth / 2) * 32 * 32,
+				(int) Math.floor (mazeWidth / 2f) * 32 * 32,
 				32
 				);
 		listOfWalls.add(underneathRight);
 		
 		for(Rectangle x : listOfWalls){
 			RectangleMapObject help = new RectangleMapObject();
-		
 			help.getRectangle().set(x);
+
+            if(x.equals(doorBottom) || x.equals(doorLeft) || x.equals(doorRight))
+                help.setName("entranceDoor");
+
 			colliderWalls.getObjects().add(help);
 		}
 		
@@ -333,10 +356,8 @@ public class MazeGenerator {
 				objectLayer = map.getLayers().get("mapObjects");
 
 				for (MapObject mo : objectLayer.getObjects()) {
-                    System.out.print(mo.getName());
                     // Create Monsters .................................................... MONSTERS
                     if(mo.getName().equals("monster")) {
-                        System.out.print("ma");
                         MapMonsterObject monster = new MapMonsterObject(
                                 new Vector2(
                                         mo.getProperties().get("x", Float.class)/32 + x*32 + .5f,
@@ -382,12 +403,6 @@ public class MazeGenerator {
 	public TiledMap createNewMapFromGrid(Map<Vector2, Integer> entries){
 		generateMazeFromGrid(entries);
 		return map;
-	}
-	
-	//Settings übernehmen
-	public void setParam(int mazewidth, int mazeheight){
-		this.mazeWidth = mazewidth;
-		this.mazeHeight = mazeheight;
 	}
 
     public Array<Vector2> getLightPositions() {

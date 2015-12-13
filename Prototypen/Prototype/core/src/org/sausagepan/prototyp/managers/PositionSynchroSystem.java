@@ -3,11 +3,10 @@ package org.sausagepan.prototyp.managers;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -15,13 +14,13 @@ import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.MonsterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.Sword;
 
 /**
  * Created by georg on 28.10.15.
  */
-public class PositionSynchroSystem extends ObservingEntitySystem {
+public class PositionSynchroSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
 
@@ -38,22 +37,15 @@ public class PositionSynchroSystem extends ObservingEntitySystem {
     private ComponentMapper<InjurableAreaComponent> jm
             = ComponentMapper.getFor(InjurableAreaComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
-    public PositionSynchroSystem() {};
+    public PositionSynchroSystem() {}
 
     /* ............................................................................... METHODS .. */
     /*
     Update method should synchronize positions of components
 
      */
-    public void addedToEngine(ObservableEngine engine) {
-        entities = engine.getEntitiesFor(Family.all(
-                DynamicBodyComponent.class).one(
-                LightComponent.class,
-                CharacterSpriteComponent.class,
-                WeaponComponent.class,
-                InputComponent.class,
-                InjurableAreaComponent.class
-        ).get());
+    public void addedToEngine(Engine engine) {
+        entities = engine.getEntitiesFor(EntityFamilies.positionSynchroFamily);
     }
 
     public void update(float deltaTime) {
@@ -143,6 +135,16 @@ public class PositionSynchroSystem extends ObservingEntitySystem {
                 );
             }
         }
+    }
+
+    @Override
+    public void entityAdded(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        addedToEngine(this.getEngine());
     }
     
     /* ..................................................................... GETTERS & SETTERS .. */

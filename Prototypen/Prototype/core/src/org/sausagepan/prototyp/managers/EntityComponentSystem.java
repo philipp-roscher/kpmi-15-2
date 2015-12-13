@@ -1,43 +1,40 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
+import org.sausagepan.prototyp.model.entities.ItemEntity;
+import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.HeroInformation;
-import org.sausagepan.prototyp.network.Network.ShootResponse;
-import org.sausagepan.prototyp.network.Network.TakeKeyResponse;
-import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
-import org.sausagepan.prototyp.network.Network.LoseKeyResponse;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
+
+import java.util.HashMap;
 
 import box2dLight.RayHandler;
 
@@ -49,16 +46,18 @@ import box2dLight.RayHandler;
  */
 public class EntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
-    private ObservableEngine engine;
+    private Engine engine;
     private World world;
     private MediaManager mediaManager;
     private ItemFactory itemFactory;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private RayHandler rayHandler;
     private Maze maze;
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
+    private HashMap<Integer,MonsterEntity> monsters;
+    private HashMap<Integer,ItemEntity> items;
+    private KPMIPrototype game;
 
     private EntityFactory entityFactory;
 
@@ -68,35 +67,35 @@ public class EntityComponentSystem {
     private CharacterClass characterClass;
     private int TeamId;
 
-    private float [] [] startPos;
+    private float[][] startPositions;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
             KPMIPrototype game, World world, Viewport viewport, RayHandler rayHandler, Maze maze,
             OrthographicCamera camera, CharacterClass characterClass, int TeamId) {
 
+    	this.game = game;
         this.mediaManager = game.mediaManager;
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = world;
         this.camera = camera;
         this.viewport = viewport;
-        this.rayHandler = rayHandler;
         this.maze = maze;
+        this.startPositions = maze.getStartPositions();
         this.shpRend = new ShapeRenderer();
         this.characterClass = characterClass;
         this.TeamId = TeamId;
 
-        this.engine = new ObservableEngine(); // Create Engine
+        this.engine = new Engine(); // Create Engine
         this.characters = new HashMap<Integer,CharacterEntity>();
+        this.monsters = new HashMap<Integer,MonsterEntity>();
+        this.items = new HashMap<Integer,ItemEntity>();
         this.localCharacterId = game.clientId;
 
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
         
-        setUpEntities();
         setUpLocalCharacterEntity();
         setUpMazeLights();
-        setUpMonsters();
-        setUpItems();
 
         // At least - not before adding entities
         setUpEntitySystems();
@@ -104,11 +103,6 @@ public class EntityComponentSystem {
 
     /* ............................................................................... METHODS .. */
     private void setUpEntitySystems() {
-        // Movement System
-        MovementSystem movementSystem = new MovementSystem(world);
-        movementSystem.addedToEngine(engine);
-        engine.addEntityListener(Family.all(DynamicBodyComponent.class).get(), movementSystem);
-
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
         spriteSystem.addedToEngine(engine);
@@ -117,68 +111,50 @@ public class EntityComponentSystem {
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
         weaponSystem.addedToEngine(engine);
-        engine.subscribe(weaponSystem);
+        engine.addEntityListener(Family.all(WeaponComponent.class,NetworkTransmissionComponent.class).get(), weaponSystem);
 
         // Input System
         InputSystem inputSystem = new InputSystem(viewport, mediaManager);
         inputSystem.addedToEngine(engine);
-        engine.subscribe(inputSystem);
 
         // Character Sprite System
-        CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem();
+        CharacterSpriteSystem characterSpriteSystem = new CharacterSpriteSystem(this);
         characterSpriteSystem.addedToEngine(engine);
-        engine.subscribe(characterSpriteSystem);
-
+        engine.addEntityListener(Family.all(
+                CharacterSpriteComponent.class,
+                DynamicBodyComponent.class).get(), characterSpriteSystem);
+        
         // Position Synchro System
         PositionSynchroSystem positionSynchroSystem = new PositionSynchroSystem();
         positionSynchroSystem.addedToEngine(engine);
-        engine.subscribe(positionSynchroSystem);
+        engine.addEntityListener(EntityFamilies.positionSynchroFamily, positionSynchroSystem);
 
         // Network System
-        NetworkSystem networkSystem = new NetworkSystem();
+        NetworkSystem networkSystem = new NetworkSystem(this);
         networkSystem.addedToEngine(engine);
-        engine.subscribe(networkSystem);
 
         // Debugging System
         VisualDebuggingSystem visualDebuggingSystem
                 = new VisualDebuggingSystem(shpRend, camera, maze);
         visualDebuggingSystem.addedToEngine(engine);
-        engine.subscribe(visualDebuggingSystem);
+        engine.addEntityListener(Family.all(HealthComponent.class,DynamicBodyComponent.class,InjurableAreaComponent.class).get(), visualDebuggingSystem);
 
-        // Battle System
-        BattleSystem battleSystem = new BattleSystem();
-        battleSystem.addedToEngine(engine);
-        engine.addEntityListener(EntityFamilies.attackerFamily, battleSystem);
-        engine.addEntityListener(EntityFamilies.victimFamily, battleSystem);
-
-        //Inventory System
-        InventorySystem inventorySystem = new InventorySystem(maze);
+        // Inventory System
+        InventorySystem inventorySystem = new InventorySystem(maze, getLocalCharacterEntity());
         inventorySystem.addedToEngine(engine);
-        engine.subscribe(inventorySystem);
+        engine.addEntityListener(EntityFamilies.characterFamily, inventorySystem);
 
         // Bullet System
-        BulletSystem bulletSystem = new BulletSystem(engine, maze);
+        BulletSystem bulletSystem = new BulletSystem(maze);
         bulletSystem.addedToEngine(engine);
-        engine.subscribe(bulletSystem);
+        engine.addEntityListener(Family.all(WeaponComponent.class).get(), bulletSystem);
 
         // Ingame UI System
         InGameUISystem inGameUISystem
-                = new InGameUISystem(mediaManager, characterClass);
+                = new InGameUISystem(mediaManager, characterClass, game);
         inGameUISystem.addedToEngine(engine);
-        engine.subscribe(inGameUISystem);
-
-        // Item System
-        ItemSystem itemSystem = new ItemSystem(maze.getTiledMapRenderer());
-        itemSystem.addedToEngine(engine);
-        engine.subscribe(itemSystem);
-
-        // Light System
-        LightSystem lightSystem = new LightSystem(rayHandler);
-        lightSystem.addedToEngine(engine);
-        engine.subscribe(lightSystem);
 
         // Adding them to the Engine
-        this.engine.addSystem(movementSystem);
         this.engine.addSystem(spriteSystem);
         this.engine.addSystem(weaponSystem);
         this.engine.addSystem(characterSpriteSystem);
@@ -186,12 +162,9 @@ public class EntityComponentSystem {
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(networkSystem);
         this.engine.addSystem(visualDebuggingSystem);
-        this.engine.addSystem(battleSystem);
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
-        this.engine.addSystem(itemSystem);
-        this.engine.addSystem(lightSystem);
     }
 
     public void setUpMazeLights() {
@@ -204,23 +177,23 @@ public class EntityComponentSystem {
         }
     }
 
-    private void setUpEntities() {
-        // TODO
-    }
-
-    private void setUpMonsters() {
-        // Get Objects from Maps Monster Layer and add monster entities there
-        for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
+    public void setUpMonsters(HashMap<Integer,MapMonsterObject> mapMonsterObjects) {
+        // Get Objects from FullGameStateResponse Monster HashMap and add monster entities there
+        for(HashMap.Entry<Integer,MapMonsterObject> mapObject : mapMonsterObjects.entrySet()) {
             // Using factory method for creating monsters
-            this.engine.addEntity(entityFactory.createMonster(mapObject));
+        	MonsterEntity monster = entityFactory.createMonster(mapObject.getValue(), mapObject.getKey());
+        	monsters.put(mapObject.getKey(), monster);
+            this.engine.addEntity(monster);
         }
-        // TODO
     }
 
-    private void setUpItems() {
-        // Get Objects from Maps Monster Layer and add monster entities there
-        for(MapItem mi : maze.getMapItems()) {
-            this.engine.addEntity(entityFactory.createItem(mi));
+    public void setUpItems(HashMap<Integer,MapItem> mapItems) {
+        // Get Objects from FullGameStateResponse Item HashMap and add item entities there
+        for(HashMap.Entry<Integer,MapItem> mapItem : mapItems.entrySet()) {
+            // Using factory method for creating monsters
+        	ItemEntity item = entityFactory.createItem(mapItem.getValue(), mapItem.getKey());
+        	items.put(mapItem.getKey(), item);
+            this.engine.addEntity(item);
         }
     }
 
@@ -234,7 +207,7 @@ public class EntityComponentSystem {
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
-		return addNewCharacter(request.playerId, request.teamId, request.hero);
+		return addNewCharacter(request.playerId, request.teamId, request.clientClass);
 	}
 
     /**
@@ -243,39 +216,26 @@ public class EntityComponentSystem {
      */
     private void setUpLocalCharacterEntity() {
         // Create Entity
-        this.localCharacter = setUpCharacterEntity(characterClass);
+        this.localCharacter = addNewCharacter(localCharacterId, TeamId, characterClass);
 
-        // Add Components
-        localCharacter.add(new NetworkTransmissionComponent());
-        localCharacter.add(new TeamComponent(TeamId));
+        // Add NetworkComponent
         localCharacter.add(new NetworkComponent());
-        localCharacter.add(new IdComponent(localCharacterId));
-
-        //Set Spawn locations: Game master
-        if (TeamId == 0) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), characterClass));
-        }
-        if (TeamId == 1) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), characterClass));
-        }
-
-        if (TeamId == 2) {
-            localCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), characterClass));
-        }
-
-        characters.put(localCharacterId, localCharacter);
-        this.engine.addEntity(localCharacter);
+        
+        // opens passages for game master
+        if(characterClass == CharacterClass.DRAGON) maze.openSecretPassages();
     }
 
     /**
-     * Adds other (network-) players characters to the world
+     * Adds players characters to the world
      * @param newCharacterId
-     * @param newHero
+     * @param newCharacterTeamId
+     * @param clientClass
      * @return
      */
-	public CharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, HeroInformation newHero) {		
+	public CharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, CharacterClass clientClass) {		
+		System.out.println(newCharacterId + ", " + newCharacterTeamId + ", " + clientClass);
 		// Create Entity
-        CharacterEntity newCharacter = setUpCharacterEntity(newHero.clientClass);
+        CharacterEntity newCharacter = entityFactory.createCharacter(clientClass);
 
         // Add Components
         newCharacter.add(new NetworkTransmissionComponent());
@@ -283,116 +243,99 @@ public class EntityComponentSystem {
         newCharacter.add(new TeamComponent(newCharacterTeamId));
 
         //Set Spawn locations: Game master
-        if (newCharacterId == 0) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*2.5f, 32*.5f), characterClass));
+        if (newCharacterTeamId == 0) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), clientClass));
         }
-        if (newCharacterId == 1) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*.5f, 32*3.5f), characterClass));
+        if (newCharacterTeamId == 1) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), clientClass));
         }
-
-        if (newCharacterId == 2) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(32*6.5f, 32*3.5f), characterClass));
+        if (newCharacterTeamId == 2) {
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass));
         }
         
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);
         return newCharacter;
 	}
-
-    /**
-     * Creates a generic {@link CharacterEntity} without {@link NetworkComponent} or
-     * {@link NetworkTransmissionComponent}
-     * @return
-     */
-    private CharacterEntity setUpCharacterEntity(CharacterClass characterClass) {
-        // Create Entity
-        CharacterEntity characterEntity = entityFactory.createCharacter(characterClass);
-
-        // opens passages for game master
-        if(characterClass == CharacterClass.DRAGON) maze.openSecretPassages();
-
-        return characterEntity;
-    }
-
-    /* TODO move stuff that doesn't belong here to the respective systems, like
-       {@link NetworkSystem} */
-	public void updatePosition(int id, NetworkTransmissionComponent position) {
-		if(characters.get(id) != null) {
-			this.characters.get(id)
-                    .getComponent(DynamicBodyComponent.class)
-                    .dynamicBody
-                    .setTransform(position.position, 0f);
-			this.characters.get(id).getComponent(DynamicBodyComponent.class)
-                    .dynamicBody.setLinearVelocity(position.linearVelocity);
-			if(position.direction != null)
-				this.characters.get(id).getComponent(InputComponent.class).direction
-                        = position.direction;
-		}
+	
+	public void addNewCharacter(Integer heroId, MapCharacterObject character) {
+		CharacterEntity newCharacter = addNewCharacter(heroId, character.teamId, character.characterClass);
+		newCharacter.getComponent(HealthComponent.class).HP = character.health;
+		newCharacter.getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(character.position, 0f);
+		newCharacter.getComponent(InventoryComponent.class).ownKeys = character.ownKeys;
 	}
 
 	public void deleteCharacter(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character wird gelöscht: " +id);
-			engine.removeEntity(this.characters.get(id));
+		CharacterEntity character = characters.get(id);
+		if(character != null) {
+			world.destroyBody(character.getComponent(DynamicBodyComponent.class).dynamicBody);
+			character.getComponent(LightComponent.class).spriteLight.remove();
+			engine.removeEntity(character);
 			this.characters.remove(id);
 		}
 	}
 	
-	public void attack(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character greift an: " + id);
-			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = true;
-//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
+	public void deleteMonster(int id, boolean finalDeletion) {
+		MonsterEntity monster = monsters.get(id);
+		if(monster != null) {
+			if(!finalDeletion) {
+				// delete body only
+				world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);	
+			}
+			else {
+				// completely delete entity
+				engine.removeEntity(monster);
+				this.monsters.remove(id);
+			}
 		}
 	}
 
-	public void stopAttacking(int id) {
-		if(characters.get(id) != null) {
-//			System.out.println("Character bricht Angriff ab: "+id);
-			this.characters.get(id).getComponent(InputComponent.class).weaponDrawn = false;
-//			this.characters.get(id).getComponent(WeaponComponent.class).weapon.justUsed = true;
+	public void deleteItem(int id) {
+		ItemEntity item = items.get(id);
+		if(item != null) {
+			engine.removeEntity(item);
+			this.items.remove(id);
 		}
 	}
 	
-	public void shoot(ShootResponse sr) {
-		if(characters.get(sr.playerId) != null) {
-//			System.out.println("Character schießt: "+sr.playerId);
-			((Bow)this.characters.get(sr.playerId).getComponent(WeaponComponent.class).weapon).shoot(sr.position, sr.direction);
-		}
-	}
-
-	public void updateHP(HPUpdateResponse result) {
-		if(characters.get(result.playerId) != null)
-			this.characters.get(result.playerId).getComponent(HealthComponent.class).HP = result.HP;		
-	}
-
+    public void createItem(int id, MapItem mapItem) {
+    	ItemEntity item = entityFactory.createItem(mapItem, id);
+    	items.put(id, item);
+        this.engine.addEntity(item);
+    }
+    
 	public CharacterEntity getCharacter(int playerId) {
-		if(characters.get(playerId) != null)
-			return characters.get(playerId);
-		
-		return null;
+		return characters.get(playerId);
 	}
 
-	public void loseKey(LoseKeyResponse result) {
-		if(characters.get(result.id) != null) {
-			characters.get(result.id).getComponent(InventoryComponent.class).dropAllItems();
-		}
+	public MonsterEntity getMonster(Integer key) {
+		return monsters.get(key);
 	}
-
-	public void takeKey(TakeKeyResponse result) {
-        if (characters.get(result.id) != null) {
-			characters.get(result.id).getComponent(InventoryComponent.class)
-                    .pickUpItem(itemFactory.createKeyFragment(result.keySection), 1);
-		}
+	
+	public ItemEntity getItem(Integer key) {
+		return items.get(key);
+	}
+	
+	public void setupNetworkSystem() {
+		engine.getSystem(NetworkSystem.class).setupSystem();
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;
     }
+    
+    public ItemFactory getItemFactory() {
+    	return itemFactory;
+    }
+
 
     public void setInputProcessor() {
         InputSystem inputSystem = this.engine.getSystem(InputSystem.class);
         inputSystem.setInputProcessor();
+    }
+
+    public Maze getMaze() {
+        return maze;
     }
 }

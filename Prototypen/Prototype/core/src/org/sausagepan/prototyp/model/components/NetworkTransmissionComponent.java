@@ -1,19 +1,15 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.math.Vector2;
-
-import org.sausagepan.prototyp.enums.Direction;
 
 /**
  * Created by georg on 29.10.15.
  */
 public class NetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public Vector2 position = new Vector2(0,0);
-    public Vector2 linearVelocity = new Vector2(0,0);
-    public Direction direction;
-    public boolean moving = false;
+    public boolean attack = false;
+    public boolean stopAttacking = false;
+    public boolean shoot = false;
 
     /* ........................................................................... CONSTRUCTOR .. */
     

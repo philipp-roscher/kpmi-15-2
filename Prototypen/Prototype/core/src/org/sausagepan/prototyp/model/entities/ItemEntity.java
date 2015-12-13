@@ -1,29 +1,32 @@
 package org.sausagepan.prototyp.model.entities;
 
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.model.components.CharacterClassComponent;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.enums.ItemType;
+import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
+import org.sausagepan.prototyp.model.components.ItemComponent;
+import org.sausagepan.prototyp.model.items.MapItem;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Created by georg on 30.10.15.
+ * Created by philipp on 10.12.15.
  */
-public class MonsterEntity extends Entity {
+public class ItemEntity extends Entity {
     /* ............................................................................ ATTRIBUTES .. */
     
     /* ........................................................................... CONSTRUCTOR .. */
     
     /* ............................................................................... METHODS .. */
     
-	public MapMonsterObject createClientInformation() {
-		Vector2 position = this.getComponent(DynamicBodyComponent.class).dynamicBody.getPosition();
-		CharacterClass characterClass = this.getComponent(CharacterClassComponent.class).characterClass;
-		int health = this.getComponent(HealthComponent.class).HP;
-		return new MapMonsterObject(position, characterClass, health);
+	public MapItem createClientInformation() {
+		Rectangle area = this.getComponent(InjurableAreaComponent.class).area;
+		ItemComponent item = this.getComponent(ItemComponent.class);
+		Vector2 position = new Vector2(area.x, area.y);
+		ItemType type = item.type;
+		int value = item.value;
+		return new MapItem(position, type, value);
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */
@@ -34,6 +37,6 @@ public class MonsterEntity extends Entity {
      * @return
      */
     public static Family getFamily() {
-        return EntityFamilies.monsterFamily;
+        return EntityFamilies.itemFamily;
     }
 }

@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.model.items;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -52,40 +51,48 @@ public class Bow extends WeaponItem {
      * @param startPos  position of the firing character
      * @param dirVector direction in which activeArrows should fly
      */
-    public void shoot(Vector2 startPos, Vector2 dirVector) {
-        System.out.println("Shoot!");
+    public void shoot(Vector2 startPos, Vector2 dirVector, int bulletId) {
         if(TimeUtils.timeSinceMillis(lastAttack) < 100) return; // maximum 10 bullets per second
         Bullet newArrow = arrowPool.obtain();           // obtain new bullet from pool
         newArrow.init(startPos.x, startPos.y, dirVector);
+        newArrow.id = bulletId;
         activeArrows.add(newArrow);                           // add initialized bullet to active bullets
         lastAttack = TimeUtils.millis();                // remember spawn time
-        System.out.println(activeArrows);
     }
 
     /**
      * Move Arrows around
      */
-    public void updateArrows() {
-        Iterator<Bullet> i = activeArrows.iterator();
-        while (i.hasNext()) {
-            Bullet b = i.next();
-            b.x += Gdx.graphics.getDeltaTime() * 1 * b.direction.x;
-            b.y += Gdx.graphics.getDeltaTime() * 1 * b.direction.y;
+    public void updateArrows(float delta) {
+        for(Bullet b : activeArrows) {
+            b.x += delta * b.direction.x;
+            b.y += delta * b.direction.y;
         }
     }
 
-    public boolean checkHit(Rectangle hittableArea) {
+    public int checkHit(Rectangle hittableArea) {
         Iterator<Bullet> i = activeArrows.iterator();
         while (i.hasNext()) {
             Bullet arrow = i.next();
             if(hittableArea.overlaps(arrow)) {
-                System.out.println("Arrow hit something");
                 arrow.reset();
                 i.remove();
-                return true;
+                return arrow.id;
             }
         }
-        return false;
+        return -1;
+    }
+
+    public void deleteBullet(int bulletId) {
+        Iterator<Bullet> i = activeArrows.iterator();
+        while (i.hasNext()) {
+            Bullet arrow = i.next();
+            if(arrow.id == bulletId) {
+                arrow.reset();
+                i.remove();
+                return;
+            }
+        }
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }

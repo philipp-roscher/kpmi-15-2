@@ -1,46 +1,39 @@
 package org.sausagepan.prototyp.view;
 
-import java.util.Random;
-
-import box2dLight.RayHandler;
-
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-
-import org.sausagepan.prototyp.KPMIPrototype;
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.network.HeroInformation;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.network.Network.MapInformation;
-import org.sausagepan.prototyp.network.Network.NewHeroRequest;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.network.Network.MapInformation;
+import org.sausagepan.prototyp.network.Network.NewHeroRequest;
+
+import java.util.Random;
+
+import box2dLight.RayHandler;
+
 public class MainMenuScreen implements Screen {
 	
 	/* ........................................................ ATTRIBUTES .. */
-	final KPMIPrototype game;
+	KPMIPrototype game;
 	public OrthographicCamera camera;
 	public Viewport viewport;
 	private Texture bgImg;
-	private Texture SelArcherF;
-	private Texture SelKnightM;
-	private Texture SelFighterM;
-	private Texture SelShamanM;
-	private Texture SelDragonRed;
 
 	private int connectionStatus;
-	private final World world;
-    private final RayHandler rayHandler;
+	private World world;
+    private RayHandler rayHandler;
     private MapInformation mapInformation;
 	String serverIp;
 
@@ -53,7 +46,7 @@ public class MainMenuScreen implements Screen {
 
 	
 	/* ...................................................... CONSTRUCTORS .. */
-	public MainMenuScreen(final KPMIPrototype game) {
+	public MainMenuScreen(KPMIPrototype game) {
 		this.game  = game;
 		this.world = new World(new Vector2(0,0), true);
         this.rayHandler = new RayHandler(world);
@@ -64,11 +57,6 @@ public class MainMenuScreen implements Screen {
 		connectionStatus = 0;
 		
 		this.bgImg = game.mediaManager.getMainMenuBackgroundImg();
-		this.SelArcherF = game.mediaManager.getSelectionArcherFBig();
-		this.SelDragonRed = game.mediaManager.getSelectionDragonRedBig();
-		this.SelFighterM = game.mediaManager.getSelectionFighterMBig();
-		this.SelKnightM = game.mediaManager.getSelectionKnightMBig();
-		this.SelShamanM = game.mediaManager.getSelectionShamanMBig();
 
 		game.client.addListener(new Listener() {
 			public void received (Connection connection, Object object) {
@@ -87,11 +75,6 @@ public class MainMenuScreen implements Screen {
 	/* ................................................................................................... METHODS .. */
 
 	public void setUpGame() {
-//		BattleSystem bs = new BattleSystem();
- 	   	System.out.println(mapInformation.height + " " + mapInformation.width);
-
-		System.out.println("Assigned teamId is: "+game.TeamId);
-
 		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, clientClass, game.TeamId));
 	}
 
@@ -101,40 +84,42 @@ public class MainMenuScreen implements Screen {
 		game.batch.begin();
 		//GameMaster
 		if (game.TeamId == 0) {
-			game.batch.draw(SelDragonRed, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 			clientClass = CharacterClass.DRAGON;
 		}
 		//Teams
 		else {
 			Random ran = new Random();
-			int x = ran.nextInt(4);                                        //TODO: raise number according to available character sheets!!!!
+			int x = ran.nextInt(6);                                        //TODO: raise number according to available character sheets!!!!
 
 			//System.out.println("random number = "+x);
 
 			switch (x) {
 				case 0: {
 					clientClass = CharacterClass.KNIGHT_M;
-					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 1: {
 					clientClass = CharacterClass.ARCHER_F;
-					game.batch.draw(SelArcherF, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 2: {
 					clientClass = CharacterClass.SHAMAN_M;
-					game.batch.draw(SelShamanM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 				case 3: {
 					clientClass = CharacterClass.FIGHTER_M;
-					game.batch.draw(SelFighterM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
+					break;
+				}
+				case 4: {
+					clientClass = CharacterClass.WITCH_F;
+					break;
+				}
+				case 5: {
+					clientClass = CharacterClass.NINJA_F;
 					break;
 				}
 				default: {
 					clientClass = CharacterClass.KNIGHT_M;
-					game.batch.draw(SelKnightM, (camera.viewportWidth / 2) - 100, (camera.viewportHeight / 2) - 100, 200, 200);
 					break;
 				}
 			}
@@ -179,9 +164,12 @@ public class MainMenuScreen implements Screen {
 				
 				@Override
 				public void input(String text) {
+                    // avoid connecting multiple times
+                    if(connectionStatus == 1) return;
+
 					// trim IP to remove unnecessary whitepaces (sometimes created by android auto-correct)
 					text = text.trim();
-					
+
 					Gdx.app.log("ServerConnector", "Attempting Connection to: "+ text);
 					try {
 						connectionStatus = 1;
@@ -204,7 +192,7 @@ public class MainMenuScreen implements Screen {
 			}, "Bitte Server-IP eingeben", "127.0.0.1", "");
 		}
 
-		if(game.connected == true && game.clientId != 0) {
+		if(game.connected && game.clientId != 0) {
 
 
 			if (game.TeamAssignmentReceived) {
@@ -215,17 +203,18 @@ public class MainMenuScreen implements Screen {
 				}
 
 				//send Hero/Client info to server after class Selection
-				if(!heroRequestSent && clientSel) {
+				if(!heroRequestSent && clientSel && game.clientCount <= game.maxClients) {
 					game.client.sendTCP(
 							new NewHeroRequest(
 									game.clientId,
-									new HeroInformation(clientClass)
+									clientClass
 							)
 					);
 					heroRequestSent = true;
 				}
 			}
 
+			/*
 			//too few clients
 			if(game.clientCount < game.maxClients) {
 				game.batch.begin();
@@ -247,7 +236,7 @@ public class MainMenuScreen implements Screen {
 				if (mapInformationReceived) {
 					setUpGame();
 				}
-			}
+			} */
 
 			//too many players
 			if(game.clientCount > game.maxClients) {
@@ -256,7 +245,11 @@ public class MainMenuScreen implements Screen {
 				game.font.draw(game.batch, "Sorry, server is already full!"+game.clientCount+"/"+game.maxClients, 320, 380);
 				game.font.setColor(1, 1, 1, 1);
 				game.batch.end();
-			}
+			} else {
+                if (mapInformationReceived) {
+                    setUpGame();
+                }
+            }
 			dispose();
 		}
 		

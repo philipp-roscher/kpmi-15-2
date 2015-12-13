@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -31,8 +30,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     private Array<WeaponComponent> weaponComponents;
     private Array<EntitySprite> entitySprites;
     private int drawSpritesAfterLayer = 3;
-    private MediaManager media;
-    private BitmapFont font;
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
@@ -44,8 +41,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         characterSpriteComponents = new Array<CharacterSpriteComponent>();
         weaponComponents = new Array<WeaponComponent>();
         entitySprites = new Array<EntitySprite>();
-        this.media = media;
-        this.font = new BitmapFont();
     }
 
 
@@ -75,7 +70,7 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
     }
 
     public void clearSprites() {
-        System.out.println("Clearing Sprites");
+        //System.out.println("Clearing Sprites");
         sprites.clear();
         spriteComponents.clear();
         weaponComponents.clear();

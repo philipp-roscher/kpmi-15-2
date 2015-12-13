@@ -1,0 +1,33 @@
+package org.sausagepan.prototyp.network;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+import com.badlogic.gdx.backends.headless.HeadlessFiles;
+import com.badlogic.gdx.backends.headless.HeadlessNativesLoader;
+import com.badlogic.gdx.backends.headless.HeadlessNet;
+import com.badlogic.gdx.backends.headless.mock.graphics.MockGraphics;
+import com.badlogic.gdx.graphics.GL20;
+
+import org.mockito.Mockito;
+import org.sausagepan.prototyp.model.ServerSettings;
+
+public class ServerLauncher {
+	public static void main (String[] arg) {
+		// Load gdx stuff
+		HeadlessNativesLoader.load();
+
+		Gdx.graphics = new MockGraphics();
+		Gdx.net = new HeadlessNet();
+		Gdx.files = new HeadlessFiles();
+		Gdx.gl = Mockito.mock(GL20.class);
+		
+		// Create new configuration
+		HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
+		// Set tickrate
+		config.renderInterval = 1f / ServerSettings.TICKRATE;
+		
+		// Create server
+		new HeadlessApplication(new GameServer(), config);
+	}
+}

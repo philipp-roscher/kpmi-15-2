@@ -31,6 +31,8 @@ public class MediaManager {
     private String dragonRedSpriteSheetFile = "textures/spritesheets/characters/dragon_red.pack";
     private String shamanMSpriteSheetFile   = "textures/spritesheets/characters/shaman_m.pack";
     private String fighterMSpriteSheetFile  = "textures/spritesheets/characters/fighter_m.pack";
+    private String witchFSpriteSheetFile  = "textures/spritesheets/characters/witch_f.pack";
+    private String ninjaFSpriteSheetFile  = "textures/spritesheets/characters/ninja_f.pack";
     //weapons
     private String weaponsSpriteSheetFile       = "textures/spritesheets/weapons.pack";
     //monsters
@@ -60,6 +62,9 @@ public class MediaManager {
         assets.load(this.dragonRedSpriteSheetFile, TextureAtlas.class);
         assets.load(this.shamanMSpriteSheetFile, TextureAtlas.class);
         assets.load(this.fighterMSpriteSheetFile, TextureAtlas.class);
+        assets.load(this.witchFSpriteSheetFile, TextureAtlas.class);
+        assets.load(this.ninjaFSpriteSheetFile, TextureAtlas.class);
+
         assets.load(this.weaponsSpriteSheetFile, TextureAtlas.class);
         assets.load(this.zombieSpriteFile, TextureAtlas.class);
         assets.load(this.skeletonSpriteFile, TextureAtlas.class);

@@ -1,13 +1,8 @@
 package org.sausagepan.prototyp.model.components;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-
-import org.sausagepan.prototyp.Utils.UnitConverter;
-import org.sausagepan.prototyp.enums.Damagetype;
-import org.sausagepan.prototyp.graphics.EntitySprite;
 import org.sausagepan.prototyp.model.items.WeaponItem;
+
+import com.badlogic.ashley.core.Component;
 
 /**
  * Created by georg on 22.10.15.

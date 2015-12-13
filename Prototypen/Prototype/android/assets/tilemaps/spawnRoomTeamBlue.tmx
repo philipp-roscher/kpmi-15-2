@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="57">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
- <tileset firstgid="751" name="buch1" tilewidth="32" tileheight="32">
+ <tileset firstgid="751" name="buch1" tilewidth="32" tileheight="32" tilecount="500">
   <image source="../textures/spritesheets/the_field_of_the_floating_island_by_buch_PD.png" width="800" height="640"/>
  </tileset>
- <tileset firstgid="1251" name="buch2" tilewidth="32" tileheight="32">
+ <tileset firstgid="1251" name="buch2" tilewidth="32" tileheight="32" tilecount="308">
   <image source="../textures/spritesheets/maze_snow.png" width="704" height="448"/>
  </tileset>
  <layer name="ground" width="32" height="32">
@@ -29,68 +29,69 @@
    eJzt1TkKgEAMQNFcRRzcl6u43P8uRrCYIlrY/MBE+AhBfaRQTxGZtPE55w3G3LrO6u2+fH5os3BHcuDXoN+Advg+/Ar2V9gn338P+5P+/f1bQJ/ev3Sf/v/S+4cffvjhl+on2Pew/661Wqf1WdbsT1/P3bQLj0QUNg==
   </data>
  </layer>
- <objectgroup name="colliderWalls" width="0" height="0">
-  <object x="0" y="288" width="32" height="736"/>
-  <object x="640" y="224" width="32" height="96"/>
-  <object x="672" y="288" width="64" height="32"/>
-  <object x="704" y="320" width="32" height="64"/>
-  <object x="736" y="352" width="96" height="32"/>
-  <object x="352" y="224" width="32" height="96"/>
-  <object x="288" y="288" width="64" height="32"/>
-  <object x="288" y="320" width="32" height="64"/>
-  <object x="192" y="352" width="96" height="32"/>
-  <object x="192" y="384" width="32" height="96"/>
-  <object x="96" y="448" width="96" height="32"/>
-  <object x="96" y="192" width="32" height="256"/>
-  <object x="32" y="544" width="192" height="32"/>
-  <object x="192" y="576" width="32" height="96"/>
-  <object x="224" y="640" width="96" height="32"/>
-  <object x="288" y="672" width="32" height="64"/>
-  <object x="320" y="704" width="64" height="32"/>
-  <object x="352" y="736" width="32" height="96"/>
-  <object x="704" y="640" width="96" height="32"/>
-  <object x="704" y="672" width="32" height="64"/>
-  <object x="640" y="704" width="64" height="32"/>
-  <object x="640" y="736" width="32" height="96"/>
-  <object x="416" y="288" width="64" height="64"/>
-  <object x="384" y="352" width="96" height="32"/>
-  <object x="352" y="384" width="128" height="32"/>
-  <object x="288" y="416" width="160" height="32"/>
-  <object x="288" y="448" width="128" height="32"/>
-  <object x="544" y="288" width="64" height="64"/>
-  <object x="544" y="352" width="96" height="32"/>
-  <object x="544" y="384" width="128" height="32"/>
-  <object x="576" y="416" width="160" height="32"/>
-  <object x="608" y="448" width="128" height="32"/>
-  <object x="288" y="544" width="128" height="32"/>
-  <object x="288" y="576" width="160" height="32"/>
-  <object x="352" y="608" width="128" height="32"/>
-  <object x="384" y="640" width="96" height="32"/>
-  <object x="416" y="672" width="64" height="64"/>
-  <object x="608" y="544" width="128" height="32"/>
-  <object x="576" y="576" width="160" height="32"/>
-  <object x="544" y="608" width="128" height="32"/>
-  <object x="544" y="640" width="96" height="32"/>
-  <object x="544" y="672" width="64" height="64"/>
-  <object x="0" y="0" width="32" height="192"/>
-  <object x="352" y="192" width="320" height="32"/>
-  <object x="800" y="384" width="32" height="288"/>
-  <object x="384" y="800" width="256" height="32"/>
-  <object x="32" y="160" width="96" height="32"/>
+ <objectgroup name="colliderWalls">
+  <object id="1" x="0" y="288" width="32" height="736"/>
+  <object id="2" x="640" y="224" width="32" height="96"/>
+  <object id="3" x="672" y="288" width="64" height="32"/>
+  <object id="4" x="704" y="320" width="32" height="64"/>
+  <object id="5" x="736" y="352" width="96" height="32"/>
+  <object id="6" x="352" y="224" width="32" height="96"/>
+  <object id="7" x="288" y="288" width="64" height="32"/>
+  <object id="8" x="288" y="320" width="32" height="64"/>
+  <object id="9" x="192" y="352" width="96" height="32"/>
+  <object id="10" x="192" y="384" width="32" height="96"/>
+  <object id="11" x="96" y="448" width="96" height="32"/>
+  <object id="12" x="96" y="192" width="32" height="256"/>
+  <object id="13" x="32" y="544" width="192" height="32"/>
+  <object id="14" x="192" y="576" width="32" height="96"/>
+  <object id="15" x="224" y="640" width="96" height="32"/>
+  <object id="16" x="288" y="672" width="32" height="64"/>
+  <object id="17" x="320" y="704" width="64" height="32"/>
+  <object id="18" x="352" y="736" width="32" height="96"/>
+  <object id="19" x="704" y="640" width="96" height="32"/>
+  <object id="20" x="704" y="672" width="32" height="64"/>
+  <object id="21" x="640" y="704" width="64" height="32"/>
+  <object id="22" x="640" y="736" width="32" height="96"/>
+  <object id="23" x="416" y="288" width="64" height="64"/>
+  <object id="24" x="384" y="352" width="96" height="32"/>
+  <object id="25" x="352" y="384" width="128" height="32"/>
+  <object id="26" x="288" y="416" width="160" height="32"/>
+  <object id="27" x="288" y="448" width="128" height="32"/>
+  <object id="28" x="544" y="288" width="64" height="64"/>
+  <object id="29" x="544" y="352" width="96" height="32"/>
+  <object id="30" x="544" y="384" width="128" height="32"/>
+  <object id="31" x="576" y="416" width="160" height="32"/>
+  <object id="32" x="608" y="448" width="128" height="32"/>
+  <object id="33" x="288" y="544" width="128" height="32"/>
+  <object id="34" x="288" y="576" width="160" height="32"/>
+  <object id="35" x="352" y="608" width="128" height="32"/>
+  <object id="36" x="384" y="640" width="96" height="32"/>
+  <object id="37" x="416" y="672" width="64" height="64"/>
+  <object id="38" x="608" y="544" width="128" height="32"/>
+  <object id="39" x="576" y="576" width="160" height="32"/>
+  <object id="40" x="544" y="608" width="128" height="32"/>
+  <object id="41" x="544" y="640" width="96" height="32"/>
+  <object id="42" x="544" y="672" width="64" height="64"/>
+  <object id="43" x="0" y="0" width="32" height="192"/>
+  <object id="44" x="352" y="192" width="320" height="32"/>
+  <object id="45" x="800" y="384" width="32" height="288"/>
+  <object id="46" x="384" y="800" width="256" height="32"/>
+  <object id="47" x="32" y="160" width="96" height="32"/>
  </objectgroup>
- <objectgroup name="lights" width="32" height="32">
-  <object name="light" x="384" y="352" width="32" height="32"/>
-  <object name="light" x="608" y="352" width="32" height="32"/>
-  <object name="light" x="384" y="576" width="32" height="32"/>
-  <object name="light" x="608" y="576" width="32" height="32"/>
-  <object name="light" x="0" y="128" width="32" height="32"/>
-  <object name="light" x="448" y="32" width="32" height="32"/>
-  <object name="light" x="544" y="32" width="32" height="32"/>
+ <objectgroup name="lights">
+  <object id="48" name="light" x="384" y="352" width="32" height="32"/>
+  <object id="49" name="light" x="608" y="352" width="32" height="32"/>
+  <object id="50" name="light" x="384" y="576" width="32" height="32"/>
+  <object id="51" name="light" x="608" y="576" width="32" height="32"/>
+  <object id="52" name="light" x="0" y="128" width="32" height="32"/>
+  <object id="53" name="light" x="448" y="32" width="32" height="32"/>
+  <object id="54" name="light" x="544" y="32" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="items" width="32" height="32">
-  <object name="key" x="416" y="480" width="32" height="32">
+ <objectgroup name="mapObjects">
+  <object id="56" name="item" x="336" y="496" width="32" height="32">
    <properties>
-    <property name="value" value="2"/>
+    <property name="type" value="key"/>
+    <property name="value" value="3"/>
    </properties>
   </object>
  </objectgroup>

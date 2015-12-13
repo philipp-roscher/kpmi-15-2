@@ -1,19 +1,19 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Array;
 
 /**
- * Created by sara on 4.11.15.
- * TeamComponent, for all Characters and living Entities
+ * Created by philipp on 07.12.15.
+ * Component that is used for communication between systems,
+ * holds a list of network messages which are to be processed by the ServerNetworkSystem
  */
-public class TeamComponent implements Component {
+public class ServerNetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public final int TeamId;
+
+    public Array<Object> networkMessagesToProcess = new Array<Object>();
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public TeamComponent(int Id) {
-        this.TeamId = Id;
-    }
     
     /* ............................................................................... METHODS .. */
     

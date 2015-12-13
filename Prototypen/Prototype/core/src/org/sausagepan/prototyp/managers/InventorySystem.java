@@ -1,85 +1,80 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Array;
 
 import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.items.KeyFragmentItem;
+import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 
 /**
  * Created by Bettina on 03.11.2015.
  */
-public class InventorySystem extends ObservingEntitySystem {
+public class InventorySystem extends EntitySystem implements EntityListener {
 
     /*...................................................................................Atributes*/
-    private ImmutableArray<Entity> characters;
+    private CharacterEntity localCharacter;
+    private ImmutableArray<Entity> entities;
     private Maze maze;
+    private int teamId;
 
     private ComponentMapper<InventoryComponent> im
             = ComponentMapper.getFor(InventoryComponent.class);
-    private ComponentMapper<WeaponComponent> wm
-            = ComponentMapper.getFor(WeaponComponent.class);
-    private ComponentMapper<DynamicBodyComponent> dbm
-            = ComponentMapper.getFor(DynamicBodyComponent.class);
-    private ComponentMapper<NetworkComponent> nm
-            = ComponentMapper.getFor(NetworkComponent.class);
+    private ComponentMapper<TeamComponent> tm
+    		= ComponentMapper.getFor(TeamComponent.class);
 
-    public InventorySystem(Maze maze) {
+    public InventorySystem(Maze maze, CharacterEntity character) {
         this.maze = maze;
+        localCharacter = character;
+        teamId = tm.get(localCharacter).TeamId;
     }
 
     /*...................................................................................Functions*/
-    public void addedToEngine(ObservableEngine engine)
-    {
-        characters = engine.getEntitiesFor(Family.all(
-                WeaponComponent.class,
-                InventoryComponent.class,
-                TeamComponent.class,
-                DynamicBodyComponent.class,
-                NetworkComponent.class,
-                InjurableAreaComponent.class).get());
+    public void addedToEngine(Engine engine) {
+    	entities = engine.getEntitiesFor(EntityFamilies.characterFamily);
     }
 
     public void update(float deltaTime)
     {
-        for (Entity entity : characters) {
-            InventoryComponent inventory = im.get(entity);
-            NetworkComponent network = nm.get(entity);
-            DynamicBodyComponent body = dbm.get(entity);
-
-            // If a new key fragment hast been picked up, notify server
-            if(inventory.justPGotKey) {
-                network.takeKey(inventory.recentlyFoundKey.keyFragmentNr);
-                inventory.justPGotKey = false;
-                inventory.recentlyFoundKey = null;
-                if(inventory.keyFragments.size == 3) maze.openTreasureRoom();
-            }
-
-            // If a character lost key fragments, notify server
-            if(inventory.justLostKey) {
-                for(KeyFragmentItem kf : inventory.keyFragments)
-                    network.loseKey(kf.keyFragmentNr, body.x, body.y);
-                inventory.justLostKey = false;
-                inventory.keyFragments = new Array<KeyFragmentItem>();
-                maze.lockTreasureRoom();
-            }
+        InventoryComponent inventory = im.get(localCharacter);
+        
+        // calculate how many keys the whole team has
+        inventory.teamKeys = inventory.ownKeys.clone();
+    	for(Entity character : entities) {
+    		if (tm.get(character).TeamId == teamId) {
+    			InventoryComponent teamInventory = im.get(character);
+            	for(int i=0; i<3; i++) {
+            		inventory.teamKeys[i] = inventory.teamKeys[i] || teamInventory.ownKeys[i];
+            	}
+    		}
+    	}
+        
+        if(inventory.getKeyAmount() == 3 && !inventory.treasureRoomOpen) {
+        	// Open treasure room
+        	maze.openTreasureRoom();
+        	inventory.treasureRoomOpen = true;
+        }
+        
+        if(inventory.treasureRoomOpen && inventory.getKeyAmount() != 3) {
+        	// Close treasure room
+        	maze.lockTreasureRoom();
+        	inventory.treasureRoomOpen = false;
         }
     }
 
-    public void setWeaponInInventory()
-    {
-        for(Entity character: characters)
-        {
-            im.get(character).weapon = wm.get(character).weapon;
-        }
+    @Override
+    public void entityAdded(Entity entity) {
+        addedToEngine(this.getEngine());
+    }
+
+    @Override
+    public void entityRemoved(Entity entity) {
+        addedToEngine(this.getEngine());
     }
 }

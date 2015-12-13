@@ -1,9 +1,7 @@
 package org.sausagepan.prototyp.model;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -12,18 +10,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-import org.sausagepan.prototyp.enums.ObjectGroup;
 import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.MazeGenerator;
-import org.sausagepan.prototyp.model.components.SpriteComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network;
@@ -36,6 +28,7 @@ public class Maze extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
     //Tiled Map for map creation and collision detection
     private Network.MapInformation mapInformation;
+    private MazeGenerator generator;
     private TiledMap tiledMap;         // contains the layers of the tiled map
     private OrthogonalTiledMapRendererWithPlayers tiledMapRenderer; // renders the tiled map, players and items
     private Array<Vector2> lightPositions;
@@ -44,6 +37,7 @@ public class Maze extends EntitySystem {
     private Array<MapItem> mapItems;
     private Array<MapMonsterObject> mapMonsterObjects;
     private World world;
+    private Array<Body> entranceDoorBodies;
     private Array<Body> doorLockerBodies;
     private Array<BodyDef> doorLockerBodyDefs;
     private Array<Rectangle> doorLockerRectangles;
@@ -52,16 +46,25 @@ public class Maze extends EntitySystem {
 
     /* ........................................................................... CONSTRUCTOR .. */
 
-    public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager) {
+    public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager, boolean gameReady) {
+        this(mapInformation, world, gameReady);
+        
+        // set up map renderer and scale
+        tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
+    }
+    public Maze(Network.MapInformation mapInformation, World world, boolean gameReady) {
         this.mapInformation = mapInformation;
+        this.entranceDoorBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
         this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
         this.doorLockerRectangles = new Array<Rectangle>();
         this.secretWalls = new Array<Body>();
+        generator = new MazeGenerator(mapInformation.width, mapInformation.height);
         setUpTiledMap(world);
         this.world = world;
-        // set up map renderer and scale
-        tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
+
+        if(gameReady)
+            openEntranceDoors();
     }
     /* ............................................................................... METHODS .. */
     public void render(OrthographicCamera camera) {
@@ -73,9 +76,6 @@ public class Maze extends EntitySystem {
      * Sets up the {@link TiledMap} and {@link OrthogonalTiledMapRendererWithPlayers} for the game
      */
     public void setUpTiledMap(World world) {
-
-        MazeGenerator generator = new MazeGenerator();
-        generator.setParam(mapInformation.width, mapInformation.height);
         tiledMap = generator.createNewMapFromGrid(mapInformation.entries);
         lightPositions = generator.getLightPositions();
         monsterPositions = generator.getMonsterPositions();
@@ -97,6 +97,12 @@ public class Maze extends EntitySystem {
                 doorLockerBodies.add(groundBody);
                 doorLockerBodyDefs.add(groundBodyDef);
             }
+
+            // Look for door objects
+            if(mo.getName().equals("entranceDoor")) {
+                entranceDoorBodies.add(groundBody);
+            }
+
             // List Game Masters secret passages
             if(mo.getName() != null && mo.getName().equals("secretWall"))
                 secretWalls.add(groundBody);
@@ -115,6 +121,7 @@ public class Maze extends EntitySystem {
     	if(!treasureRoomOpen) {
 	        for(Body b : doorLockerBodies)
 	        	world.destroyBody(b);
+            doorLockerBodies.clear();
 	        treasureRoomOpen = true;
     	}
     }
@@ -142,26 +149,18 @@ public class Maze extends EntitySystem {
             body.createFixture(box, 0.0f);
             box.dispose();
             i++;
+
+            doorLockerBodies.add(body);
         }
+        treasureRoomOpen = false;
+    }
+
+    public void openEntranceDoors() {
+        for(Body b : entranceDoorBodies)
+            world.destroyBody(b);
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */
-    public void addCharacterSpriteComponent(CharacterSpriteComponent spriteComponent) {
-        this.tiledMapRenderer.addCharacterSpriteComponent(spriteComponent);
-    }
-    
-    public void addWeaponComponent(WeaponComponent weaponComponent) {
-    	this.tiledMapRenderer.addWeaponComponent(weaponComponent);
-    }
-	public void removeCharacterSpriteComponent(
-			CharacterSpriteComponent component) {
-		this.tiledMapRenderer.removeCharacterSpriteComponent(component);
-		
-	}
-	public void removeWeaponComponent(WeaponComponent component) {
-		this.tiledMapRenderer.removeWeaponComponent(component);		
-	}
-
     public OrthogonalTiledMapRendererWithPlayers getTiledMapRenderer() {
         return tiledMapRenderer;
     }
@@ -188,5 +187,9 @@ public class Maze extends EntitySystem {
 
     public MapObjects getColliders() {
         return tiledMap.getLayers().get("colliderWalls").getObjects();
+    }
+    
+    public float[][] getStartPositions() {
+    	return generator.getStartPositions();
     }
 }

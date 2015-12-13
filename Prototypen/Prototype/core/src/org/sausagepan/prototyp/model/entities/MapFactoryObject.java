@@ -12,6 +12,8 @@ public class MapFactoryObject {
     public MapFactoryObject(Vector2 position) {
         this.position = position;
     }
+    
+    public MapFactoryObject() { }
     /* ............................................................................... METHODS .. */
     
     /* ..................................................................... GETTERS & SETTERS .. */

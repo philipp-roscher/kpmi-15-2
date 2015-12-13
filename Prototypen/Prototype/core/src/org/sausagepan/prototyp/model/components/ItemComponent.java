@@ -1,8 +1,9 @@
 package org.sausagepan.prototyp.model.components;
 
-import com.badlogic.ashley.core.Component;
-
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.items.Item;
+
+import com.badlogic.ashley.core.Component;
 
 /**
  * Created by georg on 12.11.15.
@@ -10,9 +11,13 @@ import org.sausagepan.prototyp.model.items.Item;
 public class ItemComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Item item;
+    public ItemType type;
+    public int value;
     /* ........................................................................... CONSTRUCTOR .. */
-    public ItemComponent(Item item) {
+    public ItemComponent(Item item, ItemType type, int value) {
         this.item = item;
+        this.type = type;
+        this.value = value;
     }
     /* ............................................................................... METHODS .. */
     

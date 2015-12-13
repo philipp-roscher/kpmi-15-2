@@ -12,12 +12,10 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -25,16 +23,17 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
  * Created by georg on 28.10.15.
  */
-public class InputSystem extends ObservingEntitySystem implements InputProcessor {
+public class InputSystem extends EntitySystem implements InputProcessor {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
-    private float elapsedTime = 0;
 
     private ComponentMapper<DynamicBodyComponent> pm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
@@ -42,11 +41,11 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
             = ComponentMapper.getFor(InputComponent.class);
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
-    private ComponentMapper<NetworkComponent> nm
-    		= ComponentMapper.getFor(NetworkComponent.class);
+    private ComponentMapper<NetworkTransmissionComponent> ntm
+			= ComponentMapper.getFor(NetworkTransmissionComponent.class);
+    private ComponentMapper<IsDeadComponent> idm
+			= ComponentMapper.getFor(IsDeadComponent.class);
 
-
-    private float ax, ay;
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
 
@@ -96,7 +95,7 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     }
     
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(ObservableEngine engine) {
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,
                 InputComponent.class,
@@ -105,22 +104,22 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     }
 
     public void update(float deltaTime) {
-        elapsedTime += deltaTime;
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
             WeaponComponent weapon = wm.get(entity);
-            NetworkComponent network = nm.get(entity);
+            NetworkTransmissionComponent network = ntm.get(entity);
 
             // Attack Button
             if(attackButtonPressed) {
                 input.weaponDrawn = true;
                 attackButtonPressed = false;
                 weapon.weapon.justUsed = true;
-                network.attack();
+                network.attack = true;
             }
+            IsDeadComponent isDead = idm.get(entity);
 
-            if(input.moving) move(input.touchPos, body, input);
+            if(input.moving && isDead == null) move(input.touchPos, body, input);
                 /* Keyboard Input */
 //                switch(input.direction) {
 //                    case NORTH: body.dynamicBody.setLinearVelocity(0,5);break;
@@ -150,8 +149,8 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
         }
 
         // split up velocity vector in x and y component
-        ax = (-1)*(body.dynamicBody.getPosition().x-touchPos.x);
-        ay = (-1)*(body.dynamicBody.getPosition().y-touchPos.y);
+        float ax = (-1)*(body.dynamicBody.getPosition().x-touchPos.x);
+        float ay = (-1)*(body.dynamicBody.getPosition().y-touchPos.y);
 
         directionVector.x = ax;
         directionVector.y = ay;
@@ -182,7 +181,6 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
             WeaponComponent weapon = wm.get(entity);
-            NetworkComponent network = nm.get(entity);
             switch(keycode) {
                 case Input.Keys.UP:     input.direction = Direction.NORTH;break;
                 case Input.Keys.LEFT:   input.direction = Direction.WEST;break;
@@ -190,9 +188,8 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
                 case Input.Keys.DOWN:   input.direction = Direction.SOUTH;break;
                 case Input.Keys.A:
                     input.weaponDrawn = true;
-                    System.out.println("Attacking!");
+                    //System.out.println("Attacking!");
                     weapon.weapon.justUsed = true;
-                    network.attack();                    
                     break;
                 default:break;
             }
@@ -205,10 +202,12 @@ public class InputSystem extends ObservingEntitySystem implements InputProcessor
     public boolean keyUp(int keycode) {
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
-            NetworkComponent network = nm.get(entity);
+            NetworkTransmissionComponent ntc = ntm.get(entity);
+            WeaponComponent weapon = wm.get(entity);
             if (keycode == Input.Keys.A) {
             	input.weaponDrawn = false;
-            	network.stopAttacking();
+            	weapon.weapon.justUsed = false;
+            	ntc.stopAttacking = true;
             }
         }
         return true;

@@ -75,9 +75,8 @@ public class ItemFactory {
      * @return
      */
     public KeyFragmentItem createKeyFragment(int nr) {
-        KeyFragmentItem keyFrag = new KeyFragmentItem(
+        return new KeyFragmentItem(
                 mediaManager.getTextureAtlasType("IngameUI").findRegion("key", nr), nr);
-        return keyFrag;
     }
 
     /**

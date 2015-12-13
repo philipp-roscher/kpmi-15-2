@@ -3,16 +3,22 @@ package org.sausagepan.prototyp.model.components;
 import com.badlogic.ashley.core.Component;
 
 /**
- * Created by sara on 4.11.15.
- * TeamComponent, for all Characters and living Entities
+ * Created by philipp on 9.11.15.
+ * IdComponent used as an identifier for all characters
  */
-public class TeamComponent implements Component {
+public class IsDeadComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
-    public final int TeamId;
+    // time when the character died
+	public final long deathTime;
+	// how long the character is marked as dead
+    public final long deathLength;
+    public boolean deathAcknowledged;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public TeamComponent(int Id) {
-        this.TeamId = Id;
+    public IsDeadComponent(long deathTime, long deathLength) {
+        this.deathTime = deathTime;
+        this.deathLength = deathLength;
+        this.deathAcknowledged = false;
     }
     
     /* ............................................................................... METHODS .. */
