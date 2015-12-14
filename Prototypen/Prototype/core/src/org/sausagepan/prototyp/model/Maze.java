@@ -20,6 +20,7 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
+import org.w3c.dom.css.Rect;
 
 /**
  * Created by georg on 18.10.15.
@@ -38,6 +39,8 @@ public class Maze extends EntitySystem {
     private Array<MapMonsterObject> mapMonsterObjects;
     private World world;
     private Array<Body> entranceDoorBodies;
+    private Array<Rectangle> exitWayRect;
+    private Array<Body> exitWayBody;
     private Array<Body> doorLockerBodies;
     private Array<BodyDef> doorLockerBodyDefs;
     private Array<Rectangle> doorLockerRectangles;
@@ -54,9 +57,11 @@ public class Maze extends EntitySystem {
     }
     public Maze(Network.MapInformation mapInformation, World world, boolean gameReady) {
         this.mapInformation = mapInformation;
-        this.entranceDoorBodies = new Array<Body>();      // Array with treasure room locking bodies
-        this.doorLockerBodies = new Array<Body>();      // Array with treasure room locking bodies
-        this.doorLockerBodyDefs = new Array<BodyDef>(); // Array with their definition fo recreate
+        this.entranceDoorBodies = new Array<Body>();        // Array with treasure room locking bodies
+        this.exitWayRect = new Array<Rectangle>();          // Array with exit way rectangles
+        this.exitWayBody = new Array<Body>();               // Array with exit way bodies
+        this.doorLockerBodies = new Array<Body>();          // Array with treasure room locking bodies
+        this.doorLockerBodyDefs = new Array<BodyDef>();     // Array with their definition fo recreate
         this.doorLockerRectangles = new Array<Rectangle>();
         this.secretWalls = new Array<Body>();
         generator = new MazeGenerator(mapInformation.width, mapInformation.height);
@@ -98,9 +103,16 @@ public class Maze extends EntitySystem {
                 doorLockerBodyDefs.add(groundBodyDef);
             }
 
-            // Look for door objects
+            // Look for entrace door objects
             if(mo.getName().equals("entranceDoor")) {
                 entranceDoorBodies.add(groundBody);
+            }
+
+            // Look for exit door objects and destroy bodies
+            if(mo.getName().equals("exitWay")) {
+                exitWayRect.add(r);
+                exitWayBody.add(groundBody);
+                destroyExitBody();
             }
 
             // List Game Masters secret passages
@@ -112,6 +124,12 @@ public class Maze extends EntitySystem {
             groundBody.createFixture(groundBox, 0.0f);
             groundBox.dispose();
         }
+    }
+
+    private void destroyExitBody() {
+        for(Body b : exitWayBody)
+            world.destroyBody(b);
+        exitWayBody.clear();
     }
 
     /**
@@ -193,4 +211,6 @@ public class Maze extends EntitySystem {
     public float[][] getStartPositions() {
     	return generator.getStartPositions();
     }
+
+    public Array<Rectangle> getExitWayRect() {return exitWayRect;}
 }

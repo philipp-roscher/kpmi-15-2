@@ -67,6 +67,8 @@ public class Network {
 		kryo.register(boolean[].class);
         kryo.register(HashMap.class);
 		kryo.register(CharacterClass.class);
+		kryo.register(GameExitRequest.class);
+		kryo.register(GameExitResponse.class);
 	}
 	
 
@@ -300,4 +302,21 @@ public class Network {
 			this.entries = entries;
 		}
 	}
+
+	public static class GameExitRequest {
+		public int id;
+		public GameExitRequest() {}
+		public GameExitRequest(int playerId) {
+			this.id = playerId;
+		}
+	}
+
+	public static class GameExitResponse {
+		public int id;
+		public GameExitResponse() {}
+		public GameExitResponse(int teamId) {
+			this.id = teamId;
+		}
+	}
+
 }

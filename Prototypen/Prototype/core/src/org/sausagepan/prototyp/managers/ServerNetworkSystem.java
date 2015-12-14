@@ -15,10 +15,12 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.GameServer;
+import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
@@ -35,6 +37,8 @@ import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
+import org.sausagepan.prototyp.network.Network.GameExitRequest;
+import org.sausagepan.prototyp.network.Network.GameExitResponse;
 
 /**
  * Created by philipp on 06.12.15.
@@ -203,6 +207,20 @@ public class ServerNetworkSystem extends EntitySystem {
                    character.getComponent(IsDeadComponent.class).deathAcknowledged = true;
                }        	   
            }
+
+            //end game because player entered exit area
+            if (object instanceof GameExitRequest) {
+                GameExitRequest result = (GameExitRequest) object;
+                ServerCharacterEntity character = ECS.getCharacter(result.id);
+                if(character != null) {
+                    //send winning Team-Id to all Clients
+                    int teamId = character.getComponent(TeamComponent.class).TeamId;
+                    server.sendToAllTCP(new GameExitResponse(teamId));
+
+
+
+                }
+            }
         }
 
         networkMessages.clear();

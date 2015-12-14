@@ -110,8 +110,8 @@
   <object id="76" x="640" y="96" width="96" height="32"/>
   <object id="77" x="640" y="128" width="64" height="64"/>
   <object id="78" x="576" y="128" width="64" height="32"/>
-  <object id="79" x="288" y="128" width="32" height="32"/>
-  <object id="80" x="704" y="128" width="32" height="32"/>
+  <object id="79" name="exitWay" type="exitWay" x="288" y="128" width="32" height="94"/>
+  <object id="80" name="exitWay" type="exitWay" x="704" y="128" width="32" height="95"/>
  </objectgroup>
  <objectgroup name="lights">
   <object id="81" name="light" x="32" y="128" width="32" height="32"/>
