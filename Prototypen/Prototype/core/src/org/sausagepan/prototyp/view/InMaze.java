@@ -101,7 +101,7 @@ public class InMaze implements Screen {
 	@Override
 	public void show() {
 		this.batch = new SpriteBatch();
-        Gdx.input.setInputProcessor(ECS.getInputProcessor());
+        ECS.setInputProcessor();
 		//Listener for Monsters to see clients
 		world.setContactListener(new MonsterListener());
 	}

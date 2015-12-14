@@ -46,9 +46,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
 
     /* ................................................................................................... METHODS .. */
 
-    public void addSpriteComponent(SpriteComponent spriteComponent) {
-        spriteComponents.add(spriteComponent);
-    }
     
     public void addCharacterSpriteComponent(CharacterSpriteComponent spriteComponent) {
         characterSpriteComponents.add(spriteComponent);
@@ -84,7 +81,6 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         sprites.removeValue(sprite, false);
     }
 
-    public void addEntitySprite(EntitySprite entitySprite) { this.entitySprites.add(entitySprite); }
 
 
     @Override
@@ -109,7 +105,9 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
                         if(w.weapon.getClass().equals(Bow.class)) {
                             Bow bow = (Bow) w.weapon;
                             for (Bullet b : bow.activeArrows) {
-                                bow.arrowSprite.setPosition(b.x,b.y);
+                                bow.arrowSprite.setPosition(
+                                        b.x-bow.arrowSprite.getWidth()/2,
+                                        b.y-bow.arrowSprite.getHeight()/2);
                                 bow.arrowSprite.draw(this.batch);
                             }
                         }

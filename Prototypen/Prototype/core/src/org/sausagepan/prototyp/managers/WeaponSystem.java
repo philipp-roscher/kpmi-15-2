@@ -29,6 +29,7 @@ public class WeaponSystem extends EntitySystem implements EntityListener {
     public WeaponSystem() {}
 
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 WeaponComponent.class,

@@ -39,6 +39,7 @@ public class ServerCharacterEntity extends Entity {
      * {@link com.badlogic.ashley.core.Component}s a ServerCharacterEntity should contain.
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static Family getFamily() {
         return Family.all(
                 DynamicBodyComponent.class,

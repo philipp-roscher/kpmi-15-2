@@ -31,7 +31,6 @@ public class InGameUISystem extends EntitySystem {
     private Array<TextureRegion> healthBarImages;
     private TextureRegion characterImg;
     private TextureRegion recentHealthBarImg;
-    private TextureRegion attackButton;
     private Array<TextureRegion> keyFragmentImgs;
     private boolean[] keyFragmentItems;
     private KPMIPrototype game;
@@ -68,8 +67,6 @@ public class InGameUISystem extends EntitySystem {
         for(int i=0; i<4; i++)
             this.keyFragmentImgs.add(atlas.findRegion("key", i));
 
-        this.attackButton = atlas.findRegion("attackButton");
-
         switch(characterClass) {
             case KNIGHT_M:this.characterImg = atlas.findRegion("face_knight");break;
             case KNIGHT_F:this.characterImg = atlas.findRegion("face_knight");break;
@@ -92,8 +89,6 @@ public class InGameUISystem extends EntitySystem {
         this.batch.begin();
         this.batch.draw(characterImg, 16, 400, 64, 64);
         this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
-        this.batch.draw(attackButton, 32, 32, 48, 48);
-        
         batch.draw(keyFragmentImgs.get(0), 690, 429);
         if(keyFragmentItems[0])
         	batch.draw(keyFragmentImgs.get(1), 691, 430);
@@ -113,6 +108,7 @@ public class InGameUISystem extends EntitySystem {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entity = engine.getEntitiesFor(Family.all(
                 HealthComponent.class,

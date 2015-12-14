@@ -2,7 +2,6 @@ package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -102,6 +101,7 @@ public class EntityComponentSystem {
     }
 
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     private void setUpEntitySystems() {
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);
@@ -114,7 +114,7 @@ public class EntityComponentSystem {
         engine.addEntityListener(Family.all(WeaponComponent.class,NetworkTransmissionComponent.class).get(), weaponSystem);
 
         // Input System
-        InputSystem inputSystem = new InputSystem(viewport);
+        InputSystem inputSystem = new InputSystem(viewport, mediaManager);
         inputSystem.addedToEngine(engine);
 
         // Character Sprite System
@@ -203,6 +203,7 @@ public class EntityComponentSystem {
 
     public void draw() {
         this.engine.getSystem(InGameUISystem.class).draw();
+        this.engine.getSystem(InputSystem.class).draw();
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
@@ -319,6 +320,11 @@ public class EntityComponentSystem {
 		engine.getSystem(NetworkSystem.class).setupSystem();
 	}
 	
+	public void checkGameReady() {
+		if(game.gameReady)
+			maze.openEntranceDoors();
+	}
+	
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;
@@ -328,8 +334,10 @@ public class EntityComponentSystem {
     	return itemFactory;
     }
 
-    public InputProcessor getInputProcessor() {
-        return this.engine.getSystem(InputSystem.class);
+
+    public void setInputProcessor() {
+        InputSystem inputSystem = this.engine.getSystem(InputSystem.class);
+        inputSystem.setInputProcessor();
     }
 
     public Maze getMaze() {

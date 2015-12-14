@@ -49,6 +49,7 @@ public class CharacterSpriteSystem extends EntitySystem implements EntityListene
     	this.ECS = ECS;
     }
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 CharacterSpriteComponent.class,
