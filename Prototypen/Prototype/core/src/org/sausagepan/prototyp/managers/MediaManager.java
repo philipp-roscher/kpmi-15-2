@@ -22,6 +22,9 @@ public class MediaManager {
     private String SelectionFighterMBig      = "textures/characterSelection/Fighter_m_big.png";
     private String SelectionShamanMBig       = "textures/characterSelection/Shaman_m_big.png";
     private String SelectionDragonRedBig     = "textures/characterSelection/Dragon_red_big.png";
+    private String SelectionNinjaFBig       = "textures/characterSelection/Ninja_f_big.png";
+    private String SelectionWitchFBig       = "textures/characterSelection/Witch_f_big.png";
+
     private String IngameUISheetFile         = "textures/spritesheets/ingame_UI.pack";
     private String itemsSheetFile            = "textures/spritesheets/items.pack";
 
@@ -56,6 +59,8 @@ public class MediaManager {
         assets.load(this.SelectionFighterMBig, Texture.class);
         assets.load(this.SelectionKnightMBig, Texture.class);
         assets.load(this.SelectionShamanMBig, Texture.class);
+        assets.load(this.SelectionNinjaFBig, Texture.class);
+        assets.load(this.SelectionWitchFBig, Texture.class);
         //load sprites
         assets.load(this.knightMSpriteSheetFile, TextureAtlas.class);
         assets.load(this.archerFSpriteSheetFile, TextureAtlas.class);
@@ -68,7 +73,6 @@ public class MediaManager {
         assets.load(this.weaponsSpriteSheetFile, TextureAtlas.class);
         assets.load(this.zombieSpriteFile, TextureAtlas.class);
         assets.load(this.skeletonSpriteFile, TextureAtlas.class);
-
 
         assets.finishLoading();
     }
@@ -109,6 +113,14 @@ public class MediaManager {
 
     public Texture getSelectionDragonRedBig() {
         return assets.get(this.SelectionDragonRedBig, Texture.class);
+    }
+
+    public Texture getSelectionNinjaFBig() {
+        return assets.get(this.SelectionNinjaFBig, Texture.class);
+    }
+
+    public Texture getSelectionWitchFBig() {
+        return assets.get(this.SelectionWitchFBig, Texture.class);
     }
 
     public TextureAtlas getTextureAtlas(String name) {

@@ -8,10 +8,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
@@ -43,7 +50,15 @@ public class MainMenuScreen implements Screen {
 	//chosen Player Class
 	private CharacterClass clientClass;
 	private boolean clientSel = false;
-
+	private Stage stage;
+	private Table table;
+	private Texture SelArcherF;
+	private Texture SelKnightM;
+	private Texture SelFighterM;
+	private Texture SelShamanM;
+	private Texture SelDragonRed;
+	private Texture SelNinjaF;
+	private Texture SelWitchF;
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(KPMIPrototype game) {
@@ -57,18 +72,24 @@ public class MainMenuScreen implements Screen {
 		connectionStatus = 0;
 		
 		this.bgImg = game.mediaManager.getMainMenuBackgroundImg();
+		this.SelArcherF = game.mediaManager.getSelectionArcherFBig();
+		this.SelDragonRed = game.mediaManager.getSelectionDragonRedBig();
+		this.SelFighterM = game.mediaManager.getSelectionFighterMBig();
+		this.SelKnightM = game.mediaManager.getSelectionKnightMBig();
+		this.SelShamanM = game.mediaManager.getSelectionShamanMBig();
+		this.SelNinjaF = game.mediaManager.getSelectionNinjaFBig();
+		this.SelWitchF = game.mediaManager.getSelectionWitchFBig();
 
 		game.client.addListener(new Listener() {
-			public void received (Connection connection, Object object) {
+			public void received(Connection connection, Object object) {
 				if (object instanceof MapInformation) {
 					System.out.println("Received MapInformation");
-					MainMenuScreen.this.mapInformation = (MapInformation)object;
+					MainMenuScreen.this.mapInformation = (MapInformation) object;
 					mapInformationReceived = true;
 				}
 			}
 
 		});
-
 	}
 
 
@@ -96,38 +117,164 @@ public class MainMenuScreen implements Screen {
 			switch (x) {
 				case 0: {
 					clientClass = CharacterClass.KNIGHT_M;
-					break;
-				}
+					break; }
 				case 1: {
 					clientClass = CharacterClass.ARCHER_F;
-					break;
-				}
+					break; }
 				case 2: {
 					clientClass = CharacterClass.SHAMAN_M;
-					break;
-				}
+					break; }
 				case 3: {
 					clientClass = CharacterClass.FIGHTER_M;
-					break;
-				}
+					break; }
 				case 4: {
 					clientClass = CharacterClass.WITCH_F;
-					break;
-				}
+					break; }
 				case 5: {
 					clientClass = CharacterClass.NINJA_F;
-					break;
-				}
+					break; }
 				default: {
 					clientClass = CharacterClass.KNIGHT_M;
-					break;
-				}
+					break; }
 			}
 		}
 		game.batch.end();
 		System.out.println("Chosen Client Class is: " + clientClass);
-
 		clientSel = true;
+	}
+
+	//manuell class selection (and team selection?)
+	public  void manClassSel() {
+		//for character selection menu
+		stage = new Stage(viewport);
+		Gdx.input.setInputProcessor(stage);
+
+		table = new Table();
+		table.setFillParent(true);
+		stage.addActor(table);
+
+		table.setDebug(true);		//TODO: auf false setzten wenn fertig
+		//GameMaster
+		if (game.TeamId == 0) {
+			clientClass = CharacterClass.DRAGON;
+			clientSel = true;
+		}
+		//Teams
+		else {
+			//skin for menu-buttons
+			Skin mainMenuSkins = new Skin();
+			mainMenuSkins.add("knight_m", SelKnightM);
+			mainMenuSkins.add("archer_f", SelArcherF);
+			mainMenuSkins.add("shaman_m", SelShamanM);
+			mainMenuSkins.add("fighter_m", SelFighterM);
+			mainMenuSkins.add("dragon_red", SelDragonRed);
+			mainMenuSkins.add("witch_f", SelWitchF);
+			mainMenuSkins.add("ninja_f", SelNinjaF);
+
+			//make it a Drawable and then a ButtonStyle TODO different images for up,down.checked! (via .pack)
+			Drawable drawKnightM = mainMenuSkins.getDrawable("knight_m");
+			Drawable drawArcherF = mainMenuSkins.getDrawable("archer_f");
+			Drawable drawShamanM = mainMenuSkins.getDrawable("shaman_m");
+			Drawable drawFighterM = mainMenuSkins.getDrawable("fighter_m");
+			Drawable drawNinjaF = mainMenuSkins.getDrawable("ninja_f");
+			Drawable drawWitchF = mainMenuSkins.getDrawable("witch_f");
+			Button.ButtonStyle knightmStyle = new Button.ButtonStyle(drawKnightM, drawArcherF, drawShamanM);
+			Button.ButtonStyle archerfStyle = new Button.ButtonStyle(drawArcherF, drawArcherF, drawArcherF);
+			Button.ButtonStyle ninjafStyle = new Button.ButtonStyle(drawNinjaF, drawNinjaF, drawNinjaF);
+			Button.ButtonStyle witchfStyle = new Button.ButtonStyle(drawWitchF, drawWitchF, drawWitchF);
+			Button.ButtonStyle fightermStyle = new Button.ButtonStyle(drawFighterM, drawFighterM, drawFighterM);
+			Button.ButtonStyle shamanmStyle = new Button.ButtonStyle(drawShamanM, drawShamanM, drawShamanM);
+			//buttons
+			Button knightMButton = new Button();
+			knightMButton.setHeight(200f);
+			knightMButton.setWidth(200f);
+			knightMButton.setStyle(knightmStyle);
+			knightMButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					System.out.print("selecting knight_m");
+					clientClass = CharacterClass.KNIGHT_M;
+					clientSel = true;
+				}
+			});
+
+			Button archerFButton = new Button();
+			archerFButton.setHeight(200f);
+			archerFButton.setWidth(200f);
+			archerFButton.setStyle(archerfStyle);
+			archerFButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					System.out.print("selecting archer_f");
+					clientClass = CharacterClass.ARCHER_F;
+					clientSel = true;
+				}
+			});
+
+			Button ninjaFButton = new Button();
+			ninjaFButton.setHeight(200f);
+			ninjaFButton.setWidth(200f);
+			ninjaFButton.setStyle(ninjafStyle);
+			ninjaFButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					System.out.print("selecting ninja_f");
+					clientClass = CharacterClass.NINJA_F;
+					clientSel = true;
+				}
+			});
+
+			Button witchFButton = new Button();
+			witchFButton.setHeight(200f);
+			witchFButton.setWidth(200f);
+			witchFButton.setStyle(witchfStyle);
+			witchFButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					System.out.print("selecting witch_f");
+					clientClass = CharacterClass.WITCH_F;
+					clientSel = true;
+				}
+			});
+
+			Button fighterMButton = new Button();
+			fighterMButton.setHeight(200f);
+			fighterMButton.setWidth(200f);
+			fighterMButton.setStyle(fightermStyle);
+			fighterMButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					System.out.print("selecting fighter_m");
+					clientClass = CharacterClass.FIGHTER_M;
+					clientSel = true;
+				}
+			});
+
+			Button shamanMButton = new Button();
+			shamanMButton.setHeight(200f);
+			shamanMButton.setWidth(200f);
+			shamanMButton.setStyle(shamanmStyle);
+			shamanMButton.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					System.out.print("selecting shaman_m");
+					clientClass = CharacterClass.SHAMAN_M;
+					clientSel = true;
+				}
+			});
+
+			table.add(knightMButton);
+			table.add(archerFButton);
+			table.add(fighterMButton);
+			table.row();					//new row
+			table.add(ninjaFButton);
+			table.add(shamanMButton);
+			table.add(witchFButton);
+
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			stage.act(Gdx.graphics.getDeltaTime());
+			stage.draw();
+		}
 
 	}
 
@@ -198,8 +345,9 @@ public class MainMenuScreen implements Screen {
 			if (game.TeamAssignmentReceived) {
 
 				//class selection
-				if (!clientSel) {
-					randomClassSel();
+				if (!clientSel && game.clientCount <= game.maxClients) {
+					//randomClassSel();
+					manClassSel();
 				}
 
 				//send Hero/Client info to server after class Selection
@@ -214,30 +362,6 @@ public class MainMenuScreen implements Screen {
 				}
 			}
 
-			/*
-			//too few clients
-			if(game.clientCount < game.maxClients) {
-				game.batch.begin();
-				game.font.setColor(1, 0, 0, 1);
-				game.font.draw(game.batch, "Waiting for players... " + game.clientCount + "/" + game.maxClients, 320, 380);
-				game.font.setColor(1, 1, 1, 1);
-				game.batch.end();
-			}
-
-			//right amount of players: set up game
-			if(game.clientCount == game.maxClients) {
-				game.batch.begin();
-				game.font.setColor(0, 1, 0, 1);
-				game.font.draw(game.batch, "Starting... " + game.clientCount + "/" + game.maxClients, 340, 380);
-				game.font.setColor(1, 1, 1, 1);
-				game.batch.end();
-
-				//after sending infos was successful: start game
-				if (mapInformationReceived) {
-					setUpGame();
-				}
-			} */
-
 			//too many players
 			if(game.clientCount > game.maxClients) {
 				game.batch.begin();
@@ -246,7 +370,7 @@ public class MainMenuScreen implements Screen {
 				game.font.setColor(1, 1, 1, 1);
 				game.batch.end();
 			} else {
-                if (mapInformationReceived) {
+                if (mapInformationReceived && heroRequestSent) {
                     setUpGame();
                 }
             }
@@ -266,8 +390,8 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		viewport.update(width,height);
-		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+		viewport.update(width, height);
+		camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
 	}
 
 	@Override
