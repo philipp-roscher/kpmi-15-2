@@ -320,6 +320,11 @@ public class EntityComponentSystem {
 		engine.getSystem(NetworkSystem.class).setupSystem();
 	}
 	
+	public void checkGameReady() {
+		if(game.gameReady)
+			maze.openEntranceDoors();
+	}
+	
     /* ..................................................................... GETTERS & SETTERS .. */
     public CharacterEntity getLocalCharacterEntity() {
         return localCharacter;

@@ -158,6 +158,7 @@ public class Maze extends EntitySystem {
     public void openEntranceDoors() {
         for(Body b : entranceDoorBodies)
             world.destroyBody(b);
+        entranceDoorBodies.clear();
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */

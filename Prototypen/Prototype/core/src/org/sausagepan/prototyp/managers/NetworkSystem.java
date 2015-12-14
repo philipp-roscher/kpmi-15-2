@@ -149,6 +149,9 @@ public class NetworkSystem extends EntitySystem {
                         }
                     }
                 });
+
+                // if server sent GameStart before it was registered, open the entrance doors anyway
+                ECS.checkGameReady();
             }
 
             if (object instanceof NewHeroResponse) {
