@@ -75,14 +75,12 @@ public class ServerNetworkSystem extends EntitySystem {
                 networkMessages.add(new NetworkMessage(connection, new DisconnectionMessage()));
             }
         });
+        
+        ntc = ECS.getSNTC();
     }
     
     /* ............................................................................... METHODS .. */
-    public void addedToEngine(Engine engine) {
-        ntc = engine.getEntitiesFor(Family.all(ServerNetworkTransmissionComponent.class).get()).
-                get(0).
-                getComponent(ServerNetworkTransmissionComponent.class);
-    }
+    public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
         for(Object object : ntc.networkMessagesToProcess) {

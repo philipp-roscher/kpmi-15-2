@@ -108,6 +108,7 @@ public class InGameUISystem extends EntitySystem {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entity = engine.getEntitiesFor(Family.all(
                 HealthComponent.class,

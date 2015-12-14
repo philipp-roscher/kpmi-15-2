@@ -10,6 +10,7 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -22,12 +23,14 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
  */
 public class EntityFamilies {
     /* ............................................................................ ATTRIBUTES .. */
+    @SuppressWarnings("unchecked")
     public static Family spriteFamily = Family.one(
             SpriteComponent.class,
             WeaponComponent.class,
             CharacterSpriteComponent.class
     ).get();
     
+    @SuppressWarnings("unchecked")
     public static Family characterFamily = Family.all(
     		NetworkTransmissionComponent.class,
     		IdComponent.class,
@@ -43,6 +46,7 @@ public class EntityFamilies {
     		InjurableAreaComponent.class    		
 	).get();
     
+    @SuppressWarnings("unchecked")
     public static Family serverCharacterFamily = Family.all(
     		CharacterClassComponent.class,
     		IdComponent.class,
@@ -54,7 +58,8 @@ public class EntityFamilies {
     		WeaponComponent.class,
     		InjurableAreaComponent.class    		
 	).get();
-    
+
+    @SuppressWarnings("unchecked")
     public static Family monsterFamily = Family.all(
             DynamicBodyComponent.class,
             InjurableAreaComponent.class,
@@ -65,7 +70,8 @@ public class EntityFamilies {
     ).exclude(
     		InventoryComponent.class
 	).get();
-    
+
+    @SuppressWarnings("unchecked")
     public static Family itemFamily = Family.all(
             ItemComponent.class,
             SpriteComponent.class,
@@ -73,18 +79,24 @@ public class EntityFamilies {
             IdComponent.class
     ).get();
 
+    @SuppressWarnings("unchecked")
     public static Family attackerFamily = Family.all(
             HealthComponent.class,
             DynamicBodyComponent.class,
             WeaponComponent.class,
             InjurableAreaComponent.class
-	).get();
+	).exclude(
+			IsDeadComponent.class
+	).
+	get();
 
+    @SuppressWarnings("unchecked")
     public static Family victimFamily = Family.all(
             HealthComponent.class,
             InjurableAreaComponent.class
     ).get();
 
+    @SuppressWarnings("unchecked")
     public static Family positionSynchroFamily = Family.all(
             DynamicBodyComponent.class).one(
             LightComponent.class,

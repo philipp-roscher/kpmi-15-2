@@ -38,6 +38,7 @@ public class BulletSystem extends EntitySystem implements EntityListener {
 
     /* ............................................................................... METHODS .. */
 
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(WeaponComponent.class).get());
     }

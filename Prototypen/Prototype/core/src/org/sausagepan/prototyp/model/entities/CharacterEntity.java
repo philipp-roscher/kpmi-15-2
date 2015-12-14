@@ -28,6 +28,8 @@ public class CharacterEntity extends Entity {
      * {@link com.badlogic.ashley.core.Component}s a MonsterEntity should contain.
      * @return
      */
+
+    @SuppressWarnings("unchecked")
     public static Family getFamily() {
         return Family.all(
                 DynamicBodyComponent.class,

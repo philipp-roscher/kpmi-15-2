@@ -101,6 +101,7 @@ public class EntityComponentSystem {
     }
 
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     private void setUpEntitySystems() {
         // Sprite System
         SpriteSystem spriteSystem = new SpriteSystem(maze);

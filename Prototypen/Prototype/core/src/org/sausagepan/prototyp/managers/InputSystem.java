@@ -100,6 +100,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     }
     
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 DynamicBodyComponent.class,

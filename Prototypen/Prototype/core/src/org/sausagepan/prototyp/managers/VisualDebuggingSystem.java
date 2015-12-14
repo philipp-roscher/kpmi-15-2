@@ -53,6 +53,7 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
         this.maze = maze;
     }
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 HealthComponent.class,
@@ -62,9 +63,6 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
     }
 
     public void update(float deltaTime) {
-        for (Entity entity : entities) {
-            // TODO
-        }
         if(debug) draw();
     }
 

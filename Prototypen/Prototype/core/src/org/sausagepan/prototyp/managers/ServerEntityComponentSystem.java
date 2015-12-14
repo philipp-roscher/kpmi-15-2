@@ -95,6 +95,7 @@ public class ServerEntityComponentSystem {
     }
 
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     private void setUpEntitySystems() {
         // Movement System
         MovementSystem movementSystem = new MovementSystem(world);
