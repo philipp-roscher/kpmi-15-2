@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
@@ -50,8 +52,6 @@ public class MainMenuScreen implements Screen {
 	//chosen Player Class
 	private CharacterClass clientClass;
 	private boolean clientSel = false;
-	private Stage stage;
-	private Table table;
 	private Texture SelArcherF;
 	private Texture SelKnightM;
 	private Texture SelFighterM;
@@ -59,6 +59,12 @@ public class MainMenuScreen implements Screen {
 	private Texture SelDragonRed;
 	private Texture SelNinjaF;
 	private Texture SelWitchF;
+
+    // UI
+    private Stage stage;
+    private Table table;
+    private Skin skin;
+    private final TextButton startButton;
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(KPMIPrototype game) {
@@ -90,6 +96,25 @@ public class MainMenuScreen implements Screen {
 			}
 
 		});
+
+
+		// Scene2d UI ........................................................................ UI */
+        FitViewport fit = new FitViewport(800, 480);
+        this.stage = new Stage(fit);
+        this.skin = new Skin(Gdx.files.internal("UI/uiskin.json"));
+        this.startButton = new TextButton("Start Game", skin, "default");
+        this.startButton.setWidth(128);
+        this.startButton.setHeight(48);
+        this.startButton.setPosition(400 - 64, 64);
+        this.startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                startConnection();
+                startButton.setVisible(false);
+            }
+        });
+        this.stage.addActor(this.startButton);
+        // Scene2d UI ........................................................................ UI */
 	}
 
 
@@ -98,6 +123,43 @@ public class MainMenuScreen implements Screen {
 	public void setUpGame() {
 		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, clientClass, game.TeamId));
 	}
+
+    public void startConnection() {
+        // If screen is touched
+        if(connectionStatus != 1) {
+            Gdx.input.getTextInput(new TextInputListener() {
+
+                @Override
+                public void input(String text) {
+                    // avoid connecting multiple times
+                    if(connectionStatus == 1) return;
+
+                    // trim IP to remove unnecessary whitepaces (sometimes created by android auto-correct)
+                    text = text.trim();
+
+                    Gdx.app.log("ServerConnector", "Attempting Connection to: "+ text);
+                    try {
+                        connectionStatus = 1;
+                        game.client.connect(2000, text, Network.TCPPort, Network.UDPPort);
+                        System.out.println("Established connection to "+text);
+
+                        game.connected = true;
+                    } catch (Exception e) {
+                        System.out.println("Couldn't find running server at "+text);
+                        e.printStackTrace();
+                        connectionStatus = -1;
+                    }
+                }
+
+                @Override
+                public void canceled() {
+                    // TODO Auto-generated method stub
+                }
+
+            }, "Bitte Server-IP eingeben", "127.0.0.1", "");
+        }
+    }
+
 
 	//random chose Class for clients according to their TeamId
 	public void randomClassSel() {
@@ -143,12 +205,10 @@ public class MainMenuScreen implements Screen {
 		clientSel = true;
 	}
 
-	//manuell class selection (and team selection?)
+    /**
+     * Manual player class selection when not playing as dragon
+     */
 	public  void manClassSel() {
-		//for character selection menu
-		stage = new Stage(viewport);
-		Gdx.input.setInputProcessor(stage);
-
 		table = new Table();
 		table.setFillParent(true);
 		stage.addActor(table);
@@ -290,7 +350,6 @@ public class MainMenuScreen implements Screen {
 		// Start collecting textures for OpenGL
 		game.batch.begin();
 			game.batch.draw(bgImg, 0, 0);
-			game.font.draw(game.batch, "Tap to start", 365, 100);
 	
 			if(connectionStatus == -1) {
 			    game.font.setColor(1, 0, 0, 1);
@@ -304,40 +363,7 @@ public class MainMenuScreen implements Screen {
 			    game.font.setColor(1, 1, 1, 1);
 			}
 		game.batch.end();
-		
-		// If screen is touched
-		if(Gdx.input.justTouched() && connectionStatus != 1) {
-			Gdx.input.getTextInput(new TextInputListener() {
-				
-				@Override
-				public void input(String text) {
-                    // avoid connecting multiple times
-                    if(connectionStatus == 1) return;
 
-					// trim IP to remove unnecessary whitepaces (sometimes created by android auto-correct)
-					text = text.trim();
-
-					Gdx.app.log("ServerConnector", "Attempting Connection to: "+ text);
-					try {
-						connectionStatus = 1;
-						game.client.connect(2000, text, Network.TCPPort, Network.UDPPort);
-						System.out.println("Established connection to "+text);
-
-						game.connected = true;
-					} catch (Exception e) {
-						System.out.println("Couldn't find running server at "+text);
-						e.printStackTrace();
-						connectionStatus = -1;
-					}
-				}
-
-				@Override
-				public void canceled() {
-					// TODO Auto-generated method stub
-				}
-				
-			}, "Bitte Server-IP eingeben", "127.0.0.1", "");
-		}
 
 		if(game.connected && game.clientId != 0) {
 
@@ -379,19 +405,20 @@ public class MainMenuScreen implements Screen {
 		
 		// Update camera
 		camera.update();
+        this.stage.draw();
 
 	}
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
+		Gdx.input.setInputProcessor(this.stage);
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
 		camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        stage.getViewport().update(width, height);
 	}
 
 	@Override
