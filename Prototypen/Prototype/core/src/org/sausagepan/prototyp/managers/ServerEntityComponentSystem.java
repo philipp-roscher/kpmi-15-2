@@ -13,6 +13,7 @@ import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.model.components.CharacterClassComponent;
+import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
@@ -140,6 +141,10 @@ public class ServerEntityComponentSystem {
         engine.addEntityListener(EntityFamilies.serverCharacterFamily, itemSystem);
         engine.addEntityListener(EntityFamilies.itemFamily, itemSystem);
 
+        // ChaseSystem
+        ChaseSystem chaseSystem = new ChaseSystem();
+        chaseSystem.addedToEngine(engine);
+
         // Network System
         ServerNetworkSystem networkSystem = new ServerNetworkSystem(this, server, gameServer);
         networkSystem.addedToEngine(engine);
@@ -152,6 +157,8 @@ public class ServerEntityComponentSystem {
         this.engine.addSystem(positionSynchroSystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(itemSystem);
+        this.engine.addSystem(chaseSystem);
+        this.engine.addEntityListener(Family.all(ChaseComponent.class).get(), chaseSystem);
     }
 
     private void setUpMonsters() {

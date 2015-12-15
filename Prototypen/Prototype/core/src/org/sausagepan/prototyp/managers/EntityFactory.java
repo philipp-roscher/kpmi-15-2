@@ -24,6 +24,7 @@ import org.sausagepan.prototyp.model.components.MagicComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SensorBodyComponent;
+import org.sausagepan.prototyp.model.components.SensorComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -82,6 +83,7 @@ public class EntityFactory {
         monster.add(new IdComponent(id));
         monster.add(new TeamComponent(0));
         monster.add(new SensorBodyComponent(world, mapMonsterObject.position));
+        monster.add(new SensorComponent(world, monster));
 
         int health;
         TextureAtlas tex;

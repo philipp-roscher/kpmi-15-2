@@ -22,22 +22,17 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 public class MonsterListener extends EntitySystem implements ContactListener {
     @Override
     public void endContact(Contact contact) {
-        //stop following and go back to walking in circles
-        if(!contact.getFixtureA().getBody().equals(contact.getFixtureB().getBody())) {
-            if (contact.getFixtureA().getBody().getUserData() instanceof MonsterEntity
-                    && contact.getFixtureB().getBody().getUserData() instanceof CharacterEntity) {
-                Entity detectingEntity = (MonsterEntity)contact.getFixtureA().getBody().getUserData();
-                Entity detectedEntity = (CharacterEntity)contact.getFixtureB().getBody().getUserData();
-
-                System.out.println("Involved Monster: " + detectingEntity.getComponent
-                        (IdComponent.class).id);
-                System.out.println("Involved Character: " + detectedEntity);
-            }
-        }
+        if(contact.getFixtureA().isSensor() &&
+                contact.getFixtureA().getBody().getUserData() != null)
+            ((Entity)(contact.getFixtureA().getBody().getUserData())).remove(ChaseComponent.class);
     }
 
     @Override
     public void beginContact(Contact contact) {
+
+        // Ignore if first one isn't sensor
+        boolean firstOneSensor
+                = contact.getFixtureA().isSensor() && !contact.getFixtureB().isSensor();
 
         // Ignore static bodies at contact detection
         boolean oneStatic = (contact.getFixtureA().getBody().getType() == BodyDef.BodyType.StaticBody)
@@ -50,7 +45,7 @@ public class MonsterListener extends EntitySystem implements ContactListener {
                 || contact.getFixtureB().getBody().getUserData() == null;
 
         // If everything is okay
-        if( !oneStatic && !bothMonsters && !oneWithoutEntityReference) {
+        if( firstOneSensor && !oneStatic && !bothMonsters && !oneWithoutEntityReference) {
             boolean selfDetection = contact.getFixtureA().getBody()
                     .equals(contact.getFixtureB().getBody());
             boolean oneMonsterOneCharacter = contact.getFixtureA().getBody().getUserData()

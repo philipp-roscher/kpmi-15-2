@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Rectangle;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
@@ -25,20 +26,6 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
 
-    private ComponentMapper<DynamicBodyComponent> pm
-            = ComponentMapper.getFor(DynamicBodyComponent.class);
-    private ComponentMapper<CharacterSpriteComponent> sm
-            = ComponentMapper.getFor(CharacterSpriteComponent.class);
-    private ComponentMapper<WeaponComponent> wm
-            = ComponentMapper.getFor(WeaponComponent.class);
-    private ComponentMapper<LightComponent> lm
-            = ComponentMapper.getFor(LightComponent.class);
-    private ComponentMapper<InputComponent> im
-            = ComponentMapper.getFor(InputComponent.class);
-    private ComponentMapper<InjurableAreaComponent> jm
-            = ComponentMapper.getFor(InjurableAreaComponent.class);
-    private ComponentMapper<SensorBodyComponent> sbm
-    		= ComponentMapper.getFor(SensorBodyComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public PositionSynchroSystem() {}
 
@@ -53,11 +40,11 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
 
     public void update(float deltaTime) {
         for (Entity entity : entities) {
-            DynamicBodyComponent body = pm.get(entity);
+            DynamicBodyComponent body = CompMappers.dynBody.get(entity);
 
             // Synchronize CharacterSprite with DynamicBody
             if(entity.getComponent(CharacterSpriteComponent.class) != null) {
-                CharacterSpriteComponent sprite = sm.get(entity);
+                CharacterSpriteComponent sprite = CompMappers.charSprite.get(entity);
                 sprite.sprite.setPosition(
                         body.dynamicBody.getPosition().x - sprite.sprite.getWidth()/2,
                         body.dynamicBody.getPosition().y - body.fixture.getShape().getRadius()
@@ -67,8 +54,8 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
             // Synchronize Weapon with DynamicBody
             if(entity.getComponent(WeaponComponent.class) != null &&
                     entity.getComponent(InputComponent.class) != null) {
-                WeaponComponent weapon = wm.get(entity);
-                InputComponent input = im.get(entity);
+                WeaponComponent weapon = CompMappers.weapon.get(entity);
+                InputComponent input = CompMappers.input.get(entity);
 
                 switch(input.direction) {
                     case NORTH:
@@ -121,7 +108,7 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
 
             // Synchronize Light with DynamicBody
             if(entity.getComponent(LightComponent.class) != null) {
-                LightComponent light = lm.get(entity);
+                LightComponent light = CompMappers.light.get(entity);
 
                 light.spriteLight.setPosition(
                         body.dynamicBody.getPosition().x,
@@ -131,7 +118,7 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
 
             // Synchronize InjurableArea with DynamicBody
             if(entity.getComponent(InjurableAreaComponent.class) != null) {
-                InjurableAreaComponent area = jm.get(entity);
+                InjurableAreaComponent area = CompMappers.injurableArea.get(entity);
                 area.area.setPosition(
                         body.dynamicBody.getPosition().x-area.area.width/2,
                         body.dynamicBody.getPosition().y-body.fixture.getShape().getRadius()
@@ -139,8 +126,14 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
             }
             
             // Synchronize SensorBody with DynamicBody
-            if(sbm.get(entity) != null)
-            	sbm.get(entity).sensorBody.setTransform(body.dynamicBody.getPosition(), 0f);
+            if(CompMappers.sensorBody.get(entity) != null)
+            	CompMappers.sensorBody.get(entity).sensorBody.setTransform(body.dynamicBody.getPosition(),
+                    0f);
+
+            // Synchronize Sensor with DynamicBody
+            if(CompMappers.sensor.get(entity) != null)
+                CompMappers.sensor.get(entity).sensor.setTransform(
+                        body.dynamicBody.getPosition(), 0f);
         }
     }
 
