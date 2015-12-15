@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="127">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="128">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
@@ -20,7 +20,7 @@
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztl8sKgCAQRedPsicUUZt21T/0+P9/aXZFTVijNgleODu9B0VBVwCoGaSwJ0EqRseCtCCX4gf+QdDfC7p9S4R0L4gc+F2Mj4l5d5j4qT4F1/tna98o/znU/Q/+5/06dL25gf9tvt5/X/yNsJ9avymmfhehesfg99Jv61xmTL+tBL/s+1/aL/3/CesHmJGSwfHdrpgdE7IBTy8gbA==
+   eJwLZmBg0CEDKzMggBIQa5FhRhAQ6zMMHFAbBPbbDKD91gNo91AD8kBsQgKWp4H9tFCviEUfLkyJ/ZZAbIqG1Rkw8x+1wg3dHGzmYsv/o/YTbz4hTMhcVQrsJxXQO/yHiv16A2w/Nv9Tiim1nxYAm7m2o/YPSfuplS5VyLSfWmDU/oFt/w+0/QPd/xn1PwNDIBBrkoGR2+0KZJoRAMQAxlYg5Q==
   </data>
  </layer>
  <objectgroup name="colliderWalls">
@@ -52,7 +52,7 @@
   <object id="103" x="864" y="896" width="32" height="32"/>
   <object id="105" x="640" y="896" width="32" height="32"/>
   <object id="108" x="32" y="256" height="733"/>
-  <object id="109" x="992" y="256" width="32" height="736"/>
+  <object id="127" x="992" y="288" width="32" height="704"/>
  </objectgroup>
  <objectgroup name="lights">
   <object id="113" name="light" x="0" y="128" width="32" height="32"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="58">
- <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="65">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
  <layer name="ground" width="32" height="32">
@@ -29,13 +29,9 @@
   <object id="5" x="0" y="288" width="32" height="736"/>
   <object id="6" x="992" y="288" width="32" height="736"/>
   <object id="11" x="608" y="96" width="64" height="320"/>
-  <object id="12" x="672" y="288" width="320" height="128"/>
-  <object id="13" x="992" y="256" width="32" height="32"/>
   <object id="14" x="448" y="480" width="128" height="96"/>
-  <object id="15" x="480" y="576" width="512" height="64"/>
+  <object id="15" x="480" y="576" width="160" height="64"/>
   <object id="16" x="576" y="544" width="64" height="32"/>
-  <object id="17" x="640" y="640" width="64" height="64"/>
-  <object id="18" x="800" y="640" width="192" height="64"/>
   <object id="21" x="544" y="640" width="96" height="128"/>
   <object id="23" x="416" y="704" width="192" height="96"/>
   <object id="24" x="320" y="736" width="192" height="96"/>
@@ -52,6 +48,9 @@
   <object id="35" x="128" y="192" width="64" height="96"/>
   <object id="36" x="0" y="32" width="480" height="64"/>
   <object id="37" x="544" y="32" width="480" height="64"/>
+  <object id="62" x="672" y="320" width="320" height="96"/>
+  <object id="63" x="640" y="608" width="64" height="96"/>
+  <object id="64" x="800" y="608" width="192" height="96"/>
  </objectgroup>
  <objectgroup name="lights">
   <object id="7" name="light" x="992" y="128" width="32" height="32"/>

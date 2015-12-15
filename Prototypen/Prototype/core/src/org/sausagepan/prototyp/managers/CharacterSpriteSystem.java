@@ -97,7 +97,7 @@ public class CharacterSpriteSystem extends EntitySystem implements EntityListene
                     sprite.recentAnim = sprite.playerAnims.get("s");
             }
 
-            sprite.recentIdleImg = sprite.recentAnim.getKeyFrames()[0];
+            sprite.recentIdleImg = sprite.recentAnim.getKeyFrames()[1];
 
             if(Math.abs(body.dynamicBody.getLinearVelocity().x) < 0.1 &&
                Math.abs(body.dynamicBody.getLinearVelocity().y) < 0.1)

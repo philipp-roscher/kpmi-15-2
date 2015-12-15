@@ -95,8 +95,11 @@ public class Maze extends EntitySystem {
             groundBodyDef.position.set(new Vector2(r.x / 32f + r.width / 64f, r.y / 32f + r.height / 64f));
             Body groundBody        = world.createBody(groundBodyDef);
 
+            if (!mo.getName().equals(""))
+                System.out.println("An objects name is: "+mo.getName());
             // Look for door objects
             if(mo.getName().equals("lockedDoor")) {
+                //System.out.println("found lockedDoor Stuff");
                 doorLockerRectangles.add(r);
                 doorLockerBodies.add(groundBody);
                 doorLockerBodyDefs.add(groundBodyDef);
@@ -109,6 +112,7 @@ public class Maze extends EntitySystem {
 
             // Look for exit door objects and destroy bodies
             if(mo.getName().equals("exitWay")) {
+                System.out.println("found exitWay Stuff");
                 exitWayRect.add(r);
                 exitWayBody.add(groundBody);
                 destroyExitBody();

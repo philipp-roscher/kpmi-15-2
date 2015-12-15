@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="101">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="106">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
@@ -110,8 +110,8 @@
   <object id="76" x="640" y="96" width="96" height="32"/>
   <object id="77" x="640" y="128" width="64" height="64"/>
   <object id="78" x="576" y="128" width="64" height="32"/>
-  <object id="79" name="exitWay" type="exitWay" x="288" y="128" width="32" height="94"/>
-  <object id="80" name="exitWay" type="exitWay" x="704" y="128" width="32" height="95"/>
+  <object id="102" name="exitWay" type="exitWay" x="288" y="128" width="32" height="96"/>
+  <object id="103" name="exitWay" type="exitWay" x="704" y="128" width="32" height="96"/>
  </objectgroup>
  <objectgroup name="lights">
   <object id="81" name="light" x="32" y="128" width="32" height="32"/>
