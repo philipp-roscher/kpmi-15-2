@@ -191,13 +191,13 @@ public class ServerEntityComponentSystem {
         
         //Set Spawn locations: Game master
         if (newCharacterTeamId == 0) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), clientClass, newCharacter));
         }
         if (newCharacterTeamId == 1) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), clientClass, newCharacter));
         }
         if (newCharacterTeamId == 2) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass, newCharacter));
         }
         
         characters.put(newCharacterId, newCharacter);

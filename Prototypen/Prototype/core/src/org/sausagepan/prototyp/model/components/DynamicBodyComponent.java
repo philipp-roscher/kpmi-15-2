@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.model.components;
 import org.sausagepan.prototyp.enums.CharacterClass;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -26,11 +27,13 @@ public class DynamicBodyComponent implements Component {
     public Vector2 startPosition;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public DynamicBodyComponent(World world, Vector2 startPosition, CharacterClass characterClass) {
+    public DynamicBodyComponent(
+            World world, Vector2 startPosition, CharacterClass characterClass, Entity childOf) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;    // set up body definition for player
         bodyDef.position.set(startPosition.x, startPosition.y); // set players bodys position
         dynamicBody = world.createBody(bodyDef);        // add body to the world
+        dynamicBody.setUserData(childOf);
         CircleShape circle = new CircleShape();         // give body a shape
         //bigger size for dragon/GM
         if(characterClass == CharacterClass.DRAGON)  circle.setRadius(.4f*2);

@@ -107,7 +107,7 @@ public class InMaze implements Screen {
 		this.batch = new SpriteBatch();
         ECS.setInputProcessor();
 		//Listener for Monsters to see clients
-		world.setContactListener(new MonsterListener());
+		world.setContactListener(ECS.getContactListener());
 	}
 
 	@Override

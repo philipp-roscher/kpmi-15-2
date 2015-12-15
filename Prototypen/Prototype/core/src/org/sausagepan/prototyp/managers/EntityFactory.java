@@ -74,7 +74,8 @@ public class EntityFactory {
      */
     public MonsterEntity createMonster(MapMonsterObject mapMonsterObject, int id) {
         MonsterEntity monster = new MonsterEntity();
-        monster.add(new DynamicBodyComponent(world, mapMonsterObject.position, CharacterClass.MONSTER));
+        monster.add(new DynamicBodyComponent(
+                world, mapMonsterObject.position, CharacterClass.MONSTER, monster));
         monster.add(new InjurableAreaComponent(
                 mapMonsterObject.position.x, mapMonsterObject.position.y, .8f, 1f));
         //same Team as GM -> no friendly fire
@@ -117,7 +118,7 @@ public class EntityFactory {
     
     /**
      * Creates a {@link ItemEntity} for the game world
-     * @param i 
+     * @param id
      * @return
      */
     public ItemEntity createItem(MapItem mapItem, int id) {

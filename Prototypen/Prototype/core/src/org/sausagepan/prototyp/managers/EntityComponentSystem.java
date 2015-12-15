@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -31,6 +32,7 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.network.MonsterListener;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
 import java.util.HashMap;
@@ -47,6 +49,8 @@ public class EntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
     private Engine engine;
     private World world;
+    private ContactListener contactListener;
+
     private MediaManager mediaManager;
     private ItemFactory itemFactory;
     private OrthographicCamera camera;
@@ -92,6 +96,8 @@ public class EntityComponentSystem {
         this.localCharacterId = game.clientId;
 
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
+
+        this.contactListener = new MonsterListener();
         
         setUpLocalCharacterEntity();
         setUpMazeLights();
@@ -244,13 +250,13 @@ public class EntityComponentSystem {
 
         //Set Spawn locations: Game master
         if (newCharacterTeamId == 0) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[0][0] / 32f, startPositions[0][1] / 32f), clientClass, newCharacter));
         }
         if (newCharacterTeamId == 1) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[1][0] / 32f, startPositions[1][1] / 32f), clientClass, newCharacter));
         }
         if (newCharacterTeamId == 2) {
-            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass));
+            newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass, newCharacter));
         }
         
         characters.put(newCharacterId, newCharacter);
@@ -342,5 +348,9 @@ public class EntityComponentSystem {
 
     public Maze getMaze() {
         return maze;
+    }
+
+    public ContactListener getContactListener() {
+        return contactListener;
     }
 }
