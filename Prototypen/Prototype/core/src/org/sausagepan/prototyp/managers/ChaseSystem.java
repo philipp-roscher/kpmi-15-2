@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.SensorComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 
 /**
@@ -37,19 +38,31 @@ public class ChaseSystem extends EntitySystem implements EntityListener {
             // Follow enemy
             DynamicBodyComponent dbc = CompMappers.dynBody.get(e);
             ChaseComponent chc = CompMappers.chase.get(e);
-            System.out.println(dbc.dynamicBody.getPosition());
-            System.out.println(chc.body.getPosition());
+            //System.out.println(dbc.dynamicBody.getPosition());
+            //System.out.println(chc.body.getPosition());
 
             Vector2 distance = new Vector2(
                     chc.body.getPosition().x - dbc.dynamicBody.getPosition().x,
                     chc.body.getPosition().y - dbc.dynamicBody.getPosition().y
                     );
-            System.out.println(distance);
+            //System.out.println(distance);
             distance.nor();
             distance.x *= 2;
             distance.y *= 2;
 
             dbc.dynamicBody.setLinearVelocity(distance);
+
+            //start attacking
+            if ( Math.abs(distance.x) <= 2.0f) {
+                //System.out.println("in Attack radius");
+                e.getComponent(WeaponComponent.class).weapon.justUsed = true;
+            }
+
+            //stop attacking
+            if ( Math.abs(distance.x) >= 2.0f) {
+                //System.out.println("out of attack radius");
+                e.getComponent(WeaponComponent.class).weapon.justUsed = false;
+            }
         }
     }
 
@@ -63,7 +76,7 @@ public class ChaseSystem extends EntitySystem implements EntityListener {
     @Override
     public void entityAdded(Entity entity) {
         addedToEngine(this.getEngine());
-        System.out.println("Following");
+        //System.out.println("Following");
     }
 
     /**
@@ -76,7 +89,7 @@ public class ChaseSystem extends EntitySystem implements EntityListener {
     public void entityRemoved(Entity entity) {
         CompMappers.dynBody.get(entity).dynamicBody.setLinearVelocity(0,0);
         addedToEngine(this.getEngine());
-        System.out.println("Giving up");
+        //System.out.println("Giving up");
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 }
