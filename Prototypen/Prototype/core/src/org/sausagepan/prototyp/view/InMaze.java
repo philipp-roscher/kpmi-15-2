@@ -68,6 +68,9 @@ public class InMaze implements Screen {
     private World world;    	// create a box2d world which calculates all physics
     public RayHandler rayHandler;   // handles rays of light
 
+    // Flags
+    private boolean exitGame=false;
+
 	/* .......................................................................... CONSTRUCTORS .. */
     /**
      * Creates an in game object for rendering in game action
@@ -150,6 +153,10 @@ public class InMaze implements Screen {
             ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 115f, 1);
 
         }
+
+        /* ............................................................................. END GAME */
+        if(exitGame) quitGame();
+        /* ............................................................................. END GAME */
 	}
 
 
@@ -185,6 +192,11 @@ public class InMaze implements Screen {
 	
 	
 	/* ............................................................................... METHODS .. */
+    private void quitGame() {
+        game.setScreen(new MainMenuScreen(game));
+        dispose();
+    }
+
     private void setUpRendering() {
         // Rendering ...............................................................................
         camera   = new OrthographicCamera();    // set up the camera and viewport
@@ -285,8 +297,7 @@ public class InMaze implements Screen {
                         waitTimeEnd += Gdx.graphics.getDeltaTime();
                         if (waitTimeEnd >= 50) {
                             //go back to mainMenu
-                            game.setScreen(new MainMenuScreen(game));
-                            dispose();
+                            exitGame = true;
                         }
                     }
                     //other teams
@@ -298,8 +309,7 @@ public class InMaze implements Screen {
                         waitTimeEnd += Gdx.graphics.getDeltaTime();
                         if (waitTimeEnd >= 50) {
                             //go back to mainMenu
-                            game.setScreen(new MainMenuScreen(game));
-                            dispose();
+                            exitGame = true;
                         }
                     }
                 }
