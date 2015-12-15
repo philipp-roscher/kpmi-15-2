@@ -19,7 +19,7 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
@@ -32,7 +32,7 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.GameServer;
-import org.sausagepan.prototyp.network.MonsterListener;
+import org.sausagepan.prototyp.network.MazeContactListener;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
@@ -47,7 +47,7 @@ import java.util.HashMap;
  * {@link com.badlogic.ashley.core.Engine} on the server.
  * Created by philipp on 01.12.15.
  */
-public class ServerEntityComponentSystem {
+public class SERVEREntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
     private Engine engine;
     private World world;
@@ -61,19 +61,18 @@ public class ServerEntityComponentSystem {
     private GameServer gameServer;
     private Server server;
     private float tickrate = ServerSettings.TICKRATE;
-    private ServerNetworkTransmissionComponent sntc;
+    private SERVERNetworkTransmissionComponent sntc;
     private float[][] startPositions;
     private int maxItemId;
     
     private EntityFactory entityFactory;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public ServerEntityComponentSystem(MapInformation mapInformation, Server server, GameServer gameServer) {
+    public SERVEREntityComponentSystem(MapInformation mapInformation, Server server, GameServer gameServer) {
     	Box2D.init();
         MediaManager mediaManager = new MediaManager();
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
-        this.contactListener = new MonsterListener();
         this.maze = new Maze(mapInformation, world, gameServer.gameReady);
         this.startPositions = maze.getStartPositions();
         this.maze.openSecretPassages();
@@ -89,9 +88,11 @@ public class ServerEntityComponentSystem {
         this.gameServer = gameServer;
 
         Entity networkEntity = new Entity();
-        sntc = new ServerNetworkTransmissionComponent();
+        sntc = new SERVERNetworkTransmissionComponent();
         networkEntity.add(sntc);
         engine.addEntity(networkEntity);
+
+        this.contactListener = new MazeContactListener(sntc);
 
         setUpMonsters();
         setUpItems();
@@ -146,7 +147,7 @@ public class ServerEntityComponentSystem {
         chaseSystem.addedToEngine(engine);
 
         // Network System
-        ServerNetworkSystem networkSystem = new ServerNetworkSystem(this, server, gameServer);
+        SERVERNetworkSystem networkSystem = new SERVERNetworkSystem(this, server, gameServer);
         networkSystem.addedToEngine(engine);
         
         // Adding them to the Engine
@@ -277,7 +278,7 @@ public class ServerEntityComponentSystem {
     	return itemFactory;
     }
     
-    public ServerNetworkTransmissionComponent getSNTC() {
+    public SERVERNetworkTransmissionComponent getSNTC() {
     	return sntc;
     }
 

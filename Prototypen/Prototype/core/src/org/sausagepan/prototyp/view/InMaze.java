@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
@@ -60,7 +61,8 @@ public class InMaze implements Screen {
 	private float   elapsedTime    = 0;
 	private float   disconnectTime = 0;
 	private float   timeOut        = 5;
-    private float   waitTimeEnd    = 0;
+    private long    quittingTime   = 0;
+    private boolean gameOver = false;
 
     private Maze maze;
 
@@ -95,7 +97,7 @@ public class InMaze implements Screen {
 
         // Entity-Component-System ........................................................... START
         this.ECS = new EntityComponentSystem(
-                game, world, viewport, rayHandler, maze, camera, clientClass, TeamId);
+                game, world, viewport, rayHandler, maze, camera, clientClass, TeamId, this);
         // Entity-Component-System ............................................................. END
 
         setUpNetwork();
@@ -142,14 +144,20 @@ public class InMaze implements Screen {
         ECS.update(delta);
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
 
-        //check if Game is finished/can be exited
-        exitGame();
-
         //wenn X is pressed teleport player in treasure room
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
             ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 115f, 1);
 
         }
+
+        //wenn C is pressed teleport player in random room/out of spawn
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 95f, 1);
+
+        }
+
+        // Exit Game
+        if(gameOver && TimeUtils.timeSinceMillis(quittingTime)>3000) backToMainMenu();
 	}
 
 
@@ -185,6 +193,24 @@ public class InMaze implements Screen {
 	
 	
 	/* ............................................................................... METHODS .. */
+
+
+    public void quitGame(Network.GameExitResponse result) {
+        int teamIdWinner = result.id;
+        int teamIdHere = ECS.getCharacter(game.clientId).getComponent(TeamComponent.class).TeamId;
+        quittingTime = TimeUtils.millis();
+        gameOver = true;
+        //winning Team
+        if (teamIdHere == teamIdWinner) game.gameWon = true;
+        //other teams
+        else game.gameLost = true;
+    }
+
+    private void backToMainMenu() {
+        game.setScreen(new MainMenuScreen(game));
+        dispose();
+    }
+
     private void setUpRendering() {
         // Rendering ...............................................................................
         camera   = new OrthographicCamera();    // set up the camera and viewport
@@ -256,55 +282,5 @@ public class InMaze implements Screen {
                 dispose();
             }
         }
-    }
-
-    //check if player entered exit area
-    private void exitGame() {
-        for (Rectangle rec : maze.getExitWayRect()) {
-            Rectangle player = ECS.getLocalCharacterEntity().getComponent(InjurableAreaComponent.class).area;
-            //System.out.println("rectangle exit: "+rec);
-            if (rec.overlaps(player)) {
-                //System.out.println("Player "+game.clientId+" entered exit area");
-                game.client.sendTCP( new Network.GameExitRequest(game.clientId));
-            }
-        }
-
-        game.client.addListener(new Listener() {
-            public void received(Connection connection, Object object) {
-                //receives Exit response
-                if (object instanceof Network.GameExitResponse) {
-                    Network.GameExitResponse result = (Network.GameExitResponse) object;
-                    int teamIdWinner = result.id;
-                    int teamIdHere = ECS.getCharacter(game.clientId).getComponent(TeamComponent.class).TeamId;
-                    //winning Team
-                    if (teamIdHere == teamIdWinner) {
-                        //draw Winner
-                        game.gameWon = true;
-                        //System.out.println("You won!");
-                        //wait for 5 seconds
-                        waitTimeEnd += Gdx.graphics.getDeltaTime();
-                        if (waitTimeEnd >= 50) {
-                            //go back to mainMenu
-                            game.setScreen(new MainMenuScreen(game));
-                            dispose();
-                        }
-                    }
-                    //other teams
-                    else {
-                        //draw Loser
-                        game.gameLost = true;
-                       // System.out.println("You lost!");
-                        //wait for 5 seconds
-                        waitTimeEnd += Gdx.graphics.getDeltaTime();
-                        if (waitTimeEnd >= 50) {
-                            //go back to mainMenu
-                            game.setScreen(new MainMenuScreen(game));
-                            dispose();
-                        }
-                    }
-                }
-            }});
-
-
     }
 }

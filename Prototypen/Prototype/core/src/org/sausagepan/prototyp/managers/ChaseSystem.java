@@ -6,16 +6,13 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import org.sausagepan.prototyp.Utils.CompMappers;
-import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.SensorComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.EntityFamilies;
+
 
 /**
  * Created by georg on 15.12.15.
@@ -53,13 +50,13 @@ public class ChaseSystem extends EntitySystem implements EntityListener {
             dbc.dynamicBody.setLinearVelocity(distance);
 
             //start attacking
-            if ( Math.abs(distance.x) <= 2.0f) {
+            if ( Math.abs(distance.x) <= 0.8f) {
                 //System.out.println("in Attack radius");
                 e.getComponent(WeaponComponent.class).weapon.justUsed = true;
             }
 
             //stop attacking
-            if ( Math.abs(distance.x) >= 2.0f) {
+            if ( Math.abs(distance.x) >= 0.8f) {
                 //System.out.println("out of attack radius");
                 e.getComponent(WeaponComponent.class).weapon.justUsed = false;
             }

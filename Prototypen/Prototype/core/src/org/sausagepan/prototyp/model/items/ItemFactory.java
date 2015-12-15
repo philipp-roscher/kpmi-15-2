@@ -49,6 +49,17 @@ public class ItemFactory {
     }
 
     /**
+     * Creates a mini {@link Sword} item of {@link org.sausagepan.prototyp.enums.Damagetype}
+     * Physical
+     * @return  the sword item
+     */
+    public Sword createMiniSword() {
+        return new Sword(
+                mediaManager.getTextureAtlasType("weapons").findRegion("sword", 2),
+                1, Damagetype.PHYSICAL);
+    }
+
+    /**
      * Creates weapon for {@link org.sausagepan.prototyp.enums.CharacterClass} FIGHTER
      * @param itemType allowed values: GLOVE_RED, GLOVE_SPIKE
      * @return

@@ -84,7 +84,7 @@ public class EntityFactory {
         monster.add(new TeamComponent(0));
         monster.add(new SensorBodyComponent(world, mapMonsterObject.position));
         monster.add(new SensorComponent(world, monster));
-        monster.add(new WeaponComponent(itemFactory.createSmallSword())); //TODO: change weapon
+        monster.add(new WeaponComponent(itemFactory.createMiniSword())); //TODO: change weapon
 
         int health;
         TextureAtlas tex;

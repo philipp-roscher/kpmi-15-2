@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -116,6 +117,17 @@ public class Maze extends EntitySystem {
                 r.setWidth(r.getWidth() / 32);
                 exitWayRect.add(r);
                 exitWayBody.add(groundBody);
+
+                // Create Sensor
+                Body exitSensor = world.createBody(groundBodyDef);
+                FixtureDef exitSensorFixture = new FixtureDef();
+                exitSensorFixture.isSensor = true;
+                PolygonShape exitSensorShape = new PolygonShape();
+                exitSensorShape.setAsBox(1,1);
+                exitSensorFixture.shape = exitSensorShape;
+                exitSensor.createFixture(exitSensorFixture);
+                exitSensorShape.dispose();
+                exitSensor.setUserData("ExitSensor");
             }
 
             // List Game Masters secret passages
