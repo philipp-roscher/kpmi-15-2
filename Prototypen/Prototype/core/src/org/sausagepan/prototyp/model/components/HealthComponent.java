@@ -10,6 +10,7 @@ public class HealthComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public final int initialHP;
     public int HP;
+    public boolean justHurt=false;
     /* ........................................................................... CONSTRUCTOR .. */
     public HealthComponent(int HP) {
         this.HP = HP;
