@@ -1,34 +1,59 @@
 package org.sausagepan.prototyp.network;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.sun.org.apache.xpath.internal.SourceTree;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 
 /**
  * Created by Sara on 10.11.2015.
  */
-public class MonsterListener extends EntitySystem implements ContactListener {
+public class MazeContactListener extends EntitySystem implements ContactListener {
+    private SERVERNetworkTransmissionComponent sntc;
+
+    /**
+     * Default constructor that will initialise an EntitySystem with priority 0.
+     */
+    public MazeContactListener(SERVERNetworkTransmissionComponent sntc) {
+        this.sntc = sntc;
+    }
+
     @Override
     public void endContact(Contact contact) {
         if(contact.getFixtureA().isSensor() &&
-                contact.getFixtureA().getBody().getUserData() != null)
+                contact.getFixtureA().getBody().getUserData() != null
+                && !(contact.getFixtureA().getBody().getUserData() instanceof String))
             ((Entity)(contact.getFixtureA().getBody().getUserData())).remove(ChaseComponent.class);
     }
 
     @Override
     public void beginContact(Contact contact) {
+        if(contact.getFixtureA().getBody().getUserData() != null
+                && contact.getFixtureA().getBody().getUserData() instanceof String
+                && ((String)contact.getFixtureA().getBody().getUserData()).equals("ExitSensor")) {
+            System.out.println("Sending Exit Request ...");
+            this.sntc.networkMessagesToProcess.add(new Network.GameExitResponse());
+        }
 
         // Ignore if first one isn't sensor
         boolean firstOneSensor

@@ -13,7 +13,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
-import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
@@ -41,7 +41,7 @@ import org.sausagepan.prototyp.network.Network.GameExitResponse;
 /**
  * Created by philipp on 06.12.15.
  */
-public class ServerNetworkSystem extends EntitySystem {
+public class SERVERNetworkSystem extends EntitySystem {
 	/* ............................................................................... CLASSES .. */
 	class NetworkMessage {
 		Connection connection;
@@ -59,11 +59,11 @@ public class ServerNetworkSystem extends EntitySystem {
     private Array<NetworkMessage> networkMessages = new Array<NetworkMessage>();
     private Server server;
     private GameServer gameServer;
-	private ServerEntityComponentSystem ECS;
-    private ServerNetworkTransmissionComponent ntc;
+	private SERVEREntityComponentSystem ECS;
+    private SERVERNetworkTransmissionComponent ntc;
 	
     /* ........................................................................... CONSTRUCTOR .. */
-    public ServerNetworkSystem(ServerEntityComponentSystem ECS, Server server, GameServer gameServer) {
+    public SERVERNetworkSystem(SERVEREntityComponentSystem ECS, Server server, GameServer gameServer) {
     	this.ECS = ECS;
     	this.server = server;
     	this.gameServer = gameServer;
@@ -90,7 +90,8 @@ public class ServerNetworkSystem extends EntitySystem {
                 (object instanceof DeleteBulletResponse) ||
                 (object instanceof ItemPickUp) ||
                 (object instanceof NewItem) ||
-                (object instanceof YouDiedResponse)
+                (object instanceof YouDiedResponse) ||
+                    (object instanceof GameExitResponse)
             )
                 server.sendToAllTCP(object);
             

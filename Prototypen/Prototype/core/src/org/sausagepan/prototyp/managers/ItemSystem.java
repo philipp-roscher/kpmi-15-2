@@ -8,7 +8,7 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
-import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 import org.sausagepan.prototyp.model.items.PotionHP;
@@ -36,10 +36,10 @@ public class ItemSystem extends EntitySystem implements EntityListener {
 
     private ImmutableArray<Entity> characters;
     private ImmutableArray<Entity> items;
-    private ServerNetworkTransmissionComponent ntc;
-    private ServerEntityComponentSystem ECS;
+    private SERVERNetworkTransmissionComponent ntc;
+    private SERVEREntityComponentSystem ECS;
     /* ........................................................................... CONSTRUCTOR .. */
-    public ItemSystem(ServerEntityComponentSystem ECS) {
+    public ItemSystem(SERVEREntityComponentSystem ECS) {
     	this.ECS = ECS;
     	ntc = ECS.getSNTC();
     }

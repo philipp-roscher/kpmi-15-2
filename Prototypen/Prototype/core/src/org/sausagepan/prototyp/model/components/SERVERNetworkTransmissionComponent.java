@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
  * Component that is used for communication between systems,
  * holds a list of network messages which are to be processed by the ServerNetworkSystem
  */
-public class ServerNetworkTransmissionComponent implements Component {
+public class SERVERNetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
 
     public Array<Object> networkMessagesToProcess = new Array<Object>();

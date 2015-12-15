@@ -16,7 +16,7 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
-import org.sausagepan.prototyp.model.components.ServerNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
@@ -43,9 +43,9 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> attackers;
     private ImmutableArray<Entity> victims;
-    private ServerNetworkTransmissionComponent ntc;
+    private SERVERNetworkTransmissionComponent ntc;
     private int maxBulletId;
-    private ServerEntityComponentSystem ECS;
+    private SERVEREntityComponentSystem ECS;
 
     private ComponentMapper<HealthComponent> hm
             = ComponentMapper.getFor(HealthComponent.class);
@@ -59,7 +59,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
             = ComponentMapper.getFor(TeamComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
-    public BattleSystem(ServerEntityComponentSystem ECS) {
+    public BattleSystem(SERVEREntityComponentSystem ECS) {
         this.maxBulletId = 1;
         this.ECS = ECS;
         ntc = ECS.getSNTC();

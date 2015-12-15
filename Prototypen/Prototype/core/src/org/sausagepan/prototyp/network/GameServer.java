@@ -7,7 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-import org.sausagepan.prototyp.managers.ServerEntityComponentSystem;
+import org.sausagepan.prototyp.managers.SERVEREntityComponentSystem;
 import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.GameStart;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class GameServer implements ApplicationListener {
 	private Server server;
-	private ServerEntityComponentSystem ECS;
+	private SERVEREntityComponentSystem ECS;
 	private long lastUpdate;
 	private float delta;
 
@@ -82,7 +82,7 @@ public class GameServer implements ApplicationListener {
 		        }
 		     });
 		    
-			ECS = new ServerEntityComponentSystem(map, server, this);
+			ECS = new SERVEREntityComponentSystem(map, server, this);
 		    System.out.println("Server up and running");
 		    lastUpdate = System.nanoTime();
 		} catch (Exception e) {

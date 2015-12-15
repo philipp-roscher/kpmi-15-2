@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -32,8 +31,9 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.MonsterListener;
+import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
+import org.sausagepan.prototyp.view.InMaze;
 
 import java.util.HashMap;
 
@@ -55,6 +55,7 @@ public class EntityComponentSystem {
     private OrthographicCamera camera;
     private Viewport viewport;
     private Maze maze;
+    private InMaze inMaze;
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
     private HashMap<Integer,MonsterEntity> monsters;
@@ -74,9 +75,11 @@ public class EntityComponentSystem {
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
             KPMIPrototype game, World world, Viewport viewport, RayHandler rayHandler, Maze maze,
-            OrthographicCamera camera, CharacterClass characterClass, int TeamId) {
+            OrthographicCamera camera, CharacterClass characterClass, int TeamId,
+            InMaze inMaze) {
 
     	this.game = game;
+        this.inMaze = inMaze;
         this.mediaManager = game.mediaManager;
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = world;
@@ -337,6 +340,10 @@ public class EntityComponentSystem {
 
     public Maze getMaze() {
         return maze;
+    }
+
+    public void quitGame(Network.GameExitResponse response) {
+        inMaze.quitGame(response);
     }
 
 }
