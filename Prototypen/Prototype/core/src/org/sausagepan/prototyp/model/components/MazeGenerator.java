@@ -300,6 +300,9 @@ public class MazeGenerator {
             if(mo.getName() != null && mo.getName().equals("secretWall"))
                 nmo.setName("secretWall");
 
+            if (mo.getName() != null && mo.getName().equals("exitWay"))
+                nmo.setName("exitWay");
+
             // set rectangle objects rectangle properties to the new position and original width and height
             nmo.getRectangle().set(pos);
 
