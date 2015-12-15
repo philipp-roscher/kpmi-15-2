@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Family;
 
 import org.sausagepan.prototyp.model.components.CharacterClassComponent;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
+import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
@@ -68,7 +69,8 @@ public class EntityFamilies {
             HealthComponent.class,
             CharacterClassComponent.class
     ).exclude(
-    		InventoryComponent.class
+    		InventoryComponent.class,
+            ChaseComponent.class
 	).get();
 
     @SuppressWarnings("unchecked")
