@@ -371,8 +371,8 @@ public class MainMenuScreen implements Screen {
 
 				//class selection
 				if (!clientSel && game.clientCount <= game.maxClients) {
-					randomClassSel();
-					//manClassSel();
+					//randomClassSel();
+					manClassSel();
 				}
 
 				//send Hero/Client info to server after class Selection
