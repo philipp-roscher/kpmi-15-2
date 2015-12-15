@@ -26,6 +26,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 /**
@@ -45,12 +46,15 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 			= ComponentMapper.getFor(NetworkTransmissionComponent.class);
     private ComponentMapper<IsDeadComponent> idm
 			= ComponentMapper.getFor(IsDeadComponent.class);
+    private ComponentMapper<TeamComponent> tm
+            = ComponentMapper.getFor(TeamComponent.class);
 
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
 
     private Stage stage;
     private final ImageButton fightButton;
+    private final ImageButton spawnButton;
 
     private InputMultiplexer inputMultiplexer;
 
@@ -85,14 +89,35 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 InputSystem.this.keyDown(Input.Keys.A);
                 return true;
             }
-            
+
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 InputSystem.this.keyUp(Input.Keys.A);
             }
         });
 
+
+        spawnButton = new ImageButton(fightButtonStyle);
+        spawnButton.setWidth(64f);
+        spawnButton.setHeight(64f);
+        spawnButton.setPosition(136, 36);
+
+        spawnButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                InputSystem.this.keyDown(Input.Keys.S);
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                InputSystem.this.keyUp(Input.Keys.S);
+            }
+        });
+
+
         stage.addActor(fightButton);
+        stage.addActor(spawnButton);
 
         inputMultiplexer = new InputMultiplexer(stage, this);
 
@@ -106,7 +131,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 DynamicBodyComponent.class,
                 InputComponent.class,
                 WeaponComponent.class,
-                NetworkComponent.class).get());
+                NetworkComponent.class).get() );
     }
 
     public void update(float deltaTime) {

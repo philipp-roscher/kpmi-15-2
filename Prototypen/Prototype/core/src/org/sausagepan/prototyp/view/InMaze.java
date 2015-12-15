@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -22,6 +23,7 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
+import org.sausagepan.prototyp.managers.InputSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -142,6 +144,12 @@ public class InMaze implements Screen {
 
         //check if Game is finished/can be exited
         exitGame();
+
+        //wenn X is pressed teleport player in treasure room
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 115f, 1);
+
+        }
 	}
 
 
@@ -256,7 +264,7 @@ public class InMaze implements Screen {
             Rectangle player = ECS.getLocalCharacterEntity().getComponent(InjurableAreaComponent.class).area;
             //System.out.println("rectangle exit: "+rec);
             if (rec.overlaps(player)) {
-                System.out.println("Player "+game.clientId+" entered exit area");
+                //System.out.println("Player "+game.clientId+" entered exit area");
                 game.client.sendTCP( new Network.GameExitRequest(game.clientId));
             }
         }
