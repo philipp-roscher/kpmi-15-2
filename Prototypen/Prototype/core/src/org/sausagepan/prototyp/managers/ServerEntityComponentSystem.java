@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Server;
 
@@ -30,6 +31,7 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.GameServer;
+import org.sausagepan.prototyp.network.MonsterListener;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.MapInformation;
@@ -48,6 +50,8 @@ public class ServerEntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
     private Engine engine;
     private World world;
+    private ContactListener contactListener;
+
     private ItemFactory itemFactory;
     private Maze maze;
     private HashMap<Integer,ServerCharacterEntity> characters;
@@ -68,9 +72,10 @@ public class ServerEntityComponentSystem {
         MediaManager mediaManager = new MediaManager();
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
+        this.contactListener = new MonsterListener();
         this.maze = new Maze(mapInformation, world, gameServer.gameReady);
         this.startPositions = maze.getStartPositions();
-        maze.openSecretPassages();
+        this.maze.openSecretPassages();
         this.maxItemId = 1;
 
         this.engine = new Engine(); // Create Engine
@@ -92,9 +97,16 @@ public class ServerEntityComponentSystem {
 
         // At least - not before adding entities
         setUpEntitySystems();
+
+        setUpContactListener();
     }
 
     /* ............................................................................... METHODS .. */
+    /* Listener */
+    private void setUpContactListener() {
+        //Listener for Monsters to see clients
+        world.setContactListener(contactListener);
+    }
     @SuppressWarnings("unchecked")
     private void setUpEntitySystems() {
         // Movement System
@@ -199,6 +211,8 @@ public class ServerEntityComponentSystem {
         if (newCharacterTeamId == 2) {
             newCharacter.add(new DynamicBodyComponent(world, new Vector2(startPositions[3][0] / 32f, startPositions[3][1] / 32f), clientClass, newCharacter));
         }
+
+        System.out.println(newCharacter.getComponent(DynamicBodyComponent.class).dynamicBody.getUserData());
         
         characters.put(newCharacterId, newCharacter);
         this.engine.addEntity(newCharacter);

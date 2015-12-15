@@ -28,7 +28,6 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
-import org.sausagepan.prototyp.network.MonsterListener;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 
@@ -106,8 +105,6 @@ public class InMaze implements Screen {
 	public void show() {
 		this.batch = new SpriteBatch();
         ECS.setInputProcessor();
-		//Listener for Monsters to see clients
-		world.setContactListener(ECS.getContactListener());
 	}
 
 	@Override

@@ -49,7 +49,6 @@ public class EntityComponentSystem {
     /* ............................................................................ ATTRIBUTES .. */
     private Engine engine;
     private World world;
-    private ContactListener contactListener;
 
     private MediaManager mediaManager;
     private ItemFactory itemFactory;
@@ -96,8 +95,6 @@ public class EntityComponentSystem {
         this.localCharacterId = game.clientId;
 
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
-
-        this.contactListener = new MonsterListener();
         
         setUpLocalCharacterEntity();
         setUpMazeLights();
@@ -350,7 +347,4 @@ public class EntityComponentSystem {
         return maze;
     }
 
-    public ContactListener getContactListener() {
-        return contactListener;
-    }
 }
