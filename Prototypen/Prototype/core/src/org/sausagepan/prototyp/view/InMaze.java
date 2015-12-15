@@ -26,6 +26,7 @@ import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.network.Network;
@@ -224,6 +225,8 @@ public class InMaze implements Screen {
 
     private void updateCamera() {
         // project to camera
+    	// don't move camera if player is dead
+    	if(ECS.getLocalCharacterEntity().getComponent(IsDeadComponent.class) == null)
         camera.position.set(ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class)
                 .dynamicBody.getPosition().x, ECS.getLocalCharacterEntity()
                 .getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y, 0);

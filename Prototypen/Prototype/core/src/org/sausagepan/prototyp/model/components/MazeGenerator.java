@@ -73,7 +73,7 @@ public class MazeGenerator {
         this.gameMasterSecretPositions = new Array<Vector2>();
         this.mapItems = new Array<MapItem>();
 
-        this.positions = new float[5][2]; //[Player][0 - x, 1 - y], GM is Player 0, Team 1 1+2, Team 2 3+4
+        this.positions = new float[3][2]; //[TeamId][0 - x, 1 - y]
 
     }
 
@@ -125,16 +125,12 @@ public class MazeGenerator {
 		addNewMazeCell("tilemaps/spawnRoomTeamRed.tmx", 0, (int) Math.ceil(mazeHeight / 2f) + 1);
 		positions[1][0] =  16 * 32;
 		positions[1][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
-		positions[2][0] =  16 * 32;
-		positions[2][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
 
 		// Team Blues Spawn Room
 		addNewMazeCell("tilemaps/spawnRoomTeamBlue.tmx",
                 mazeWidth + 1, (int) Math.ceil(mazeHeight / 2f) + 1);
-		positions[3][0] =  mazeWidth * 32 * 32 + 48 * 32;
-		positions[3][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
-		positions[4][0] =  mazeWidth * 32 * 32 + 48 * 32;
-		positions[4][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
+		positions[2][0] =  mazeWidth * 32 * 32 + 48 * 32;
+		positions[2][1] =  (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 48 * 32;
 		
 	}
 	

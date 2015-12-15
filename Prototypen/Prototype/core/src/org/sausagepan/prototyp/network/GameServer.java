@@ -136,7 +136,7 @@ public class GameServer implements ApplicationListener {
 		map.height = height;
 		map.width = width;
 		map.entries = new HashMap<Vector2, Integer>();
-		System.out.println(map.entries);
+		//System.out.println(map.entries);
 		for(int i = width; i > 0; i--)
 			for(int j = height; j > 0; j--) {
 				if (i == (int) Math.ceil(width / 2f) && j == (int) Math.ceil(height / 2f)) {

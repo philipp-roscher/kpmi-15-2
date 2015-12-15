@@ -33,7 +33,7 @@ public class CharacterSpriteComponent implements Component {
         playerAnims.put("w", new Animation(.2f, textureAtlas.findRegions("w")));
 
         recentAnim    = playerAnims.get("s");
-        recentIdleImg = playerAnims.get("s").getKeyFrames()[0];
+        recentIdleImg = playerAnims.get("s").getKeyFrames()[1];
         this.sprite = new Sprite(recentIdleImg);
         //bigger size for dragon/GM
         if(characterClass == CharacterClass.DRAGON) this.sprite.setSize(.8f*2, 1*2);

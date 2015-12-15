@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -85,8 +86,10 @@ public class NetworkSystem extends EntitySystem {
         
         // send PositionUpdate (every tick) unless dead
         if(isDead != null) {
-        	if(System.currentTimeMillis() - isDead.deathTime > isDead.deathLength)
+        	if(System.currentTimeMillis() - isDead.deathTime > isDead.deathLength) {
         		entity.remove(IsDeadComponent.class);
+        		body.dynamicBody.setTransform(body.startPosition, 0f);
+        	}
         } else {
 	        posUpdate.position.moving     = input.moving;
 	        posUpdate.position.direction  = input.direction;
@@ -254,7 +257,7 @@ public class NetworkSystem extends EntitySystem {
             	
             	if(result.id == posUpdate.playerId) {
             		entity.add(new IsDeadComponent(System.currentTimeMillis(), 5000));
-            		body.dynamicBody.setTransform(body.startPosition, 0f);
+            		body.dynamicBody.setTransform(new Vector2(0,0), 0f);
             		network.client.sendTCP(new AcknowledgeDeath(posUpdate.playerId));
             	}
             }

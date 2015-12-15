@@ -13,6 +13,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
+import org.sausagepan.prototyp.model.components.SensorBodyComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.Sword;
@@ -36,6 +37,8 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
             = ComponentMapper.getFor(InputComponent.class);
     private ComponentMapper<InjurableAreaComponent> jm
             = ComponentMapper.getFor(InjurableAreaComponent.class);
+    private ComponentMapper<SensorBodyComponent> sbm
+    		= ComponentMapper.getFor(SensorBodyComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public PositionSynchroSystem() {}
 
@@ -134,6 +137,10 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
                         body.dynamicBody.getPosition().y-body.fixture.getShape().getRadius()
                 );
             }
+            
+            // Synchronize SensorBody with DynamicBody
+            if(sbm.get(entity) != null)
+            	sbm.get(entity).sensorBody.setTransform(body.dynamicBody.getPosition(), 0f);
         }
     }
 
