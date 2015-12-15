@@ -2,7 +2,6 @@ package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -20,7 +19,6 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.GameServer;
-import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
@@ -157,7 +155,7 @@ public class ServerNetworkSystem extends EntitySystem {
                     if(id != null) {
                     	if( (System.currentTimeMillis() - id.deathTime > id.deathLength)
                     			&& id.deathAcknowledged)
-                    		character.remove(IsDeadComponent.class);                		
+                    		character.remove(IsDeadComponent.class);
                     } else {
 	                    character.getComponent(DynamicBodyComponent.class)
 	                            .dynamicBody

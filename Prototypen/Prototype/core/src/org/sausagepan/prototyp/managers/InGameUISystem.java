@@ -19,6 +19,7 @@ import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 
 /**
@@ -101,6 +102,17 @@ public class InGameUISystem extends EntitySystem {
             font.setColor(1, 0, 0, 1);
             font.draw(batch, "Waiting for players... " + game.clientCount + "/" + game.maxClients, 630, 20);
             font.setColor(1, 1, 1, 1);
+        }
+        
+        IsDeadComponent isDead = entity.getComponent(IsDeadComponent.class);
+        if (isDead != null) {
+        	float respawnTime = (isDead.deathLength - (System.currentTimeMillis() - isDead.deathTime)) / 1000f;
+        	if(respawnTime >= 0) {
+	            font.setColor(1, 0, 0, 1);
+	            // TODO use proper coordinates??
+	            font.draw(batch, "Respawn in " + respawnTime, 350, 250);
+	            font.setColor(1, 1, 1, 1);
+        	}
         }
 
         //draw Winner/Loser after Game

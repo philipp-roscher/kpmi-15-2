@@ -20,7 +20,6 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
-import org.w3c.dom.css.Rect;
 
 /**
  * Created by georg on 18.10.15.

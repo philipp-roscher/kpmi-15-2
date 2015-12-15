@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
@@ -372,8 +371,8 @@ public class MainMenuScreen implements Screen {
 
 				//class selection
 				if (!clientSel && game.clientCount <= game.maxClients) {
-					//randomClassSel();
-					manClassSel();
+					randomClassSel();
+					//manClassSel();
 				}
 
 				//send Hero/Client info to server after class Selection

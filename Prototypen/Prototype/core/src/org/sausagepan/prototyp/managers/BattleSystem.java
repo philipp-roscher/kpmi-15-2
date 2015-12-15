@@ -132,7 +132,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
 					Vector2 position = new Vector2(body.dynamicBody.getPosition());
         			
         			// Reset human player to starting position, refill his health bar
-        			body.dynamicBody.setTransform(body.startPosition, 0f);
+        			body.dynamicBody.setTransform(new Vector2(0,0), 0f);
         			body.dynamicBody.setLinearVelocity(0f, 0f);
         			health.HP = health.initialHP;
         			
