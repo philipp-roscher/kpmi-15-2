@@ -249,7 +249,7 @@ public class MainMenuScreen implements Screen {
 			Drawable drawWitchF = mainMenuSkins.getDrawable("witch_f");
 			drawWitchF.setMinWidth(200f);
 			drawWitchF.setMinHeight(200f);
-			Button.ButtonStyle knightmStyle = new Button.ButtonStyle(drawKnightM, drawArcherF, drawShamanM);
+			Button.ButtonStyle knightmStyle = new Button.ButtonStyle(drawKnightM, drawKnightM, drawKnightM);
 			Button.ButtonStyle archerfStyle = new Button.ButtonStyle(drawArcherF, drawArcherF, drawArcherF);
 			Button.ButtonStyle ninjafStyle = new Button.ButtonStyle(drawNinjaF, drawNinjaF, drawNinjaF);
 			Button.ButtonStyle witchfStyle = new Button.ButtonStyle(drawWitchF, drawWitchF, drawWitchF);

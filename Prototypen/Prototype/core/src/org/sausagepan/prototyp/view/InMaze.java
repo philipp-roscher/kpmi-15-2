@@ -150,6 +150,12 @@ public class InMaze implements Screen {
 
         }
 
+        //wenn C is pressed teleport player in random room/out of spawn
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 95f, 1);
+
+        }
+
         // Exit Game
         if(gameOver && TimeUtils.timeSinceMillis(quittingTime)>3000) backToMainMenu();
 	}

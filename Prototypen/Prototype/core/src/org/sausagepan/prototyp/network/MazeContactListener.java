@@ -18,7 +18,7 @@ import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
@@ -85,13 +85,17 @@ public class MazeContactListener extends EntitySystem implements ContactListener
                 Entity detectedEntity
                     = (ServerCharacterEntity) contact.getFixtureB().getBody().getUserData();
 
-                detectingEntity.add(new ChaseComponent(
-                        detectedEntity.getComponent(DynamicBodyComponent.class).dynamicBody));
+                //checking for teamID so GM doesn't get chased
+                if(detectedEntity.getComponent(TeamComponent.class).TeamId != 0) {
+                    detectingEntity.add(new ChaseComponent(
+                            detectedEntity.getComponent(DynamicBodyComponent.class).dynamicBody));
 
-                if(GlobalSettings.DEBUGGING_ACTIVE) {
-                    System.out.println("Involved Monster: " + detectingEntity.getComponent(IdComponent.class).id);
-                    System.out.println("Involved Character: " + detectedEntity);
+                    if(GlobalSettings.DEBUGGING_ACTIVE) {
+                        System.out.println("Involved Monster: " + detectingEntity.getComponent(IdComponent.class).id);
+                        System.out.println("Involved Character: " + detectedEntity);
+                    }
                 }
+
             } else {
                 return;
             }
