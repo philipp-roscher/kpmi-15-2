@@ -213,7 +213,7 @@ public class MainMenuScreen implements Screen {
 		table.setFillParent(true);
 		stage.addActor(table);
 
-		table.setDebug(true);		//TODO: auf false setzten wenn fertig
+		table.setDebug(false);		//TODO: auf false setzten wenn fertig
 		//GameMaster
 		if (game.TeamId == 0) {
 			clientClass = CharacterClass.DRAGON;
@@ -233,11 +233,23 @@ public class MainMenuScreen implements Screen {
 
 			//make it a Drawable and then a ButtonStyle TODO different images for up,down.checked! (via .pack)
 			Drawable drawKnightM = mainMenuSkins.getDrawable("knight_m");
+			drawKnightM.setMinWidth(200f);
+			drawKnightM.setMinHeight(200f);
 			Drawable drawArcherF = mainMenuSkins.getDrawable("archer_f");
+			drawArcherF.setMinWidth(200f);
+			drawArcherF.setMinHeight(200f);
 			Drawable drawShamanM = mainMenuSkins.getDrawable("shaman_m");
+			drawShamanM.setMinWidth(200f);
+			drawShamanM.setMinHeight(200f);
 			Drawable drawFighterM = mainMenuSkins.getDrawable("fighter_m");
+			drawFighterM.setMinWidth(200f);
+			drawFighterM.setMinHeight(200f);
 			Drawable drawNinjaF = mainMenuSkins.getDrawable("ninja_f");
+			drawNinjaF.setMinWidth(200f);
+			drawNinjaF.setMinHeight(200f);
 			Drawable drawWitchF = mainMenuSkins.getDrawable("witch_f");
+			drawWitchF.setMinWidth(200f);
+			drawWitchF.setMinHeight(200f);
 			Button.ButtonStyle knightmStyle = new Button.ButtonStyle(drawKnightM, drawArcherF, drawShamanM);
 			Button.ButtonStyle archerfStyle = new Button.ButtonStyle(drawArcherF, drawArcherF, drawArcherF);
 			Button.ButtonStyle ninjafStyle = new Button.ButtonStyle(drawNinjaF, drawNinjaF, drawNinjaF);
@@ -246,8 +258,6 @@ public class MainMenuScreen implements Screen {
 			Button.ButtonStyle shamanmStyle = new Button.ButtonStyle(drawShamanM, drawShamanM, drawShamanM);
 			//buttons
 			Button knightMButton = new Button();
-			knightMButton.setHeight(200f);
-			knightMButton.setWidth(200f);
 			knightMButton.setStyle(knightmStyle);
 			knightMButton.addListener(new ClickListener() {
 				@Override
@@ -259,8 +269,6 @@ public class MainMenuScreen implements Screen {
 			});
 
 			Button archerFButton = new Button();
-			archerFButton.setHeight(200f);
-			archerFButton.setWidth(200f);
 			archerFButton.setStyle(archerfStyle);
 			archerFButton.addListener(new ClickListener() {
 				@Override
@@ -272,8 +280,6 @@ public class MainMenuScreen implements Screen {
 			});
 
 			Button ninjaFButton = new Button();
-			ninjaFButton.setHeight(200f);
-			ninjaFButton.setWidth(200f);
 			ninjaFButton.setStyle(ninjafStyle);
 			ninjaFButton.addListener(new ClickListener() {
 				@Override
@@ -285,8 +291,6 @@ public class MainMenuScreen implements Screen {
 			});
 
 			Button witchFButton = new Button();
-			witchFButton.setHeight(200f);
-			witchFButton.setWidth(200f);
 			witchFButton.setStyle(witchfStyle);
 			witchFButton.addListener(new ClickListener() {
 				@Override
@@ -298,8 +302,6 @@ public class MainMenuScreen implements Screen {
 			});
 
 			Button fighterMButton = new Button();
-			fighterMButton.setHeight(200f);
-			fighterMButton.setWidth(200f);
 			fighterMButton.setStyle(fightermStyle);
 			fighterMButton.addListener(new ClickListener() {
 				@Override
@@ -311,8 +313,6 @@ public class MainMenuScreen implements Screen {
 			});
 
 			Button shamanMButton = new Button();
-			shamanMButton.setHeight(200f);
-			shamanMButton.setWidth(200f);
 			shamanMButton.setStyle(shamanmStyle);
 			shamanMButton.addListener(new ClickListener() {
 				@Override
