@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -24,8 +25,11 @@ import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.network.MonsterListener;
+import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 
 import box2dLight.RayHandler;
@@ -54,13 +58,13 @@ public class InMaze implements Screen {
 	private float   elapsedTime    = 0;
 	private float   disconnectTime = 0;
 	private float   timeOut        = 5;
+    private float   waitTimeEnd    = 0;
 
     private Maze maze;
 
     // Physics
     private World world;    	// create a box2d world which calculates all physics
     public RayHandler rayHandler;   // handles rays of light
-
 
 	/* .......................................................................... CONSTRUCTORS .. */
     /**
@@ -137,6 +141,9 @@ public class InMaze implements Screen {
 
         ECS.update(delta);
         world.step(1 / 45f, 6, 2);    // time step at which world is updated
+
+        //check if Game is finished/can be exited
+        exitGame();
 	}
 
 
@@ -241,5 +248,53 @@ public class InMaze implements Screen {
                 dispose();
             }
         }
+    }
+
+    //check if player entered exit area
+    private void exitGame() {
+        for (Rectangle rec : maze.getExitWayRect()) {
+            if (rec.overlaps(ECS.getLocalCharacterEntity().getComponent(InjurableAreaComponent.class).area)) {
+                System.out.println("Player "+game.clientId+" entered exit area");
+                game.client.sendTCP( new Network.GameExitRequest(game.clientId));
+            }
+        }
+
+        game.client.addListener(new Listener() {
+            public void received(Connection connection, Object object) {
+                //receives Exit response
+                if (object instanceof Network.GameExitResponse) {
+                    Network.GameExitResponse result = (Network.GameExitResponse) object;
+                    int teamIdWinner = result.id;
+                    int teamIdHere = ECS.getCharacter(game.clientId).getComponent(TeamComponent.class).TeamId;
+                    //winning Team
+                    if (teamIdHere == teamIdWinner) {
+                        //draw Winner
+                        game.gameWon = true;
+                        System.out.println("You won!");
+                        //wait for 5 seconds
+                        waitTimeEnd += Gdx.graphics.getDeltaTime();
+                        if (waitTimeEnd >= 5) {
+                            //go back to mainMenu
+                            game.setScreen(new MainMenuScreen(game));
+                            dispose();
+                        }
+                    }
+                    //other teams
+                    else {
+                        //draw Loser
+                        game.gameLost = true;
+                        System.out.println("You lost!");
+                        //wait for 5 seconds
+                        waitTimeEnd += Gdx.graphics.getDeltaTime();
+                        if (waitTimeEnd >= 5) {
+                            //go back to mainMenu
+                            game.setScreen(new MainMenuScreen(game));
+                            dispose();
+                        }
+                    }
+                }
+            }});
+
+
     }
 }

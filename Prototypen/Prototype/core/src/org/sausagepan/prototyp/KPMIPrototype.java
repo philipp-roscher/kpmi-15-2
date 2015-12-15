@@ -32,6 +32,8 @@ public class KPMIPrototype extends Game {
 	public int clientCount;
 
 	public boolean gameReady = false;
+	public boolean gameWon = false;
+	public boolean gameLost = false;
 
 	public int TeamId;
 	public boolean TeamAssignmentReceived = false;

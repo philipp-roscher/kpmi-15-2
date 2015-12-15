@@ -103,6 +103,17 @@ public class InGameUISystem extends EntitySystem {
             font.setColor(1, 1, 1, 1);
         }
 
+        //draw Winner/Loser after Game
+        if (game.gameWon) {
+            font.setColor(0, 1, 0, 1);
+            font.draw(batch, "You have won!", (camera.viewportWidth / 2), (camera.viewportHeight / 2));
+        }
+
+        if (game.gameLost) {
+            font.setColor(1, 0, 0, 1);
+            font.draw(batch, "You have lost!",(camera.viewportWidth/2), (camera.viewportHeight/2 ));
+        }
+
         this.batch.end();
         this.camera.update();
     }
