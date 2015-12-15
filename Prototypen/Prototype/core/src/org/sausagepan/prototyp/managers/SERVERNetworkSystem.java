@@ -101,8 +101,7 @@ public class SERVERNetworkSystem extends EntitySystem {
         ntc.networkMessagesToProcess.clear();
 
         for(NetworkMessage nm : networkMessages) {
-        	Connection connection =
-        			nm.connection;
+        	Connection connection = nm.connection;
         	Object object = nm.object;
 
             // handle disconnection messages

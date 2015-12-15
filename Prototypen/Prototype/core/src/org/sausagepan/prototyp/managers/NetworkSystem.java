@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
@@ -245,8 +246,13 @@ public class NetworkSystem extends EntitySystem {
                 else
                     character = ECS.getMonster(result.playerId);
 
-                if(character != null)
+                if(character != null) {
+                    HealthComponent h = CompMappers.health.get(character);
+                    if(h.HP > result.HP && result.isHuman && localCharEntity.equals(ECS
+                            .getCharacter(result.playerId))) h
+                            .justHurt = true;
                     character.getComponent(HealthComponent.class).HP = result.HP;
+                }
             }
 
             if (object instanceof DeleteBulletResponse) {

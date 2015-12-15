@@ -6,6 +6,7 @@ import org.sausagepan.prototyp.managers.ChaseSystem;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
@@ -39,6 +40,8 @@ public abstract class CompMappers {
             = ComponentMapper.getFor(ChaseComponent.class);
     public static ComponentMapper<NetworkTransmissionComponent> netTrans
             = ComponentMapper.getFor(NetworkTransmissionComponent.class);
+    public static ComponentMapper<HealthComponent> health
+            = ComponentMapper.getFor(HealthComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     
     /* ............................................................................... METHODS .. */

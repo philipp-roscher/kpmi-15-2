@@ -1,11 +1,14 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.Bullet;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
 
@@ -23,6 +26,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.TimeUtils;
 
 /**
  * Created by georg on 31.10.15.
@@ -34,15 +38,9 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
     private OrthographicCamera camera;
     private boolean debug = true;
     private Maze maze;
+    private boolean damageFeedback=false;
+    private long damFeedbStartTime=0;
 
-    private ComponentMapper<WeaponComponent> wm
-            = ComponentMapper.getFor(WeaponComponent.class);
-    private ComponentMapper<HealthComponent> hm
-            = ComponentMapper.getFor(HealthComponent.class);
-    private ComponentMapper<DynamicBodyComponent> dm
-            = ComponentMapper.getFor(DynamicBodyComponent.class);
-    private ComponentMapper<InjurableAreaComponent> jm
-            = ComponentMapper.getFor(InjurableAreaComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     public VisualDebuggingSystem(
             ShapeRenderer shapeRenderer,
@@ -70,29 +68,23 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
-//        drawMazeColliders();
-//        drawWeaponDebugger();
+        if(GlobalSettings.DEBUGGING_ACTIVE) drawWeaponDebugger();
         shapeRenderer.end();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
         drawBattleDebugger();
+        shapeRenderer.setColor(Color.RED);
+        if(damageFeedback) shapeRenderer.rect(0,0,800,480);
         shapeRenderer.end();
+
+        if(TimeUtils.timeSinceMillis(damFeedbStartTime) > 30) damageFeedback = false;
     }
 
-    public void drawMazeColliders() {
-        // Colliders
-        MapObjects mo = maze.getColliders();
-        Rectangle r;
-        for(MapObject m : mo) {
-            r = ((RectangleMapObject) m).getRectangle();
-            shapeRenderer.rect(r.x/32f, r.y/32f, r.width/32f, r.height/32f);
-        }
-    }
 
     public void drawWeaponDebugger() {
         for (Entity entity : entities) {
             if(entity.getComponent(WeaponComponent.class) != null) {
-                WeaponComponent weapon = wm.get(entity);
+                WeaponComponent weapon = CompMappers.weapon.get(entity);
                 if(weapon.weapon.getClass().equals(Sword.class)) {
                     shapeRenderer.rect(
                             ((Sword)weapon.weapon).damageArea.x,
@@ -106,7 +98,7 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
                         shapeRenderer.rect(a.x, a.y, .1f, .1f);
             }
             if(entity.getComponent(InjurableAreaComponent.class) != null) {
-                InjurableAreaComponent area = jm.get(entity);
+                InjurableAreaComponent area = CompMappers.injurableArea.get(entity);
                 shapeRenderer.rect(area.area.x,area.area.y, area.area.width, area.area.height);
             }
         }
@@ -115,14 +107,19 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
     public void drawBattleDebugger() {
         for (Entity entity : entities) {
             if(entity.getComponent(HealthComponent.class) != null) {
-                HealthComponent health = hm.get(entity);
-                DynamicBodyComponent body = dm.get(entity);
+                HealthComponent health = CompMappers.health.get(entity);
+                DynamicBodyComponent body = CompMappers.dynBody.get(entity);
                 shapeRenderer.rect(
                         body.dynamicBody.getPosition().x - .5f,
                         body.dynamicBody.getPosition().y + .7f,
                         ((float)health.HP)/health.initialHP,
                         .05f
                 );
+                if(health.justHurt) {
+                    health.justHurt = false;
+                    this.damageFeedback = true;
+                    this.damFeedbStartTime = TimeUtils.millis();
+                }
             }
         }
     }
