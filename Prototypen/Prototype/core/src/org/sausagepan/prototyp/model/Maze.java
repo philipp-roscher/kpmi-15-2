@@ -110,7 +110,10 @@ public class Maze extends EntitySystem {
 
             // Look for exit door objects and destroy bodies
             if(mo.getName().equals("exitWay")) {
-                System.out.println("found exitWay Stuff");
+                r.setX(r.getX() / 32);
+                r.setY(r.getY() / 32);
+                r.setHeight(r.getHeight() / 32);
+                r.setWidth(r.getWidth() / 32);
                 exitWayRect.add(r);
                 exitWayBody.add(groundBody);
             }
@@ -126,6 +129,9 @@ public class Maze extends EntitySystem {
         }
     }
 
+    /*
+    destroy body in exit area
+     */
     private void destroyExitBody() {
         for(Body b : exitWayBody)
             world.destroyBody(b);

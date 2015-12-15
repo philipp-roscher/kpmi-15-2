@@ -253,7 +253,9 @@ public class InMaze implements Screen {
     //check if player entered exit area
     private void exitGame() {
         for (Rectangle rec : maze.getExitWayRect()) {
-            if (rec.overlaps(ECS.getLocalCharacterEntity().getComponent(InjurableAreaComponent.class).area)) {
+            Rectangle player = ECS.getLocalCharacterEntity().getComponent(InjurableAreaComponent.class).area;
+            //System.out.println("rectangle exit: "+rec);
+            if (rec.overlaps(player)) {
                 System.out.println("Player "+game.clientId+" entered exit area");
                 game.client.sendTCP( new Network.GameExitRequest(game.clientId));
             }
@@ -270,10 +272,10 @@ public class InMaze implements Screen {
                     if (teamIdHere == teamIdWinner) {
                         //draw Winner
                         game.gameWon = true;
-                        System.out.println("You won!");
+                        //System.out.println("You won!");
                         //wait for 5 seconds
                         waitTimeEnd += Gdx.graphics.getDeltaTime();
-                        if (waitTimeEnd >= 5) {
+                        if (waitTimeEnd >= 50) {
                             //go back to mainMenu
                             game.setScreen(new MainMenuScreen(game));
                             dispose();
@@ -283,10 +285,10 @@ public class InMaze implements Screen {
                     else {
                         //draw Loser
                         game.gameLost = true;
-                        System.out.println("You lost!");
+                       // System.out.println("You lost!");
                         //wait for 5 seconds
                         waitTimeEnd += Gdx.graphics.getDeltaTime();
-                        if (waitTimeEnd >= 5) {
+                        if (waitTimeEnd >= 50) {
                             //go back to mainMenu
                             game.setScreen(new MainMenuScreen(game));
                             dispose();

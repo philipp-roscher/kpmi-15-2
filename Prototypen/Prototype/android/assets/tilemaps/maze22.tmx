@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="65">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="68">
  <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzdlkFuw0AIRYmUOpsuYku+Qe9/mbhSoySLNBeprc5XEMLAYDuVukBj2QwPA8Nw3BEdE9KOciaiB/0+t0k7WflP/GG0cTPkkz1z3f24921n61g2wT+T7d+38b0p66PCXq2+xcfeLB9xfBW/KyvyFqmPSfdCT5G564L8Ez1rt6bOZb41Vm38pc0uqIszZ/HhNxdp56DkUNM7kc9vGV9y5/zIxGvSs/hR9lb8j43570WXn4d9sc3fXcvK+92FvbuKMzSI73yP3D/XKyKxX5p/rR4tfi/4fK/G1+o/ei5ras/rV71iO+pDE/RjSb+aROvdXgwsfmPkdguRfCsG8EurhegdtoSfka9i7z5jV8s/Zpk1Zjn0Cdzz6DvoKdr8JWOQqYdoHLX/x8q5hwr2EJilYJvPX9r/o9as2QtMPHtsSF/4N8HVYsfzp4nH5GfG6z9rn4FM/ps/5EPgg7wH1uyPXv9fIw7W3Snn1YxMfnvnw5MfpJ/aCA==
+   eJzdls0KwjAMxyPodvHgBnsD3/9lnKCoB/VF3LB/DCGmadwUPIQWzfJr89VsFkSbgDSDHInoTs99E7QTlX/i94ONiyF7tue6y+Hb1cLWsWyCfyT7fDfj/yqt9wJ7pfoWH99G+fDjt/htWhE3T36Muid6iYxd6+Tv6JW7JXku462xSv0vbbZOXdScxce5uUg7tRJDTW9HeX7D+JLbpPvVwn7EX6OexdfY6FMyh+fgb2fmr5Mur4dlYvDfzmmVfRK/nUUN9ay2eI88iT147+rEEplf0XqR+WjxO8Hn32p8Lf+9dem5P7dp3b9TbHvPUDnP8Um/GkXr3TkfWPzKiO0cIvmWD3AuLRe8b9gn/Igckr3rG7ta/DHLTDHLoU/gnUffQU/R5i/pg0g+eP2o3R8r59YF7N4xS8E2n7+0+yPXrNkLTOxzbEiX+BfB1XzH46dJjslrJtd/pq6BSPyrH/IhOIN8B6bsj7n+P4UfrLdTzqsR0eaqUnkA2U7bdA==
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztVgsKgzAM7Z03GXbqBfaDjWGnXmA/2G64PLAYpaXTWerABw/a+NLQmoQIER4JMSWu2Vo69hnzj+vvNq3NrlEQS+KFrZVjXzH/vP5u09rsU0DmlngD/lvlVDXahHEM5AZbRFxatAWjL5yIR4/nu/AmvgLG/2dEns9fsDXqoVu7yB30N93rdK1oW8r2kvlJ0fRGyfTcD3ael6iHbu0id9DfdK/TtaJtJdsr5qdE0xsV03M/2Oe8nA7iwPGRf77rzQXU2ypgfNTbOWB8EzbELXFH3BMPoj1/mea3MXEl3oh34oP4FO35yzS/jYUhd/r1HfCesj6n752+nb+gs83geE81IDZgmr9sOtcMPmPGjP74AKWeYyM=
+   eJztVgsKwjAM7Z11yGrdBfyBIqt1F/AHekMTaFm2tdTNlU7og8e69C2hXRLCWHwI4Aq4JGvueS/I97ned2lddgMFvADPZC097xX5vtT7Lq3LPgUUfkkw4H+rvKpaKwjHQGmxZcC5Q6sIQ+EIPAT078Mb+IoY/5+RBfY/I2ush3btYu5gfzO9TrBunxRaw4mds7o3cuLDPI0/mpdYD+3axdzB/mZ6nWLdPqm0RhK7ZHVvlMSHeRp/KS+ngzxyfMyl0PXmA9bbImJ8rLdTxPg2rIEb4Ba4A+5Zc/6yzW9j4gq8Ae/AB/DJmvOXbX4bC0PO9Os94H1y7afvmb6dv1DnmsHxPuWA2Ajb/OXS+WbwhISE/vgAJtNg8w==
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
@@ -20,7 +20,7 @@
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztlk0OgjAQhecmIEQTjD8botdQOQUxIvdf2SY0TJoCb/ojLnzJWxin85XpdKAhogPgh3LGfpc0qlDeD/9nYD6T80yYdkCs4aNCcqbml4tR6fiFMFafWT24Ut4E8l3qld9AnKseMfid8mtFPqpYfPsM53SJzM8dOeZ0BfkV6EzAb61YfR/su6t7B519fKbWgHU80pcSSeZfCm1X5oc8v55Tpo+QeRWbr/vP9M8xgH/yXGvW8zsnrUNo/3WM71OHGP3/tPaAzh7tm/KdZDPYJcNuyG/+hNSgZXxpHtM/0nX87vFnR7+lbD5yBlNM1/ewlL9Ug57c5+fD9OGn0p//O/wYcyiEv8YebP639+Dio+8RvscciJ96/3wAcYo0iQ==
+   eJztlk0OgjAQhecmIEQTjD8botdQOQUxIvdf2SY0TiYV3rRFXPiStyBM+/VnOm1DRDvAN+OMfZf0VmG8Hf5nYH+uzyNh2gCxjo8K6XNufjkZNR+/UMbaPasHV8arSL5PvfETiPOtRwp+Z/xYkI8qFV/u4ZhOifm5p48xnUF+xcznl4t/mYLfilh7HuTZtbkja5ysk76aWgO28UheaqSpf3NovTA/Zv62Trk8QupVar7NJZc/+wj+IbCta8/PnHYdYvOvY/yQdUiR/3cxhkrhi/GVdDXYJ8duCH978foTswYt42v7cfmjbcfPHp87+paSfGQPPjF9dV7Ln1qDnvz7F8IM4c+lP/93+CnqUAx/iTFI/rfH4OOj98jYu1Zz/7wAt6Mzuw==
   </data>
  </layer>
  <objectgroup name="colliderWalls">
@@ -48,9 +48,10 @@
   <object id="35" x="128" y="192" width="64" height="96"/>
   <object id="36" x="0" y="32" width="480" height="64"/>
   <object id="37" x="544" y="32" width="480" height="64"/>
-  <object id="62" x="672" y="320" width="320" height="96"/>
   <object id="63" x="640" y="608" width="64" height="96"/>
   <object id="64" x="800" y="608" width="192" height="96"/>
+  <object id="66" x="672" y="320" width="128" height="96"/>
+  <object id="67" x="864" y="320" width="128" height="96"/>
  </objectgroup>
  <objectgroup name="lights">
   <object id="7" name="light" x="992" y="128" width="32" height="32"/>
