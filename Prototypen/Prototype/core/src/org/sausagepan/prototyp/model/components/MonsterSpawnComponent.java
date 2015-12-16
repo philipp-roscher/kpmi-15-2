@@ -22,7 +22,6 @@ public class MonsterSpawnComponent implements Component {
         this.count = 5;
         this.monsterSpawn = false;
         this.masterPosition = new Vector2(0,0);
-        this.mapMonsterObject = createMonsters();
     }
 
     /*
@@ -47,5 +46,10 @@ public class MonsterSpawnComponent implements Component {
     returns number monsters that should be spawned
      */
     public int getSpawnCount () {return count; }
+    
+    public void setMasterPosition(Vector2 masterPosition) {
+    	this.masterPosition = masterPosition;
+        this.mapMonsterObject = createMonsters();
+    }
 
 }

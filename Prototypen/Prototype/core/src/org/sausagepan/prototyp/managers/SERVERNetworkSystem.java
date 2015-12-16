@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -13,6 +14,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -31,6 +33,7 @@ import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.NewItem;
+import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
@@ -91,7 +94,8 @@ public class SERVERNetworkSystem extends EntitySystem {
                 (object instanceof ItemPickUp) ||
                 (object instanceof NewItem) ||
                 (object instanceof YouDiedResponse) ||
-                (object instanceof GameExitResponse)
+                (object instanceof GameExitResponse) ||
+                (object instanceof NewMonster)
             )
                 server.sendToAllTCP(object);
             
@@ -217,6 +221,23 @@ public class SERVERNetworkSystem extends EntitySystem {
 
 
 
+                }
+            }
+            
+            if (object instanceof MonsterSpawnComponent) {
+                MonsterSpawnComponent mon = (MonsterSpawnComponent) object;
+
+                if (mon.monsterSpawn) {
+                    int count = mon.getSpawnCount();
+                    //create as many monsters as count implies
+                    for (int i=1; i <= count; i++) {
+                        int id = ECS.createMonster(mon.getMonster());
+                        NewMonster newMonster = new NewMonster(id, mon.getMonster());
+                        ntc.networkMessagesToProcess.add(newMonster);
+                    }
+
+                    //so it only spawns monster one time per button press
+                    mon.monsterSpawn = false;
                 }
             }
         }
