@@ -121,7 +121,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
         stage.addActor(fightButton);
 
-        inputMultiplexer = new InputMultiplexer(stage, this);
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(this);
 
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
@@ -238,7 +240,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
                 default:break;
             }
-            if(keycode != Input.Keys.A || keycode != Input.Keys.S) input.moving = true;
+            if(keycode != Input.Keys.A && keycode != Input.Keys.S) input.moving = true;
         }
         return true;
     }
