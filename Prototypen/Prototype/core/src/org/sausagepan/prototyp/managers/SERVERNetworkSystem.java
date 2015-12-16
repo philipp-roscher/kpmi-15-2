@@ -91,7 +91,7 @@ public class SERVERNetworkSystem extends EntitySystem {
                 (object instanceof ItemPickUp) ||
                 (object instanceof NewItem) ||
                 (object instanceof YouDiedResponse) ||
-                    (object instanceof GameExitResponse)
+                (object instanceof GameExitResponse)
             )
                 server.sendToAllTCP(object);
             

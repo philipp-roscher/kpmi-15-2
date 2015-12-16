@@ -45,11 +45,18 @@ public class KPMIPrototype extends Game {
 		font  = new BitmapFont();
 		mediaManager = new MediaManager();
 
+		startClient();
+		
+		// switch to main menu screen
+		this.setScreen(new MainMenuScreen(this));
+	}
+
+	public void startClient() {
 		// Client starten
 		client = new Client();
 		new Thread(client).start();
 		Network.register(client);
-
+		
 		//Listeners to receive data from server
 		client.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
@@ -58,13 +65,13 @@ public class KPMIPrototype extends Game {
 					IDAssignment result = (IDAssignment) object;
 					clientId = result.id;
 				}
-
+	
 				//receives current number of clients
 				if (object instanceof GameClientCount) {
 					GameClientCount result = (GameClientCount) object;
 					clientCount = result.count;
 					if(result.gameReady)
-                        gameReady = true;
+	                    gameReady = true;
 				}
 				
 				//receives Team ID
@@ -79,16 +86,13 @@ public class KPMIPrototype extends Game {
 					MaxClients result = (MaxClients) object;
 					maxClients = result.count;
 				}
-
+	
 				//receives game start notifier
 				if(object instanceof GameStart) {
 					gameReady = true;
 				}
 			}
 		});
-
-		// switch to main menu screen
-		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
@@ -105,4 +109,19 @@ public class KPMIPrototype extends Game {
 		client.stop();
 	}
 
+	public void reset() {
+		client.stop();
+		this.connected = false;
+		this.clientId = 0;
+		this.clientCount = 0;
+		this.maxClients = 0;
+		this.TeamId = 0;
+		this.TeamAssignmentReceived = false;
+		this.gameLost = false;
+		this.gameReady = false;
+		this.gameWon = false;
+		
+		startClient();
+	}
+	
 }
