@@ -195,6 +195,11 @@ public class Maze extends EntitySystem {
         for(Body b : entranceDoorBodies)
             world.destroyBody(b);
         entranceDoorBodies.clear();
+        
+        // hide sprites for entrance doors
+        if(tiledMapRenderer != null)
+        	tiledMapRenderer.hideEntranceDoors();
+        
         destroyExitBody();
     }
 

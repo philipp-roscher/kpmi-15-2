@@ -36,6 +36,7 @@ public class MazeGenerator {
 	TiledMapTileLayer walls;
 	TiledMapTileLayer objects;
 	TiledMapTileLayer tops;
+	TiledMapTileLayer entranceDoors;
     MapLayer          colliderWalls;
     MapLayer          lights;
 
@@ -64,6 +65,7 @@ public class MazeGenerator {
         this.walls   = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.objects = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.tops    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
+        this.entranceDoors    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.colliderWalls = new MapLayer();
         this.lights        = new MapLayer();
 
@@ -107,6 +109,7 @@ public class MazeGenerator {
 		map.getLayers().add(walls);         			// walls layer
 		map.getLayers().add(objects);       			// objects layer
 		map.getLayers().add(tops);          			// layer rendered above character
+		map.getLayers().add(entranceDoors);
 		map.getLayers().add(colliderWalls); 			// layer containing collider rectangles
         map.getLayers().add(lights);
 	}
@@ -156,7 +159,7 @@ public class MazeGenerator {
 		listOfWalls.add(topLeft);
 
         Rectangle doorLeft = new Rectangle(
-                32 * 31 + 30,
+                32 * 31,
                 (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 55 * 32,
                 2,
                 3*32
@@ -180,7 +183,7 @@ public class MazeGenerator {
         listOfWalls.add(topRight);
 
         Rectangle doorRight = new Rectangle(
-                (mazeWidth + 1) * 32 * 32,
+                (mazeWidth + 1) * 32 * 32+30,
                 (int) Math.ceil(mazeHeight / 2f) * 32 * 32 + 55 * 32,
                 2,
                 3*32
@@ -205,7 +208,7 @@ public class MazeGenerator {
 
         Rectangle doorBottom = new Rectangle(
                 (int) Math.ceil (mazeWidth / 2f) * 32 * 32 + 15*32,
-                32 * 31 + 30,
+                32 * 28 + 30,
                 2*32,
                 2
         );
@@ -243,32 +246,33 @@ public class MazeGenerator {
 		calculateLightPositions(tiledMap, x, y);
         calculateObjectPositions(tiledMap, x, y);
 		
-		for(int layer_nr = 0; layer_nr < 6; layer_nr++){ 	//für alle Layer
-			if(layer_nr == 4){								
+		for(int layer_nr = 0; layer_nr < tiledMap.getLayers().getCount(); layer_nr++) {	//für alle Layer			
+			if(layer_nr == 4) {
 				addNewColliderLayer(tiledMap, x, y, "colliderWalls");
-				return;
 			}
-			
-			if(layer_nr == 5){								
+			else if(layer_nr == 5) {						
 				addNewColliderLayer(tiledMap, x, y, "gameMasterColliderWalls");
-				return;
-			}
+			} else {
+				// get Layer from Tiled Map
+				if(tiledMap.getLayers().get(layer_nr) != null &&
+						tiledMap.getLayers().get(layer_nr) instanceof TiledMapTileLayer) {
 
-			// get Layer from Tiled Map
-			TiledMapTileLayer newLayer = (TiledMapTileLayer) tiledMap.getLayers().get(layer_nr);
-			
-			for(int k = 0; k < 32; k++){					// füge alle 32*32 Positionen ein
-				for(int l = 0; l < 32; l++){
-						Cell cell = new Cell();
-						
-						if(newLayer.getCell(k, l) != null)	cell.setTile(newLayer.getCell(k, l).getTile()); //hol dir die Kachel falls die Zelle existiert
+					TiledMapTileLayer newLayer = (TiledMapTileLayer) tiledMap.getLayers().get(layer_nr);
+					for(int k = 0; k < 32; k++){					// füge alle 32*32 Positionen ein
+						for(int l = 0; l < 32; l++){
+							Cell cell = new Cell();
+							
+							if(newLayer.getCell(k, l) != null)	cell.setTile(newLayer.getCell(k, l).getTile()); //hol dir die Kachel falls die Zelle existiert
 
-						switch(layer_nr){															//setze Kachel auf entsprechenden Layer an korrekte Position
-							case 0: ground.setCell(k  + 32*x, l + 32*y, cell);break;
-							case 1: walls.setCell(k  + 32*x, l + 32*y, cell);break;
-							case 2: objects.setCell(k  + 32*x, l + 32*y, cell);break;
-							case 3: tops.setCell(k  + 32*x, l + 32*y, cell);break;
+							switch(layer_nr){															//setze Kachel auf entsprechenden Layer an korrekte Position
+								case 0: ground.setCell(k  + 32*x, l + 32*y, cell);break;
+								case 1: walls.setCell(k  + 32*x, l + 32*y, cell);break;
+								case 2: objects.setCell(k  + 32*x, l + 32*y, cell);break;
+								case 3: tops.setCell(k  + 32*x, l + 32*y, cell);break;
+								case 7: entranceDoors.setCell(k+32*x, l+32*y, cell);break;
+							}
 						}
+					}
 				}
 			}
 		}
@@ -282,36 +286,36 @@ public class MazeGenerator {
      */
     private void addNewColliderLayer(TiledMap map, int x, int y, String layer) {
         MapLayer colliderLayer = map.getLayers().get(layer); // get collider layer
-
-        for (MapObject mo : colliderLayer.getObjects()) {    // for every object in the original collider layer
-            RectangleMapObject nmo = new RectangleMapObject();  // create new rectangle map object
-
-            // Store x, y, width, height in rectangle object
-            Rectangle pos = new Rectangle(
-                    mo.getProperties().get("x", Float.class) + x*32*32,
-                    mo.getProperties().get("y", Float.class) + y*32*32,
-                    mo.getProperties().get("width", Float.class),
-                    mo.getProperties().get("height", Float.class)
-            );
-
-            if(mo.getName() != null && mo.getName().equals("lockedDoor"))
-                nmo.setName("lockedDoor");
-
-            if(mo.getName() != null && mo.getName().equals("secretWall"))
-                nmo.setName("secretWall");
-
-            if (mo.getName() != null && mo.getName().equals("exitWay"))
-                nmo.setName("exitWay");
-
-            // set rectangle objects rectangle properties to the new position and original width and height
-            nmo.getRectangle().set(pos);
-
-            // ad recently created new collider object to layer
-            if (layer.equals("colliderWalls"))
-            	colliderWalls.getObjects().add(nmo);
-
-            colliderWalls.setName("colliderWalls");
-        }
+        if(colliderLayer != null)
+	        for (MapObject mo : colliderLayer.getObjects()) {    // for every object in the original collider layer
+	            RectangleMapObject nmo = new RectangleMapObject();  // create new rectangle map object
+	
+	            // Store x, y, width, height in rectangle object
+	            Rectangle pos = new Rectangle(
+	                    mo.getProperties().get("x", Float.class) + x*32*32,
+	                    mo.getProperties().get("y", Float.class) + y*32*32,
+	                    mo.getProperties().get("width", Float.class),
+	                    mo.getProperties().get("height", Float.class)
+	            );
+	
+	            if(mo.getName() != null && mo.getName().equals("lockedDoor"))
+	                nmo.setName("lockedDoor");
+	
+	            if(mo.getName() != null && mo.getName().equals("secretWall"))
+	                nmo.setName("secretWall");
+	
+	            if (mo.getName() != null && mo.getName().equals("exitWay"))
+	                nmo.setName("exitWay");
+	
+	            // set rectangle objects rectangle properties to the new position and original width and height
+	            nmo.getRectangle().set(pos);
+	
+	            // ad recently created new collider object to layer
+	            if (layer.equals("colliderWalls"))
+	            	colliderWalls.getObjects().add(nmo);
+	
+	            colliderWalls.setName("colliderWalls");
+	        }
     }
 
     /**

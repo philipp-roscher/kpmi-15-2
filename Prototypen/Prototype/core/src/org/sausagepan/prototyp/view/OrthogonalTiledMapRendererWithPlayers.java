@@ -89,7 +89,9 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
         int currentLayer = 0;
         for(MapLayer layer : map.getLayers()) {
             if(layer instanceof TiledMapTileLayer) {
-                renderTileLayer((TiledMapTileLayer) layer);
+                if(layer.isVisible())
+                	renderTileLayer((TiledMapTileLayer) layer);
+                
                 currentLayer++;
                 if(currentLayer == drawSpritesAfterLayer) {
                     for(Sprite s : sprites)
@@ -125,6 +127,11 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
             }
         endRender();
     }
+
+
+	public void hideEntranceDoors() {
+		map.getLayers().get(4).setVisible(false);		
+	}
 
     
     /* ......................................................................................... GETTERS & SETTERS .. */

@@ -96,4 +96,9 @@
    </properties>
   </object>
  </objectgroup>
+ <layer name="entranceDoors" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJwLZmBg0AFibSiNjLWwiGvjwOh6selDFw8CYl2GgQMqg8B+/QG033aA7TcbtX9E228/wParMQxs/gfZP9D+H0j7QeWf3gDaP9D+H+n2D3T9O9D+H7V/1P5R+0ftH6n2D3T/ZzD4PxCI1YFYA4g1kTA2MXIwPnMDgBgA5aAVdw==
+  </data>
+ </layer>
 </map>

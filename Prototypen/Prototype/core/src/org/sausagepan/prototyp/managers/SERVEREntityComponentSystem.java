@@ -77,6 +77,7 @@ public class SERVEREntityComponentSystem {
         this.maze = new Maze(mapInformation, world, gameServer.gameReady);
         this.startPositions = maze.getStartPositions();
         this.maze.openSecretPassages();
+        this.maze.openEntranceDoors();
         this.maxItemId = 1;
         this.maxMonsterId = 1;
 
