@@ -207,6 +207,7 @@ public class InMaze implements Screen {
     }
 
     private void backToMainMenu() {
+    	game.reset();
         game.setScreen(new MainMenuScreen(game));
         dispose();
     }
@@ -277,9 +278,7 @@ public class InMaze implements Screen {
             if( disconnectTime == 0 ) disconnectTime = elapsedTime;
             else
             if(elapsedTime - disconnectTime > timeOut) {
-                disconnectTime = 0;
-                game.setScreen(new MainMenuScreen(game));
-                dispose();
+                backToMainMenu();
             }
         }
     }

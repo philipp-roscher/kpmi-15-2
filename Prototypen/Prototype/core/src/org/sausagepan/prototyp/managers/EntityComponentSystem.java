@@ -61,7 +61,8 @@ public class EntityComponentSystem {
     private HashMap<Integer,MonsterEntity> monsters;
     private HashMap<Integer,ItemEntity> items;
     private KPMIPrototype game;
-
+    private RayHandler rayHandler;
+    
     private EntityFactory entityFactory;
 
     private int localCharacterId;
@@ -90,6 +91,7 @@ public class EntityComponentSystem {
         this.shpRend = new ShapeRenderer();
         this.characterClass = characterClass;
         this.TeamId = TeamId;
+        this.rayHandler = rayHandler;
 
         this.engine = new Engine(); // Create Engine
         this.characters = new HashMap<Integer,CharacterEntity>();
@@ -141,7 +143,7 @@ public class EntityComponentSystem {
 
         // Debugging System
         VisualDebuggingSystem visualDebuggingSystem
-                = new VisualDebuggingSystem(shpRend, camera, maze);
+                = new VisualDebuggingSystem(shpRend, camera, maze, rayHandler);
         visualDebuggingSystem.addedToEngine(engine);
         engine.addEntityListener(Family.all(HealthComponent.class,DynamicBodyComponent.class,InjurableAreaComponent.class).get(), visualDebuggingSystem);
 

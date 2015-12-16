@@ -28,6 +28,8 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import box2dLight.RayHandler;
+
 /**
  * Created by georg on 31.10.15.
  */
@@ -40,15 +42,18 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
     private Maze maze;
     private boolean damageFeedback=false;
     private long damFeedbStartTime=0;
+    private RayHandler rayHandler;
 
     /* ........................................................................... CONSTRUCTOR .. */
     public VisualDebuggingSystem(
             ShapeRenderer shapeRenderer,
             OrthographicCamera camera,
-            Maze maze) {
+            Maze maze,
+            RayHandler rayHandler) {
         this.shapeRenderer = shapeRenderer;
         this.camera = camera;
         this.maze = maze;
+        this.rayHandler = rayHandler;
     }
     /* ............................................................................... METHODS .. */
     @SuppressWarnings("unchecked")
@@ -73,11 +78,13 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
         drawBattleDebugger();
-        shapeRenderer.setColor(Color.RED);
-        if(damageFeedback) shapeRenderer.rect(0,0,800,480);
+        this.rayHandler.setAmbientLight(.5f, .1f, .1f, 1);
         shapeRenderer.end();
 
-        if(TimeUtils.timeSinceMillis(damFeedbStartTime) > 30) damageFeedback = false;
+        if(TimeUtils.timeSinceMillis(damFeedbStartTime) > 100){
+        	damageFeedback = false;
+            this.rayHandler.setAmbientLight(.3f, .3f, .3f, 1);        	
+        }
     }
 
 
