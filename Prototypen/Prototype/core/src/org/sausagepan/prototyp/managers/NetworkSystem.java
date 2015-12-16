@@ -1,14 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.ItemType;
@@ -20,7 +13,6 @@ import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.MapCharacterObject;
@@ -48,8 +40,14 @@ import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 /**
  * Created by georg on 29.10.15.
@@ -218,9 +216,9 @@ public class NetworkSystem extends EntitySystem {
             			monster.getComponent(DynamicBodyComponent.class)
                                 .dynamicBody
                                 .setLinearVelocity(e.getValue().velocity);
-//            			if(e.getValue().direction != null)
-//            				character.getComponent(InputComponent.class).direction
-//                                    = e.getValue().direction;
+            			if(e.getValue().direction != null)
+            				monster.getComponent(InputComponent.class).direction
+                            	= e.getValue().direction;
                     }
                 }
             }

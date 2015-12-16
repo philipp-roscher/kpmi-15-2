@@ -1,12 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.MazeObjectType;
@@ -39,6 +32,12 @@ import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 
 import box2dLight.RayHandler;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * This class creates and returns {@link Entity}s for use in the game world

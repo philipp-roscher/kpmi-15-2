@@ -1,11 +1,10 @@
 package org.sausagepan.prototyp.model.components;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.math.Vector2;
-
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.WeaponItem;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by Sara on 15.12.15.

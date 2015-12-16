@@ -1,8 +1,5 @@
 package org.sausagepan.prototyp.Utils;
 
-import com.badlogic.ashley.core.ComponentMapper;
-
-import org.sausagepan.prototyp.managers.ChaseSystem;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -13,6 +10,8 @@ import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SensorComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+
+import com.badlogic.ashley.core.ComponentMapper;
 
 /**
  * Created by georg on 15.12.15.

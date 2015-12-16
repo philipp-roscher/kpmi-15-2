@@ -1,11 +1,8 @@
 package org.sausagepan.prototyp.network;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.sausagepan.prototyp.managers.SERVEREntityComponentSystem;
 import org.sausagepan.prototyp.model.ServerSettings;
@@ -16,9 +13,12 @@ import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 
 public class GameServer implements ApplicationListener {
 	private Server server;

@@ -1,5 +1,20 @@
 package org.sausagepan.prototyp.view;
 
+import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.Utils.UnitConverter;
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.managers.EntityComponentSystem;
+import org.sausagepan.prototyp.model.GlobalSettings;
+import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.network.Network.MapInformation;
+
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -10,7 +25,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,23 +33,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-
-import org.sausagepan.prototyp.KPMIPrototype;
-import org.sausagepan.prototyp.Utils.UnitConverter;
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.managers.EntityComponentSystem;
-import org.sausagepan.prototyp.managers.InputSystem;
-import org.sausagepan.prototyp.model.GlobalSettings;
-import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
-import org.sausagepan.prototyp.model.components.IsDeadComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.components.TeamComponent;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.network.Network.MapInformation;
-
-import box2dLight.RayHandler;
 
 /**
  * Screen for all ingame action. Here everything is rendered to the screen

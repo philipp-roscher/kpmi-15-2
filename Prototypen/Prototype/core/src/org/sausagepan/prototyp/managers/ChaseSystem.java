@@ -1,5 +1,11 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
+import org.sausagepan.prototyp.model.components.ChaseComponent;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -7,11 +13,6 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
-
-import org.sausagepan.prototyp.Utils.CompMappers;
-import org.sausagepan.prototyp.model.components.ChaseComponent;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 
 /**
@@ -24,6 +25,7 @@ public class ChaseSystem extends EntitySystem implements EntityListener {
     /* ........................................................................... CONSTRUCTOR .. */
     public ChaseSystem(){}
     /* ............................................................................... METHODS .. */
+    @SuppressWarnings("unchecked")
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(
                 ChaseComponent.class, DynamicBodyComponent.class)
@@ -42,24 +44,26 @@ public class ChaseSystem extends EntitySystem implements EntityListener {
                     chc.body.getPosition().x - dbc.dynamicBody.getPosition().x,
                     chc.body.getPosition().y - dbc.dynamicBody.getPosition().y
                     );
-            //System.out.println(distance);
+            
+            //start attacking
+            if ( Math.abs(distance.len()) <= 1.5f) {
+                //System.out.println("in Attack radius");
+                e.getComponent(WeaponComponent.class).weapon.justUsed = true;
+                e.getComponent(InputComponent.class).weaponDrawn = true;
+            }
+
+            //stop attacking
+            if ( Math.abs(distance.len()) >= 1.5f) {
+                //System.out.println("out of attack radius");
+                e.getComponent(WeaponComponent.class).weapon.justUsed = false;
+                e.getComponent(InputComponent.class).weaponDrawn = false;
+            }
+
             distance.nor();
             distance.x *= 2;
             distance.y *= 2;
 
             dbc.dynamicBody.setLinearVelocity(distance);
-
-            //start attacking
-            if ( Math.abs(distance.x) <= 1.0f) {
-                //System.out.println("in Attack radius");
-                e.getComponent(WeaponComponent.class).weapon.justUsed = true;
-            }
-
-            //stop attacking
-            if ( Math.abs(distance.x) >= 1.0f) {
-                //System.out.println("out of attack radius");
-                e.getComponent(WeaponComponent.class).weapon.justUsed = false;
-            }
         }
     }
 

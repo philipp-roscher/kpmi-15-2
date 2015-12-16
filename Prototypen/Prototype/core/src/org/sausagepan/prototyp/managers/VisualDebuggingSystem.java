@@ -3,16 +3,15 @@ package org.sausagepan.prototyp.managers;
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.Bullet;
 import org.sausagepan.prototyp.model.GlobalSettings;
-import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
 
-import com.badlogic.ashley.core.ComponentMapper;
+import box2dLight.RayHandler;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
@@ -22,13 +21,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
-
-import box2dLight.RayHandler;
 
 /**
  * Created by georg on 31.10.15.
@@ -39,7 +32,6 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private boolean debug = true;
-    private Maze maze;
     private boolean damageFeedback=false;
     private long damFeedbStartTime=0;
     private RayHandler rayHandler;
@@ -48,11 +40,9 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
     public VisualDebuggingSystem(
             ShapeRenderer shapeRenderer,
             OrthographicCamera camera,
-            Maze maze,
             RayHandler rayHandler) {
         this.shapeRenderer = shapeRenderer;
         this.camera = camera;
-        this.maze = maze;
         this.rayHandler = rayHandler;
     }
     /* ............................................................................... METHODS .. */

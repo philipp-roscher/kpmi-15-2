@@ -1,7 +1,5 @@
 package org.sausagepan.prototyp.model.entities;
 
-import com.badlogic.ashley.core.Family;
-
 import org.sausagepan.prototyp.model.components.CharacterClassComponent;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
@@ -19,6 +17,8 @@ import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+
+import com.badlogic.ashley.core.Family;
 
 /**
  * Created by georg on 19.11.15.
@@ -70,10 +70,22 @@ public class EntityFamilies {
             HealthComponent.class,
             CharacterClassComponent.class
     ).exclude(
+    		InventoryComponent.class
+	).get();
+
+    @SuppressWarnings("unchecked")
+    public static Family monsterMovementFamily = Family.all(
+            DynamicBodyComponent.class,
+            InjurableAreaComponent.class,
+            IdComponent.class,
+            TeamComponent.class,
+            HealthComponent.class,
+            CharacterClassComponent.class
+    ).exclude(
     		InventoryComponent.class,
             ChaseComponent.class
 	).get();
-
+    
     @SuppressWarnings("unchecked")
     public static Family itemFamily = Family.all(
             ItemComponent.class,
@@ -100,7 +112,7 @@ public class EntityFamilies {
             InjurableAreaComponent.class
     ).get();
 
-
+    @SuppressWarnings("unchecked")
     public static Family gameMasterFamily = Family.all(
             MonsterSpawnComponent.class).get();
 

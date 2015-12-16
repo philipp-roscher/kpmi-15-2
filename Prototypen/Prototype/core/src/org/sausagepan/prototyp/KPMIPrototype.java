@@ -1,12 +1,5 @@
 package org.sausagepan.prototyp;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-
 import org.sausagepan.prototyp.managers.MediaManager;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
@@ -15,6 +8,13 @@ import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 import org.sausagepan.prototyp.view.MainMenuScreen;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 public class KPMIPrototype extends Game {
 	

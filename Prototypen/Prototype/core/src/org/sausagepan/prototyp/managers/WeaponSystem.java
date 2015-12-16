@@ -1,5 +1,10 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
+import org.sausagepan.prototyp.model.items.Sword;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -7,11 +12,6 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.items.Bow;
-import org.sausagepan.prototyp.model.items.Sword;
 
 /**
  * Created by georg on 22.10.15.

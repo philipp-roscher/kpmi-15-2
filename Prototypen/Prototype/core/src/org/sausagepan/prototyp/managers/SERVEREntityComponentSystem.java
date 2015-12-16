@@ -1,13 +1,6 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.World;
-import com.esotericsoftware.kryonet.Server;
+import java.util.HashMap;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.Maze;
@@ -39,7 +32,14 @@ import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 
-import java.util.HashMap;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.World;
+import com.esotericsoftware.kryonet.Server;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -117,6 +117,7 @@ public class SERVEREntityComponentSystem {
         MovementSystem movementSystem = new MovementSystem(world);
         movementSystem.addedToEngine(engine);
         engine.addEntityListener(EntityFamilies.monsterFamily, movementSystem);
+        engine.addEntityListener(EntityFamilies.monsterMovementFamily, movementSystem);
 
         // Weapon System
         WeaponSystem weaponSystem = new WeaponSystem();
@@ -147,6 +148,7 @@ public class SERVEREntityComponentSystem {
         // ChaseSystem
         ChaseSystem chaseSystem = new ChaseSystem();
         chaseSystem.addedToEngine(engine);
+        engine.addEntityListener(Family.all(ChaseComponent.class).get(), chaseSystem);
 
         // Network System
         SERVERNetworkSystem networkSystem = new SERVERNetworkSystem(this, server, gameServer);
@@ -161,7 +163,6 @@ public class SERVEREntityComponentSystem {
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(itemSystem);
         this.engine.addSystem(chaseSystem);
-        this.engine.addEntityListener(Family.all(ChaseComponent.class).get(), chaseSystem);
     }
 
     private void setUpMonsters() {
@@ -303,6 +304,7 @@ public class SERVEREntityComponentSystem {
 			NetworkPosition np = new NetworkPosition();
 		    np.velocity   = monster.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getLinearVelocity();
 		    np.position   = monster.getValue().getComponent(DynamicBodyComponent.class).dynamicBody.getPosition();
+		    np.direction  = monster.getValue().getComponent(InputComponent.class).direction;
 			monsters.put(
 					monster.getKey(),
 					np

@@ -1,5 +1,12 @@
 package org.sausagepan.prototyp.model.components;
 
+import java.util.LinkedList;
+import java.util.Map;
+
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.items.MapItem;
+
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -10,13 +17,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.MapItem;
-
-import java.util.LinkedList;
-import java.util.Map;
 
 
 /**

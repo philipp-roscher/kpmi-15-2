@@ -1,10 +1,6 @@
 package org.sausagepan.prototyp.network;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.EndPoint;
+import java.util.HashMap;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.Damagetype;
@@ -18,7 +14,11 @@ import org.sausagepan.prototyp.model.entities.MapFactoryObject;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
 
-import java.util.HashMap;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.EndPoint;
 
 public class Network {
 	public static final int TCPPort = 49078;

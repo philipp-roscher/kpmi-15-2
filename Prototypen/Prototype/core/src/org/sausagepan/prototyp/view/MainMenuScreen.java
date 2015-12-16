@@ -1,5 +1,15 @@
 package org.sausagepan.prototyp.view;
 
+import java.util.Random;
+
+import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.network.Network.MapInformation;
+import org.sausagepan.prototyp.network.Network.NewHeroRequest;
+
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.Screen;
@@ -10,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,17 +30,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-
-import org.sausagepan.prototyp.KPMIPrototype;
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.network.Network.MapInformation;
-import org.sausagepan.prototyp.network.Network.NewHeroRequest;
-
-import java.util.Random;
-
-import box2dLight.RayHandler;
 
 public class MainMenuScreen implements Screen {
 	

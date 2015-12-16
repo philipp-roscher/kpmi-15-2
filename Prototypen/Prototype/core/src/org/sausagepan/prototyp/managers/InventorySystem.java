@@ -1,17 +1,17 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
+import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-
-import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
-import org.sausagepan.prototyp.model.components.TeamComponent;
-import org.sausagepan.prototyp.model.entities.CharacterEntity;
-import org.sausagepan.prototyp.model.entities.EntityFamilies;
 
 /**
  * Created by Bettina on 03.11.2015.

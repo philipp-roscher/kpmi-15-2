@@ -1,12 +1,6 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
@@ -35,9 +29,15 @@ import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.view.InMaze;
 
-import java.util.HashMap;
-
 import box2dLight.RayHandler;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -143,7 +143,7 @@ public class EntityComponentSystem {
 
         // Debugging System
         VisualDebuggingSystem visualDebuggingSystem
-                = new VisualDebuggingSystem(shpRend, camera, maze, rayHandler);
+                = new VisualDebuggingSystem(shpRend, camera, rayHandler);
         visualDebuggingSystem.addedToEngine(engine);
         engine.addEntityListener(Family.all(HealthComponent.class,DynamicBodyComponent.class,InjurableAreaComponent.class).get(), visualDebuggingSystem);
 

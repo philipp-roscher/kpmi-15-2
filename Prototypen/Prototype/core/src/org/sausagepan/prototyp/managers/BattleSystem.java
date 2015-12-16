@@ -1,13 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Vector2;
-
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -16,7 +8,6 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
-import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -26,14 +17,20 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.model.items.Sword;
-import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.NewItem;
-import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each
@@ -46,7 +43,6 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> attackers;
     private ImmutableArray<Entity> victims;
-    private ImmutableArray<Entity> gms;
     private SERVERNetworkTransmissionComponent ntc;
     private int maxBulletId;
     private SERVEREntityComponentSystem ECS;
@@ -61,8 +57,6 @@ public class BattleSystem extends EntitySystem implements EntityListener {
             = ComponentMapper.getFor(InjurableAreaComponent.class);
     private ComponentMapper<TeamComponent> tm
             = ComponentMapper.getFor(TeamComponent.class);
-    private ComponentMapper<MonsterSpawnComponent> mm
-            = ComponentMapper.getFor(MonsterSpawnComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
     public BattleSystem(SERVEREntityComponentSystem ECS) {
@@ -75,7 +69,6 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     public void addedToEngine(Engine engine) {
         attackers = engine.getEntitiesFor(EntityFamilies.attackerFamily);
         victims = engine.getEntitiesFor(EntityFamilies.victimFamily);
-        gms = engine.getEntitiesFor(EntityFamilies.gameMasterFamily);
     }
 
     public void update(float deltaTime) {

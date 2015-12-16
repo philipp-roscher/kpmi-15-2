@@ -1,5 +1,12 @@
 package org.sausagepan.prototyp.model;
 
+import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.model.components.MazeGenerator;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.network.Network;
+import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
+
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
@@ -14,13 +21,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-
-import org.sausagepan.prototyp.managers.MediaManager;
-import org.sausagepan.prototyp.model.components.MazeGenerator;
-import org.sausagepan.prototyp.model.entities.MapMonsterObject;
-import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.network.Network;
-import org.sausagepan.prototyp.view.OrthogonalTiledMapRendererWithPlayers;
 
 /**
  * Created by georg on 18.10.15.

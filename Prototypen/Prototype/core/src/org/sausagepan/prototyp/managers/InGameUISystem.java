@@ -1,5 +1,13 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -13,14 +21,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-
-import org.sausagepan.prototyp.KPMIPrototype;
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.model.components.HealthComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
-import org.sausagepan.prototyp.model.components.IsDeadComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
 
 /**
  * Created by georg on 11.11.15.

@@ -1,5 +1,9 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.model.Maze;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.items.Bow;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -11,10 +15,6 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
-
-import org.sausagepan.prototyp.model.Maze;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.items.Bow;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each

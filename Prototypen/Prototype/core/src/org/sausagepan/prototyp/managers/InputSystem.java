@@ -1,5 +1,16 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InputComponent;
+import org.sausagepan.prototyp.model.components.IsDeadComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -19,19 +30,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.enums.Direction;
-import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.IsDeadComponent;
-import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.TeamComponent;
-import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.EntityFamilies;
-import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 
 /**
  * Created by georg on 28.10.15.

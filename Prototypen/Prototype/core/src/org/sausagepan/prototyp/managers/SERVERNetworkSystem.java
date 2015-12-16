@@ -1,14 +1,5 @@
 package org.sausagepan.prototyp.managers;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
@@ -28,6 +19,8 @@ import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
+import org.sausagepan.prototyp.network.Network.GameExitRequest;
+import org.sausagepan.prototyp.network.Network.GameExitResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
@@ -38,8 +31,14 @@ import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
-import org.sausagepan.prototyp.network.Network.GameExitRequest;
-import org.sausagepan.prototyp.network.Network.GameExitResponse;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 
 /**
  * Created by philipp on 06.12.15.
