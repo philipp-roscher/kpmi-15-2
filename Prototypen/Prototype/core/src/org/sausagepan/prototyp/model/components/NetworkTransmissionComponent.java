@@ -10,6 +10,7 @@ public class NetworkTransmissionComponent implements Component {
     public boolean attack = false;
     public boolean stopAttacking = false;
     public boolean shoot = false;
+    public MonsterSpawnComponent monster = null;
 
     /* ........................................................................... CONSTRUCTOR .. */
     

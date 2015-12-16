@@ -11,6 +11,7 @@ import org.sausagepan.prototyp.enums.Damagetype;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.Weapontype;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MapFactoryObject;
@@ -52,6 +53,7 @@ public class Network {
 		kryo.register(MaxClients.class);
 		kryo.register(MapInformation.class);
 
+		kryo.register(MonsterSpawnComponent.class);
         kryo.register(NetworkPosition.class);
         kryo.register(NetworkTransmissionComponent.class);
         kryo.register(MapCharacterObject.class);

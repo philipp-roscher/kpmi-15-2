@@ -117,6 +117,10 @@ public class NetworkSystem extends EntitySystem {
         	network.client.sendUDP(new ShootRequest(network.id));
         	ntc.shoot = false;
         }
+        if(ntc.monster != null) {
+        	network.client.sendTCP(ntc.monster);
+        	ntc.monster = null;
+        }
 
         for(Object object : networkMessages) {
             //System.out.println( object.getClass() +" auswerten");
@@ -152,7 +156,8 @@ public class NetworkSystem extends EntitySystem {
                                 (object instanceof ItemPickUp) ||
                                 (object instanceof NewItem) ||
                                 (object instanceof GameStart) ||
-                                (object instanceof Network.GameExitResponse)) {
+                                (object instanceof Network.GameExitResponse) || 
+                                (object instanceof NewMonster)) {
                             //System.out.println( object.getClass() +" empfangen");
                             NetworkSystem.this.networkMessages.add(object);
                         }
@@ -283,13 +288,11 @@ public class NetworkSystem extends EntitySystem {
 
             if (object instanceof NewItem) {
             	NewItem result = (NewItem) object;
-            	System.out.println("New Item: " + result.id + " : " + result.item.position);
             	ECS.createItem(result.id, result.item);
             }
 
             if (object instanceof NewMonster) {
                 NewMonster result = (NewMonster) object;
-                System.out.println("NewMonster was spawned: "+result.id);
                 ECS.createMonster(result.id, result.monster);
 
             }

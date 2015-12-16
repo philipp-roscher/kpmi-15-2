@@ -84,6 +84,7 @@ public class EntityFactory {
         monster.add(new IdComponent(id));
         monster.add(new TeamComponent(0));
 
+        monster.add(new InputComponent());
         monster.add(new SensorComponent(world, monster));
         monster.add(new WeaponComponent(itemFactory.createMiniSword())); //TODO: change weapon
 

@@ -125,27 +125,6 @@ public class BattleSystem extends EntitySystem implements EntityListener {
             weapon.weapon.justUsed = false; // usage over, waiting for next attack
         }
 
-        //check if GM spawned Monsters
-        for (Entity gm : gms) {
-            MonsterSpawnComponent mon = mm.get(gm);
-            System.out.println("gm: "+gm+" component: "+mon);
-
-            if (mon.monsterSpawn) {
-                System.out.println("battlesystem.monsterspawn.1");
-                int count = mon.getSpawnCount();
-                //create as many monsters as count implies
-                for (int i=1; i <= count; i++) {
-                    int id = ECS.createMonster(mon.getMonster());
-                    NewMonster newMonster = new NewMonster(id, mon.getMonster());
-                    ntc.networkMessagesToProcess.add(newMonster);
-                }
-
-                //so it only spawns monster one time per button press
-                mon.monsterSpawn = false;
-
-            }
-        }
-
         // Check if someone has died
         for(Entity v : victims) {
         	HealthComponent health = hm.get(v);

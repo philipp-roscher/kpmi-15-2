@@ -28,11 +28,11 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 /**
  * Created by Sara on 10.11.2015.
  */
-public class MazeContactListener extends EntitySystem implements ContactListener {
+public class MazeContactListener implements ContactListener {
     private SERVERNetworkTransmissionComponent sntc;
 
     /**
-     * Default constructor that will initialise an EntitySystem with priority 0.
+     * Default constructor
      */
     public MazeContactListener(SERVERNetworkTransmissionComponent sntc) {
         this.sntc = sntc;

@@ -158,7 +158,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
             //so only GM sees this button
             if (entity.getComponent(TeamComponent.class).TeamId == 0) {
-                //stage.addActor(spawnButton);
+                stage.addActor(spawnButton);
             }
         }
     }
@@ -213,6 +213,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             InputComponent input = im.get(entity);
             WeaponComponent weapon = wm.get(entity);
             DynamicBodyComponent body = pm.get(entity);
+            NetworkTransmissionComponent ntc = ntm.get(entity);
 
             switch(keycode) {
                 case Input.Keys.UP:     input.direction = Direction.NORTH;break;
@@ -229,11 +230,12 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                     if (gms != null) {
                         for (Entity gm : gms) {
                             MonsterSpawnComponent mon = mm.get(gm);
-                            mon.masterPosition = new Vector2(
+                            mon.setMasterPosition(new Vector2(
                                     body.dynamicBody.getPosition().x,
                                     body.dynamicBody.getPosition().y
-                            );
+                            ));
                             mon.monsterSpawn = true;
+                            ntc.monster = mon;
                         }
                     }
                     break;
