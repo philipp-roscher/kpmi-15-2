@@ -14,7 +14,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
-import org.sausagepan.prototyp.model.components.SensorBodyComponent;
+
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.Sword;
@@ -124,11 +124,7 @@ public class PositionSynchroSystem extends EntitySystem implements EntityListene
                         body.dynamicBody.getPosition().y-body.fixture.getShape().getRadius()
                 );
             }
-            
-            // Synchronize SensorBody with DynamicBody
-            if(CompMappers.sensorBody.get(entity) != null)
-            	CompMappers.sensorBody.get(entity).sensorBody.setTransform(body.dynamicBody.getPosition(),
-                    0f);
+
 
             // Synchronize Sensor with DynamicBody
             if(CompMappers.sensor.get(entity) != null)

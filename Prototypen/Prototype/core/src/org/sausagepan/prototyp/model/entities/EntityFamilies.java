@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -86,7 +87,8 @@ public class EntityFamilies {
             HealthComponent.class,
             DynamicBodyComponent.class,
             WeaponComponent.class,
-            InjurableAreaComponent.class
+            InjurableAreaComponent.class,
+            TeamComponent.class
 	).exclude(
 			IsDeadComponent.class
 	).
@@ -97,6 +99,10 @@ public class EntityFamilies {
             HealthComponent.class,
             InjurableAreaComponent.class
     ).get();
+
+
+    public static Family gameMasterFamily = Family.all(
+            MonsterSpawnComponent.class).get();
 
     @SuppressWarnings("unchecked")
     public static Family positionSynchroFamily = Family.all(

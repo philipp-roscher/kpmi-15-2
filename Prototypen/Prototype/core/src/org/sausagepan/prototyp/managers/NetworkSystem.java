@@ -42,6 +42,7 @@ import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NetworkPosition;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.network.Network.NewItem;
+import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
@@ -285,6 +286,13 @@ public class NetworkSystem extends EntitySystem {
             	System.out.println("New Item: " + result.id + " : " + result.item.position);
             	ECS.createItem(result.id, result.item);
             }
+
+            if (object instanceof NewMonster) {
+                NewMonster result = (NewMonster) object;
+                System.out.println("NewMonster was spawned: "+result.id);
+                ECS.createMonster(result.id, result.monster);
+
+            }
             
             if (object instanceof ItemPickUp) {
             	ItemPickUp result = (ItemPickUp) object;
@@ -292,9 +300,9 @@ public class NetworkSystem extends EntitySystem {
 				if(ECS.getItem(result.itemId).getComponent(ItemComponent.class).type == ItemType.KEY) {
                 	// add key to character inventory
                 	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
-                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;               	
-				}
-                
+                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;
+                }
+
                 ECS.deleteItem(result.itemId);
             }
 

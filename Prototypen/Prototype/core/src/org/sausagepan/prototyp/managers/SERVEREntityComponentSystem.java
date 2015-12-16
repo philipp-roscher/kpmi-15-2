@@ -64,6 +64,7 @@ public class SERVEREntityComponentSystem {
     private SERVERNetworkTransmissionComponent sntc;
     private float[][] startPositions;
     private int maxItemId;
+    private int maxMonsterId;
     
     private EntityFactory entityFactory;
 
@@ -77,6 +78,7 @@ public class SERVEREntityComponentSystem {
         this.startPositions = maze.getStartPositions();
         this.maze.openSecretPassages();
         this.maxItemId = 1;
+        this.maxMonsterId = 1;
 
         this.engine = new Engine(); // Create Engine
         this.characters = new HashMap<Integer,ServerCharacterEntity>();
@@ -163,14 +165,13 @@ public class SERVEREntityComponentSystem {
     }
 
     private void setUpMonsters() {
-    	int i = 1;
         // Get Objects from Maps Monster Layer and add monster entities there
         for(MapMonsterObject mapObject : maze.getMapMonsterObjects()) {
             // Using factory method for creating monsters
-        	MonsterEntity monster = entityFactory.createMonster(mapObject, i);
-        	monsters.put(i, monster);
+        	MonsterEntity monster = entityFactory.createMonster(mapObject, maxMonsterId);
+        	monsters.put(maxMonsterId++, monster);
             this.engine.addEntity(monster);
-            i++;
+            maxMonsterId++;
         }
         // TODO
     }
@@ -256,10 +257,11 @@ public class SERVEREntityComponentSystem {
 		}
 	}
     
-    public void createMonster(MapMonsterObject mmo, int id) {
-    	MonsterEntity monster = entityFactory.createMonster(mmo, id);
-    	monsters.put(id, monster);
+    public int createMonster(MapMonsterObject mmo) {
+    	MonsterEntity monster = entityFactory.createMonster(mmo, maxMonsterId);
+    	monsters.put(maxMonsterId, monster);
         this.engine.addEntity(monster);
+        return maxMonsterId++;
     }
     
     public int createItem(MapItem mapItem) {

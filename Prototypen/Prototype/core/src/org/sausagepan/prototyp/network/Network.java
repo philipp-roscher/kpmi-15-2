@@ -45,6 +45,7 @@ public class Network {
 		kryo.register(AcknowledgeDeath.class);
 		kryo.register(ItemPickUp.class);
 		kryo.register(NewItem.class);
+		kryo.register(NewMonster.class);
 		kryo.register(IDAssignment.class);
 		kryo.register(GameClientCount.class);
 		kryo.register(TeamAssignment.class);
@@ -247,6 +248,17 @@ public class Network {
             this.item = item;
         }
     }
+
+	public static class NewMonster {
+		public int id;
+		public MapMonsterObject monster;
+
+		public NewMonster() { }
+		public NewMonster(int id, MapMonsterObject monster) {
+			this.id = id;
+			this.monster = monster;
+		}
+	}
 
 	public static class YouDiedResponse {
 		public int id;

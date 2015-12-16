@@ -301,6 +301,13 @@ public class EntityComponentSystem {
     	items.put(id, item);
         this.engine.addEntity(item);
     }
+
+    public void createMonster (int id, MapMonsterObject mmo) {
+        MonsterEntity monster = entityFactory.createMonster(mmo, id);
+        monsters.put(id, monster);
+        this.engine.addEntity(monster);
+
+    }
     
 	public CharacterEntity getCharacter(int playerId) {
 		return characters.get(playerId);

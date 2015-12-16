@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
@@ -21,9 +22,9 @@ import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MagicComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
-import org.sausagepan.prototyp.model.components.SensorBodyComponent;
 import org.sausagepan.prototyp.model.components.SensorComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -82,7 +83,7 @@ public class EntityFactory {
         //same Team as GM -> no friendly fire
         monster.add(new IdComponent(id));
         monster.add(new TeamComponent(0));
-        monster.add(new SensorBodyComponent(world, mapMonsterObject.position));
+
         monster.add(new SensorComponent(world, monster));
         monster.add(new WeaponComponent(itemFactory.createMiniSword())); //TODO: change weapon
 
@@ -225,6 +226,7 @@ public class EntityFactory {
                 characterEntity.add(new WeaponComponent(itemFactory.createFireBreather()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f * 2, 1f * 2));
                 //has to be *2 here and added in CharacterSpriteComponent and DynamicBodyComponent
+                characterEntity.add(new MonsterSpawnComponent());
                 break;
             default: break;
         }

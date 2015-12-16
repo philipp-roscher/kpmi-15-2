@@ -20,14 +20,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
+import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 
 /**
  * Created by georg on 28.10.15.
@@ -35,6 +39,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 public class InputSystem extends EntitySystem implements InputProcessor {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
+    private ImmutableArray<Entity> gms;
 
     private ComponentMapper<DynamicBodyComponent> pm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
@@ -46,8 +51,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 			= ComponentMapper.getFor(NetworkTransmissionComponent.class);
     private ComponentMapper<IsDeadComponent> idm
 			= ComponentMapper.getFor(IsDeadComponent.class);
-    private ComponentMapper<TeamComponent> tm
-            = ComponentMapper.getFor(TeamComponent.class);
+    private ComponentMapper<MonsterSpawnComponent> mm
+            = ComponentMapper.getFor(MonsterSpawnComponent.class);
 
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
@@ -96,7 +101,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             }
         });
 
-
         spawnButton = new ImageButton(fightButtonStyle);
         spawnButton.setWidth(64f);
         spawnButton.setHeight(64f);
@@ -115,9 +119,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             }
         });
 
-
         stage.addActor(fightButton);
-        stage.addActor(spawnButton);
 
         inputMultiplexer = new InputMultiplexer(stage, this);
 
@@ -132,6 +134,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 InputComponent.class,
                 WeaponComponent.class,
                 NetworkComponent.class).get() );
+        gms = engine.getEntitiesFor(EntityFamilies.gameMasterFamily);
     }
 
     public void update(float deltaTime) {
@@ -150,6 +153,11 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 //                    default: body.dynamicBody.setLinearVelocity(0,0);break;
 //                }
             else body.dynamicBody.setLinearVelocity(0,0);
+
+            //so only GM sees this button
+            if (entity.getComponent(TeamComponent.class).TeamId == 0) {
+                stage.addActor(spawnButton);
+            }
         }
     }
 
@@ -202,6 +210,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
             WeaponComponent weapon = wm.get(entity);
+            DynamicBodyComponent body = pm.get(entity);
+
             switch(keycode) {
                 case Input.Keys.UP:     input.direction = Direction.NORTH;break;
                 case Input.Keys.LEFT:   input.direction = Direction.WEST;break;
@@ -212,9 +222,23 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                     //System.out.println("Attacking!");
                     weapon.weapon.justUsed = true;
                     break;
+                case Input.Keys.S:
+                    //Spawn Monsters : sent current position of MG and set spawn to true
+                    if (gms != null) {
+                        for (Entity gm : gms) {
+                            MonsterSpawnComponent mon = mm.get(gm);
+                            mon.masterPosition = new Vector2(
+                                    body.dynamicBody.getPosition().x,
+                                    body.dynamicBody.getPosition().y
+                            );
+                            mon.monsterSpawn = true;
+                        }
+                    }
+                    break;
+
                 default:break;
             }
-            if(keycode != Input.Keys.A) input.moving = true;
+            if(keycode != Input.Keys.A || keycode != Input.Keys.S) input.moving = true;
         }
         return true;
     }

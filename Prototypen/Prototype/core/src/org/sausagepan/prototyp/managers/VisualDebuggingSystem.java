@@ -77,7 +77,7 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
         if(damageFeedback) shapeRenderer.rect(0,0,800,480);
         shapeRenderer.end();
 
-        if(TimeUtils.timeSinceMillis(damFeedbStartTime) > 30) damageFeedback = false;
+        if(TimeUtils.timeSinceMillis(damFeedbStartTime) > 15) damageFeedback = false;
     }
 
 

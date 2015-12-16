@@ -10,5 +10,5 @@ public class ServerSettings {
     public final static int MAZE_HEIGHT = 5;
     public final static float TICKRATE = 64;
     public final static int TIMEOUT_MS = 5000;
-    public final static boolean FRIENDLY_FIRE = true;
+    public final static boolean FRIENDLY_FIRE = false;
 }

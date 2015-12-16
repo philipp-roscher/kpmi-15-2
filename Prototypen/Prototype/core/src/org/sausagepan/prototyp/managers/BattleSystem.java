@@ -16,6 +16,7 @@ import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -25,10 +26,12 @@ import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.model.items.Sword;
+import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.AttackResponse;
 import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.NewItem;
+import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
@@ -43,6 +46,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> attackers;
     private ImmutableArray<Entity> victims;
+    private ImmutableArray<Entity> gms;
     private SERVERNetworkTransmissionComponent ntc;
     private int maxBulletId;
     private SERVEREntityComponentSystem ECS;
@@ -57,6 +61,8 @@ public class BattleSystem extends EntitySystem implements EntityListener {
             = ComponentMapper.getFor(InjurableAreaComponent.class);
     private ComponentMapper<TeamComponent> tm
             = ComponentMapper.getFor(TeamComponent.class);
+    private ComponentMapper<MonsterSpawnComponent> mm
+            = ComponentMapper.getFor(MonsterSpawnComponent.class);
 
     /* .......................................................................... CONSTRUCTORS .. */
     public BattleSystem(SERVEREntityComponentSystem ECS) {
@@ -69,6 +75,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
     public void addedToEngine(Engine engine) {
         attackers = engine.getEntitiesFor(EntityFamilies.attackerFamily);
         victims = engine.getEntitiesFor(EntityFamilies.victimFamily);
+        gms = engine.getEntitiesFor(EntityFamilies.gameMasterFamily);
     }
 
     public void update(float deltaTime) {
@@ -82,25 +89,26 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                 bow.updateArrows(deltaTime);
             }
 
-            if	(weapon.weapon.getClass().equals(Sword.class) && weapon.weapon.justUsed)
-            	ntc.networkMessagesToProcess.add(new AttackResponse(attacker.getComponent(IdComponent.class).id, true));
-            
+            if (weapon.weapon.getClass().equals(Sword.class) && weapon.weapon.justUsed)
+                ntc.networkMessagesToProcess.add(new AttackResponse(attacker.getComponent(IdComponent.class).id, true));
+
             // Check victims for damage
-            for(Entity v : victims) {
-                if(!attacker.equals(v)) {
+            for (Entity v : victims) {
+                if (!attacker.equals(v)) {
                     HealthComponent health = hm.get(v);
                     InjurableAreaComponent area = jm.get(v);
-                    if(weapon.weapon.justUsed) {
+                    if (weapon.weapon.justUsed) {
                         // If weapon area and injurable area of character overlap
 
                         // Handle Sword
-                        if(weapon.weapon.getClass().equals(Sword.class))
-                            if (((Sword)weapon.weapon).checkHit(area.area))
-                                calculateDamage(weapon, health, v, attacker, -1);
+                        if (weapon.weapon.getClass().equals(Sword.class))
+                            if (((Sword) weapon.weapon).checkHit(area.area))
+                                System.out.println("Trying to attack" + weapon.weapon.strength);
+                        calculateDamage(weapon, health, v, attacker, -1);
 
                         // Handle Bow
-                        if(weapon.weapon.getClass().equals(Bow.class)) {
-                            Bow bow = (Bow)weapon.weapon;
+                        if (weapon.weapon.getClass().equals(Bow.class)) {
+                            Bow bow = (Bow) weapon.weapon;
                             bow.shoot(body.dynamicBody.getPosition(), body.direction, maxBulletId);
                             ntc.networkMessagesToProcess.add(new ShootResponse(attacker.getComponent(IdComponent.class).id, body.dynamicBody.getPosition(), body.direction, maxBulletId));
                             maxBulletId++;
@@ -111,13 +119,34 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                     // Check Bullets for hit
                     int res;
                     if (weapon.weapon.getClass().equals(Bow.class))
-                        if((res = ((Bow)weapon.weapon).checkHit(area.area)) != -1)
+                        if ((res = ((Bow) weapon.weapon).checkHit(area.area)) != -1)
                             calculateDamage(weapon, health, v, attacker, res);
                 }
             }
             weapon.weapon.justUsed = false; // usage over, waiting for next attack
         }
-        
+
+        //check if GM spawned Monsters
+        for (Entity gm : gms) {
+            MonsterSpawnComponent mon = mm.get(gm);
+            System.out.println("gm: "+gm+" component: "+mon);
+
+            if (mon.monsterSpawn) {
+                System.out.println("battlesystem.monsterspawn.1");
+                int count = mon.getSpawnCount();
+                //create as many monsters as count implies
+                for (int i=1; i <= count; i++) {
+                    int id = ECS.createMonster(mon.getMonster());
+                    NewMonster newMonster = new NewMonster(id, mon.getMonster());
+                    ntc.networkMessagesToProcess.add(newMonster);
+                }
+
+                //so it only spawns monster one time per button press
+                mon.monsterSpawn = false;
+
+            }
+        }
+
         // Check if someone has died
         for(Entity v : victims) {
         	HealthComponent health = hm.get(v);

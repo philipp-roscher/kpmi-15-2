@@ -50,13 +50,13 @@ public class ChaseSystem extends EntitySystem implements EntityListener {
             dbc.dynamicBody.setLinearVelocity(distance);
 
             //start attacking
-            if ( Math.abs(distance.x) <= 0.8f) {
+            if ( Math.abs(distance.x) <= 1.0f) {
                 //System.out.println("in Attack radius");
                 e.getComponent(WeaponComponent.class).weapon.justUsed = true;
             }
 
             //stop attacking
-            if ( Math.abs(distance.x) >= 0.8f) {
+            if ( Math.abs(distance.x) >= 1.0f) {
                 //System.out.println("out of attack radius");
                 e.getComponent(WeaponComponent.class).weapon.justUsed = false;
             }
