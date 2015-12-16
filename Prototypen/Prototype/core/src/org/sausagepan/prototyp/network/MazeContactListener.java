@@ -94,7 +94,7 @@ public class MazeContactListener extends EntitySystem implements ContactListener
 
                     if(GlobalSettings.DEBUGGING_ACTIVE) {
                         System.out.println("Involved Monster: " + detectingEntity.getComponent(IdComponent.class).id);
-                        System.out.println("Involved Character: " + detectedEntity);
+                        System.out.println("Involved Character: " + detectedEntity.getComponent(IdComponent.class).id);
                     }
                 }
 

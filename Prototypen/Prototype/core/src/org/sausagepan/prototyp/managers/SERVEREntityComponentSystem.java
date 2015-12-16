@@ -171,7 +171,6 @@ public class SERVEREntityComponentSystem {
         	MonsterEntity monster = entityFactory.createMonster(mapObject, maxMonsterId);
         	monsters.put(maxMonsterId++, monster);
             this.engine.addEntity(monster);
-            maxMonsterId++;
         }
         // TODO
     }
