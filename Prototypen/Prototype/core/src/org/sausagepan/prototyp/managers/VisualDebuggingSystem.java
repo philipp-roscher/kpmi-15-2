@@ -78,7 +78,9 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
         drawBattleDebugger();
-        this.rayHandler.setAmbientLight(.5f, .1f, .1f, 1);
+        if(damageFeedback) {
+        	this.rayHandler.setAmbientLight(.5f, .1f, .1f, 1);
+        }
         shapeRenderer.end();
 
         if(TimeUtils.timeSinceMillis(damFeedbStartTime) > 100){
