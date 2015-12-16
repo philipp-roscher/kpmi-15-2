@@ -75,6 +75,7 @@ public class GameServer implements ApplicationListener {
 					if(clientCount == maxClients && !gameReady) {
                         gameReady = true;
 						server.sendToAllTCP(new GameStart());
+						ECS.startGame();
 					}
 					//assignTeamId
 					assignTeam(idAssignment.id);
