@@ -147,12 +147,13 @@ public class MainMenuScreen implements Screen {
                         System.out.println("Couldn't find running server at "+text);
                         e.printStackTrace();
                         connectionStatus = -1;
+                        startButton.setVisible(true);
                     }
                 }
 
                 @Override
                 public void canceled() {
-                    // TODO Auto-generated method stub
+                    startButton.setVisible(true);
                 }
 
             }, "Bitte Server-IP eingeben", "127.0.0.1", "");
@@ -249,6 +250,7 @@ public class MainMenuScreen implements Screen {
 			Drawable drawWitchF = mainMenuSkins.getDrawable("witch_f");
 			drawWitchF.setMinWidth(200f);
 			drawWitchF.setMinHeight(200f);
+			
 			Button.ButtonStyle knightmStyle = new Button.ButtonStyle(drawKnightM, drawKnightM, drawKnightM);
 			Button.ButtonStyle archerfStyle = new Button.ButtonStyle(drawArcherF, drawArcherF, drawArcherF);
 			Button.ButtonStyle ninjafStyle = new Button.ButtonStyle(drawNinjaF, drawNinjaF, drawNinjaF);
@@ -258,69 +260,27 @@ public class MainMenuScreen implements Screen {
 			//buttons
 			Button knightMButton = new Button();
 			knightMButton.setStyle(knightmStyle);
-			knightMButton.addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					System.out.print("selecting knight_m");
-					clientClass = CharacterClass.KNIGHT_M;
-					clientSel = true;
-				}
-			});
+			knightMButton.addListener(new CharacterButtonListener(CharacterClass.KNIGHT_M));
 
 			Button archerFButton = new Button();
 			archerFButton.setStyle(archerfStyle);
-			archerFButton.addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					System.out.print("selecting archer_f");
-					clientClass = CharacterClass.ARCHER_F;
-					clientSel = true;
-				}
-			});
+			archerFButton.addListener(new CharacterButtonListener(CharacterClass.ARCHER_F));
 
 			Button ninjaFButton = new Button();
 			ninjaFButton.setStyle(ninjafStyle);
-			ninjaFButton.addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					System.out.print("selecting ninja_f");
-					clientClass = CharacterClass.NINJA_F;
-					clientSel = true;
-				}
-			});
-
+			ninjaFButton.addListener(new CharacterButtonListener(CharacterClass.NINJA_F));
+			
 			Button witchFButton = new Button();
 			witchFButton.setStyle(witchfStyle);
-			witchFButton.addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					System.out.print("selecting witch_f");
-					clientClass = CharacterClass.WITCH_F;
-					clientSel = true;
-				}
-			});
+			witchFButton.addListener(new CharacterButtonListener(CharacterClass.WITCH_F));
 
 			Button fighterMButton = new Button();
 			fighterMButton.setStyle(fightermStyle);
-			fighterMButton.addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					System.out.print("selecting fighter_m");
-					clientClass = CharacterClass.FIGHTER_M;
-					clientSel = true;
-				}
-			});
+			fighterMButton.addListener(new CharacterButtonListener(CharacterClass.FIGHTER_M));
 
 			Button shamanMButton = new Button();
 			shamanMButton.setStyle(shamanmStyle);
-			shamanMButton.addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					System.out.print("selecting shaman_m");
-					clientClass = CharacterClass.SHAMAN_M;
-					clientSel = true;
-				}
-			});
+			shamanMButton.addListener(new CharacterButtonListener(CharacterClass.SHAMAN_M));
 
 			table.add(knightMButton);
 			table.add(archerFButton);
@@ -443,4 +403,18 @@ public class MainMenuScreen implements Screen {
 		// TODO Auto-generated method stub
 	}
 
+	class CharacterButtonListener extends ClickListener {
+		private CharacterClass characterClass;
+		
+		public CharacterButtonListener(CharacterClass characterClass) {
+			this.characterClass = characterClass;
+		}
+		
+		@Override
+		public void clicked(InputEvent event, float x, float y) {
+			System.out.print("selecting "+ characterClass);
+			clientClass = characterClass;
+			clientSel = true;
+		}
+	}
 }
