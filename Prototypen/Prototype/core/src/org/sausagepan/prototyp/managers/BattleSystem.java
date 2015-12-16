@@ -103,8 +103,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                         // Handle Sword
                         if (weapon.weapon.getClass().equals(Sword.class))
                             if (((Sword) weapon.weapon).checkHit(area.area))
-                                System.out.println("Trying to attack" + weapon.weapon.strength);
-                        calculateDamage(weapon, health, v, attacker, -1);
+                            	calculateDamage(weapon, health, v, attacker, -1);
 
                         // Handle Bow
                         if (weapon.weapon.getClass().equals(Bow.class)) {

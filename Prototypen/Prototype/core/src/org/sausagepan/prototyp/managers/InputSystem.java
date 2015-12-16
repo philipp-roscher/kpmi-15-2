@@ -158,7 +158,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
             //so only GM sees this button
             if (entity.getComponent(TeamComponent.class).TeamId == 0) {
-                stage.addActor(spawnButton);
+                //stage.addActor(spawnButton);
             }
         }
     }
