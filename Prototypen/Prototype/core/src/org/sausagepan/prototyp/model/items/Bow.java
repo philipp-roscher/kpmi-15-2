@@ -22,11 +22,9 @@ public class Bow extends WeaponItem {
     public Array<Bullet> activeArrows;
     public EntitySprite arrowSprite;
     public Pool<Bullet> arrowPool;
-    private long lastAttack;
     /* ........................................................................... CONSTRUCTOR .. */
-    public Bow(
-            TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture) {
-        super(region, strength, damagetype);
+    public Bow(TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture, long cooldown) {
+        super(region, strength, damagetype, cooldown);
         this.activeArrows = new Array<Bullet>();
         this.arrowSprite = new EntitySprite(arrowTexture);
         this.arrowSprite.setSize(
@@ -44,6 +42,10 @@ public class Bow extends WeaponItem {
             }
         };
     }
+    
+    public Bow(TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture) {
+        this(region, strength, damagetype, arrowTexture, 100);
+    }
     /* ............................................................................... METHODS .. */
 
     /**
@@ -52,12 +54,10 @@ public class Bow extends WeaponItem {
      * @param dirVector direction in which activeArrows should fly
      */
     public void shoot(Vector2 startPos, Vector2 dirVector, int bulletId) {
-        if(TimeUtils.timeSinceMillis(lastAttack) < 100) return; // maximum 10 bullets per second
         Bullet newArrow = arrowPool.obtain();           // obtain new bullet from pool
         newArrow.init(startPos.x, startPos.y, dirVector);
         newArrow.id = bulletId;
         activeArrows.add(newArrow);                           // add initialized bullet to active bullets
-        lastAttack = TimeUtils.millis();                // remember spawn time
     }
 
     /**

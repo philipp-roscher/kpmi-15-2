@@ -31,6 +31,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
 
 /**
  * Takes all {@link Entity}s capable of joining the battle and process their actions against each
@@ -75,6 +76,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         for (Entity attacker : attackers) {
             WeaponComponent weapon = wm.get(attacker);
             DynamicBodyComponent body = dm.get(attacker);
+            long currentTime = TimeUtils.millis();
 
             // Update Bow and Arrows
             if (weapon.weapon.getClass().equals(Bow.class)) {
@@ -82,7 +84,7 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                 bow.updateArrows(deltaTime);
             }
 
-            if (weapon.weapon.getClass().equals(Sword.class) && weapon.weapon.justUsed)
+            if (weapon.weapon.getClass().equals(Sword.class) && weapon.weapon.justUsed && (currentTime - weapon.weapon.lastAttack > weapon.weapon.cooldown))
                 ntc.networkMessagesToProcess.add(new AttackResponse(attacker.getComponent(IdComponent.class).id, true));
 
             // Check victims for damage
@@ -90,7 +92,8 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                 if (!attacker.equals(v)) {
                     HealthComponent health = hm.get(v);
                     InjurableAreaComponent area = jm.get(v);
-                    if (weapon.weapon.justUsed) {
+                    // check if weapon was used and not on cooldown
+                    if (weapon.weapon.justUsed && (currentTime - weapon.weapon.lastAttack > weapon.weapon.cooldown)) {
                         // If weapon area and injurable area of character overlap
 
                         // Handle Sword
@@ -98,14 +101,14 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                             if (((Sword) weapon.weapon).checkHit(area.area))
                             	calculateDamage(weapon, health, v, attacker, -1);
 
-                        // Handle Bow
+                        // Shoot Bow, check bullets later
                         if (weapon.weapon.getClass().equals(Bow.class)) {
                             Bow bow = (Bow) weapon.weapon;
                             bow.shoot(body.dynamicBody.getPosition(), body.direction, maxBulletId);
                             ntc.networkMessagesToProcess.add(new ShootResponse(attacker.getComponent(IdComponent.class).id, body.dynamicBody.getPosition(), body.direction, maxBulletId));
                             maxBulletId++;
                             weapon.weapon.justUsed = false; // usage over, waiting for next attack
-                        }
+                        }                        
                     }
 
                     // Check Bullets for hit
@@ -115,7 +118,11 @@ public class BattleSystem extends EntitySystem implements EntityListener {
                             calculateDamage(weapon, health, v, attacker, res);
                 }
             }
-            weapon.weapon.justUsed = false; // usage over, waiting for next attack
+            
+            if(weapon.weapon.justUsed && (currentTime - weapon.weapon.lastAttack > weapon.weapon.cooldown)) {
+            	weapon.weapon.lastAttack = currentTime;
+            	weapon.weapon.justUsed = false; // usage over, waiting for next attack
+            }
         }
 
         // Check if someone has died

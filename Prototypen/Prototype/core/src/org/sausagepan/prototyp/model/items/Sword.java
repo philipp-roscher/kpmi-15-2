@@ -12,15 +12,16 @@ public class Sword extends WeaponItem {
     /* ............................................................................ ATTRIBUTES .. */
     public Rectangle damageArea;
     /* ........................................................................... CONSTRUCTOR .. */
-    public Sword(TextureRegion region, int strength, Damagetype damagetype) {
-        super(region, strength, damagetype);
+    public Sword(TextureRegion region, int strength, Damagetype damagetype, long cooldown) {
+        super(region, strength, damagetype, cooldown);
         this.damageArea = new Rectangle(0, 0, .5f, .5f);
+    }
+    
+    public Sword(TextureRegion region, int strength, Damagetype damagetype) {
+        this(region, strength, damagetype, 300);
     }
     /* ............................................................................... METHODS .. */
     public boolean checkHit(Rectangle hittableArea) {
-        /*System.out.println(this.damageArea.overlaps(hittableArea));
-        System.out.println(hittableArea);
-        System.out.println(damageArea);*/
         return this.damageArea.overlaps(hittableArea);
     }
     /* ..................................................................... GETTERS & SETTERS .. */
