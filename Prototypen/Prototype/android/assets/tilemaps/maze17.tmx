@@ -10,7 +10,7 @@
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztVwsOwiAM5dpOncfY1HlXabImL2SljJbhEl9CwqelUB60hNAft1jusVyhPijtEfQv67gkK/UzXrG8Y3lCfVbaC+hP67gkK/X/AkZdpBno3BZVqh0mgy6tvYXvaF68DynXGbT2nO/4Tkj6Emhe5O2s2NHmqdW34HGwvdT2p4Nd5mNL25JfqV/jowekvZXuuScvCD14UQOLn4iH9G5Z3sYtP5WuiXhIMTblovXsrWd3lrPfC+87tTeuevt16x3jmFwTTzWUzIWxNM09LThz/nUEevoGOYf5oMQXzPc4bxxCPofMATmH/yPJJ/wHYjn873hy9g9ffAFiKViS
+   eJztVwEOgyAM5NvqdA/wAW7qHsAvRxMuuRGrMEVcskuaAfaAdActxpTHzVnrrPHt3llN/Xah3xG/8t81314ZB0Znk7Onb1tnD+pPC/2Z+IP/rvlaZfwK6LZdskH+t3nTKx+GHVzZe47Yybx8HqDfELL3tdjhDLXmU+tbkHmhT/kVzdoEPmCJf7bWS2pa1i6h6eaEtbW4yviYeW2zMn/suiV1ISh516Wg2smFFr/F0r18T+BKjg1jHcvX8CrMvyr2xjUEarlYHB1X1HIM5GTZl+TVI++RmLmQk5GLj7pHfrn+OgMlY8Oa43pQ0wvODdeNNbVTNcua4/eRFhOcG/jxeyd8L/1xHbwBYkNZCw==
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
