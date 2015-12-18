@@ -163,6 +163,9 @@ public class EntityComponentSystem {
                 = new InGameUISystem(mediaManager, characterClass, game);
         inGameUISystem.addedToEngine(engine);
 
+        // One Second System
+        OneSecondSystem oneSecondSystem = new OneSecondSystem(game);
+        
         // Adding them to the Engine
         this.engine.addSystem(spriteSystem);
         this.engine.addSystem(weaponSystem);
@@ -174,6 +177,7 @@ public class EntityComponentSystem {
         this.engine.addSystem(inventorySystem);
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
+        this.engine.addSystem(oneSecondSystem);
     }
 
     public void setUpMazeLights() {

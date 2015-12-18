@@ -32,7 +32,9 @@ public class BulletSystem extends EntitySystem implements EntityListener {
     private ComponentMapper<WeaponComponent> wm
             = ComponentMapper.getFor(WeaponComponent.class);
 
-    BulletSystem(Maze maze) {
+    /* ........................................................................... CONSTRUCTOR .. */
+
+    public BulletSystem(Maze maze) {
         this.maze = maze;
     }
 
