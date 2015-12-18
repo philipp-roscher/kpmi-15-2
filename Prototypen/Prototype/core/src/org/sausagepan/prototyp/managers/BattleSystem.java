@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
+import java.util.Random;
+
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -130,6 +132,17 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         	HealthComponent health = hm.get(v);
         	if(health.HP == 0) {
         		if(v.getClass().equals(MonsterEntity.class)) {
+					Random r = new Random();
+
+					// Generate potion with a chance of 25%
+					if (r.nextFloat() < 0.25) {
+						DynamicBodyComponent body = dm.get(v);
+						MapItem mapItem = new MapItem(body.dynamicBody.getPosition(), ItemType.POTION_HP, 1);
+						int id = ECS.createItem(mapItem);
+						NewItem newItem = new NewItem(id, mapItem);
+						ntc.networkMessagesToProcess.add(newItem);
+					}
+
         			// Remove monsters
         			ECS.deleteMonster(v.getComponent(IdComponent.class).id);        			
         		} else {
