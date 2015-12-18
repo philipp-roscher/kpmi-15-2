@@ -1,10 +1,13 @@
 package org.sausagepan.prototyp.model.components;
 
+import org.sausagepan.prototyp.model.CollisionFilter;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -32,6 +35,12 @@ public class SensorComponent implements Component {
         fixDef.shape       = circle;                           // bouncing
         fixture = sensor.createFixture(fixDef);    // add fixture to body
         fixture.setSensor(true);
+        
+        Filter filter = fixture.getFilterData();
+        System.out.println(filter.categoryBits);
+        filter.categoryBits = CollisionFilter.CATEGORY_SENSOR;
+        fixture.setFilterData(filter);
+
 
         circle.dispose();
     }
