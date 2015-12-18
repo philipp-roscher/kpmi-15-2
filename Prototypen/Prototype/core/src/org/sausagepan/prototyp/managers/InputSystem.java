@@ -9,7 +9,6 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.EntityFamilies;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -37,7 +36,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class InputSystem extends EntitySystem implements InputProcessor {
     /* ............................................................................ ATTRIBUTES .. */
     private ImmutableArray<Entity> entities;
-    private ImmutableArray<Entity> gms;
 
     private ComponentMapper<DynamicBodyComponent> pm
             = ComponentMapper.getFor(DynamicBodyComponent.class);
@@ -134,7 +132,6 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                 InputComponent.class,
                 WeaponComponent.class,
                 NetworkComponent.class).get() );
-        gms = engine.getEntitiesFor(EntityFamilies.gameMasterFamily);
     }
 
     public void update(float deltaTime) {
@@ -225,16 +222,14 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                     break;
                 case Input.Keys.S:
                     //Spawn Monsters : sent current position of MG and set spawn to true
-                    if (gms != null) {
-                        for (Entity gm : gms) {
-                            MonsterSpawnComponent mon = mm.get(gm);
-                            mon.setMasterPosition(new Vector2(
-                                    body.dynamicBody.getPosition().x,
-                                    body.dynamicBody.getPosition().y
-                            ));
-                            mon.monsterSpawn = true;
-                            ntc.monster = mon;
-                        }
+                    if (entity.getComponent(TeamComponent.class).TeamId == 0) {
+                        MonsterSpawnComponent mon = mm.get(entity);
+                        mon.setMasterPosition(new Vector2(
+                                body.dynamicBody.getPosition().x,
+                                body.dynamicBody.getPosition().y
+                        ));
+                        mon.monsterSpawn = true;
+                        ntc.monster = mon;
                     }
                     break;
 

@@ -15,6 +15,7 @@ import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SensorComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
@@ -279,8 +280,9 @@ public class EntityComponentSystem {
 		MonsterEntity monster = monsters.get(id);
 		if(monster != null) {
 			if(!finalDeletion) {
-				// delete body only
-				world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);	
+				// delete sensor and body only
+				world.destroyBody(monster.getComponent(SensorComponent.class).sensor);
+				world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
 			}
 			else {
 				// completely delete entity

@@ -114,19 +114,24 @@ public class SERVERNetworkSystem extends EntitySystem {
             	System.out.println("Player " + id + " has disconnected");
             	
             	ServerCharacterEntity character = ECS.getCharacter(id);
-            	DynamicBodyComponent body = character.getComponent(DynamicBodyComponent.class);
-    			InventoryComponent inventory = character.getComponent(InventoryComponent.class);
-    			// create new temporary Vector2 that holds old character position
-				Vector2 position = new Vector2(body.dynamicBody.getPosition());
     			
-    			// Drop his keys        			
-    			for(int i=0; i<3; i++) {
-    				if(inventory.ownKeys[i]) {
-    					MapItem mapItem = new MapItem(position, ItemType.KEY, (i+1));
-    					int itemId = ECS.createItem(mapItem);
-    					NewItem newItem = new NewItem(itemId, mapItem);
-    					ntc.networkMessagesToProcess.add(newItem);
-    				}
+    			// if player hasn't chosen a character class yet, he isn't registered by the ECS yet
+    			if(character != null) {
+                	DynamicBodyComponent body = character.getComponent(DynamicBodyComponent.class);
+        			InventoryComponent inventory = character.getComponent(InventoryComponent.class);
+        			
+	    			// create new temporary Vector2 that holds old character position
+					Vector2 position = new Vector2(body.dynamicBody.getPosition());
+	    			
+	    			// Drop his keys        			
+	    			for(int i=0; i<3; i++) {
+	    				if(inventory.ownKeys[i]) {
+	    					MapItem mapItem = new MapItem(position, ItemType.KEY, (i+1));
+	    					int itemId = ECS.createItem(mapItem);
+	    					NewItem newItem = new NewItem(itemId, mapItem);
+	    					ntc.networkMessagesToProcess.add(newItem);
+	    				}
+	    			}
     			}
 
             	ECS.deleteCharacter(id);

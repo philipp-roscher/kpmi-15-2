@@ -10,12 +10,10 @@ import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.NetworkComponent;
-import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
+import org.sausagepan.prototyp.model.components.SensorComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
-import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapCharacterObject;
@@ -203,7 +201,7 @@ public class SERVEREntityComponentSystem {
 	public ServerCharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, CharacterClass clientClass) {		
 		System.out.println(newCharacterId + ", " + newCharacterTeamId + ", " + clientClass);
 		// Create Entity
-        ServerCharacterEntity newCharacter = setUpCharacterEntity(clientClass);
+        ServerCharacterEntity newCharacter = entityFactory.createServerCharacter(clientClass);
 
         // Add Components
         newCharacter.add(new IdComponent(newCharacterId));
@@ -219,17 +217,7 @@ public class SERVEREntityComponentSystem {
         this.engine.addEntity(newCharacter);
         return newCharacter;
 	}
-
-    /**
-     * Creates a generic {@link CharacterEntity} without {@link NetworkComponent} or
-     * {@link NetworkTransmissionComponent}
-     * @return
-     */
-    private ServerCharacterEntity setUpCharacterEntity(CharacterClass characterClass) {
-        // Create Entity
-        return entityFactory.createServerCharacter(characterClass);
-    }
-
+	
     public void deleteCharacter(int id) {
 		ServerCharacterEntity character = characters.get(id);
 		if(character != null) {
@@ -243,6 +231,7 @@ public class SERVEREntityComponentSystem {
     public void deleteMonster(int id) {
 		MonsterEntity monster = monsters.get(id);
 		if(monster != null) {
+			world.destroyBody(monster.getComponent(SensorComponent.class).sensor);
 			world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
 			engine.removeEntity(monster);
 			this.monsters.remove(id);

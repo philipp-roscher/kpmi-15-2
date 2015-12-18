@@ -80,7 +80,6 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
         }
     }
 
-
     public void drawWeaponDebugger() {
         for (Entity entity : entities) {
             if(entity.getComponent(WeaponComponent.class) != null) {

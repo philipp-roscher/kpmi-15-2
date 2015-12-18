@@ -250,6 +250,7 @@ public class InMaze implements Screen {
             }
         });
         
+        game.client.updateReturnTripTime();
         ECS.setupNetworkSystem();
     }
 

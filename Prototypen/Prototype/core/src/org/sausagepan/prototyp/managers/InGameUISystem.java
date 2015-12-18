@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.managers;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
@@ -13,6 +14,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -110,7 +112,7 @@ public class InGameUISystem extends EntitySystem {
         	if(respawnTime >= 0) {
 	            font.setColor(1, 0, 0, 1);
 	            // TODO use proper coordinates??
-	            font.draw(batch, "Respawn in " + respawnTime, 350, 250);
+	            font.draw(batch, "Respawn in " + respawnTime, 350, 280);
 	            font.setColor(1, 1, 1, 1);
         	}
         }
@@ -130,6 +132,13 @@ public class InGameUISystem extends EntitySystem {
             font.draw(batch, "You have lost!", 305, 320);
             font.getData().setScale(1);
             font.setColor(1, 1, 1, 1);
+        }
+        
+        if (GlobalSettings.DEBUGGING_ACTIVE) {
+        	int ping = game.client.getReturnTripTime();
+        	int fps = Gdx.graphics.getFramesPerSecond();
+        	font.draw(batch, ping + " ms", 100, 420);
+        	font.draw(batch, fps + " FPS", 150, 420);
         }
 
         this.batch.end();
