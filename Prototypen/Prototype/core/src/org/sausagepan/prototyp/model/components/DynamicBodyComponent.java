@@ -1,6 +1,9 @@
 package org.sausagepan.prototyp.model.components;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.model.CollisionFilter;
+import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -8,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -47,6 +51,14 @@ public class DynamicBodyComponent implements Component {
         fixDef.friction    = 0.4f;                      // objects friction on other objects
         fixDef.restitution = 0.0f;                      // bouncing
         fixture = dynamicBody.createFixture(fixDef);    // add fixture to body
+        
+        Filter filter = fixture.getFilterData();
+        if(childOf.getClass().equals(ServerCharacterEntity.class) || childOf.getClass().equals(CharacterEntity.class))
+        	if(characterClass == CharacterClass.DRAGON)
+        		filter.categoryBits = CollisionFilter.CATEGORY_GAME_MASTER;
+        	else
+        		filter.categoryBits = CollisionFilter.CATEGORY_PLAYER;
+        fixture.setFilterData(filter);
         
         circle.dispose();
     }

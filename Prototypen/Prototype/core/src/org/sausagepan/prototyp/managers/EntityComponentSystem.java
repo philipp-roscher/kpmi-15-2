@@ -231,7 +231,7 @@ public class EntityComponentSystem {
         localCharacter.add(new NetworkComponent());
         
         // opens passages for game master
-        if(characterClass == CharacterClass.DRAGON) maze.openSecretPassages();
+        maze.openSecretPassages();
     }
 
     /**

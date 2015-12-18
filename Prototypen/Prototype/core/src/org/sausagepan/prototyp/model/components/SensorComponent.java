@@ -37,7 +37,6 @@ public class SensorComponent implements Component {
         fixture.setSensor(true);
         
         Filter filter = fixture.getFilterData();
-        System.out.println(filter.categoryBits);
         filter.categoryBits = CollisionFilter.CATEGORY_SENSOR;
         fixture.setFilterData(filter);
 
