@@ -32,21 +32,32 @@ public class MazeContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+    	Fixture FixtureA = contact.getFixtureA();
+    	Fixture FixtureB = contact.getFixtureB();
+    	
+    	// if not in the correct order, try again with swapped fixtures
+    	if(!(FixtureA.isSensor() && !FixtureB.isSensor())) {
+        	FixtureB = contact.getFixtureA();
+        	FixtureA = contact.getFixtureB();
+        	
+        	if(!(FixtureA.isSensor() && !FixtureB.isSensor())) {
+            	return;
+            }
+        }
+    	
     	// check if the ended contact was the contact with the player the monster was chasing
-        if(contact.getFixtureA().isSensor()
-    		&& !contact.getFixtureB().isSensor()
-            && contact.getFixtureA().getBody().getUserData() != null
-            && !(contact.getFixtureA().getBody().getUserData() instanceof String)
-            && contact.getFixtureB().getBody().getUserData() != null
-            && !(contact.getFixtureB().getBody().getUserData() instanceof String)
-            ) {
-        		ChaseComponent chase = ((Entity)contact.getFixtureA().getBody().getUserData())
-	        			.getComponent(ChaseComponent.class);
-        		DynamicBodyComponent body = ((Entity)contact.getFixtureA().getBody().getUserData())
-	        			.getComponent(DynamicBodyComponent.class);
-        		
-	        	if(chase != null && body != null && chase.body.equals(body.dynamicBody))
-	        		((Entity)(contact.getFixtureA().getBody().getUserData())).remove(ChaseComponent.class);        	
+        if(FixtureA.getBody().getUserData() != null
+            && !(FixtureA.getBody().getUserData() instanceof String)
+            && FixtureB.getBody().getUserData() != null
+            && !(FixtureB.getBody().getUserData() instanceof String)
+        ) {
+        	ChaseComponent chase = ((Entity)FixtureA.getBody().getUserData())
+        			.getComponent(ChaseComponent.class);
+        	DynamicBodyComponent body = ((Entity)FixtureB.getBody().getUserData())
+        			.getComponent(DynamicBodyComponent.class);
+        	
+        	if(chase != null && body != null && chase.body.equals(body.dynamicBody))
+        		((Entity)FixtureA.getBody().getUserData()).remove(ChaseComponent.class);
         }
     }
 
@@ -70,7 +81,6 @@ public class MazeContactListener implements ContactListener {
         		&& FixtureB.getBody().getUserData() instanceof MonsterEntity) {
         	FixtureB = contact.getFixtureA();
         	FixtureA = contact.getFixtureB();
-        	System.out.println("Swapped fixtures");
         }
         
         
@@ -89,7 +99,6 @@ public class MazeContactListener implements ContactListener {
                 || FixtureB.getBody().getUserData() == null;
 
         // If everything is okay
-        System.out.println(""+firstOneSensor + oneStatic + bothMonsters + oneWithoutEntityReference);
         if( firstOneSensor && !oneStatic && !bothMonsters && !oneWithoutEntityReference) {
             boolean selfDetection = FixtureA.getBody()
                     .equals(FixtureB.getBody());
