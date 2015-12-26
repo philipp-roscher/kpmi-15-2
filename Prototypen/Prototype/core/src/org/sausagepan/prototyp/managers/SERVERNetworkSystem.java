@@ -1,16 +1,13 @@
 package org.sausagepan.prototyp.managers;
 
-import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
-import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
@@ -34,7 +31,6 @@ import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -116,23 +112,8 @@ public class SERVERNetworkSystem extends EntitySystem {
             	ServerCharacterEntity character = ECS.getCharacter(id);
     			
     			// if player hasn't chosen a character class yet, he isn't registered by the ECS yet
-    			if(character != null) {
-                	DynamicBodyComponent body = character.getComponent(DynamicBodyComponent.class);
-        			InventoryComponent inventory = character.getComponent(InventoryComponent.class);
-        			
-	    			// create new temporary Vector2 that holds old character position
-					Vector2 position = new Vector2(body.dynamicBody.getPosition());
-	    			
-	    			// Drop his keys        			
-	    			for(int i=0; i<3; i++) {
-	    				if(inventory.ownKeys[i]) {
-	    					MapItem mapItem = new MapItem(position, ItemType.KEY, (i+1));
-	    					int itemId = ECS.createItem(mapItem);
-	    					NewItem newItem = new NewItem(itemId, mapItem);
-	    					ntc.networkMessagesToProcess.add(newItem);
-	    				}
-	    			}
-    			}
+            	if(character != null)
+            		this.getEngine().getSystem(ItemSystem.class).dropItems(id);
 
             	ECS.deleteCharacter(id);
             	server.sendToAllTCP(new DeleteHeroResponse(id));

@@ -43,6 +43,7 @@ public class MazeGenerator {
     Array<Vector2> lightPositions;
     Array<Vector2> gameMasterSecretPositions;
     Array<Vector2> monsterPositions;
+    Array<Rectangle> invalidKeyPositions;
 	Array<MapMonsterObject> monsterObjects;
     Array<MapItem> mapItems;
 
@@ -72,6 +73,7 @@ public class MazeGenerator {
         this.lightPositions = new Array<Vector2>();
         this.monsterPositions = new Array<Vector2>();
         this.monsterObjects = new Array<MapMonsterObject>();
+        this.invalidKeyPositions = new Array<Rectangle>();
         this.gameMasterSecretPositions = new Array<Vector2>();
         this.mapItems = new Array<MapItem>();
 
@@ -95,8 +97,10 @@ public class MazeGenerator {
 		for(int i = mazeWidth; i > 0; i--)
 			for(int j = mazeHeight; j > 0; j--){
 				k = entries.get(new Vector2(i, j));
-				if (k == -1)
+				if (k == -1) {
 					addNewMazeCell("tilemaps/treasureRoom.tmx", i, j); // treasure cave
+					invalidKeyPositions.add(new Rectangle(i*32f, j*32f, 32f, 32f));
+				}
 				else
 					addNewMazeCell("tilemaps/maze" + k + ".tmx", i, j);
 			}				
@@ -417,7 +421,7 @@ public class MazeGenerator {
     }
 
     public Array<MapMonsterObject> getMonsterObjects() {
-        return  monsterObjects;
+        return monsterObjects;
     }
 
     public Array<Vector2> getGameMasterSecretPositions() {
@@ -428,8 +432,12 @@ public class MazeGenerator {
         return mapItems;
     }
 
-    //übergibt Startpsotionen der Spieler
+    // übergibt Startpositionen der Spieler
 	public float[][] getStartPositions(){
 		return positions;
+	}
+
+	public Array<Rectangle> getInvalidKeyPositions() {
+		return invalidKeyPositions;
 	}
 }

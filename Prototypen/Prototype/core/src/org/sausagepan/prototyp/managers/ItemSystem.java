@@ -2,7 +2,9 @@ package org.sausagepan.prototyp.managers;
 
 import java.util.Iterator;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.ItemType;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
@@ -11,9 +13,11 @@ import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
+import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.model.items.PotionHP;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.ItemPickUp;
+import org.sausagepan.prototyp.network.Network.NewItem;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -21,6 +25,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by georg on 13.11.15.
@@ -85,6 +91,30 @@ public class ItemSystem extends EntitySystem implements EntityListener {
                 }
             }
         }
+    }
+    
+    public void dropItems(int playerId) {
+    	Entity player = ECS.getCharacter(playerId);
+    	InventoryComponent inventory = CompMappers.inventory.get(player);
+    	DynamicBodyComponent body = CompMappers.dynBody.get(player);
+    	// create new temporary Vector2 that holds old character position
+    	Vector2 position = body.dynamicBody.getPosition().cpy();
+
+    	for(int i=0; i<3; i++) {
+    		if(inventory.ownKeys[i]) {
+    			// if character is in a position where the key can't be retrieved by other players,
+    			// drop it at his starting position instead
+    			if(ECS.getMaze().isInvalidKeyPosition(new Rectangle(position.x, position.y, 1f, 1f)))
+    				position = body.startPosition.cpy().add(2f, 0f);
+
+    			// create new item and a message to inform the clients
+    			MapItem mapItem = new MapItem(position, ItemType.KEY, (i+1));
+    			int id = ECS.createItem(mapItem);
+    			NewItem newItem = new NewItem(id, mapItem);
+    			ntc.networkMessagesToProcess.add(newItem);
+    		}
+    		inventory.ownKeys[i] = false;
+    	}
     }
     
     @Override

@@ -46,6 +46,7 @@ public class Maze extends EntitySystem {
     private Array<Body> doorLockerBodies;
     private Array<BodyDef> doorLockerBodyDefs;
     private Array<Rectangle> doorLockerRectangles;
+    private Array<Rectangle> invalidKeyPositions;
     private Array<Body> secretWalls;
     private boolean treasureRoomOpen = false;
 
@@ -65,6 +66,7 @@ public class Maze extends EntitySystem {
         this.doorLockerBodies = new Array<Body>();          // Array with treasure room locking bodies
         this.doorLockerBodyDefs = new Array<BodyDef>();     // Array with their definition fo recreate
         this.doorLockerRectangles = new Array<Rectangle>();
+        this.invalidKeyPositions = new Array<Rectangle>();
         this.secretWalls = new Array<Body>();
         generator = new MazeGenerator(mapInformation.width, mapInformation.height);
         setUpTiledMap(world);
@@ -89,6 +91,7 @@ public class Maze extends EntitySystem {
         mapItems = generator.getMapItems();
         gameMasterSecretPositions = generator.getGameMasterSecretPositions();
         mapMonsterObjects = generator.getMonsterObjects();
+        invalidKeyPositions = generator.getInvalidKeyPositions();
         // create static bodies from colliders
         Rectangle r;
         for(MapObject mo : tiledMap.getLayers().get("colliderWalls").getObjects()) {
@@ -133,8 +136,10 @@ public class Maze extends EntitySystem {
             }
 
             // List Game Masters secret passages
-            if(mo.getName() != null && mo.getName().equals("secretWall"))
+            if(mo.getName() != null && mo.getName().equals("secretWall")) {
                 secretWalls.add(groundBody);
+                invalidKeyPositions.add(new Rectangle(r.getX() / 32f, r.getY() / 32f, r.getWidth() / 32f, r.getHeight() / 32f));
+            }
 
             PolygonShape groundBox = new PolygonShape();
             groundBox.setAsBox(r.width/64f, r.height/64f);
@@ -209,6 +214,17 @@ public class Maze extends EntitySystem {
         destroyExitBody();
     }
 
+    /**
+     * checks if a key can be placed in the given position
+     */
+    public boolean isInvalidKeyPosition(Rectangle rectangleToCheck) {
+    	for(Rectangle r : invalidKeyPositions)
+    		if(r.overlaps(rectangleToCheck))
+    			return true;
+
+    	return false;
+    }
+
     /* ..................................................................... GETTERS & SETTERS .. */
     public OrthogonalTiledMapRendererWithPlayers getTiledMapRenderer() {
         return tiledMapRenderer;
@@ -242,5 +258,7 @@ public class Maze extends EntitySystem {
     	return generator.getStartPositions();
     }
 
-    public Array<Rectangle> getExitWayRect() {return exitWayRect;}
+    public Array<Rectangle> getExitWayRect() {
+    	return exitWayRect;
+    }
 }

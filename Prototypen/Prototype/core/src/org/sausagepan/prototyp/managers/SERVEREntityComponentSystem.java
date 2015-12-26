@@ -330,5 +330,9 @@ public class SERVEREntityComponentSystem {
 
 	public void startGame() {
 		this.maze.openEntranceDoors();		
+	}
+
+	public Maze getMaze() {
+		return maze;
 	}	
 }

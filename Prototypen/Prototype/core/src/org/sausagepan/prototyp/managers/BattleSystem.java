@@ -8,7 +8,6 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
-import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -147,9 +146,9 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         			ECS.deleteMonster(v.getComponent(IdComponent.class).id);        			
         		} else {
         			DynamicBodyComponent body = dm.get(v);
-        			InventoryComponent inventory = v.getComponent(InventoryComponent.class);
-        			// create new temporary Vector2 that holds old character position
-					Vector2 position = new Vector2(body.dynamicBody.getPosition());
+
+        			// Drop his keys
+        			this.getEngine().getSystem(ItemSystem.class).dropItems(v.getComponent(IdComponent.class).id);
         			
         			// Reset human player to starting position, refill his health bar
         			body.dynamicBody.setTransform(new Vector2(0,0), 0f);
@@ -160,17 +159,6 @@ public class BattleSystem extends EntitySystem implements EntityListener {
         			v.add(new IsDeadComponent(System.currentTimeMillis(), 5000));
         			ntc.networkMessagesToProcess.add(new YouDiedResponse(v.getComponent(IdComponent.class).id));
         			ntc.networkMessagesToProcess.add(new HPUpdateResponse(v.getComponent(IdComponent.class).id, true, health.HP));
-        			
-        			// Drop his keys        			
-        			for(int i=0; i<3; i++) {
-        				if(inventory.ownKeys[i]) {
-        					MapItem mapItem = new MapItem(position, ItemType.KEY, (i+1));
-        					int id = ECS.createItem(mapItem);
-        					NewItem newItem = new NewItem(id, mapItem);
-        					ntc.networkMessagesToProcess.add(newItem);
-        				}
-        				inventory.ownKeys[i] = false;
-        			}
         		}
         	}
         }
