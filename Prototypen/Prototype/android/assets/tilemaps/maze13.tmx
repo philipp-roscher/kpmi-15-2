@@ -1,71 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" nextobjectid="130">
- <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32" tilecount="750">
+<map version="1.0" orientation="orthogonal" width="32" height="32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="dungeon tileset calciumtrice" tilewidth="32" tileheight="32">
   <image source="../textures/spritesheets/dungeon tileset calciumtrice.png" width="960" height="808"/>
  </tileset>
  <layer name="ground" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzdllEOgjAMhkui8gon8LqexAtNHwQ1xl3ELdJImpV2lSzAwx/J/Ndv2f4VmgqgMagNugGAh+9za6xj1Rr4DqaFvkt4fkzoOvxS3y7M3Vd6P/UgvxPW6UHny/H7hfBxHzX1tNKuN7KfQQcjH/9/g43/CjrCz1cz6+D4nZLP1T0Rnxf2apznfnRu9A5g/qW65wy+g7z8OQWf7iP6uHsr5VTij+um7j+dx4k7T4nfEY+VL53T1vkx7zH/d5IPOoZ5mZufq9J82k9L8+n8tfFjn6DZ4jKWGqd9akv5k3qf9lysfKn3rI2fek9P8bnex2WTy6Ufxkrkj9vHUvnX8vE7SvudMTe/pJbEtyq+5+o/a3wAwjyx6Q==
+   eJztllEOgjAMhkuC8Aon8LqexAuJD4K+yEVkcY2lbus6GGriwx8X/Nm3dW1HUwA0CWonXQBghOe4TZwnVb/AP0FY6Oum8S2gs/3tYO4tp3d3xbuX+kNzIr8X1jnCyxfjpX5pTi1fimmsHz0mFoPVlYwHGyO+1hjF8PHcpH2E+Oi7g56P2iviydUv5B+sr7J7qQM1w/PZnE9ZzGPJ68XFp4wjW+foYaM0+efzUwaPI/7nq9syEB8N31f/ofc0kvi0R6TwQ3myBV/Kk9x8k+/Yr2h+8Gc8X3q2jlzn7zuvT/Fd867FryJqMic/xhvL533UJSnHlvBzifZVXL/m+2ctrbF/qffl5ku9T8v33dM++XqfKzf5M5qreA9uef48jlvn35//nfxUmbunXjjHA4gFsOA=
   </data>
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztllsOgjAQRbsTd8GPKwOlbsDHJyi4AR979JLMJANptFMLjbE3OWlCh5mU3qE1xk8rz7iQ+BJUYAO2oKaRn1lQTOat432eqyjelVfmZDWgBWdwAR2N/KynfHK+d7zPcy3Fu/LKnBoVM8XbzyGz1R/2x/c7zFG/UeRbK+vHVknUxB4cwBGczLhvfPdUq+F7dcQN3MEDPM24b7TenorXKXs3xprk/+BdPl6n7N1v18R5Q/s/ayz2iDwnlugBFntEnhMxeyArnaS3tGMM30lvacfsu99SiF9C/Omqo7l/SYX401VHc/9aSrvE9a+J62f9l17hL2ZX
+   eJztltsNwyAMRdmkW+SnkzUNmaCPz6QhE/SxYy8SlkzkREAhP+VIV0gB7GCMZaXCOASuS1l/glroDHWQdiN966FmMd8L+2mudeslu9wmMUAj9IAmyLiRvs3OHp+fhf00N7r1kl1uM4am0PpO+bGmONEdlPRv72dSfqwpTnQHJf0PEfaOkf5zY2OlmS7QFbpBd+Xfmy70D4bpCb2gN/RR/r2ZH/3QWXlO9ps74li+/yU2L/hbtWeLfa9bpLz/ig/liFS7cueLBOWIVLty50tlP6hnWMstreQeJBfUM6zlllFyDxKCdJ49kc7z76TkEK99oaPkx9pJqVO89oWOkp+Y/qtSqeTnC+e2a7c=
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJxjYBg8IJGRsBo3JvLkiLGjngj7KQX0sAMGrIHhYQPFuAAxYUaJ/fgALe0mxn5aA2rYfxotvRDKI8TkIUoAofRLrfSNnDZg7HQqmU1uGLVSyX5CYWTPhMADAQbSbpj9xAJsZQi10wu5gFrpZSDAqSHsdmoB9LSFq76idT02CkYBNgCrx3Cl06QBbgs0DKIy5PIAu+Ujney/CLTnKhBfQ7LvFiMEX6CDG94D7fgMxF+Q7PrBCMHvBigOxJggeDCBwVK/AgByFB3D
+   eJxjYBg8IJGRsBo3JvLkiLGjngj7KQX0sAMGrIHhYQPFuAAxYUaJ/fgALe0mxn5aA2rYfxotvRDKI8TkIUoAofRLrfSNnDaonU5oHUaEAKEwsmdC4IEAA2k3zH5iAba0QetyZSSAUwOcRwYDQE9Ho+lqFAwmAKvHcKXTpAFuCzQMojLk8gC75SOd7L8ItOcqEF9Dsu8WIwRfoIMb3gPt+AzEX5Ds+sEIwe8GKA7EmCB4MIHBUr8CAAp+G58=
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJwLZmBg0CEDKzMggBIQa5FhRhAQ6zMMHFAbBPbbDKD91gNo91AD8kBsQgKWp4H9tFCviEUfLkyJ/ZZAbIqG1Rkw8x+1wg3dHGzmYsv/o/YTbz4hTMhcVQrsJxXQO/yHiv16A2w/Nv9Tiim1nxYAm7m2o/YPSfuplS5VyLSfWmDU/oFt/w+0/QPd/xn1PwNDIBBrkoGR2+0KZJoRAMQAxlYg5Q==
+   eJztl2kKwjAQhecmVi0FF1SkCqL1hyfQ9v53MaGGjmOaTrZSMA8eJTTNl8kyaRoAmFl4+/ESOi2E1+hdLdygcp9rS/YeeCqYdYsJ8NVYyPHbgHmMQvOvzLZc+Dtm3SHliP8SXjH8tOjrkFT8dD3r5gr7HphvG8+ZWW9OyhfhEvkBv/vdl59BN1c0Lm6/ffimNZ34PB2gXR8n8lS+Gb7FezpW/CaNMf5T42fwnR8Vn+bpWPy+s5bGL8+kkumjBR+vOZcz3VcV6M/2sfi6ea0S34mvcp+Ndfkwd+SHUuL/N597T4ilFD//TkON/9szxzbkf8AbKr0wLQ==
   </data>
  </layer>
- <objectgroup name="colliderWalls">
-  <object id="59" x="544" y="0" width="480" height="96"/>
-  <object id="62" x="0" y="0" width="480" height="96"/>
-  <object id="66" x="0" y="96" width="32" height="96"/>
-  <object id="67" x="992" y="96" width="32" height="96"/>
-  <object id="74" x="448" y="416" width="288" height="64"/>
-  <object id="76" x="704" y="96" width="32" height="320"/>
-  <object id="77" x="576" y="224" width="128" height="64"/>
-  <object id="78" x="352" y="224" width="128" height="64"/>
-  <object id="79" x="128" y="288" width="224" height="64"/>
-  <object id="80" x="320" y="96" width="32" height="192"/>
-  <object id="81" x="160" y="576" width="512" height="64"/>
-  <object id="82" x="832" y="288" width="160" height="64"/>
-  <object id="84" x="416" y="736" width="448" height="64"/>
-  <object id="85" x="128" y="352" width="32" height="544"/>
-  <object id="87" x="160" y="352" width="64" height="64"/>
-  <object id="88" x="224" y="352" width="32" height="32"/>
-  <object id="89" x="160" y="416" width="32" height="32"/>
-  <object id="90" x="736" y="96" width="32" height="128"/>
-  <object id="91" x="768" y="96" width="64" height="32"/>
-  <object id="92" x="832" y="352" width="32" height="384"/>
-  <object id="96" x="672" y="896" width="64" height="32"/>
-  <object id="100" x="800" y="864" width="64" height="64"/>
-  <object id="102" x="832" y="832" width="32" height="32"/>
-  <object id="103" x="864" y="896" width="32" height="32"/>
-  <object id="105" x="640" y="896" width="32" height="32"/>
-  <object id="128" x="992" y="288" width="32" height="736"/>
-  <object id="129" x="0" y="288" width="32" height="736"/>
+ <objectgroup name="colliderWalls" width="0" height="0">
+  <object x="0" y="0" width="480" height="96"/>
+  <object x="544" y="0" width="480" height="96"/>
+  <object x="0" y="96" width="384" height="96"/>
+  <object x="672" y="96" width="160" height="32"/>
+  <object x="672" y="128" width="96" height="64"/>
+  <object x="992" y="96" width="32" height="96"/>
+  <object x="256" y="192" width="224" height="96"/>
+  <object x="576" y="192" width="160" height="96"/>
+  <object x="736" y="192" width="32" height="32"/>
+  <object x="128" y="288" width="224" height="64"/>
+  <object x="128" y="352" width="128" height="32"/>
+  <object x="128" y="384" width="96" height="32"/>
+  <object x="128" y="416" width="64" height="32"/>
+  <object x="128" y="448" width="32" height="128"/>
+  <object x="128" y="576" width="384" height="64"/>
+  <object x="448" y="416" width="288" height="64"/>
+  <object x="704" y="288" width="32" height="128"/>
+  <object x="928" y="288" width="96" height="224"/>
+  <object x="832" y="512" width="192" height="160"/>
+  <object x="992" y="672" width="32" height="352"/>
+  <object x="832" y="672" width="32" height="64"/>
+  <object x="416" y="736" width="448" height="64"/>
+  <object x="640" y="896" width="96" height="32"/>
+  <object x="800" y="896" width="96" height="32"/>
+  <object x="800" y="928" width="64" height="32"/>
+  <object x="832" y="832" width="32" height="32"/>
+  <object x="800" y="864" width="64" height="32"/>
+  <object x="0" y="288" width="32" height="736"/>
+  <object x="480" y="192" width="10" height="96"/>
+  <object x="566" y="192" width="10" height="96"/>
  </objectgroup>
- <objectgroup name="lights">
-  <object id="113" name="light" x="0" y="128" width="32" height="32"/>
-  <object id="115" name="light" x="384" y="32" width="32" height="32"/>
-  <object id="116" name="light" x="608" y="32" width="32" height="32"/>
-  <object id="117" name="light" x="992" y="128" width="32" height="32"/>
-  <object id="118" name="light" x="192" y="288" width="32" height="32"/>
-  <object id="119" name="light" x="288" y="288" width="32" height="32"/>
-  <object id="120" name="light" x="512" y="416" width="32" height="32"/>
-  <object id="121" name="light" x="672" y="416" width="32" height="32"/>
-  <object id="122" name="light" x="224" y="576" width="32" height="32"/>
-  <object id="123" name="light" x="352" y="576" width="32" height="32"/>
-  <object id="124" name="light" x="544" y="576" width="32" height="32"/>
-  <object id="125" name="light" x="544" y="736" width="32" height="32"/>
-  <object id="126" name="light" x="672" y="736" width="32" height="32"/>
+ <objectgroup name="lights" width="0" height="0">
+  <object name="light" x="0" y="128" width="32" height="32"/>
+  <object name="light" x="384" y="32" width="32" height="32"/>
+  <object name="light" x="608" y="32" width="32" height="32"/>
+  <object name="light" x="992" y="128" width="32" height="32"/>
+  <object name="light" x="192" y="288" width="32" height="32"/>
+  <object name="light" x="288" y="288" width="32" height="32"/>
+  <object name="light" x="512" y="416" width="32" height="32"/>
+  <object name="light" x="672" y="416" width="32" height="32"/>
+  <object name="light" x="224" y="576" width="32" height="32"/>
+  <object name="light" x="352" y="576" width="32" height="32"/>
+  <object name="light" x="544" y="576" width="32" height="32"/>
+  <object name="light" x="544" y="736" width="32" height="32"/>
+  <object name="light" x="672" y="736" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="monsters"/>
+ <objectgroup name="monsters" width="0" height="0"/>
 </map>
