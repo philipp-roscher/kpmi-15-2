@@ -17,6 +17,7 @@ public class MediaManager {
     // file names
     private String mazeBackgroundMusicFile   = "music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg";
     private String mainMenuBackgroundImgFile = "textures/backgrounds/main_menu_bg.png";
+    private String logoImgFile = "textures/backgrounds/logo.png";
     private String SelectionArcherFBig       = "textures/characterSelection/Archer_f_big.png";
     private String SelectionKnightMBig       = "textures/characterSelection/Knight_m_big.png";
     private String SelectionFighterMBig      = "textures/characterSelection/Fighter_m_big.png";
@@ -54,6 +55,7 @@ public class MediaManager {
         assets.load(this.mazeBackgroundMusicFile, Music.class);
         //load Images
         assets.load(this.mainMenuBackgroundImgFile, Texture.class);
+        assets.load(this.logoImgFile, Texture.class);
         assets.load(this.SelectionArcherFBig, Texture.class);
         assets.load(this.SelectionDragonRedBig, Texture.class);
         assets.load(this.SelectionFighterMBig, Texture.class);
@@ -93,6 +95,10 @@ public class MediaManager {
 
     public Texture getMainMenuBackgroundImg() {
         return assets.get(this.mainMenuBackgroundImgFile, Texture.class);
+    }
+
+    public Texture getLogoImg() {
+        return assets.get(this.logoImgFile, Texture.class);
     }
 
     public Texture getSelectionKnightMBig() {

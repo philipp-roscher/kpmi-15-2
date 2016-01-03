@@ -7,6 +7,7 @@ import org.sausagepan.prototyp.network.Network.GameStart;
 import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
+import org.sausagepan.prototyp.view.IntroScreen;
 import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;
@@ -48,7 +49,8 @@ public class KPMIPrototype extends Game {
 		startClient();
 		
 		// switch to main menu screen
-		this.setScreen(new MainMenuScreen(this));
+//		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new IntroScreen(this));
 	}
 
 	public void startClient() {
