@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
@@ -69,7 +70,7 @@ public class MainMenuScreen implements Screen {
     private Table table;
     private Skin skin;
     private final TextButton startButton, creditsButton, backButton;
-    private final TextArea creditsArea;
+    private final Label creditsArea;
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(KPMIPrototype game) {
@@ -107,7 +108,9 @@ public class MainMenuScreen implements Screen {
         FitViewport fit = new FitViewport(800, 480);
         this.stage = new Stage(fit);
         this.skin = new Skin(Gdx.files.internal("UI/uiskin.json"));
-        this.creditsArea = new TextArea("", skin, "default-transparent");
+        this.creditsArea = new Label("", skin, "default");
+		this.creditsArea.setAlignment(Align.center, Align.center);
+        this.creditsArea.setWrap(true);
         stage.addActor(creditsArea);
         this.startButton = new TextButton("Start Game", skin, "default");
         this.startButton.setWidth(128);
@@ -146,6 +149,7 @@ public class MainMenuScreen implements Screen {
                 startButton.setVisible(true);
                 creditsButton.setVisible(true);
                 creditsArea.setVisible(false);
+                backButton.setVisible(false);
             }
         });
         this.stage.addActor(backButton);

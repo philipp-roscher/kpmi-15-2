@@ -4,6 +4,8 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.UnitConverter;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
+import org.sausagepan.prototyp.managers.InGameUISystem;
+import org.sausagepan.prototyp.managers.InputSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
@@ -161,6 +163,8 @@ public class InMaze implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width,height);
+        ECS.getEngine().getSystem(InGameUISystem.class).getViewport().update(width, height);
+        ECS.getEngine().getSystem(InputSystem.class).getStage().getViewport().update(width,height);
 //		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 	}
 
@@ -263,6 +267,7 @@ public class InMaze implements Screen {
         camera.position.set(ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class)
                 .dynamicBody.getPosition().x, ECS.getLocalCharacterEntity()
                 .getComponent(DynamicBodyComponent.class).dynamicBody.getPosition().y, 0);
+        viewport.apply();
         batch.  setProjectionMatrix(camera.combined);
         shpRend.setProjectionMatrix(camera.combined);
         camera.update();

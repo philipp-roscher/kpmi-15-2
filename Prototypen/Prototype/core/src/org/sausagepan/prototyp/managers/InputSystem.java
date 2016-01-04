@@ -303,11 +303,16 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     }
 
     public void draw() {
+        this.stage.getViewport().apply();
         this.stage.draw();
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 
     public void setInputProcessor() {
         Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }

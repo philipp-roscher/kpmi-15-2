@@ -361,4 +361,7 @@ public class EntityComponentSystem {
         inMaze.quitGame(response);
     }
 
+    public Engine getEngine() {
+        return engine;
+    }
 }
