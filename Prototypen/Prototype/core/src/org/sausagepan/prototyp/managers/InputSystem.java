@@ -75,9 +75,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         // Buttons .................................................................................
         ImageButton.ImageButtonStyle fightButtonStyle = new ImageButton.ImageButtonStyle();
         Skin skin = new Skin(media.getTextureAtlasType("IngameUI"));
-        fightButtonStyle.up = skin.getDrawable("attackButton");
-        fightButtonStyle.down = skin.getDrawable("attackButton");
-        fightButtonStyle.over = skin.getDrawable("attackButton");
+        fightButtonStyle.up = skin.getDrawable("3dswordbuttonup");
+        fightButtonStyle.down = skin.getDrawable("3dswordbuttondown");
+        fightButtonStyle.over = skin.getDrawable("3dswordbuttonup");
         fightButtonStyle.pressedOffsetY = -1;
         fightButton = new ImageButton(fightButtonStyle);
         fightButton.setWidth(64f);
@@ -98,9 +98,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         });
 
         ImageButton.ImageButtonStyle spawnButtonStyle = new ImageButton.ImageButtonStyle();
-        spawnButtonStyle.up = skin.getDrawable("monsterButton");
-        spawnButtonStyle.down = skin.getDrawable("monsterButton");
-        spawnButtonStyle.over = skin.getDrawable("monsterButton");
+        spawnButtonStyle.up = skin.getDrawable("3dmonsterbuttonup");
+        spawnButtonStyle.down = skin.getDrawable("3dmonsterbuttondown");
+        spawnButtonStyle.over = skin.getDrawable("3dmonsterbuttonup");
         spawnButtonStyle.pressedOffsetY = -1;
         spawnButton = new ImageButton(spawnButtonStyle);
         spawnButton.setWidth(64f);

@@ -67,7 +67,7 @@ public class InGameUISystem extends EntitySystem {
         // Get health bar Images
         this.healthBarImages = new Array<TextureRegion>();
         for(int i=0; i<12; i++)
-            this.healthBarImages.add(atlas.findRegion("healthbar_" + i + "tenth"));
+            this.healthBarImages.add(atlas.findRegion("life_bar", i));
 
         // Get Key part Images
         this.keyFragmentImgs = new Array<TextureRegion>();
@@ -75,14 +75,14 @@ public class InGameUISystem extends EntitySystem {
             this.keyFragmentImgs.add(atlas.findRegion("key", i));
 
         switch(characterClass) {
-            case KNIGHT_M:this.characterImg = atlas.findRegion("face_knight");break;
-            case KNIGHT_F:this.characterImg = atlas.findRegion("face_knight");break;
-            case ARCHER_M:this.characterImg = atlas.findRegion("face_archer");break;
-            case ARCHER_F:this.characterImg = atlas.findRegion("face_archer");break;
-            case DRAGON:this.characterImg = atlas.findRegion("face_dragon");break;
-            case SHAMAN_M:this.characterImg = atlas.findRegion("face_shaman");break;
-            case SHAMAN_F:this.characterImg = atlas.findRegion("face_shaman");break;
-            default:this.characterImg = atlas.findRegion("face_knight");break;
+            case KNIGHT_M:this.characterImg = atlas.findRegion("3dface_knight");break;
+            case KNIGHT_F:this.characterImg = atlas.findRegion("3dface_knight");break;
+            case ARCHER_M:this.characterImg = atlas.findRegion("3dface_archer");break;
+            case ARCHER_F:this.characterImg = atlas.findRegion("3dface_archer");break;
+            case DRAGON:this.characterImg = atlas.findRegion("3dface_dragon");break;
+            case SHAMAN_M:this.characterImg = atlas.findRegion("3dface_shaman");break;
+            case SHAMAN_F:this.characterImg = atlas.findRegion("3dface_shaman");break;
+            default:this.characterImg = atlas.findRegion("3dface_knight");break;
         }
 
         this.recentHealthBarImg = healthBarImages.get(11);
@@ -95,8 +95,8 @@ public class InGameUISystem extends EntitySystem {
     public void draw() {
         this.viewport.apply();
         this.batch.begin();
-        this.batch.draw(characterImg, 16, 400, 64, 64);
-        this.batch.draw(recentHealthBarImg, 70, 424, 220, 40);
+        this.batch.draw(recentHealthBarImg, 16, 400, 256, 72);
+        this.batch.draw(characterImg, 16, 400, 72, 72);
         batch.draw(keyFragmentImgs.get(0), 690, 429);
         if(keyFragmentItems[0])
         	batch.draw(keyFragmentImgs.get(1), 691, 430);

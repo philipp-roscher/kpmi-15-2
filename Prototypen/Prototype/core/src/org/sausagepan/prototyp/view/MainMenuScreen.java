@@ -488,7 +488,7 @@ public class MainMenuScreen implements Screen {
                         "\n" +
                         "Heros & Monsters\n" +
                         "by\n" +
-                        "Sara Groß\n" +
+                        "Sara Gross\n" +
                         "\n" +
                         "Dungeon Tileset\n" +
                         "by\n" +

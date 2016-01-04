@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="life_bar.svg"
+   inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_11.png"
+   inkscape:export-xdpi="50.625"
+   inkscape:export-ydpi="50.625">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3929">
+      <stop
+         style="stop-color:#a40000;stop-opacity:1;"
+         offset="0"
+         id="stop3931" />
+      <stop
+         style="stop-color:#360000;stop-opacity:1;"
+         offset="1"
+         id="stop3933" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3785">
+      <stop
+         style="stop-color:#79df4d;stop-opacity:1;"
+         offset="0"
+         id="stop3787" />
+      <stop
+         style="stop-color:#144400;stop-opacity:1;"
+         offset="1"
+         id="stop3789" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3765">
+      <stop
+         style="stop-color:#989898;stop-opacity:1;"
+         offset="0"
+         id="stop3767" />
+      <stop
+         style="stop-color:#ededed;stop-opacity:1;"
+         offset="1"
+         id="stop3769" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3785"
+       id="linearGradient3791"
+       x1="64"
+       y1="110.64093"
+       x2="64"
+       y2="17.359074"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3929"
+       id="linearGradient3935"
+       x1="272"
+       y1="48"
+       x2="272"
+       y2="80"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,924.36218)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="82.585031"
+     inkscape:cy="42.487869"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
+     inkscape:window-x="0"
+     inkscape:window-y="131"
+     inkscape:window-maximized="1"
+     showborder="true"
+     inkscape:showpageshadow="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="4"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36218)">
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#babdb6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3082"
+       sodipodi:cx="64"
+       sodipodi:cy="64"
+       sodipodi:rx="64"
+       sodipodi:ry="64"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
+       transform="translate(0,924.36218)"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       transform="matrix(0.9609375,0,0,0.9609375,2.5,924.86218)"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
+       sodipodi:ry="64"
+       sodipodi:rx="64"
+       sodipodi:cy="64"
+       sodipodi:cx="64"
+       id="path3086"
+       style="color:#000000;fill:#eeeeec;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#888a85;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3088"
+       sodipodi:cx="64"
+       sodipodi:cy="64"
+       sodipodi:rx="64"
+       sodipodi:ry="64"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
+       transform="matrix(0.86049107,0,0,0.86049107,8.9285714,931.29075)"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       transform="matrix(0.8046875,0,0,0.8046875,12.5,936.86218)"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
+       sodipodi:ry="64"
+       sodipodi:rx="64"
+       sodipodi:cy="64"
+       sodipodi:cx="64"
+       id="path3090"
+       style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       style="color:#000000;fill:#888a85;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 94.9375,0 c 23.75259,11.503202 40.125,35.837868 40.125,64 0,2.702805 -0.14372,5.375634 -0.4375,8 L 410,72 c 4.432,0 9.69989,-4.211582 12,-8 L 456,8 c 2.30011,-3.7884183 -3.568,-8 -8,-8 z"
+       transform="translate(0,924.36218)"
+       id="rect3092"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cscssssc"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       sodipodi:nodetypes="cscssssc"
+       inkscape:connector-curvature="0"
+       id="path3098"
+       d="m 94.9375,0 c 23.75259,11.503202 40.125,35.837868 40.125,64 0,2.702805 -0.14372,5.375634 -0.4375,8 L 410,72 c 4.432,0 9.69989,-4.211582 12,-8 L 456,8 c 2.30011,-3.7884183 -3.568,-8 -8,-8 z"
+       style="color:#000000;fill:#d3d7cf;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       transform="translate(0,924.36218)"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       style="color:#000000;fill:#eeeeec;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 102.4375,925.29075 c 20.75052,12.8935 34.625,35.79045 34.625,62 0,2.02479 -0.15241,4.01086 -0.3125,6 l 273.25,0 c 1.58249,0 3.72033,-0.8497 5.65625,-2.21875 1.93592,-1.36905 3.65584,-3.21623 4.625,-4.8125 l 34,-56 c 0.29393,-0.48411 0.30344,-0.7574 0.15625,-1.21875 -0.14719,-0.46135 -0.5807,-1.06689 -1.25,-1.65625 -1.33861,-1.17871 -3.60501,-2.09375 -5.1875,-2.09375 l -345.5625,0 z"
+       id="path3883"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       style="color:#000000;fill:#888a85;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 114.375 4.90625 C 130.65069 19.01704 141.0625 39.7003 141.0625 62.90625 C 141.0625 63.60781 140.99615 64.22936 140.96875 64.90625 L 410 64.90625 C 410.15065 64.90625 411.90425 64.45549 413.34375 63.4375 C 414.80669 62.40294 416.28492 60.78439 416.875 59.8125 L 449.75 5.65625 C 448.99385 5.32 448.028 4.90625 448 4.90625 L 114.375 4.90625 z "
+       transform="translate(0,924.36218)"
+       id="path3886"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 121.8125,933.697 c 13.4855,14.09121 21.92301,33.03385 22.1875,54 l 265.65625,0 c 0.12139,-0.036 0.27463,-0.0832 0.46875,-0.15625 0.46588,-0.17544 1.0787,-0.45207 1.5,-0.75 1.03645,-0.73295 2.4841,-2.41499 2.6875,-2.75 l 30.5625,-50.34375 -323.0625,0 z"
+       id="path3895"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_0.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139" />
+    <path
+       id="path3923"
+       d="m 114.375,929.26843 c 16.27569,14.11079 26.6875,34.79405 26.6875,58 0,0.70156 -0.0663,1.32311 -0.0937,2 l 269.03125,0 c 0.15065,0 1.90425,-0.45076 3.34375,-1.46875 1.46294,-1.03456 2.94117,-2.65311 3.53125,-3.625 l 32.875,-54.15625 c -0.75615,-0.33625 -1.722,-0.75 -1.75,-0.75 l -333.625,0 z"
+       style="color:#000000;fill:url(#linearGradient3935);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/life_bar_2.png"
+       inkscape:export-xdpi="50.469139"
+       inkscape:export-ydpi="50.469139"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
