@@ -64,7 +64,7 @@ public class IntroScreen implements Screen {
         actions.addAction(Actions.fadeOut(3f));
         actions.setActor(logoImg);
         logoImg.addAction(Actions.sequence(
-                Actions.alpha(0), Actions.fadeIn(2f), Actions.alpha(1f, 1f),Actions.fadeOut(2f),
+                Actions.alpha(0), Actions.fadeIn(1f), Actions.alpha(1f, 1f),Actions.fadeOut(1f),
                 Actions.run(onSplashFinishedRunnable) ) );
 
 

@@ -1,0 +1,29 @@
+MAZE
+
+by
+
+Sausage Pan
+
+
+Development Team
+
+Alexandra Krien
+Bettina Blasberg
+Georg Eckert
+Philipp Roscher
+Sara Groß
+
+
+Artwork
+
+Heros & Monsters
+by
+Sara Groß
+
+Dungeon Tileset
+by
+Georg Eckert
+based on
+Dungeon Tileset
+by
+Calciumtrice

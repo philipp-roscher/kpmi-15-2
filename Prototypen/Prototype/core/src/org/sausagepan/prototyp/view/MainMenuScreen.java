@@ -18,14 +18,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
@@ -63,7 +68,8 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Table table;
     private Skin skin;
-    private final TextButton startButton;
+    private final TextButton startButton, creditsButton, backButton;
+    private final TextArea creditsArea;
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(KPMIPrototype game) {
@@ -101,6 +107,8 @@ public class MainMenuScreen implements Screen {
         FitViewport fit = new FitViewport(800, 480);
         this.stage = new Stage(fit);
         this.skin = new Skin(Gdx.files.internal("UI/uiskin.json"));
+        this.creditsArea = new TextArea("", skin, "default-transparent");
+        stage.addActor(creditsArea);
         this.startButton = new TextButton("Start Game", skin, "default");
         this.startButton.setWidth(128);
         this.startButton.setHeight(48);
@@ -113,6 +121,35 @@ public class MainMenuScreen implements Screen {
             }
         });
         this.stage.addActor(this.startButton);
+		this.creditsButton = new TextButton("Credits", skin, "default");
+		this.creditsButton.setWidth(128);
+		this.creditsButton.setHeight(48);
+		this.creditsButton.setPosition(400 - 64, 12);
+		this.creditsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                creditsArea.setVisible(true);
+                creditsArea.setPosition(200,-800);
+                startButton.setVisible(false);
+                creditsButton.setVisible(false);
+                backButton.setVisible(true);
+            }
+        });
+		this.stage.addActor(this.creditsButton);
+
+        backButton = new TextButton("Back", skin, "default");
+        backButton.setWidth(128);backButton.setHeight(48);backButton.setPosition(400 - 64, 64);
+        backButton.setVisible(false);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                startButton.setVisible(true);
+                creditsButton.setVisible(true);
+                creditsArea.setVisible(false);
+            }
+        });
+        this.stage.addActor(backButton);
+        setUpCredits();
         // Scene2d UI ........................................................................ UI */
 	}
 
@@ -159,6 +196,12 @@ public class MainMenuScreen implements Screen {
             }, "Bitte Server-IP eingeben", "127.0.0.1", "");
         }
     }
+
+	public void showCreditsScreen() {
+		this.startButton.setVisible(false);
+
+
+	}
 
 
 	//random chose Class for clients according to their TeamId
@@ -302,7 +345,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0,0,0,1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.batch.setProjectionMatrix(camera.combined);
 		
@@ -365,6 +408,7 @@ public class MainMenuScreen implements Screen {
 		// Update camera
 		camera.update();
         this.stage.draw();
+        this.stage.act();
 
 	}
 
@@ -417,4 +461,55 @@ public class MainMenuScreen implements Screen {
 			clientSel = true;
 		}
 	}
+
+    public void setUpCredits() {
+        creditsArea.setText(
+                "MAZE\n" +
+                        "\n" +
+                        "by\n" +
+                        "\n" +
+                        "Sausage Pan\n" +
+                        "\n" +
+                        "\n" +
+                        "Development Team\n" +
+                        "\n" +
+                        "Alexandra Krien\n" +
+                        "Bettina Blasberg\n" +
+                        "Georg Eckert\n" +
+                        "Philipp Roscher\n" +
+                        "Sara Gross\n" +
+                        "\n" +
+                        "\n" +
+                        "Artwork\n" +
+                        "\n" +
+                        "Heros & Monsters\n" +
+                        "by\n" +
+                        "Sara Groß\n" +
+                        "\n" +
+                        "Dungeon Tileset\n" +
+                        "by\n" +
+                        "Georg Eckert\n" +
+                        "based on\n" +
+                        "Dungeon Tileset\n" +
+                        "by\n" +
+                        "Calciumtrice"
+        );
+        creditsArea.setVisible(true);
+        creditsArea.setPosition(200, -800, Align.center);
+        creditsArea.setWidth(400);creditsArea.setHeight(800);
+        Action scrollCredits = Actions.moveBy(0,1);
+        scrollCredits.setActor(creditsArea);
+        creditsArea.addAction(Actions.forever(scrollCredits));
+
+        Action resetCredits = new Action() {
+            @Override
+            public boolean act(float delta) {
+                if(actor.getY() > 400) actor.setY(-800);
+                return true;
+            }
+        };
+        resetCredits.setActor(creditsArea);
+        creditsArea.addAction(Actions.forever(resetCredits));
+        creditsArea.setVisible(false);
+    }
 }
