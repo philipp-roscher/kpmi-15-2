@@ -94,72 +94,79 @@ attackButton
   orig: 24, 24
   offset: 0, 0
   index: -1
+monsterButton
+  rotate: false
+  xy: 363, 12
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
 face_archer
   rotate: false
-  xy: 363, 4
+  xy: 389, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_dragon
   rotate: false
-  xy: 397, 4
+  xy: 423, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_fighter
   rotate: false
-  xy: 431, 4
+  xy: 457, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_knight
   rotate: false
-  xy: 465, 4
+  xy: 491, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face_shaman
   rotate: false
-  xy: 499, 4
+  xy: 525, 4
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 key
   rotate: false
-  xy: 533, 2
+  xy: 559, 2
   size: 94, 34
   orig: 94, 34
   offset: 0, 0
   index: -1
 key
   rotate: false
-  xy: 629, 1
+  xy: 655, 1
   size: 94, 35
   orig: 94, 35
   offset: 0, 0
   index: 0
 key
   rotate: false
-  xy: 725, 1
+  xy: 751, 1
   size: 32, 35
   orig: 32, 35
   offset: 0, 0
   index: 1
 key
   rotate: false
-  xy: 759, 1
+  xy: 785, 1
   size: 32, 35
   orig: 32, 35
   offset: 0, 0
   index: 2
 key
   rotate: false
-  xy: 793, 1
+  xy: 819, 1
   size: 30, 35
   orig: 30, 35
   offset: 0, 0

@@ -97,7 +97,12 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             }
         });
 
-        spawnButton = new ImageButton(fightButtonStyle);
+        ImageButton.ImageButtonStyle spawnButtonStyle = new ImageButton.ImageButtonStyle();
+        spawnButtonStyle.up = skin.getDrawable("monsterButton");
+        spawnButtonStyle.down = skin.getDrawable("monsterButton");
+        spawnButtonStyle.over = skin.getDrawable("monsterButton");
+        spawnButtonStyle.pressedOffsetY = -1;
+        spawnButton = new ImageButton(spawnButtonStyle);
         spawnButton.setWidth(64f);
         spawnButton.setHeight(64f);
         spawnButton.setPosition(136, 36);
