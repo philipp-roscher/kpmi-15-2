@@ -96,7 +96,7 @@ public class InGameUISystem extends EntitySystem {
         this.viewport.apply();
         this.batch.begin();
         this.batch.draw(recentHealthBarImg, 16, 400, 256, 72);
-        this.batch.draw(characterImg, 16, 400, 72, 72);
+        this.batch.draw(characterImg, 16, 400, characterImg.getRegionWidth(), 72);
         batch.draw(keyFragmentImgs.get(0), 690, 429);
         if(keyFragmentItems[0])
         	batch.draw(keyFragmentImgs.get(1), 691, 430);
