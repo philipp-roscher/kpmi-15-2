@@ -19,10 +19,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -70,7 +72,8 @@ public class MainMenuScreen implements Screen {
     private Table table;
     private Skin skin;
     private final TextButton startButton, creditsButton, backButton;
-    private final Label creditsArea;
+    private final Image mazeLogo, blackBars;
+    private final Group creditsGroup;
 	
 	/* ...................................................... CONSTRUCTORS .. */
 	public MainMenuScreen(KPMIPrototype game) {
@@ -108,10 +111,15 @@ public class MainMenuScreen implements Screen {
         FitViewport fit = new FitViewport(800, 480);
         this.stage = new Stage(fit);
         this.skin = new Skin(Gdx.files.internal("UI/uiskin.json"));
-        this.creditsArea = new Label("", skin, "default");
-		this.creditsArea.setAlignment(Align.center, Align.center);
-        this.creditsArea.setWrap(true);
-        stage.addActor(creditsArea);
+        this.mazeLogo = new Image(game.mediaManager.getMazeLogoImg());
+        this.mazeLogo.setPosition(400, 240, Align.center);
+        this.blackBars = new Image(game.mediaManager.getBlackBarsImg());
+        this.blackBars.setWidth(800);this.blackBars.setHeight(480);
+        this.blackBars.setPosition(0, 0);
+        this.blackBars.setVisible(false);
+        this.stage.addActor(mazeLogo);
+        this.creditsGroup = new Group();
+        this.stage.addActor(creditsGroup);
         this.startButton = new TextButton("Start Game", skin, "default");
         this.startButton.setWidth(128);
         this.startButton.setHeight(48);
@@ -125,35 +133,41 @@ public class MainMenuScreen implements Screen {
         });
         this.stage.addActor(this.startButton);
 		this.creditsButton = new TextButton("Credits", skin, "default");
-		this.creditsButton.setWidth(128);
-		this.creditsButton.setHeight(48);
-		this.creditsButton.setPosition(400 - 64, 12);
-		this.creditsButton.addListener(new ClickListener() {
+        this.creditsButton.setWidth(128);
+        this.creditsButton.setHeight(48);
+        this.creditsButton.setPosition(400 - 64, 12);
+        this.creditsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                creditsArea.setVisible(true);
-                creditsArea.setPosition(200,-800);
+                creditsGroup.setVisible(true);
+                creditsGroup.setPosition(200, 10);
                 startButton.setVisible(false);
                 creditsButton.setVisible(false);
                 backButton.setVisible(true);
+                mazeLogo.setVisible(false);
+                blackBars.setVisible(true);
             }
         });
 		this.stage.addActor(this.creditsButton);
+        this.stage.addActor(blackBars);
 
         backButton = new TextButton("Back", skin, "default");
-        backButton.setWidth(128);backButton.setHeight(48);backButton.setPosition(400 - 64, 64);
+        backButton.setWidth(128);backButton.setHeight(48);
+        backButton.setPosition(400 - 64, 12);
         backButton.setVisible(false);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 startButton.setVisible(true);
                 creditsButton.setVisible(true);
-                creditsArea.setVisible(false);
+                creditsGroup.setVisible(false);
                 backButton.setVisible(false);
+                mazeLogo.setVisible(true);
+                blackBars.setVisible(false);
             }
         });
         this.stage.addActor(backButton);
-        setUpCredits();
+        setUpCredits(creditsGroup);
         // Scene2d UI ........................................................................ UI */
 	}
 
@@ -466,54 +480,60 @@ public class MainMenuScreen implements Screen {
 		}
 	}
 
-    public void setUpCredits() {
+    public void setUpCredits(Group group) {
+        group.setWidth(400);
+
+        Image mlogo = new Image(game.mediaManager.getMazeLogoImg());
+        mlogo.setPosition(200,0,Align.center);
+        group.addActor(mlogo);
+
+        Image splogo = new Image(game.mediaManager.getLogoImg());
+        splogo.setPosition(200,-300,Align.center);
+        group.addActor(splogo);
+
+        Image liblogo = new Image(game.mediaManager.getLibgdxLogoImg());
+        liblogo.setPosition(200,-1350,Align.center);
+        group.addActor(liblogo);
+
+        Label creditsArea = new Label("", skin, "default");
+        creditsArea.setAlignment(Align.center, Align.center);
+        creditsArea.setWrap(true);
         creditsArea.setText(
-                "MAZE\n" +
-                        "\n" +
-                        "by\n" +
-                        "\n" +
-                        "Sausage Pan\n" +
-                        "\n" +
-                        "\n" +
-                        "Development Team\n" +
-                        "\n" +
-                        "Alexandra Krien\n" +
-                        "Bettina Blasberg\n" +
-                        "Georg Eckert\n" +
-                        "Philipp Roscher\n" +
-                        "Sara Gross\n" +
-                        "\n" +
-                        "\n" +
-                        "Artwork\n" +
-                        "\n" +
-                        "Heros & Monsters\n" +
-                        "by\n" +
-                        "Sara Gross\n" +
-                        "\n" +
-                        "Dungeon Tileset\n" +
-                        "by\n" +
-                        "Georg Eckert\n" +
-                        "based on\n" +
-                        "Dungeon Tileset\n" +
-                        "by\n" +
-                        "Calciumtrice"
+                "\n\n\n\n\n\n\n\n\nby\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+                        "Development Team\n\n\n" +
+                        "Alexandra Krien\n\n" +
+                        "Bettina Blasberg\n\n" +
+                        "Georg Eckert\n\n" +
+                        "Philipp Roscher\n\n" +
+                        "Sara Gross\n\n\n\n\n\n\n" +
+                        "Artwork\n\n\n" +
+                        "Heroes & Monsters\n\n" +
+                        "by Sara Gross\n\n\n" +
+                        "Dungeon Tileset\n\n" +
+                        "by Georg Eckert\n\n" +
+                        "based on\n\n" +
+                        "Dungeon Tileset by Calciumtrice\n\n" +
+                        "&\n\n" +
+                        "The Field of the Floating Island by Buch\n\n\n\n" +
+						"powered by"
         );
         creditsArea.setVisible(true);
-        creditsArea.setPosition(200, -800, Align.center);
+        creditsArea.setPosition(0,-1000, Align.center);
         creditsArea.setWidth(400);creditsArea.setHeight(800);
-        Action scrollCredits = Actions.moveBy(0,1);
-        scrollCredits.setActor(creditsArea);
-        creditsArea.addAction(Actions.forever(scrollCredits));
+        Action scrollCredits = Actions.moveBy(0,.5f);
+        scrollCredits.setActor(group);
+        group.addAction(Actions.forever(scrollCredits));
 
         Action resetCredits = new Action() {
             @Override
             public boolean act(float delta) {
-                if(actor.getY() > 400) actor.setY(-800);
+                if(actor.getY() > 2000) actor.setY(0);
                 return true;
             }
         };
-        resetCredits.setActor(creditsArea);
-        creditsArea.addAction(Actions.forever(resetCredits));
-        creditsArea.setVisible(false);
+        resetCredits.setActor(group);
+        group.addAction(Actions.forever(resetCredits));
+        group.setVisible(false);
+        group.addActor(creditsArea);
     }
 }

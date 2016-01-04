@@ -15,16 +15,19 @@ public class MediaManager {
     private AssetManager assets;
 
     // file names
-    private String mazeBackgroundMusicFile   = "music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg";
-    private String mainMenuBackgroundImgFile = "textures/backgrounds/main_menu_bg.png";
-    private String logoImgFile = "textures/backgrounds/logo.png";
-    private String SelectionArcherFBig       = "textures/characterSelection/Archer_f_big.png";
-    private String SelectionKnightMBig       = "textures/characterSelection/Knight_m_big.png";
-    private String SelectionFighterMBig      = "textures/characterSelection/Fighter_m_big.png";
-    private String SelectionShamanMBig       = "textures/characterSelection/Shaman_m_big.png";
-    private String SelectionDragonRedBig     = "textures/characterSelection/Dragon_red_big.png";
-    private String SelectionNinjaFBig       = "textures/characterSelection/Ninja_f_big.png";
-    private String SelectionWitchFBig       = "textures/characterSelection/Witch_f_big.png";
+    private String mazeBackgroundMusicFile      = "music/Explorer_by_ShwiggityShwag_-_CC-by-3.0.ogg";
+    private String mainMenuBackgroundImgFile    = "textures/backgrounds/main_menu_bg.png";
+    private String logoImgFile                  = "textures/backgrounds/logo.png";
+    private String logoLibgdxImgFile            = "textures/backgrounds/libgdx_logo.png";
+    private String logoMazeImgFile              = "textures/backgrounds/maze_logo.png";
+    private String blackBars                    = "textures/backgrounds/black_bars.png";
+    private String SelectionArcherFBig          = "textures/characterSelection/Archer_f_big.png";
+    private String SelectionKnightMBig          = "textures/characterSelection/Knight_m_big.png";
+    private String SelectionFighterMBig         = "textures/characterSelection/Fighter_m_big.png";
+    private String SelectionShamanMBig          = "textures/characterSelection/Shaman_m_big.png";
+    private String SelectionDragonRedBig        = "textures/characterSelection/Dragon_red_big.png";
+    private String SelectionNinjaFBig           = "textures/characterSelection/Ninja_f_big.png";
+    private String SelectionWitchFBig           = "textures/characterSelection/Witch_f_big.png";
 
     private String IngameUISheetFile         = "textures/spritesheets/ingame_UI.pack";
     private String itemsSheetFile            = "textures/spritesheets/items.pack";
@@ -56,6 +59,9 @@ public class MediaManager {
         //load Images
         assets.load(this.mainMenuBackgroundImgFile, Texture.class);
         assets.load(this.logoImgFile, Texture.class);
+        assets.load(this.logoLibgdxImgFile, Texture.class);
+        assets.load(this.logoMazeImgFile, Texture.class);
+        assets.load(this.blackBars, Texture.class);
         assets.load(this.SelectionArcherFBig, Texture.class);
         assets.load(this.SelectionDragonRedBig, Texture.class);
         assets.load(this.SelectionFighterMBig, Texture.class);
@@ -99,6 +105,18 @@ public class MediaManager {
 
     public Texture getLogoImg() {
         return assets.get(this.logoImgFile, Texture.class);
+    }
+
+    public Texture getLibgdxLogoImg() {
+        return assets.get(this.logoLibgdxImgFile, Texture.class);
+    }
+
+    public Texture getMazeLogoImg() {
+        return assets.get(this.logoMazeImgFile, Texture.class);
+    }
+
+    public Texture getBlackBarsImg() {
+        return assets.get(this.blackBars, Texture.class);
     }
 
     public Texture getSelectionKnightMBig() {
