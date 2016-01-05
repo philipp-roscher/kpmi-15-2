@@ -170,18 +170,17 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     public void move(Vector3 touchPos, DynamicBodyComponent body, InputComponent input) {
 
         // calculate characters main moving direction for sprite choosing
-        if(Math.abs(touchPos.x - body.dynamicBody.getPosition().x)
-                > Math.abs(touchPos.y - body.dynamicBody.getPosition().y)) {
-            if(touchPos.x > body.dynamicBody.getPosition().x) input.direction = Direction.EAST;
+        if(Math.abs(touchPos.x - 400) > Math.abs(touchPos.y - 240)) {
+            if(touchPos.x > 400) input.direction = Direction.EAST;
             else input.direction = Direction.WEST;
         } else {
-            if(touchPos.y > body.dynamicBody.getPosition().y) input.direction = Direction.NORTH;
+            if(touchPos.y > 240) input.direction = Direction.NORTH;
             else input.direction = Direction.SOUTH;
         }
 
         // split up velocity vector in x and y component
-        float ax = (-1)*(body.dynamicBody.getPosition().x-touchPos.x);
-        float ay = (-1)*(body.dynamicBody.getPosition().y-touchPos.y);
+        float ax = (-.1f)*(400-touchPos.x);
+        float ay = (-.1f)*(240-touchPos.y);
 
         directionVector.x = ax;
         directionVector.y = ay;
@@ -271,7 +270,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             InputComponent input = im.get(entity);
             input.touchPos.x = screenX;
             input.touchPos.y = screenY;
-            viewport.unproject(input.touchPos);
+            stage.getViewport().unproject(input.touchPos);
         }
         return touchDragged(screenX,screenY,pointer);
     }
@@ -291,7 +290,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             InputComponent input = im.get(entity);
             input.touchPos.x = screenX;
             input.touchPos.y = screenY;
-            viewport.unproject(input.touchPos);
+            stage.getViewport().unproject(input.touchPos);
             input.moving = true;
         }
         return true;
