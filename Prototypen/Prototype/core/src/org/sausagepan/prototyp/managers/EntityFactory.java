@@ -179,7 +179,11 @@ public class EntityFactory {
         // Add components which are equal for all classes
         characterEntity.add(new HealthComponent(100));
         characterEntity.add(new MagicComponent(80));
-        characterEntity.add(new InventoryComponent());
+        InventoryComponent ic = new InventoryComponent();
+        ic.items.add(itemFactory.createMapItem(ItemType.POTION_HP, 10));
+        ic.items.add(itemFactory.createMapItem(ItemType.POTION_HP, 10));
+        ic.items.add(itemFactory.createMapItem(ItemType.POTION_MP, 10));
+        characterEntity.add(ic);
 
         // Add class specific components
         switch(characterClass) {

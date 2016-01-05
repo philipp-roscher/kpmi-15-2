@@ -1,6 +1,9 @@
 package org.sausagepan.prototyp.model.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Array;
+
+import org.sausagepan.prototyp.model.items.Item;
 
 
 /**
@@ -11,6 +14,7 @@ public class InventoryComponent implements Component {
     /*..................................................................................Attributes*/
 	public boolean[] ownKeys = new boolean[3];
 	public boolean[] teamKeys = new boolean[3];
+	public Array<Item> items = new Array<Item>();
 
     public boolean treasureRoomOpen;
 

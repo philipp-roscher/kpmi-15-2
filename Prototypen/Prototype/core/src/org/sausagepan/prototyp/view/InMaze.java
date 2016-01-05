@@ -165,6 +165,7 @@ public class InMaze implements Screen {
 		viewport.update(width,height);
         ECS.getEngine().getSystem(InGameUISystem.class).getViewport().update(width, height);
         ECS.getEngine().getSystem(InputSystem.class).getStage().getViewport().update(width,height);
+        ECS.resize(width, height);
 //		camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 	}
 

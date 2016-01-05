@@ -312,11 +312,12 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     }
     /* ..................................................................... GETTERS & SETTERS .. */
 
-    public void setInputProcessor() {
-        Gdx.input.setInputProcessor(inputMultiplexer);
-    }
 
     public Stage getStage() {
         return stage;
+    }
+
+    public InputMultiplexer getInputMultiplexer() {
+        return inputMultiplexer;
     }
 }

@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.managers;
 import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
@@ -29,11 +30,14 @@ import org.sausagepan.prototyp.model.items.MapItem;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.view.InMaze;
+import org.sausagepan.prototyp.view.ItemUI;
 
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -57,6 +61,7 @@ public class EntityComponentSystem {
     private Viewport viewport;
     private Maze maze;
     private InMaze inMaze;
+    private ItemUI itemUI;
     private ShapeRenderer shpRend;
     private HashMap<Integer,CharacterEntity> characters;
     private HashMap<Integer,MonsterEntity> monsters;
@@ -71,6 +76,7 @@ public class EntityComponentSystem {
 
     private CharacterClass characterClass;
     private int TeamId;
+    public InputMultiplexer inputMultiplexer;
 
     private float[][] startPositions;
 
@@ -79,6 +85,8 @@ public class EntityComponentSystem {
             KPMIPrototype game, World world, Viewport viewport, RayHandler rayHandler, Maze maze,
             OrthographicCamera camera, CharacterClass characterClass, int TeamId,
             InMaze inMaze) {
+
+        this.inputMultiplexer = new InputMultiplexer();
 
     	this.game = game;
         this.inMaze = inMaze;
@@ -103,10 +111,14 @@ public class EntityComponentSystem {
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
         
         setUpLocalCharacterEntity();
+        this.itemUI = new ItemUI(inMaze, game, CompMappers.inventory.get(localCharacter));
+        this.inputMultiplexer.addProcessor(itemUI.getStage());
         setUpMazeLights();
 
         // At least - not before adding entities
         setUpEntitySystems();
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     /* ............................................................................... METHODS .. */
@@ -146,7 +158,10 @@ public class EntityComponentSystem {
         VisualDebuggingSystem visualDebuggingSystem
                 = new VisualDebuggingSystem(shpRend, camera, rayHandler);
         visualDebuggingSystem.addedToEngine(engine);
-        engine.addEntityListener(Family.all(HealthComponent.class,DynamicBodyComponent.class,InjurableAreaComponent.class).get(), visualDebuggingSystem);
+        engine.addEntityListener(Family.all(
+                HealthComponent.class,
+                DynamicBodyComponent.class,
+                InjurableAreaComponent.class).get(), visualDebuggingSystem);
 
         // Inventory System
         InventorySystem inventorySystem = new InventorySystem(maze, getLocalCharacterEntity());
@@ -159,8 +174,7 @@ public class EntityComponentSystem {
         engine.addEntityListener(Family.all(WeaponComponent.class).get(), bulletSystem);
 
         // Ingame UI System
-        InGameUISystem inGameUISystem
-                = new InGameUISystem(mediaManager, characterClass, game);
+        InGameUISystem inGameUISystem = new InGameUISystem(mediaManager, characterClass, game);
         inGameUISystem.addedToEngine(engine);
 
         // One Second System
@@ -178,6 +192,8 @@ public class EntityComponentSystem {
         this.engine.addSystem(bulletSystem);
         this.engine.addSystem(inGameUISystem);
         this.engine.addSystem(oneSecondSystem);
+
+        inputMultiplexer.addProcessor(inputSystem.getInputMultiplexer());
     }
 
     public void setUpMazeLights() {
@@ -217,6 +233,11 @@ public class EntityComponentSystem {
     public void draw() {
         this.engine.getSystem(InGameUISystem.class).draw();
         this.engine.getSystem(InputSystem.class).draw();
+        this.itemUI.draw();
+    }
+
+    public void resize(int width, int height) {
+        this.itemUI.resize(width, height);
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
@@ -349,8 +370,7 @@ public class EntityComponentSystem {
 
 
     public void setInputProcessor() {
-        InputSystem inputSystem = this.engine.getSystem(InputSystem.class);
-        inputSystem.setInputProcessor();
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     public Maze getMaze() {
