@@ -21,6 +21,8 @@ import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.WeaponItem;
 
 /**
+ * Visual representation of the {@link InventoryComponent} which lets the user use {@link Item}s
+ * and change {@link WeaponItem} in {@link WeaponComponent}
  * Created by georg on 05.01.16.
  */
 public class ItemUI {
@@ -35,7 +37,6 @@ public class ItemUI {
     public final KPMIPrototype game;
     private InventoryComponent inventory;
     private WeaponComponent weapon;
-    private CharacterEntity localCharacter;
     /* ........................................................................... CONSTRUCTOR .. */
     public ItemUI(final InMaze mazeScreen, final KPMIPrototype game, final CharacterEntity
             localCharacter) {
@@ -43,7 +44,6 @@ public class ItemUI {
         this.game = game;
         this.bagPackItemButtons = new Array<ImageButton>();
         this.weaponItemButtons = new Array<ImageButton>();
-        this.localCharacter = localCharacter;
         this.inventory = CompMappers.inventory.get(localCharacter);
         this.weapon = CompMappers.weapon.get(localCharacter);
 
@@ -54,6 +54,8 @@ public class ItemUI {
 
         // Buttons .................................................................................
         this.skin = new Skin(game.mediaManager.getTextureAtlasType("IngameUI"));
+
+        // For opening item menu
         this.menuButton = new ImageButton(skin.getDrawable("menu"));
         menuButton.setPosition(752, 240 - 192 / 2);
 
@@ -68,6 +70,7 @@ public class ItemUI {
             }
         });
 
+        // For closing Item Menu
         this.menuBackButton = new ImageButton(skin.getDrawable("menuback"));
         menuBackButton.setPosition(752, 240 - 192 / 2);
         menuBackButton.setVisible(false);
@@ -119,6 +122,9 @@ public class ItemUI {
         this.stage.getViewport().update(width, height);
     }
 
+    /**
+     * Refreshes the item menu view according to InventoryComponent and WeaponComponent
+     */
     public void initializeItemMenu() {
         // Standard Items
         table.clear();
@@ -165,11 +171,10 @@ public class ItemUI {
             ib.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    // Sets new weapon in WeaponComponent
                     weapon.weapon = inventory.weapons.get(weaponItemButtons.indexOf(
                             (ImageButton)event.getListenerActor(), false));
                     initializeItemMenu();
-
-                    // TODO apply item
                 }
             });
             weaponItemButtons.add(ib);
