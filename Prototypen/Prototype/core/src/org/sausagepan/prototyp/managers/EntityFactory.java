@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.MazeObjectType;
@@ -234,6 +235,10 @@ public class EntityFactory {
                 break;
             default: break;
         }
+
+        // Add weapon to inventory
+        ic.pickUpWeapon(CompMappers.weapon.get(characterEntity).weapon);
+        ic.pickUpWeapon(itemFactory.createBareHand());
 
 
         return characterEntity;

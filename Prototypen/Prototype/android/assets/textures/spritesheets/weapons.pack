@@ -10,7 +10,7 @@ electroball
   orig: 32, 32
   offset: 0, 0
   index: -1
-boxer_glove_spike
+bare_hand
   rotate: false
   xy: 1, 1
   size: 32, 28
@@ -24,6 +24,13 @@ fireball
   orig: 32, 32
   offset: 0, 0
   index: -1
+boxer_glove_spike
+  rotate: false
+  xy: 35, 1
+  size: 32, 28
+  orig: 32, 28
+  offset: 0, 0
+  index: -1
 iceball
   rotate: false
   xy: 69, 31
@@ -33,7 +40,7 @@ iceball
   index: -1
 boxer_glove
   rotate: false
-  xy: 35, 3
+  xy: 69, 3
   size: 32, 26
   orig: 32, 26
   offset: 0, 0
@@ -45,66 +52,66 @@ fire_breath
   orig: 32, 24
   offset: 0, 0
   index: -1
-bow_golden
-  rotate: false
-  xy: 69, 1
-  size: 8, 28
-  orig: 8, 28
-  offset: 0, 0
-  index: -1
 sword
   rotate: false
-  xy: 137, 51
+  xy: 103, 25
   size: 32, 12
   orig: 32, 12
   offset: 0, 0
   index: 2
-arrow
-  rotate: false
-  xy: 137, 39
-  size: 30, 10
-  orig: 30, 10
-  offset: 0, 0
-  index: 3
 arrow_fire
   rotate: false
-  xy: 171, 49
+  xy: 137, 49
   size: 28, 14
   orig: 28, 14
   offset: 0, 0
   index: -1
+arrow
+  rotate: false
+  xy: 103, 13
+  size: 30, 10
+  orig: 30, 10
+  offset: 0, 0
+  index: 3
 arrow_ice
   rotate: false
-  xy: 201, 53
+  xy: 103, 1
   size: 30, 10
   orig: 30, 10
   offset: 0, 0
   index: -1
 sword_katana
   rotate: false
-  xy: 103, 33
+  xy: 167, 59
   size: 32, 4
   orig: 32, 4
   offset: 0, 0
   index: -1
+bow
+  rotate: false
+  xy: 137, 15
+  size: 10, 32
+  orig: 10, 32
+  offset: 0, 0
+  index: 1
+bow_golden
+  rotate: false
+  xy: 149, 19
+  size: 8, 28
+  orig: 8, 28
+  offset: 0, 0
+  index: -1
 arrow
   rotate: false
-  xy: 79, 23
+  xy: 167, 51
   size: 20, 6
   orig: 20, 6
   offset: 0, 0
   index: 2
 arrow
   rotate: false
-  xy: 233, 57
+  xy: 201, 57
   size: 16, 6
   orig: 16, 6
-  offset: 0, 0
-  index: 1
-bow
-  rotate: false
-  xy: 169, 15
-  size: 10, 32
-  orig: 10, 32
   offset: 0, 0
   index: 1

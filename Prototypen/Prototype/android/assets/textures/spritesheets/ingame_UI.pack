@@ -171,20 +171,34 @@ key
   orig: 64, 64
   offset: 0, 0
   index: -1
-3dmonsterbuttondown
+3ditembgactive
   rotate: false
   xy: 875, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-3dswordbuttondown
+3dmonsterbuttondown
   rotate: false
   xy: 949, 447
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
+3dswordbuttondown
+  rotate: false
+  xy: 657, 225
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+bg_black
+  rotate: false
+  xy: 875, 307
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 192
 key
   rotate: false
   xy: 164, 69

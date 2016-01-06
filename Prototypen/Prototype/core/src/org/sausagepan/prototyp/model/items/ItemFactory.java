@@ -75,6 +75,17 @@ public class ItemFactory {
         return glove;
     }
 
+    /**
+     * Creates weapon for everyone
+     * @return
+     */
+    public Sword createBareHand() {
+        Sword hand;
+        hand = new Sword(mediaManager.getTextureAtlasType("weapons")
+                    .findRegion("bare_hand"), 3, Damagetype.PHYSICAL);
+        return hand;
+    }
+
     public Sword createBigSword() {
         return new Sword(
                 mediaManager.getTextureAtlasType("weapons").findRegion("sword", 1),

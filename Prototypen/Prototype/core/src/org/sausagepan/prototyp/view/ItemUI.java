@@ -2,11 +2,9 @@ package org.sausagepan.prototyp.view;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -14,9 +12,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import org.sausagepan.prototyp.KPMIPrototype;
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Item;
+import org.sausagepan.prototyp.model.items.WeaponItem;
 
 /**
  * Created by georg on 05.01.16.
@@ -26,19 +28,24 @@ public class ItemUI {
     private Skin skin;
     public Stage stage;
 
-    private final Table table;
+    private final Table table, weaponTable;
     private final ImageButton menuButton, menuBackButton;
-    private final Array<ImageButton> bagPackItemButtons;
+    private final Array<ImageButton> bagPackItemButtons, weaponItemButtons;
     public final InMaze mazeScreen;
     public final KPMIPrototype game;
     private InventoryComponent inventory;
+    private WeaponComponent weapon;
+    private CharacterEntity localCharacter;
     /* ........................................................................... CONSTRUCTOR .. */
-    public ItemUI(final InMaze mazeScreen, final KPMIPrototype game,
-                  final InventoryComponent inventory) {
+    public ItemUI(final InMaze mazeScreen, final KPMIPrototype game, final CharacterEntity
+            localCharacter) {
         this.mazeScreen = mazeScreen;
         this.game = game;
         this.bagPackItemButtons = new Array<ImageButton>();
-        this.inventory = inventory;
+        this.weaponItemButtons = new Array<ImageButton>();
+        this.localCharacter = localCharacter;
+        this.inventory = CompMappers.inventory.get(localCharacter);
+        this.weapon = CompMappers.weapon.get(localCharacter);
 
         // Set up UI
         FitViewport fit = new FitViewport(800,480);
@@ -57,6 +64,7 @@ public class ItemUI {
                 menuButton.setVisible(false);
                 menuBackButton.setVisible(true);
                 table.setVisible(true);
+                weaponTable.setVisible(true);
             }
         });
 
@@ -70,19 +78,32 @@ public class ItemUI {
                 menuButton.setVisible(true);
                 menuBackButton.setVisible(false);
                 table.setVisible(false);
+                weaponTable.setVisible(false);
             }
         });
 
         stage.addActor(menuButton);
         stage.addActor(menuBackButton);
 
+        // Items
         this.table = new Table();
         this.table.setWidth(400);
-        this.table.setHeight(400);
-        this.table.setPosition(400, 240, Align.center);
+        this.table.setHeight(300);
+        this.table.setPosition(400, 160, Align.center);
+        table.setBackground(skin.getDrawable("bg_black"));
 
         table.setVisible(false);
         stage.addActor(table);
+
+        // Weapons
+        this.weaponTable = new Table();
+        this.weaponTable.setWidth(400);
+        this.weaponTable.setHeight(100);
+        this.weaponTable.setPosition(400, 380, Align.center);
+        weaponTable.setBackground(skin.getDrawable("bg_black"));
+
+        weaponTable.setVisible(false);
+        stage.addActor(weaponTable);
 
         initializeItemMenu();
 
@@ -99,6 +120,7 @@ public class ItemUI {
     }
 
     public void initializeItemMenu() {
+        // Standard Items
         table.clear();
         bagPackItemButtons.clear();
         int j = 0;
@@ -124,6 +146,36 @@ public class ItemUI {
             bagPackItemButtons.add(ib);
             table.add(ib).width(64).height(64).pad(10);
         }
+
+        // Weapon Items - maximum of four
+        weaponTable.clear();
+        weaponItemButtons.clear();
+        int k = 0;
+        for(WeaponItem i : inventory.weapons) {
+            k++;
+            if(k % 4 == 0) return;
+            ImageButton.ImageButtonStyle ibs= new ImageButton.ImageButtonStyle();
+            if(i.equals(weapon.weapon)) ibs.up = skin.getDrawable("3ditembgactive");
+            else ibs.up = skin.getDrawable("3ditembg");
+            TextureRegionDrawable trd = new TextureRegionDrawable(i.sprite);
+            trd.setMinWidth(i.sprite.getRegionWidth()*2);
+            trd.setMinHeight(i.sprite.getRegionHeight()*2);
+            ibs.imageUp = trd;
+            ImageButton ib = new ImageButton(ibs);
+            ib.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    weapon.weapon = inventory.weapons.get(weaponItemButtons.indexOf(
+                            (ImageButton)event.getListenerActor(), false));
+                    initializeItemMenu();
+
+                    // TODO apply item
+                }
+            });
+            weaponItemButtons.add(ib);
+            weaponTable.add(ib).width(64).height(64).pad(10);
+        }
+
     }
 
     /* ..................................................................... GETTERS & SETTERS .. */
