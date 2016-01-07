@@ -4,6 +4,7 @@ import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
 import org.sausagepan.prototyp.model.components.ChaseComponent;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
@@ -30,6 +31,8 @@ public abstract class CompMappers {
             = ComponentMapper.getFor(WeaponComponent.class);
     public static ComponentMapper<LightComponent> light
             = ComponentMapper.getFor(LightComponent.class);
+    public static ComponentMapper<IdComponent> id
+    		= ComponentMapper.getFor(IdComponent.class);
     public static ComponentMapper<InputComponent> input
             = ComponentMapper.getFor(InputComponent.class);
     public static ComponentMapper<InjurableAreaComponent> injurableArea

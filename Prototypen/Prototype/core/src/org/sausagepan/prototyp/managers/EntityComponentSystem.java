@@ -384,4 +384,8 @@ public class EntityComponentSystem {
     public Engine getEngine() {
         return engine;
     }
+    
+    public ItemUI getItemUI() {
+    	return itemUI;
+    }
 }

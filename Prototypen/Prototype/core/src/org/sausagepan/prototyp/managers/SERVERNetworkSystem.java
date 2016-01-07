@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
@@ -27,6 +28,8 @@ import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
+import org.sausagepan.prototyp.network.Network.WeaponChangeResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
 
 import com.badlogic.ashley.core.Engine;
@@ -203,9 +206,6 @@ public class SERVERNetworkSystem extends EntitySystem {
                     //send winning Team-Id to all Clients
                     int teamId = character.getComponent(TeamComponent.class).TeamId;
                     server.sendToAllTCP(new GameExitResponse(teamId));
-
-
-
                 }
             }
             
@@ -224,6 +224,19 @@ public class SERVERNetworkSystem extends EntitySystem {
                     //so it only spawns monster one time per button press
                     mon.monsterSpawn = false;
                 }
+            }
+            
+            if (object instanceof WeaponChangeRequest) {
+            	WeaponChangeRequest result = (WeaponChangeRequest) object;
+            	ServerCharacterEntity character;
+
+            	System.out.println("Player "+result.playerId+" switched to weapon "+result.weaponId);
+            	if((character = ECS.getCharacter(result.playerId)) != null) {
+            		CompMappers.weapon.get(character).weapon =
+            				CompMappers.inventory.get(character).weapons.get(result.weaponId);
+            		server.sendToAllTCP(new WeaponChangeResponse(result.playerId, result.weaponId));
+            		System.out.println("Sent WeaponChangeResonse");
+            	}
             }
         }
 

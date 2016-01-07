@@ -37,9 +37,9 @@ public class ItemUI {
     private final Array<ImageButton> bagPackItemButtons, weaponItemButtons;
     public final InMaze mazeScreen;
     public final KPMIPrototype game;
+    private CharacterEntity character;
     private InventoryComponent inventory;
     private WeaponComponent weapon;
-    private int id;
     private NetworkTransmissionComponent ntc;
     /* ........................................................................... CONSTRUCTOR .. */
     public ItemUI(final InMaze mazeScreen, final KPMIPrototype game, final CharacterEntity
@@ -51,7 +51,7 @@ public class ItemUI {
         this.inventory = CompMappers.inventory.get(localCharacter);
         this.weapon = CompMappers.weapon.get(localCharacter);
         this.ntc = CompMappers.netTrans.get(localCharacter);
-        this.id = CompMappers.network.get(localCharacter).id;
+        this.character = localCharacter;
 
         // Set up UI
         FitViewport fit = new FitViewport(800,480);
@@ -177,13 +177,9 @@ public class ItemUI {
             ib.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // Sets new weapon in WeaponComponent
-//                    weapon.weapon = inventory.weapons.get(weaponItemButtons.indexOf(
-//                            (ImageButton)event.getListenerActor(), false));
-                	ntc.networkMessagesToProcess.add(new WeaponChangeRequest(id,
-                			weaponItemButtons.indexOf(
-                			(ImageButton)event.getListenerActor(), false)));
-                    initializeItemMenu();
+                	ntc.networkMessagesToProcess.add(new WeaponChangeRequest(
+                			CompMappers.id.get(character).id,
+                			weaponItemButtons.indexOf((ImageButton)event.getListenerActor(), false)));
                 }
             });
             weaponItemButtons.add(ib);

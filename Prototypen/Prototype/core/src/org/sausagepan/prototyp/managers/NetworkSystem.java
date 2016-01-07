@@ -16,6 +16,7 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
@@ -40,7 +41,10 @@ import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
+import org.sausagepan.prototyp.network.Network.WeaponChangeResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
+import org.sausagepan.prototyp.view.ItemUI;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -111,7 +115,8 @@ public class NetworkSystem extends EntitySystem {
             )
                 network.client.sendUDP(object);
             
-            if (object instanceof MonsterSpawnComponent)
+            if ((object instanceof MonsterSpawnComponent) ||
+            	(object instanceof WeaponChangeRequest))
             	network.client.sendTCP(object);
         }
         ntc.networkMessagesToProcess.clear();
@@ -140,22 +145,8 @@ public class NetworkSystem extends EntitySystem {
 
                 nm.get(localCharEntity).client.addListener(new Listener() {
                     public void received(Connection connection, Object object) {
-                        if ((object instanceof NewHeroResponse) ||
-                                (object instanceof DeleteHeroResponse) ||
-                                (object instanceof GameStateResponse) ||
-                                (object instanceof AttackResponse) ||
-                                (object instanceof ShootResponse) ||
-                                (object instanceof HPUpdateResponse) ||
-                                (object instanceof DeleteBulletResponse) ||
-                                (object instanceof YouDiedResponse) ||
-                                (object instanceof ItemPickUp) ||
-                                (object instanceof NewItem) ||
-                                (object instanceof GameStart) ||
-                                (object instanceof Network.GameExitResponse) || 
-                                (object instanceof NewMonster)) {
-                            //System.out.println( object.getClass() +" empfangen");
-                            NetworkSystem.this.networkMessages.add(object);
-                        }
+                        //System.out.println( object.getClass() +" empfangen");
+                        NetworkSystem.this.networkMessages.add(object);
                     }
                 });
 
@@ -294,18 +285,35 @@ public class NetworkSystem extends EntitySystem {
             
             if (object instanceof ItemPickUp) {
             	ItemPickUp result = (ItemPickUp) object;
-
-				if(ECS.getItem(result.itemId).getComponent(ItemComponent.class).type == ItemType.KEY) {
-                	// add key to character inventory
-                	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
-                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;
-                }
+            	ItemEntity item;
+            	
+				if((item = ECS.getItem(result.itemId)) != null)
+					if(item.getComponent(ItemComponent.class).type == ItemType.KEY) {
+	                	// add key to character inventory
+	                	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
+	                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;
+					}
 
                 ECS.deleteItem(result.itemId);
             }
 
-            if(object instanceof GameStart) {
+            if (object instanceof GameStart) {
                 ECS.getMaze().openEntranceDoors();
+            }
+            
+            if (object instanceof WeaponChangeResponse) {
+            	WeaponChangeResponse result = (WeaponChangeResponse) object;
+            	CharacterEntity character;
+            	
+            	System.out.println("Player "+result.playerId+" switched to weapon "+result.weaponId);
+            	if ((character = ECS.getCharacter(result.playerId)) != null) {
+            		CompMappers.weapon.get(character).weapon =
+            				CompMappers.inventory.get(character).weapons.get(result.weaponId);
+            		
+            		if(result.playerId == network.id) {
+            			ECS.getItemUI().initializeItemMenu();
+            		}
+            	}
             }
         }
 
