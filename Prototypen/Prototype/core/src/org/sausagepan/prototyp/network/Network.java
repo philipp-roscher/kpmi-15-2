@@ -177,6 +177,17 @@ public class Network {
 		}
 	}
 	
+	public static class WeaponChangeRequest {
+		public int playerId;
+		public int weaponId;
+
+		public WeaponChangeRequest() { }
+		public WeaponChangeRequest(int playerId, int weaponId) {
+			this.playerId = playerId;
+			this.weaponId = weaponId;
+		}
+	}
+	
 	public static class HPUpdateResponse {
 		public int playerId;
         public boolean isHuman;

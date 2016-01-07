@@ -8,6 +8,7 @@ import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SensorComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -37,6 +38,8 @@ public abstract class CompMappers {
             = ComponentMapper.getFor(InventoryComponent.class);
     public static ComponentMapper<ChaseComponent> chase
             = ComponentMapper.getFor(ChaseComponent.class);
+    public static ComponentMapper<NetworkComponent> network
+    		= ComponentMapper.getFor(NetworkComponent.class);
     public static ComponentMapper<NetworkTransmissionComponent> netTrans
             = ComponentMapper.getFor(NetworkTransmissionComponent.class);
     public static ComponentMapper<HealthComponent> health

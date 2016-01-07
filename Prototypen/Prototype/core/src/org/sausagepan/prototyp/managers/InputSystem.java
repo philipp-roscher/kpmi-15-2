@@ -1,5 +1,6 @@
-package org.sausagepan.prototyp.managers;
+ package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.Direction;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
@@ -9,6 +10,7 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.network.Network.AttackRequest;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -233,7 +235,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                                 body.dynamicBody.getPosition().y
                         ));
                         mon.monsterSpawn = true;
-                        ntc.monster = mon;
+                        ntc.networkMessagesToProcess.add(mon);
                     }
                     break;
 
@@ -249,11 +251,12 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         for (Entity entity : entities) {
             InputComponent input = im.get(entity);
             NetworkTransmissionComponent ntc = ntm.get(entity);
+            NetworkComponent network = CompMappers.network.get(entity);
             WeaponComponent weapon = wm.get(entity);
             if (keycode == Input.Keys.A) {
             	input.weaponDrawn = false;
             	weapon.weapon.justUsed = false;
-            	ntc.stopAttacking = true;
+            	ntc.networkMessagesToProcess.add(new AttackRequest(network.id, true));
             }
         }
         return true;

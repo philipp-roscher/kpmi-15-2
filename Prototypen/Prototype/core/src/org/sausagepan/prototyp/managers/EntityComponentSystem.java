@@ -254,6 +254,7 @@ public class EntityComponentSystem {
 
         // Add NetworkComponent
         localCharacter.add(new NetworkComponent());
+        localCharacter.add(new NetworkTransmissionComponent());
         
         // opens passages for game master
         maze.openSecretPassages();
@@ -272,7 +273,6 @@ public class EntityComponentSystem {
         CharacterEntity newCharacter = entityFactory.createCharacter(clientClass);
 
         // Add Components
-        newCharacter.add(new NetworkTransmissionComponent());
         newCharacter.add(new IdComponent(newCharacterId));
         newCharacter.add(new TeamComponent(newCharacterTeamId));
 

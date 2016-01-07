@@ -11,6 +11,7 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -27,6 +28,7 @@ import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
+import org.sausagepan.prototyp.network.Network.GameExitResponse;
 import org.sausagepan.prototyp.network.Network.GameStart;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
@@ -101,24 +103,19 @@ public class NetworkSystem extends EntitySystem {
 	        posUpdate.position.bodyDirection = body.direction;
 	        network.client.sendUDP(posUpdate);
         }
+
+        // send other network messages
+        for(Object object : ntc.networkMessagesToProcess) {
+            if ((object instanceof AttackRequest) ||
+                (object instanceof ShootRequest)
+            )
+                network.client.sendUDP(object);
+            
+            if (object instanceof MonsterSpawnComponent)
+            	network.client.sendTCP(object);
+        }
+        ntc.networkMessagesToProcess.clear();
         
-        // send AttackRequest
-        if(ntc.attack) {
-        	network.client.sendUDP(new AttackRequest(network.id, false));
-            ntc.attack = false;
-        }
-        if(ntc.stopAttacking) {
-        	network.client.sendUDP(new AttackRequest(network.id, true));
-        	ntc.stopAttacking = false;
-        }
-        if(ntc.shoot) {
-        	network.client.sendUDP(new ShootRequest(network.id));
-        	ntc.shoot = false;
-        }
-        if(ntc.monster != null) {
-        	network.client.sendTCP(ntc.monster);
-        	ntc.monster = null;
-        }
 
         for(Object object : networkMessages) {
             //System.out.println( object.getClass() +" auswerten");
