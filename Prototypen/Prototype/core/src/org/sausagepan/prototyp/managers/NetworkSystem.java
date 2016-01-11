@@ -238,7 +238,10 @@ public class NetworkSystem extends EntitySystem {
 
                 CharacterEntity character = ECS.getCharacter(result.playerId);
                 if(character != null)
-                    ((Bow)character.getComponent(WeaponComponent.class).weapon).shoot(result.position, result.direction, result.bulletId);
+                	if(character.getComponent(WeaponComponent.class).weapon instanceof Bow)
+                		((Bow)character.getComponent(WeaponComponent.class).weapon).shoot(result.position, result.direction, result.bulletId);
+                	else
+                		System.err.println("Server character weapon doesn't match local character weapon!!");
             }
 
             if (object instanceof HPUpdateResponse) {
@@ -264,7 +267,10 @@ public class NetworkSystem extends EntitySystem {
 
                 CharacterEntity character = ECS.getCharacter(result.playerId);
                 if(character != null) {
-                    ((Bow)character.getComponent(WeaponComponent.class).weapon).deleteBullet(result.bulletId);
+                	if(character.getComponent(WeaponComponent.class).weapon instanceof Bow)
+                		((Bow)character.getComponent(WeaponComponent.class).weapon).deleteBullet(result.bulletId);
+                	else
+                		System.err.println("Server character weapon doesn't match local character weapon!!");
                 }
             }
             

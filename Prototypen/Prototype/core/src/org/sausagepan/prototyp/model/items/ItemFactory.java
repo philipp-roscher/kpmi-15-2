@@ -70,7 +70,7 @@ public class ItemFactory {
             case GLOVE_SPIKE: glove = new Sword(mediaManager.getTextureAtlasType("weapons")
                     .findRegion("boxer_glove_spike"), 10, Damagetype.PHYSICAL);break;
             default: glove = new Sword(mediaManager.getTextureAtlasType("weapons")
-            .findRegion("boxer_glove"), 10, Damagetype.PHYSICAL);break;
+            		.findRegion("boxer_glove"), 10, Damagetype.PHYSICAL);break;
         }
         return glove;
     }
@@ -80,10 +80,8 @@ public class ItemFactory {
      * @return
      */
     public Sword createBareHand() {
-        Sword hand;
-        hand = new Sword(mediaManager.getTextureAtlasType("weapons")
+        return new Sword(mediaManager.getTextureAtlasType("weapons")
                     .findRegion("bare_hand"), 3, Damagetype.PHYSICAL);
-        return hand;
     }
 
     public Sword createBigSword() {
