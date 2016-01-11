@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.model.components;
 
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
+import org.sausagepan.prototyp.model.GlobalSettings;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
@@ -18,7 +19,7 @@ public class MonsterSpawnComponent implements Component {
 
     /* ........................................................................... CONSTRUCTOR .. */
     public MonsterSpawnComponent() {
-        this.count = 5;
+        this.count = GlobalSettings.MONSTER_SPAWN_COUNT;
         this.monsterSpawn = false;
         this.masterPosition = new Vector2(0,0);
     }

@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
 import org.sausagepan.prototyp.enums.Direction;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -97,7 +99,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             }
         });
 
-        ImageButton.ImageButtonStyle spawnButtonStyle = new ImageButton.ImageButtonStyle();
+        final ImageButton.ImageButtonStyle spawnButtonStyle = new ImageButton.ImageButtonStyle();
         spawnButtonStyle.up = skin.getDrawable("3dmonsterbuttonup");
         spawnButtonStyle.down = skin.getDrawable("3dmonsterbuttondown");
         spawnButtonStyle.over = skin.getDrawable("3dmonsterbuttonup");
@@ -111,6 +113,8 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputSystem.this.keyDown(Input.Keys.S);
+                //cooldown for monster spawn
+                spawnButton.addAction(Actions.sequence(Actions.visible(false), Actions.delay(GlobalSettings.MONSTER_SPAWN_COOLDOWN), Actions.visible(true)));
                 return true;
             }
 
@@ -140,6 +144,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     }
 
     public void update(float deltaTime) {
+        stage.act();
         for (Entity entity : entities) {
             DynamicBodyComponent body = pm.get(entity);
             InputComponent input = im.get(entity);
