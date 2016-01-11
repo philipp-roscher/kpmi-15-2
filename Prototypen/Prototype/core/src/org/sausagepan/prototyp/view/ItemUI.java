@@ -1,7 +1,13 @@
 package org.sausagepan.prototyp.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -33,6 +39,12 @@ public class ItemUI {
     private final Table table, weaponTable;
     private final ImageButton menuButton, menuBackButton;
     private final Array<ImageButton> bagPackItemButtons, weaponItemButtons;
+    
+    private final ImageButton openMinimap;
+    private final ImageButton closeMinimap;
+    private Array<Image> minimapPos = new Array<Image>();
+    private boolean minimapCreated = false;
+    
     public final InMaze mazeScreen;
     public final KPMIPrototype game;
     private InventoryComponent inventory;
@@ -67,6 +79,7 @@ public class ItemUI {
                 menuBackButton.setVisible(true);
                 table.setVisible(true);
                 weaponTable.setVisible(true);
+                openMinimap.setVisible(true);
             }
         });
 
@@ -82,6 +95,12 @@ public class ItemUI {
                 menuBackButton.setVisible(false);
                 table.setVisible(false);
                 weaponTable.setVisible(false);
+                openMinimap.setVisible(false);
+                closeMinimap.setVisible(false);
+                
+                for (Image i : minimapPos){
+                	i.setVisible(false);
+                }
             }
         });
 
@@ -107,6 +126,71 @@ public class ItemUI {
 
         weaponTable.setVisible(false);
         stage.addActor(weaponTable);
+        
+        //Minimap
+        this.openMinimap = new ImageButton(skin.getDrawable("minimap"));
+        openMinimap.setPosition(570, 35);
+        openMinimap.setVisible(false);
+        stage.addActor(openMinimap);
+        
+        this.closeMinimap = new ImageButton(skin.getDrawable("minimap"));
+        closeMinimap.setPosition(570, 35);
+        closeMinimap.setVisible(false);
+        stage.addActor(closeMinimap);
+        
+        openMinimap.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                table.setVisible(false);
+                weaponTable.setVisible(false);
+                
+                if(!minimapCreated){
+	            	Array<Image> test = mazeScreen.getMaze().getGenerator().getMinimap().getTableMap();
+	            	int ix = 200;
+	            	int iy = 150;
+	            	int count = 0;
+	            	
+	            	System.out.println(test.size);
+	            	
+	            	for (Image i : test){
+	            		Image help = i;
+	            		help.setPosition(ix, iy);
+	            		iy += 2;
+	            		
+	            		if(count==99){
+	            			count = -1;
+	            			ix+=2;
+	            			iy=150;
+	            		}
+	            		
+	            		count++;
+	            		
+	            		minimapPos.add(help);
+	            		stage.addActor(help);
+	            	} 
+	            	minimapCreated = true;
+                }else{
+                	for (Image i : minimapPos){
+                    	i.setVisible(true);
+                    }
+                }
+            	closeMinimap.setVisible(true);
+            }
+        });
+        
+        closeMinimap.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            	table.setVisible(true);
+                weaponTable.setVisible(true);
+                closeMinimap.setVisible(false);
+                openMinimap.setVisible(true);
+                
+                for (Image i : minimapPos){
+                	i.setVisible(false);
+                }
+            }
+        });
 
         initializeItemMenu();
 

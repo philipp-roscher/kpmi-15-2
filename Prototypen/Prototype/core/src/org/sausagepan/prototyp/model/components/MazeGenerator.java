@@ -6,6 +6,7 @@ import java.util.Map;
 import org.sausagepan.prototyp.enums.CharacterClass;
 import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.view.Minimap;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -48,6 +49,8 @@ public class MazeGenerator {
     Array<MapItem> mapItems;
 
 	float[][] positions;
+	
+	Minimap minimap;
 
 
     /* .............................................................................................. CONSTRUCTORS .. */
@@ -108,6 +111,8 @@ public class MazeGenerator {
 		addSafeZone();  // safe spawning zone	
 		addWall(); //wall around the whole maze
 
+        minimap = new Minimap(mazeHeight, mazeWidth, colliderWalls);
+		
         // combine layers to a new tiled map
 		map.getLayers().add(ground);        			// ground layer
 		map.getLayers().add(walls);         			// walls layer
@@ -439,5 +444,9 @@ public class MazeGenerator {
 
 	public Array<Rectangle> getInvalidKeyPositions() {
 		return invalidKeyPositions;
+	}
+	
+	public Minimap getMinimap() {
+		return minimap;
 	}
 }

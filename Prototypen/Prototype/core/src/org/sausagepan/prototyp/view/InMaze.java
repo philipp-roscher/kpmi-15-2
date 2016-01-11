@@ -286,4 +286,8 @@ public class InMaze implements Screen {
             }
         }
     }
+    
+    public Maze getMaze(){
+    	return maze;
+    }
 }
