@@ -25,7 +25,8 @@ public class ItemFactory {
         return new Bow(
                 mediaManager.getTextureAtlasType("weapons").findRegion("bow", 1),
                 1, Damagetype.PHYSICAL,
-                mediaManager.getTextureAtlasType("weapons").findRegion("arrow", 1)
+                mediaManager.getTextureAtlasType("weapons").findRegion("arrow", 1),
+                "Bow"
         );
     }
 
@@ -33,7 +34,8 @@ public class ItemFactory {
         return new Bow(
                 mediaManager.getTextureAtlasType("weapons").findRegion("fire_breath"),
                 5, Damagetype.MAGICAL,
-                mediaManager.getTextureAtlasType("weapons").findRegion("fireball")
+                mediaManager.getTextureAtlasType("weapons").findRegion("fireball"),
+                "FireBreather"
         );
     }
 
@@ -45,7 +47,8 @@ public class ItemFactory {
     public Sword createSmallSword() {
         return new Sword(
                 mediaManager.getTextureAtlasType("weapons").findRegion("sword", 2),
-                5, Damagetype.PHYSICAL);
+                5, Damagetype.PHYSICAL,
+                "SmallSword");
     }
 
     /**
@@ -56,7 +59,8 @@ public class ItemFactory {
     public Sword createMiniSword() {
         return new Sword(
                 mediaManager.getTextureAtlasType("weapons").findRegion("sword", 2),
-                1, Damagetype.PHYSICAL);
+                1, Damagetype.PHYSICAL,
+                "MiniSword");
     }
 
     /**
@@ -68,9 +72,9 @@ public class ItemFactory {
         Sword glove;
         switch(itemType) {
             case GLOVE_SPIKE: glove = new Sword(mediaManager.getTextureAtlasType("weapons")
-                    .findRegion("boxer_glove_spike"), 10, Damagetype.PHYSICAL);break;
+                    .findRegion("boxer_glove_spike"), 10, Damagetype.PHYSICAL, "BoxerGloveSpike");break;
             default: glove = new Sword(mediaManager.getTextureAtlasType("weapons")
-            .findRegion("boxer_glove"), 10, Damagetype.PHYSICAL);break;
+            .findRegion("boxer_glove"), 10, Damagetype.PHYSICAL, "BoxerGlove");break;
         }
         return glove;
     }
@@ -82,14 +86,16 @@ public class ItemFactory {
     public Sword createBareHand() {
         Sword hand;
         hand = new Sword(mediaManager.getTextureAtlasType("weapons")
-                    .findRegion("bare_hand"), 3, Damagetype.PHYSICAL);
+                    .findRegion("bare_hand"), 3, Damagetype.PHYSICAL,
+                    "BareHand");
         return hand;
     }
 
     public Sword createBigSword() {
         return new Sword(
                 mediaManager.getTextureAtlasType("weapons").findRegion("sword", 1),
-                10, Damagetype.PHYSICAL);
+                10, Damagetype.PHYSICAL,
+                "BigSword");
     }
 
     /**

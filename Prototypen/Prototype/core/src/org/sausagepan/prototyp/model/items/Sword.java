@@ -12,13 +12,14 @@ public class Sword extends WeaponItem {
     /* ............................................................................ ATTRIBUTES .. */
     public Rectangle damageArea;
     /* ........................................................................... CONSTRUCTOR .. */
-    public Sword(TextureRegion region, int strength, Damagetype damagetype, long cooldown) {
-        super(region, strength, damagetype, cooldown);
+    public Sword(TextureRegion region, int strength, Damagetype damagetype, long cooldown, String name) {
+        super(region, strength, damagetype, cooldown, name);
         this.damageArea = new Rectangle(0, 0, .5f, .5f);
     }
     
-    public Sword(TextureRegion region, int strength, Damagetype damagetype) {
-        this(region, strength, damagetype, 300);
+    public Sword(TextureRegion region, int strength, Damagetype damagetype, String name) {
+    	// default cooldown: 300 ms
+        this(region, strength, damagetype, 300, name);
     }
     /* ............................................................................... METHODS .. */
     public boolean checkHit(Rectangle hittableArea) {

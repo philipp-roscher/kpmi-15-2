@@ -17,10 +17,11 @@ public abstract class  WeaponItem {
     public Damagetype damagetype;
     public long cooldown;
     public long lastAttack;
+    public String name;
     
     /* ........................................................................... CONSTRUCTOR .. */
 
-    public WeaponItem(TextureRegion region, int strength, Damagetype damagetype, long cooldown) {
+    public WeaponItem(TextureRegion region, int strength, Damagetype damagetype, long cooldown, String name) {
         this.sprite = new EntitySprite(region);
         this.sprite.setSize(
                 UnitConverter.pixelsToMeters(this.sprite.getRegionWidth()),
@@ -33,6 +34,7 @@ public abstract class  WeaponItem {
         this.strength = strength;
         this.damagetype = damagetype;
         this.cooldown = cooldown;
+        this.name = name;
     }
     /* ............................................................................... METHODS .. */
     
