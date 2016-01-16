@@ -182,22 +182,26 @@ public class Network {
 	public static class WeaponChangeRequest {
 		public int playerId;
 		public int weaponId;
+		public String weaponName;
 
 		public WeaponChangeRequest() { }
-		public WeaponChangeRequest(int playerId, int weaponId) {
+		public WeaponChangeRequest(int playerId, int weaponId, String weaponName) {
 			this.playerId = playerId;
 			this.weaponId = weaponId;
+			this.weaponName = weaponName;
 		}
 	}
 	
 	public static class WeaponChangeResponse {
 		public int playerId;
 		public int weaponId;
+		public String weaponName;
 
 		public WeaponChangeResponse() { }
-		public WeaponChangeResponse(int playerId, int weaponId) {
+		public WeaponChangeResponse(int playerId, int weaponId, String weaponName) {
 			this.playerId = playerId;
 			this.weaponId = weaponId;
+			this.weaponName = weaponName;
 		}
 	}
 	

@@ -17,6 +17,33 @@ public class ItemFactory {
     /* ............................................................................... METHODS .. */
 
     /**
+     * Creates the weapon given by its name
+     */
+    public WeaponItem createWeaponFromName(String weaponName) {
+    	WeaponItem weapon = null;
+    	
+    	// switch-case not possible because switch(String) not allowed in Java <1.7 
+    	if (weaponName.equals("Bow"))
+	 			weapon = createBow();
+	 		else if (weaponName.equals("FireBreather"))
+	 			weapon = createFireBreather();
+	 		else if (weaponName.equals("SmallSword"))
+	 			weapon = createSmallSword();
+	 		else if (weaponName.equals("MiniSword"))
+	 			weapon = createMiniSword();
+	 		else if (weaponName.equals("BoxerGlove"))
+	 			weapon = createBoxerGlove(ItemType.GLOVE_RED);
+	 		else if (weaponName.equals("BoxerGloveSpike"))
+	 			weapon = createBoxerGlove(ItemType.GLOVE_SPIKE); 
+	 		else if (weaponName.equals("BareHand"))
+	 			weapon = createBareHand();
+	 		else if (weaponName.equals("BigSword"))
+	 			weapon = createBigSword();
+    	
+    	return weapon;
+    }
+    
+    /**
      * Creates a standard {@link Bow} item of {@link org.sausagepan.prototyp.enums.Damagetype}
      * Physical
      * @return  the bow item

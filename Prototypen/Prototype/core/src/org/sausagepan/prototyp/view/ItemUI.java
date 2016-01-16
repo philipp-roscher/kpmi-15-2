@@ -177,9 +177,11 @@ public class ItemUI {
             ib.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                	int weaponId = weaponItemButtons.indexOf((ImageButton)event.getListenerActor(), false);
                 	ntc.networkMessagesToProcess.add(new WeaponChangeRequest(
                 			CompMappers.id.get(character).id,
-                			weaponItemButtons.indexOf((ImageButton)event.getListenerActor(), false)));
+                			weaponId,
+                			CompMappers.inventory.get(character).weapons.get(weaponId).name));
                 }
             });
             weaponItemButtons.add(ib);

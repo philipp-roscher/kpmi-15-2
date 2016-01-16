@@ -230,12 +230,14 @@ public class SERVERNetworkSystem extends EntitySystem {
             	WeaponChangeRequest result = (WeaponChangeRequest) object;
             	ServerCharacterEntity character;
 
-            	System.out.println("Player "+result.playerId+" switched to weapon "+result.weaponId);
             	if((character = ECS.getCharacter(result.playerId)) != null) {
-            		CompMappers.weapon.get(character).weapon =
-            				CompMappers.inventory.get(character).weapons.get(result.weaponId);
-            		server.sendToAllTCP(new WeaponChangeResponse(result.playerId, result.weaponId));
-            		System.out.println("Sent WeaponChangeResonse");
+            		if(CompMappers.inventory.get(character).weapons.get(result.weaponId).name.equals(result.weaponName)) {
+	            		CompMappers.weapon.get(character).weapon =
+	            				CompMappers.inventory.get(character).weapons.get(result.weaponId);
+	            		server.sendToAllTCP(new WeaponChangeResponse(result.playerId, result.weaponId, result.weaponName));
+            		} else {
+            			System.err.println("Sync issue: Weapon on server differs from client weapon.");
+            		}
             	}
             }
         }

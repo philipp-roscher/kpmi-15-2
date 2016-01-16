@@ -28,6 +28,7 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.model.items.WeaponItem;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.view.InMaze;
@@ -290,25 +291,10 @@ public class EntityComponentSystem {
 		newCharacter.getComponent(HealthComponent.class).HP = character.health;
 		newCharacter.getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(character.position, 0f);
 		newCharacter.getComponent(InventoryComponent.class).ownKeys = character.ownKeys;
-		WeaponComponent weapon = newCharacter.getComponent(WeaponComponent.class);
-		
-		// switch-case not possible because switch(String) not allowed in Java <1.7 
-		if (character.weaponName.equals("Bow"))
-			weapon.weapon = itemFactory.createBow();
-		else if (character.weaponName.equals("FireBreather"))
-			weapon.weapon = itemFactory.createFireBreather();
-		else if (character.weaponName.equals("SmallSword"))
-			weapon.weapon = itemFactory.createSmallSword();
-		else if (character.weaponName.equals("MiniSword"))
-			weapon.weapon = itemFactory.createMiniSword();
-		else if (character.weaponName.equals("BoxerGlove"))
-			weapon.weapon = itemFactory.createBoxerGlove(ItemType.GLOVE_RED);
-		else if (character.weaponName.equals("BoxerGloveSpike"))
-			weapon.weapon = itemFactory.createBoxerGlove(ItemType.GLOVE_SPIKE); 
-		else if (character.weaponName.equals("BareHand"))
-			weapon.weapon = itemFactory.createBareHand();
-		else if (character.weaponName.equals("BigSword"))
-			weapon.weapon = itemFactory.createBigSword();
+		WeaponItem weapon = itemFactory.createWeaponFromName(character.weaponName);
+		if (weapon != null) {
+			newCharacter.getComponent(WeaponComponent.class).weapon = weapon;
+		}
 	}
 
 	public void deleteCharacter(int id) {

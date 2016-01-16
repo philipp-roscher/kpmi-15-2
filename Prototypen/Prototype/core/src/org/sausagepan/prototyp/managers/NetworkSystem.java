@@ -305,13 +305,15 @@ public class NetworkSystem extends EntitySystem {
             	WeaponChangeResponse result = (WeaponChangeResponse) object;
             	CharacterEntity character;
             	
-            	System.out.println("Player "+result.playerId+" switched to weapon "+result.weaponId);
+            	System.out.println("Player "+result.playerId+" switched to weapon "+result.weaponName);
             	if ((character = ECS.getCharacter(result.playerId)) != null) {
-            		CompMappers.weapon.get(character).weapon =
-            				CompMappers.inventory.get(character).weapons.get(result.weaponId);
-            		
             		if(result.playerId == network.id) {
+                		CompMappers.weapon.get(character).weapon =
+                				CompMappers.inventory.get(character).weapons.get(result.weaponId);    
             			ECS.getItemUI().initializeItemMenu();
+            		} else {
+                		CompMappers.weapon.get(character).weapon =
+                				ECS.getItemFactory().createWeaponFromName(result.weaponName);            			
             		}
             	}
             }
