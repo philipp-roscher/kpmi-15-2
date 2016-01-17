@@ -1,28 +1,13 @@
 package org.sausagepan.prototyp.view;
 
-import java.io.PrintWriter;
-import java.io.BufferedWriter; 
-import java.io.FileWriter; 
-import java.io.IOException; 
-
 import org.sausagepan.prototyp.model.GlobalSettings;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-//import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
 
 public class Minimap {
@@ -38,7 +23,6 @@ public class Minimap {
 	 * Generates MapData Array from given Maze
 	 */
 	public Minimap (int height, int width, MapLayer colliderWalls){
-		System.out.println("height: " + height + " | width: " + width);
 		this.height = (height + 2)*32 + 1;
 		this.width = (width + 2)*32 + 1;
 		
@@ -52,7 +36,6 @@ public class Minimap {
 		}
 
 		ColliderLayerToArray(colliderWalls);
-		//printToFile();
 		MapDataToTable();
 	}
 	
@@ -100,29 +83,6 @@ public class Minimap {
 	
 	public Array<Image> getTableMap(){
 		return tableMap;
-	}
-	
-	/*only for testing purpose*/
-	public void printToFile(){
-		PrintWriter pWriter = null; 
-        try { 
-            pWriter = new PrintWriter(new BufferedWriter(new FileWriter("test.txt")));
-            for (int j = height * 32 - 1; j >= 0; j--){
-            	for (int i = width * 32 - 1; i >= 0; i--){ 			
-    				if(mapData[i][j])pWriter.print(1);
-    				else pWriter.print(0);
-    				if(i == 0)pWriter.println();
-    			}
-    		}
-             
-        } catch (IOException ioe) { 
-            ioe.printStackTrace(); 
-        } finally { 
-            if (pWriter != null){ 
-                pWriter.flush(); 
-                pWriter.close(); 
-            } 
-        } 
 	}
 	
 	public int getWidth() {

@@ -165,7 +165,7 @@ public class ItemUI {
 	            		Image help = i;
 	            		help.setPosition(ix, iy);
 	            		iy += GlobalSettings.MINIMAP_SIZE;
-	            		
+	        
 	            		if(count == minimap.getWidth()){
 	            			count = 0;
 	            			ix += GlobalSettings.MINIMAP_SIZE;
