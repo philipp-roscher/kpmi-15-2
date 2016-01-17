@@ -257,16 +257,17 @@ public class SERVERNetworkSystem extends EntitySystem {
             	
             	if((character = ECS.getCharacter(result.playerId)) != null && (item = CompMappers.inventory.get(character).items.get(result.itemId)) != null) {
             		if(item.type.equals(result.itemType)) {
-	            		server.sendToAllTCP(new UseItemResponse(result.playerId, result.itemId, result.itemType));
-
 	            		// if item is potion
             			if(result.itemType == ItemType.POTION_HP) {
                         	PotionHP potion = (PotionHP) item;
                         	HealthComponent health = character.getComponent(HealthComponent.class);
-                        	health.HP += potion.strength;
-                        	// health can't surpass max HP
-                        	if(health.HP > health.initialHP) health.HP = health.initialHP;
-                        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(character.getComponent(IdComponent.class).id, true, health.HP));
+                        	if(health.HP != health.initialHP) {
+	                        	health.HP += potion.strength;
+	                        	// health can't surpass max HP
+	                        	if(health.HP > health.initialHP) health.HP = health.initialHP;
+	    	            		server.sendToAllTCP(new UseItemResponse(result.playerId, result.itemId, result.itemType));
+	                        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(character.getComponent(IdComponent.class).id, true, health.HP));
+                        	}
             			}
             		} else {
             			System.err.println("Sync issue: Weapon on server differs from client weapon.");

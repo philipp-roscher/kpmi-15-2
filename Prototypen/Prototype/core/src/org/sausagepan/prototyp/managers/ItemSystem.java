@@ -74,13 +74,15 @@ public class ItemSystem extends EntitySystem implements EntityListener {
                     	// add key to character inventory
                     	inventory.ownKeys[keyFragment.keyFragmentNr - 1] = true;
                     	ntc.networkMessagesToProcess.add(new ItemPickUp(entity.getComponent(IdComponent.class).id, item.getComponent(IdComponent.class).id));
+                        ECS.deleteItem(item.getComponent(IdComponent.class).id);
                     	// adding key to team inventory is not needed on server
 					} else {
-						if(CompMappers.inventory.get(entity).pickUpItem(item.getComponent(ItemComponent.class).item))
+						if(CompMappers.inventory.get(entity).pickUpItem(item.getComponent(ItemComponent.class).item)) {
 							ntc.networkMessagesToProcess.add(new ItemPickUp(entity.getComponent(IdComponent.class).id, item.getComponent(IdComponent.class).id));
+		                    ECS.deleteItem(item.getComponent(IdComponent.class).id);
+						}
 					}
                     
-                    ECS.deleteItem(item.getComponent(IdComponent.class).id);
                 }
             }
         }
