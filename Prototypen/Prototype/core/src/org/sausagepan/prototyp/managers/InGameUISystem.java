@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -31,7 +32,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class InGameUISystem extends EntitySystem {
     /* ............................................................................ ATTRIBUTES .. */
-    private OrthographicCamera camera;
+    private Stage stage;
     private Viewport viewport;
     private Batch batch;
     private Array<TextureRegion> healthBarImages;
@@ -52,10 +53,10 @@ public class InGameUISystem extends EntitySystem {
     /* ........................................................................... CONSTRUCTOR .. */
 
     public InGameUISystem(MediaManager media, CharacterClass characterClass, KPMIPrototype game) {
-        this.batch = new SpriteBatch();
         this.font = new BitmapFont();
-        this.camera = new OrthographicCamera();
-        this.viewport = new FitViewport(800,480,camera);
+        this.viewport = new FitViewport(800,480);
+        this.stage = new Stage(viewport);
+        this.batch = stage.getBatch();
         TextureAtlas atlas = media.getTextureAtlasType("IngameUI");
         keyFragmentItems = new boolean[3];
         this.game = game;
@@ -93,8 +94,9 @@ public class InGameUISystem extends EntitySystem {
      * Draws the Ingame UI like healthbar, character image, keys, items, buttons and so on
      */
     public void draw() {
-        this.viewport.apply();
+        this.stage.getViewport().apply();
         this.batch.begin();
+        this.batch.setProjectionMatrix(stage.getCamera().combined);
         this.batch.draw(recentHealthBarImg, 16, 400, 256, 72);
         this.batch.draw(characterImg, 16, 400, characterImg.getRegionWidth(), 72);
         batch.draw(keyFragmentImgs.get(0), 690, 429);
@@ -147,7 +149,6 @@ public class InGameUISystem extends EntitySystem {
         }
 
         this.batch.end();
-        this.camera.update();
     }
 
     @Override
@@ -170,5 +171,9 @@ public class InGameUISystem extends EntitySystem {
 
     public Viewport getViewport() {
         return viewport;
+    }
+    
+    public Stage getStage() {
+    	return stage;
     }
 }
