@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
@@ -27,6 +28,7 @@ import org.sausagepan.prototyp.model.entities.MapMonsterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
+import org.sausagepan.prototyp.model.items.WeaponItem;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.view.InMaze;
@@ -254,6 +256,7 @@ public class EntityComponentSystem {
 
         // Add NetworkComponent
         localCharacter.add(new NetworkComponent());
+        localCharacter.add(new NetworkTransmissionComponent());
         
         // opens passages for game master
         maze.openSecretPassages();
@@ -272,7 +275,6 @@ public class EntityComponentSystem {
         CharacterEntity newCharacter = entityFactory.createCharacter(clientClass);
 
         // Add Components
-        newCharacter.add(new NetworkTransmissionComponent());
         newCharacter.add(new IdComponent(newCharacterId));
         newCharacter.add(new TeamComponent(newCharacterTeamId));
 
@@ -289,6 +291,10 @@ public class EntityComponentSystem {
 		newCharacter.getComponent(HealthComponent.class).HP = character.health;
 		newCharacter.getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(character.position, 0f);
 		newCharacter.getComponent(InventoryComponent.class).ownKeys = character.ownKeys;
+		WeaponItem weapon = itemFactory.createWeaponFromName(character.weaponName);
+		if (weapon != null) {
+			newCharacter.getComponent(WeaponComponent.class).weapon = weapon;
+		}
 	}
 
 	public void deleteCharacter(int id) {
@@ -383,5 +389,9 @@ public class EntityComponentSystem {
 
     public Engine getEngine() {
         return engine;
+    }
+    
+    public ItemUI getItemUI() {
+    	return itemUI;
     }
 }

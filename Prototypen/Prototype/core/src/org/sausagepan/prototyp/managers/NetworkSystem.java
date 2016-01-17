@@ -11,10 +11,12 @@ import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
+import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
 import org.sausagepan.prototyp.model.items.Bow;
@@ -27,6 +29,7 @@ import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
+import org.sausagepan.prototyp.network.Network.GameExitResponse;
 import org.sausagepan.prototyp.network.Network.GameStart;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
@@ -38,7 +41,12 @@ import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.UseItemRequest;
+import org.sausagepan.prototyp.network.Network.UseItemResponse;
+import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
+import org.sausagepan.prototyp.network.Network.WeaponChangeResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
+import org.sausagepan.prototyp.view.ItemUI;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -101,24 +109,21 @@ public class NetworkSystem extends EntitySystem {
 	        posUpdate.position.bodyDirection = body.direction;
 	        network.client.sendUDP(posUpdate);
         }
+
+        // send other network messages
+        for(Object object : ntc.networkMessagesToProcess) {
+            if ((object instanceof AttackRequest) ||
+                (object instanceof ShootRequest)
+            )
+                network.client.sendUDP(object);
+            
+            if ((object instanceof MonsterSpawnComponent) ||
+            	(object instanceof WeaponChangeRequest) ||
+            	(object instanceof UseItemRequest))
+            	network.client.sendTCP(object);
+        }
+        ntc.networkMessagesToProcess.clear();
         
-        // send AttackRequest
-        if(ntc.attack) {
-        	network.client.sendUDP(new AttackRequest(network.id, false));
-            ntc.attack = false;
-        }
-        if(ntc.stopAttacking) {
-        	network.client.sendUDP(new AttackRequest(network.id, true));
-        	ntc.stopAttacking = false;
-        }
-        if(ntc.shoot) {
-        	network.client.sendUDP(new ShootRequest(network.id));
-        	ntc.shoot = false;
-        }
-        if(ntc.monster != null) {
-        	network.client.sendTCP(ntc.monster);
-        	ntc.monster = null;
-        }
 
         for(Object object : networkMessages) {
             //System.out.println( object.getClass() +" auswerten");
@@ -143,22 +148,8 @@ public class NetworkSystem extends EntitySystem {
 
                 nm.get(localCharEntity).client.addListener(new Listener() {
                     public void received(Connection connection, Object object) {
-                        if ((object instanceof NewHeroResponse) ||
-                                (object instanceof DeleteHeroResponse) ||
-                                (object instanceof GameStateResponse) ||
-                                (object instanceof AttackResponse) ||
-                                (object instanceof ShootResponse) ||
-                                (object instanceof HPUpdateResponse) ||
-                                (object instanceof DeleteBulletResponse) ||
-                                (object instanceof YouDiedResponse) ||
-                                (object instanceof ItemPickUp) ||
-                                (object instanceof NewItem) ||
-                                (object instanceof GameStart) ||
-                                (object instanceof Network.GameExitResponse) || 
-                                (object instanceof NewMonster)) {
-                            //System.out.println( object.getClass() +" empfangen");
-                            NetworkSystem.this.networkMessages.add(object);
-                        }
+                        //System.out.println( object.getClass() +" empfangen");
+                        NetworkSystem.this.networkMessages.add(object);
                     }
                 });
 
@@ -303,18 +294,58 @@ public class NetworkSystem extends EntitySystem {
             
             if (object instanceof ItemPickUp) {
             	ItemPickUp result = (ItemPickUp) object;
-
-				if(ECS.getItem(result.itemId).getComponent(ItemComponent.class).type == ItemType.KEY) {
-                	// add key to character inventory
-                	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
-                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;
-                }
+            	ItemEntity item;
+            	CharacterEntity character;
+            	
+				if((item = ECS.getItem(result.itemId)) != null && (character = ECS.getCharacter(result.playerId)) != null) {
+					if(item.getComponent(ItemComponent.class).item.type == ItemType.KEY) {
+	                	// add key to character inventory
+	                	KeyFragmentItem keyFragment = (KeyFragmentItem) item.getComponent(ItemComponent.class).item;
+	                	CompMappers.inventory.get(character).ownKeys[keyFragment.keyFragmentNr - 1] = true;
+					} else {
+						if(result.playerId == network.id) {
+							CompMappers.inventory.get(character).pickUpItem(item.getComponent(ItemComponent.class).item);    
+	            			ECS.getItemUI().initializeItemMenu();
+						}
+					}
+					
+				}
 
                 ECS.deleteItem(result.itemId);
             }
 
-            if(object instanceof GameStart) {
+            if (object instanceof GameStart) {
                 ECS.getMaze().openEntranceDoors();
+            }
+            
+            if (object instanceof WeaponChangeResponse) {
+            	WeaponChangeResponse result = (WeaponChangeResponse) object;
+            	CharacterEntity character;
+            	
+            	System.out.println("Player "+result.playerId+" switched to weapon "+result.weaponName);
+            	if ((character = ECS.getCharacter(result.playerId)) != null) {
+            		if(result.playerId == network.id) {
+                		CompMappers.weapon.get(character).weapon =
+                				CompMappers.inventory.get(character).weapons.get(result.weaponId);    
+            			ECS.getItemUI().initializeItemMenu();
+            		} else {
+                		CompMappers.weapon.get(character).weapon =
+                				ECS.getItemFactory().createWeaponFromName(result.weaponName);            			
+            		}
+            	}
+            }
+            
+            if (object instanceof UseItemResponse) {
+            	UseItemResponse result = (UseItemResponse) object;
+            	CharacterEntity character;
+            	
+            	System.out.println("Player "+result.playerId+" used "+result.itemType);
+            	if ((character = ECS.getCharacter(result.playerId)) != null) {
+            		if(result.playerId == network.id) {
+            			CompMappers.inventory.get(character).items.removeIndex(result.itemId);
+            			ECS.getItemUI().initializeItemMenu();
+            		}
+            	}
             }
         }
 

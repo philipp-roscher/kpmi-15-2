@@ -21,10 +21,13 @@ import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.WeaponItem;
+import org.sausagepan.prototyp.network.Network.UseItemRequest;
+import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
 
 /**
  * Visual representation of the {@link InventoryComponent} which lets the user use {@link Item}s
@@ -47,8 +50,10 @@ public class ItemUI {
     
     public final InMaze mazeScreen;
     public final KPMIPrototype game;
+    private CharacterEntity character;
     private InventoryComponent inventory;
     private WeaponComponent weapon;
+    private NetworkTransmissionComponent ntc;
     /* ........................................................................... CONSTRUCTOR .. */
     public ItemUI(final InMaze mazeScreen, final KPMIPrototype game, final CharacterEntity
             localCharacter) {
@@ -58,6 +63,8 @@ public class ItemUI {
         this.weaponItemButtons = new Array<ImageButton>();
         this.inventory = CompMappers.inventory.get(localCharacter);
         this.weapon = CompMappers.weapon.get(localCharacter);
+        this.ntc = CompMappers.netTrans.get(localCharacter);
+        this.character = localCharacter;
 
         // Set up UI
         FitViewport fit = new FitViewport(800,480);
@@ -226,11 +233,11 @@ public class ItemUI {
             ib.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    inventory.items.removeIndex(bagPackItemButtons.indexOf((ImageButton)event
-                            .getListenerActor(), false));
-                    initializeItemMenu();
-
-                    // TODO apply item
+                	int itemId = bagPackItemButtons.indexOf((ImageButton)event.getListenerActor(), false);
+                	ntc.networkMessagesToProcess.add(new UseItemRequest(
+                			CompMappers.id.get(character).id,
+                			itemId,
+                			CompMappers.inventory.get(character).items.get(itemId).type));
                 }
             });
             bagPackItemButtons.add(ib);
@@ -255,10 +262,11 @@ public class ItemUI {
             ib.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // Sets new weapon in WeaponComponent
-                    weapon.weapon = inventory.weapons.get(weaponItemButtons.indexOf(
-                            (ImageButton)event.getListenerActor(), false));
-                    initializeItemMenu();
+                	int weaponId = weaponItemButtons.indexOf((ImageButton)event.getListenerActor(), false);
+                	ntc.networkMessagesToProcess.add(new WeaponChangeRequest(
+                			CompMappers.id.get(character).id,
+                			weaponId,
+                			CompMappers.inventory.get(character).weapons.get(weaponId).name));
                 }
             });
             weaponItemButtons.add(ib);

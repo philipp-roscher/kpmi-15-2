@@ -29,8 +29,9 @@ public class ServerCharacterEntity extends Entity {
 		CharacterClass characterClass = this.getComponent(CharacterClassComponent.class).characterClass;
 		int teamId = this.getComponent(TeamComponent.class).TeamId;
 		int health = this.getComponent(HealthComponent.class).HP;
+		String weaponName = this.getComponent(WeaponComponent.class).weapon.name;
 		boolean[] ownKeys = this.getComponent(InventoryComponent.class).ownKeys;
-		return new MapCharacterObject(position, characterClass, teamId, health, ownKeys);
+		return new MapCharacterObject(position, characterClass, teamId, health, weaponName, ownKeys);
 	}
 	
     /* ..................................................................... GETTERS & SETTERS .. */

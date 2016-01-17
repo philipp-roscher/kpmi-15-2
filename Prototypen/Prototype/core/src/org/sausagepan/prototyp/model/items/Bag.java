@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.model.items;
 
+import org.sausagepan.prototyp.enums.ItemType;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
@@ -12,7 +14,7 @@ public class Bag extends Item {
     public Array<Item> items;
     /* ........................................................................... CONSTRUCTOR .. */
     public Bag(TextureRegion textureRegion, Array<Item> items) {
-        super(textureRegion);
+        super(textureRegion, ItemType.BAG);
         this.items = items;
     }
     /* ............................................................................... METHODS .. */

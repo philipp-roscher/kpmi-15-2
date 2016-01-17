@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.model.items;
 
+import org.sausagepan.prototyp.enums.ItemType;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -10,7 +12,7 @@ public class PotionHP extends Item {
     public int strength;
     /* ........................................................................... CONSTRUCTOR .. */
     public PotionHP(TextureRegion textureRegion, int strength) {
-        super(textureRegion);
+        super(textureRegion, ItemType.POTION_HP);
         this.strength = strength;
     }
     /* ............................................................................... METHODS .. */

@@ -24,7 +24,7 @@ public class ItemEntity extends Entity {
 		Rectangle area = this.getComponent(InjurableAreaComponent.class).area;
 		ItemComponent item = this.getComponent(ItemComponent.class);
 		Vector2 position = new Vector2(area.x, area.y);
-		ItemType type = item.type;
+		ItemType type = item.item.type;
 		int value = item.value;
 		return new MapItem(position, type, value);
 	}

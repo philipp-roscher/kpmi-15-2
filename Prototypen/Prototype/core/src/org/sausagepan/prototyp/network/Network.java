@@ -36,6 +36,10 @@ public class Network {
 		kryo.register(AttackResponse.class);
 		kryo.register(ShootRequest.class);
 		kryo.register(ShootResponse.class);
+		kryo.register(WeaponChangeRequest.class);
+		kryo.register(WeaponChangeResponse.class);
+		kryo.register(UseItemRequest.class);
+		kryo.register(UseItemResponse.class);
 		kryo.register(HPUpdateResponse.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(GameStart.class);
@@ -174,6 +178,58 @@ public class Network {
 			this.position = position;
 			this.direction = direction;
             this.bulletId = bulletId;
+		}
+	}
+	
+	public static class WeaponChangeRequest {
+		public int playerId;
+		public int weaponId;
+		public String weaponName;
+
+		public WeaponChangeRequest() { }
+		public WeaponChangeRequest(int playerId, int weaponId, String weaponName) {
+			this.playerId = playerId;
+			this.weaponId = weaponId;
+			this.weaponName = weaponName;
+		}
+	}
+	
+	public static class WeaponChangeResponse {
+		public int playerId;
+		public int weaponId;
+		public String weaponName;
+
+		public WeaponChangeResponse() { }
+		public WeaponChangeResponse(int playerId, int weaponId, String weaponName) {
+			this.playerId = playerId;
+			this.weaponId = weaponId;
+			this.weaponName = weaponName;
+		}
+	}
+	
+	public static class UseItemRequest {
+		public int playerId;
+		public int itemId;
+		public ItemType itemType;
+
+		public UseItemRequest() { }
+		public UseItemRequest(int playerId, int itemId, ItemType itemType) {
+			this.playerId = playerId;
+			this.itemId = itemId;
+			this.itemType = itemType;
+		}
+	}
+	
+	public static class UseItemResponse {
+		public int playerId;
+		public int itemId;
+		public ItemType itemType;
+
+		public UseItemResponse() { }
+		public UseItemResponse(int playerId, int itemId, ItemType itemType) {
+			this.playerId = playerId;
+			this.itemId = itemId;
+			this.itemType = itemType;
 		}
 	}
 	

@@ -1,9 +1,13 @@
 package org.sausagepan.prototyp.managers;
 
+import org.sausagepan.prototyp.Utils.CompMappers;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
+import org.sausagepan.prototyp.network.Network.AttackRequest;
+import org.sausagepan.prototyp.network.Network.ShootRequest;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -40,14 +44,15 @@ public class WeaponSystem extends EntitySystem implements EntityListener {
         for (Entity entity : entities) {
             WeaponComponent weapon = wm.get(entity);
             NetworkTransmissionComponent ntc = ntm.get(entity);
+            NetworkComponent network = CompMappers.network.get(entity);
             if(weapon.weapon.justUsed) {
                 // Handle Sword
                 if(weapon.weapon.getClass().equals(Sword.class))
-                    ntc.attack = true;
+                    ntc.networkMessagesToProcess.add(new AttackRequest(network.id, false));
 
                 // Handle Bow
                 if(weapon.weapon.getClass().equals(Bow.class)) {
-                    ntc.shoot = true;
+                    ntc.networkMessagesToProcess.add(new ShootRequest(network.id));
                     weapon.weapon.justUsed = false;
                 }
             }

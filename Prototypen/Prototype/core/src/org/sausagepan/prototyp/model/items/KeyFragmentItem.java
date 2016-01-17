@@ -1,5 +1,7 @@
 package org.sausagepan.prototyp.model.items;
 
+import org.sausagepan.prototyp.enums.ItemType;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -10,7 +12,7 @@ public class KeyFragmentItem extends Item {
     public int keyFragmentNr;
     /* ........................................................................... CONSTRUCTOR .. */
     public KeyFragmentItem(TextureRegion keyTexture, int nr) {
-        super(keyTexture);
+        super(keyTexture, ItemType.KEY);
         this.keyFragmentNr = nr;
     }
     /* ............................................................................... METHODS .. */

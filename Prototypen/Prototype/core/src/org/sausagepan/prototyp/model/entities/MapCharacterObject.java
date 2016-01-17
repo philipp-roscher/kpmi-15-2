@@ -13,15 +13,17 @@ public class MapCharacterObject extends MapFactoryObject {
 	public CharacterClass characterClass;
 	public int teamId;
     public int health = -1;
+    public String weaponName;
     public boolean[] ownKeys;
     
     /* ........................................................................... CONSTRUCTOR .. */
 
-    public MapCharacterObject(Vector2 position, CharacterClass characterClass, int teamId, int health, boolean[] ownKeys) {
+    public MapCharacterObject(Vector2 position, CharacterClass characterClass, int teamId, int health, String weaponName, boolean[] ownKeys) {
         super(position);
         this.characterClass = characterClass;
         this.teamId = teamId;
         this.health = health;
+        this.weaponName = weaponName;
         this.ownKeys = ownKeys;
     }
     

@@ -11,12 +11,11 @@ import com.badlogic.ashley.core.Component;
 public class ItemComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Item item;
-    public ItemType type;
     public int value;
     /* ........................................................................... CONSTRUCTOR .. */
     public ItemComponent(Item item, ItemType type, int value) {
         this.item = item;
-        this.type = type;
+        this.item.type = type;
         this.value = value;
     }
     /* ............................................................................... METHODS .. */

@@ -22,8 +22,8 @@ public class Bow extends WeaponItem {
     public EntitySprite arrowSprite;
     public Pool<Bullet> arrowPool;
     /* ........................................................................... CONSTRUCTOR .. */
-    public Bow(TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture, long cooldown) {
-        super(region, strength, damagetype, cooldown);
+    public Bow(TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture, long cooldown, String name) {
+        super(region, strength, damagetype, cooldown, name);
         this.activeArrows = new Array<Bullet>();
         this.arrowSprite = new EntitySprite(arrowTexture);
         this.arrowSprite.setSize(
@@ -42,8 +42,9 @@ public class Bow extends WeaponItem {
         };
     }
     
-    public Bow(TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture) {
-        this(region, strength, damagetype, arrowTexture, 100);
+    public Bow(TextureRegion region, int strength, Damagetype damagetype, TextureRegion arrowTexture, String name) {
+    	// default cooldown: 100 ms
+        this(region, strength, damagetype, arrowTexture, 100, name);
     }
     /* ............................................................................... METHODS .. */
 
