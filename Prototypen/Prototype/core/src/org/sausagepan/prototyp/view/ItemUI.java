@@ -152,22 +152,22 @@ public class ItemUI {
                 weaponTable.setVisible(false);
                 
                 if(!minimapCreated){
-	            	Array<Image> test = mazeScreen.getMaze().getGenerator().getMinimap().getTableMap();
+	            	Array<Image> mapArray = mazeScreen.getMaze().getGenerator().getMinimap().getTableMap();
 	            	int ix = 200;
-	            	int iy = 150;
+	            	int iy = 10;
 	            	int count = 0;
 	            	
-	            	System.out.println(test.size);
+	            	System.out.println(mapArray.size);
 	            	
-	            	for (Image i : test){
+	            	for (Image i : mapArray){
 	            		Image help = i;
 	            		help.setPosition(ix, iy);
 	            		iy += 2;
 	            		
-	            		if(count==99){
+	            		if(count==223){
 	            			count = -1;
 	            			ix+=2;
-	            			iy=150;
+	            			iy=10;
 	            		}
 	            		
 	            		count++;
