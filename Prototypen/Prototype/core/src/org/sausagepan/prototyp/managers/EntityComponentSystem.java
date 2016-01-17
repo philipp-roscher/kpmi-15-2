@@ -281,7 +281,7 @@ public class EntityComponentSystem {
         return newCharacter;
 	}
 	
-	public void addNewCharacter(Integer heroId, MapCharacterObject character) {
+	public void addNewCharacter(int heroId, MapCharacterObject character) {
 		CharacterEntity newCharacter = addNewCharacter(heroId, character.teamId, character.characterClass);
 		newCharacter.getComponent(HealthComponent.class).HP = character.health;
 		newCharacter.getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(character.position, 0f);
@@ -343,11 +343,11 @@ public class EntityComponentSystem {
 		return characters.get(playerId);
 	}
 
-	public MonsterEntity getMonster(Integer key) {
+	public MonsterEntity getMonster(int key) {
 		return monsters.get(key);
 	}
 	
-	public ItemEntity getItem(Integer key) {
+	public ItemEntity getItem(int key) {
 		return items.get(key);
 	}
 	

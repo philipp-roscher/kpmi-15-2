@@ -63,6 +63,7 @@ public class SERVEREntityComponentSystem {
     private float[][] startPositions;
     private int maxItemId;
     private int maxMonsterId;
+    private int tickId;
     
     private EntityFactory entityFactory;
 
@@ -77,6 +78,7 @@ public class SERVEREntityComponentSystem {
         this.maze.openSecretPassages();
         this.maxItemId = 1;
         this.maxMonsterId = 1;
+        this.tickId = 1;
 
         this.engine = new Engine(); // Create Engine
         this.characters = new HashMap<Integer,ServerCharacterEntity>();
@@ -303,6 +305,7 @@ public class SERVEREntityComponentSystem {
 		GameStateResponse result = new GameStateResponse();
 		result.characters = characters;
 		result.monsters = monsters;
+		result.tickId = tickId++;
 		
 		return result;
 	}

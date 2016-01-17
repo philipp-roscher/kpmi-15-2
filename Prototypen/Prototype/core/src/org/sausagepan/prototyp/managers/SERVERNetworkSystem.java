@@ -14,6 +14,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.PotionHP;
+import org.sausagepan.prototyp.model.items.PotionMP;
 import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
@@ -244,6 +245,7 @@ public class SERVERNetworkSystem extends EntitySystem {
 	            		server.sendToAllTCP(new WeaponChangeResponse(result.playerId, result.weaponId, result.weaponName));
             		} else {
             			System.err.println("Sync issue: Weapon on server differs from client weapon.");
+            			System.err.println("Client: "+ result.weaponName + " | Server: " + CompMappers.inventory.get(character).weapons.get(result.weaponId).name);
             		}
             	}
             }
@@ -269,9 +271,27 @@ public class SERVERNetworkSystem extends EntitySystem {
 	                        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(character.getComponent(IdComponent.class).id, true, health.HP));
                         	}
             			}
+            			
+            			if(result.itemType == ItemType.POTION_MP) {
+                        	PotionMP potion = (PotionMP) item;
+	    	            	server.sendToAllTCP(new UseItemResponse(result.playerId, result.itemId, result.itemType));
+            			}
+            			
+            			CompMappers.inventory.get(character).items.removeIndex(result.itemId);
+            			// TODO: add more items?
             		} else {
             			System.err.println("Sync issue: Item on server differs from client item.");
             			System.err.println("Client: "+ result.itemType + " | Server: " + item.type);
+                		Array<Item> items = CompMappers.inventory.get(character).items;
+                		for(Item i : items) {
+                			System.out.println(items.indexOf(i, true) + " - " + i.type);
+                		}
+            		}
+            	} else {
+            		System.err.println("ERR2");
+            		Array<Item> items = CompMappers.inventory.get(character).items;
+            		for(Item i : items) {
+            			System.out.println(items.indexOf(i, true) + " - " + i.type);
             		}
             	}
             }

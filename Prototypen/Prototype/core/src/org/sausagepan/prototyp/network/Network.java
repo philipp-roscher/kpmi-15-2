@@ -249,6 +249,7 @@ public class Network {
 	public static class GameStateResponse {
 		public HashMap<Integer,NetworkPosition> characters;
 		public HashMap<Integer,NetworkPosition> monsters;
+		public int tickId;
 		
 		public GameStateResponse() { }
 	}

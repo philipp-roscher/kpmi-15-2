@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 public class NetworkTransmissionComponent implements Component {
     /* ............................................................................ ATTRIBUTES .. */
     public Array<Object> networkMessagesToProcess = new Array<Object>();
+    public int lastTickId = 0;
 
     /* ........................................................................... CONSTRUCTOR .. */
     

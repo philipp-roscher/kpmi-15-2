@@ -153,17 +153,20 @@ public class NetworkSystem extends EntitySystem {
 
                 // if server sent GameStart before it was registered, open the entrance doors anyway
                 ECS.checkGameReady();
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof NewHeroResponse) {
                 NewHeroResponse request = (NewHeroResponse) object;
                 ECS.addNewCharacter(request);
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof DeleteHeroResponse) {
                 int playerId = ((DeleteHeroResponse) object).playerId;
                 System.out.println(playerId + " was inactive for too long and thus removed from the session.");
                 ECS.deleteCharacter(playerId);
+				networkMessages.removeValue(object, true);
             }
 
 
@@ -171,45 +174,52 @@ public class NetworkSystem extends EntitySystem {
             if(object instanceof Network.GameExitResponse) {
                 System.out.print("Quit Game Message received ...");
                 ECS.quitGame((Network.GameExitResponse)object);
+				networkMessages.removeValue(object, true);
             }
             /* ........................................................................ GAME EXIT */
 
             if (object instanceof GameStateResponse) {
                 GameStateResponse result = (GameStateResponse) object;
-
-                for(Entry<Integer, NetworkPosition> e : result.characters.entrySet()) {
-                    if(e.getKey() != posUpdate.playerId) {
-                        CharacterEntity character = ECS.getCharacter(e.getKey());
-                        if(character != null) {
-                			character.getComponent(DynamicBodyComponent.class)
-                                    .dynamicBody
-                                    .setTransform(e.getValue().position, 0f);
-                			character.getComponent(DynamicBodyComponent.class)
-                                    .dynamicBody
-                                    .setLinearVelocity(e.getValue().velocity);
-                            character.getComponent(DynamicBodyComponent.class).direction = e.getValue().bodyDirection;
-
-                			if(e.getValue().direction != null)
-                				character.getComponent(InputComponent.class).direction
-                                        = e.getValue().direction;
-                        }
-                	}
+                
+                // don't process messages older than the current state
+                if(result.tickId > ntc.lastTickId) {
+	                for(Entry<Integer, NetworkPosition> e : result.characters.entrySet()) {
+	                    if(e.getKey() != posUpdate.playerId) {
+	                        CharacterEntity character = ECS.getCharacter(e.getKey());
+	                        if(character != null) {
+	                			character.getComponent(DynamicBodyComponent.class)
+	                                    .dynamicBody
+	                                    .setTransform(e.getValue().position, 0f);
+	                			character.getComponent(DynamicBodyComponent.class)
+	                                    .dynamicBody
+	                                    .setLinearVelocity(e.getValue().velocity);
+	                            character.getComponent(DynamicBodyComponent.class).direction = e.getValue().bodyDirection;
+	
+	                			if(e.getValue().direction != null)
+	                				character.getComponent(InputComponent.class).direction
+	                                        = e.getValue().direction;
+	                        }
+	                	}
+	                }
+	
+	                for(Entry<Integer, NetworkPosition> e : result.monsters.entrySet()) {
+	                    MonsterEntity monster = ECS.getMonster(e.getKey());
+	                    if(monster != null) {
+	            			monster.getComponent(DynamicBodyComponent.class)
+	                                .dynamicBody
+	                                .setTransform(e.getValue().position, 0f);
+	            			monster.getComponent(DynamicBodyComponent.class)
+	                                .dynamicBody
+	                                .setLinearVelocity(e.getValue().velocity);
+	            			if(e.getValue().direction != null)
+	            				monster.getComponent(InputComponent.class).direction
+	                            	= e.getValue().direction;
+	                    }
+	                }
+	                
+	                ntc.lastTickId = result.tickId;
                 }
-
-                for(Entry<Integer, NetworkPosition> e : result.monsters.entrySet()) {
-                    MonsterEntity monster = ECS.getMonster(e.getKey());
-                    if(monster != null) {
-            			monster.getComponent(DynamicBodyComponent.class)
-                                .dynamicBody
-                                .setTransform(e.getValue().position, 0f);
-            			monster.getComponent(DynamicBodyComponent.class)
-                                .dynamicBody
-                                .setLinearVelocity(e.getValue().velocity);
-            			if(e.getValue().direction != null)
-            				monster.getComponent(InputComponent.class).direction
-                            	= e.getValue().direction;
-                    }
-                }
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof AttackResponse) {
@@ -220,6 +230,7 @@ public class NetworkSystem extends EntitySystem {
                     	character.getComponent(InputComponent.class).weaponDrawn = !result.stop;
                     }
                 }
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof ShootResponse) {
@@ -231,6 +242,8 @@ public class NetworkSystem extends EntitySystem {
                 		((Bow)character.getComponent(WeaponComponent.class).weapon).shoot(result.position, result.direction, result.bulletId);
                 	else
                 		System.err.println("Server character weapon doesn't match local character weapon!!");
+                
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof HPUpdateResponse) {
@@ -249,6 +262,7 @@ public class NetworkSystem extends EntitySystem {
                             .justHurt = true;
                     character.getComponent(HealthComponent.class).HP = result.HP;
                 }
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof DeleteBulletResponse) {
@@ -261,6 +275,7 @@ public class NetworkSystem extends EntitySystem {
                 	else
                 		System.err.println("Server character weapon doesn't match local character weapon!!");
                 }
+				networkMessages.removeValue(object, true);
             }
             
             if (object instanceof YouDiedResponse) {
@@ -277,17 +292,19 @@ public class NetworkSystem extends EntitySystem {
             		body.dynamicBody.setTransform(new Vector2(0,0), 0f);
             		network.client.sendTCP(new AcknowledgeDeath(posUpdate.playerId));
             	}
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof NewItem) {
             	NewItem result = (NewItem) object;
             	ECS.createItem(result.id, result.item);
+				networkMessages.removeValue(object, true);
             }
 
             if (object instanceof NewMonster) {
                 NewMonster result = (NewMonster) object;
                 ECS.createMonster(result.id, result.monster);
-
+				networkMessages.removeValue(object, true);
             }
             
             if (object instanceof ItemPickUp) {
@@ -306,14 +323,15 @@ public class NetworkSystem extends EntitySystem {
 	            			ECS.getItemUI().initializeItemMenu();
 						}
 					}
-					
-				}
 
-                ECS.deleteItem(result.itemId);
+	                ECS.deleteItem(result.itemId);
+					networkMessages.removeValue(object, true);
+				}
             }
 
             if (object instanceof GameStart) {
                 ECS.getMaze().openEntranceDoors();
+				networkMessages.removeValue(object, true);
             }
             
             if (object instanceof WeaponChangeResponse) {
@@ -331,6 +349,7 @@ public class NetworkSystem extends EntitySystem {
                 				ECS.getItemFactory().createWeaponFromName(result.weaponName);            			
             		}
             	}
+				networkMessages.removeValue(object, true);
             }
             
             if (object instanceof UseItemResponse) {
@@ -344,10 +363,9 @@ public class NetworkSystem extends EntitySystem {
             			ECS.getItemUI().initializeItemMenu();
             		}
             	}
+				networkMessages.removeValue(object, true);
             }
         }
-
-        networkMessages.clear();
     }
     
     // sets up the system for communication, adds listener
