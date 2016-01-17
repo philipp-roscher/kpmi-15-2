@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter; 
 import java.io.IOException; 
 
+import org.sausagepan.prototyp.model.GlobalSettings;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,7 +27,6 @@ import com.badlogic.gdx.utils.Array;
 
 public class Minimap {
 	private boolean[][] mapData;
-	private MapLayer colliderWalls = new MapLayer();;
 	
 	private int height;
 	private int width;
@@ -37,20 +38,20 @@ public class Minimap {
 	 * Generates MapData Array from given Maze
 	 */
 	public Minimap (int height, int width, MapLayer colliderWalls){
-		this.mapData = new boolean[(width+5) * 32][(height+5) * 32];
-		this.colliderWalls = colliderWalls;
+		System.out.println("height: " + height + " | width: " + width);
+		this.height = (height + 2)*32 + 1;
+		this.width = (width + 2)*32 + 1;
 		
-		this.height = height + 5;
-		this.width = width + 5;
+		this.mapData = new boolean[this.width][this.height];
 		
 		//set whole mapData to false
-		for (int i = this.width * 32 - 1; i >= 0; i--){
-			for (int j = this.height * 32 - 1; j >= 0; j--){
+		for (int i = this.width - 1; i >= 0; i--){
+			for (int j = this.height - 1; j >= 0; j--){
 				mapData[i][j] = false;
 			}
 		}
 
-		ColliderLayerToArray(this.colliderWalls);
+		ColliderLayerToArray(colliderWalls);
 		//printToFile();
 		MapDataToTable();
 	}
@@ -74,11 +75,11 @@ public class Minimap {
 	private void MapDataToTable(){
 		Array<Image> table = new Array<Image>();
 
-		Texture white = new Texture(Gdx.files.internal("UI/minimap_white.png"));
-		Texture black = new Texture(Gdx.files.internal("UI/minimap_black.png"));
+		Texture white = new Texture(Gdx.files.internal("UI/minimap_white"+ GlobalSettings.MINIMAP_SIZE +".png"));
+		Texture black = new Texture(Gdx.files.internal("UI/minimap_black"+ GlobalSettings.MINIMAP_SIZE +".png"));
 		
-		for (int i = 0; i < 100; i++){
-			for (int j = 0; j < 100; j++){	
+		for (int i = 0; i < width; i++){
+			for (int j = 0; j < height; j++){	
 				if(mapData[i][j])
 					table.add(new Image(black));
 				else
@@ -122,6 +123,14 @@ public class Minimap {
                 pWriter.close(); 
             } 
         } 
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 }
 

@@ -152,22 +152,24 @@ public class ItemUI {
                 weaponTable.setVisible(false);
                 
                 if(!minimapCreated){
-	            	Array<Image> test = mazeScreen.getMaze().getGenerator().getMinimap().getTableMap();
-	            	int ix = 200;
-	            	int iy = 150;
-	            	int count = 0;
+                	Minimap minimap = mazeScreen.getMaze().getGenerator().getMinimap();
+	            	int ix = 400 - GlobalSettings.MINIMAP_SIZE * minimap.getWidth()/2;
+	            	int iy = 240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2;
+	            	int count = 1;
 	            	
-	            	System.out.println(test.size);
+	            	System.out.println(ix + " " + iy);
 	            	
-	            	for (Image i : test){
+	            	System.out.println(minimap.getTableMap().size);
+	            	
+	            	for (Image i : minimap.getTableMap()){
 	            		Image help = i;
 	            		help.setPosition(ix, iy);
-	            		iy += 2;
+	            		iy += GlobalSettings.MINIMAP_SIZE;
 	            		
-	            		if(count==99){
-	            			count = -1;
-	            			ix+=2;
-	            			iy=150;
+	            		if(count == minimap.getWidth()){
+	            			count = 0;
+	            			ix += GlobalSettings.MINIMAP_SIZE;
+	    	            	iy = 240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2;
 	            		}
 	            		
 	            		count++;
@@ -176,6 +178,7 @@ public class ItemUI {
 	            		stage.addActor(help);
 	            	} 
 	            	minimapCreated = true;
+	            	System.out.println(ix + " " + iy);
                 }else{
                 	for (Image i : minimapPos){
                     	i.setVisible(true);
