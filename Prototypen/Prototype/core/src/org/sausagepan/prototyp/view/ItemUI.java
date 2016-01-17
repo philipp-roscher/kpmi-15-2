@@ -222,8 +222,8 @@ public class ItemUI {
         bagPackItemButtons.clear();
         int j = 0;
         for(Item i : inventory.items) {
+            if((j != 0) && j % 4 == 0) table.row();
             j++;
-            if(j % 4 == 0) table.row();
             ImageButton.ImageButtonStyle ibs= new ImageButton.ImageButtonStyle();
             ibs.up = skin.getDrawable("3ditembg");
             TextureRegionDrawable trd = new TextureRegionDrawable(i.itemImg);
