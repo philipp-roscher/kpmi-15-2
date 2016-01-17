@@ -41,6 +41,8 @@ import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.UseItemRequest;
+import org.sausagepan.prototyp.network.Network.UseItemResponse;
 import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
 import org.sausagepan.prototyp.network.Network.WeaponChangeResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
@@ -116,7 +118,8 @@ public class NetworkSystem extends EntitySystem {
                 network.client.sendUDP(object);
             
             if ((object instanceof MonsterSpawnComponent) ||
-            	(object instanceof WeaponChangeRequest))
+            	(object instanceof WeaponChangeRequest) ||
+            	(object instanceof UseItemRequest))
             	network.client.sendTCP(object);
         }
         ntc.networkMessagesToProcess.clear();
@@ -286,13 +289,21 @@ public class NetworkSystem extends EntitySystem {
             if (object instanceof ItemPickUp) {
             	ItemPickUp result = (ItemPickUp) object;
             	ItemEntity item;
+            	CharacterEntity character;
             	
-				if((item = ECS.getItem(result.itemId)) != null)
-					if(item.getComponent(ItemComponent.class).type == ItemType.KEY) {
+				if((item = ECS.getItem(result.itemId)) != null && (character = ECS.getCharacter(result.playerId)) != null) {
+					if(item.getComponent(ItemComponent.class).item.type == ItemType.KEY) {
 	                	// add key to character inventory
-	                	KeyFragmentItem keyFragment = (KeyFragmentItem) ECS.getItem(result.itemId).getComponent(ItemComponent.class).item;
-	                	ECS.getCharacter(result.playerId).getComponent(InventoryComponent.class).ownKeys[keyFragment.keyFragmentNr - 1] = true;
+	                	KeyFragmentItem keyFragment = (KeyFragmentItem) item.getComponent(ItemComponent.class).item;
+	                	CompMappers.inventory.get(character).ownKeys[keyFragment.keyFragmentNr - 1] = true;
+					} else {
+						if(result.playerId == network.id) {
+							CompMappers.inventory.get(character).pickUpItem(item.getComponent(ItemComponent.class).item);    
+	            			ECS.getItemUI().initializeItemMenu();
+						}
 					}
+					
+				}
 
                 ECS.deleteItem(result.itemId);
             }
@@ -314,6 +325,19 @@ public class NetworkSystem extends EntitySystem {
             		} else {
                 		CompMappers.weapon.get(character).weapon =
                 				ECS.getItemFactory().createWeaponFromName(result.weaponName);            			
+            		}
+            	}
+            }
+            
+            if (object instanceof UseItemResponse) {
+            	UseItemResponse result = (UseItemResponse) object;
+            	CharacterEntity character;
+            	
+            	System.out.println("Player "+result.playerId+" used "+result.itemType);
+            	if ((character = ECS.getCharacter(result.playerId)) != null) {
+            		if(result.playerId == network.id) {
+            			CompMappers.inventory.get(character).items.removeIndex(result.itemId);
+            			ECS.getItemUI().initializeItemMenu();
             		}
             	}
             }

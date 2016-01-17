@@ -1,7 +1,10 @@
 package org.sausagepan.prototyp.managers;
 
 import org.sausagepan.prototyp.Utils.CompMappers;
+import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.HealthComponent;
+import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InputComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
@@ -9,6 +12,8 @@ import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionCompone
 import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
+import org.sausagepan.prototyp.model.items.Item;
+import org.sausagepan.prototyp.model.items.PotionHP;
 import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;
@@ -28,6 +33,8 @@ import org.sausagepan.prototyp.network.Network.NewMonster;
 import org.sausagepan.prototyp.network.Network.PositionUpdate;
 import org.sausagepan.prototyp.network.Network.ShootRequest;
 import org.sausagepan.prototyp.network.Network.ShootResponse;
+import org.sausagepan.prototyp.network.Network.UseItemRequest;
+import org.sausagepan.prototyp.network.Network.UseItemResponse;
 import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
 import org.sausagepan.prototyp.network.Network.WeaponChangeResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
@@ -235,6 +242,32 @@ public class SERVERNetworkSystem extends EntitySystem {
 	            		CompMappers.weapon.get(character).weapon =
 	            				CompMappers.inventory.get(character).weapons.get(result.weaponId);
 	            		server.sendToAllTCP(new WeaponChangeResponse(result.playerId, result.weaponId, result.weaponName));
+            		} else {
+            			System.err.println("Sync issue: Weapon on server differs from client weapon.");
+            		}
+            	}
+            }
+            
+            if (object instanceof UseItemRequest) {
+            	UseItemRequest result = (UseItemRequest) object;
+            	ServerCharacterEntity character;
+            	Item item;
+
+            	System.out.println(result.playerId + " - " + result.itemId + " - "+ result.itemType);
+            	
+            	if((character = ECS.getCharacter(result.playerId)) != null && (item = CompMappers.inventory.get(character).items.get(result.itemId)) != null) {
+            		if(item.type.equals(result.itemType)) {
+	            		server.sendToAllTCP(new UseItemResponse(result.playerId, result.itemId, result.itemType));
+
+	            		// if item is potion
+            			if(result.itemType == ItemType.POTION_HP) {
+                        	PotionHP potion = (PotionHP) item;
+                        	HealthComponent health = character.getComponent(HealthComponent.class);
+                        	health.HP += potion.strength;
+                        	// health can't surpass max HP
+                        	if(health.HP > health.initialHP) health.HP = health.initialHP;
+                        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(character.getComponent(IdComponent.class).id, true, health.HP));
+            			}
             		} else {
             			System.err.println("Sync issue: Weapon on server differs from client weapon.");
             		}

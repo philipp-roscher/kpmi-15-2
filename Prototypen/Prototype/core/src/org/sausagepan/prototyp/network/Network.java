@@ -38,6 +38,8 @@ public class Network {
 		kryo.register(ShootResponse.class);
 		kryo.register(WeaponChangeRequest.class);
 		kryo.register(WeaponChangeResponse.class);
+		kryo.register(UseItemRequest.class);
+		kryo.register(UseItemResponse.class);
 		kryo.register(HPUpdateResponse.class);
 		kryo.register(GameStateResponse.class);
 		kryo.register(GameStart.class);
@@ -202,6 +204,32 @@ public class Network {
 			this.playerId = playerId;
 			this.weaponId = weaponId;
 			this.weaponName = weaponName;
+		}
+	}
+	
+	public static class UseItemRequest {
+		public int playerId;
+		public int itemId;
+		public ItemType itemType;
+
+		public UseItemRequest() { }
+		public UseItemRequest(int playerId, int itemId, ItemType itemType) {
+			this.playerId = playerId;
+			this.itemId = itemId;
+			this.itemType = itemType;
+		}
+	}
+	
+	public static class UseItemResponse {
+		public int playerId;
+		public int itemId;
+		public ItemType itemType;
+
+		public UseItemResponse() { }
+		public UseItemResponse(int playerId, int itemId, ItemType itemType) {
+			this.playerId = playerId;
+			this.itemId = itemId;
+			this.itemType = itemType;
 		}
 	}
 	

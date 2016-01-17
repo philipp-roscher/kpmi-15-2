@@ -20,6 +20,7 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.WeaponItem;
+import org.sausagepan.prototyp.network.Network.UseItemRequest;
 import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
 
 /**
@@ -148,11 +149,11 @@ public class ItemUI {
             ib.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    inventory.items.removeIndex(bagPackItemButtons.indexOf((ImageButton)event
-                            .getListenerActor(), false));
-                    initializeItemMenu();
-
-                    // TODO apply item
+                	int itemId = bagPackItemButtons.indexOf((ImageButton)event.getListenerActor(), false);
+                	ntc.networkMessagesToProcess.add(new UseItemRequest(
+                			CompMappers.id.get(character).id,
+                			itemId,
+                			CompMappers.inventory.get(character).items.get(itemId).type));
                 }
             });
             bagPackItemButtons.add(ib);

@@ -66,25 +66,18 @@ public class ItemSystem extends EntitySystem implements EntityListener {
             while (itemIterator.hasNext()) {
                 Entity item = itemIterator.next();
                 if(area.area.overlaps(am.get(item).area)) {
-                    System.out.println("Character "+ entity.getComponent(IdComponent.class).id +" picked up Item: " + itemM.get(item).type + "(" +item.getComponent(IdComponent.class).id + ")");
-                    ntc.networkMessagesToProcess.add(new ItemPickUp(entity.getComponent(IdComponent.class).id, item.getComponent(IdComponent.class).id));
+                    System.out.println("Character "+ entity.getComponent(IdComponent.class).id +" picked up Item: " + itemM.get(item).item.type + "(" +item.getComponent(IdComponent.class).id + ")");
                     
                     // if item is key
-					if(itemM.get(item).type == ItemType.KEY) {
+					if(itemM.get(item).item.type == ItemType.KEY) {
                     	KeyFragmentItem keyFragment = (KeyFragmentItem) itemM.get(item).item;
                     	// add key to character inventory
                     	inventory.ownKeys[keyFragment.keyFragmentNr - 1] = true;
+                    	ntc.networkMessagesToProcess.add(new ItemPickUp(entity.getComponent(IdComponent.class).id, item.getComponent(IdComponent.class).id));
                     	// adding key to team inventory is not needed on server
-					}
-					
-					// if item is potion
-					if(itemM.get(item).type == ItemType.POTION_HP) {
-                    	PotionHP potion = (PotionHP) itemM.get(item).item;
-                    	HealthComponent health = entity.getComponent(HealthComponent.class);
-                    	health.HP += potion.strength;
-                    	// health can't surpass max HP
-                    	if(health.HP > health.initialHP) health.HP = health.initialHP;
-                    	ntc.networkMessagesToProcess.add(new HPUpdateResponse(entity.getComponent(IdComponent.class).id, true, health.HP));
+					} else {
+						if(CompMappers.inventory.get(entity).pickUpItem(item.getComponent(ItemComponent.class).item))
+							ntc.networkMessagesToProcess.add(new ItemPickUp(entity.getComponent(IdComponent.class).id, item.getComponent(IdComponent.class).id));
 					}
                     
                     ECS.deleteItem(item.getComponent(IdComponent.class).id);
