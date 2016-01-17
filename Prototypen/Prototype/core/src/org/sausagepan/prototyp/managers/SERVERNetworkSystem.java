@@ -270,7 +270,8 @@ public class SERVERNetworkSystem extends EntitySystem {
                         	}
             			}
             		} else {
-            			System.err.println("Sync issue: Weapon on server differs from client weapon.");
+            			System.err.println("Sync issue: Item on server differs from client item.");
+            			System.err.println("Client: "+ result.itemType + " | Server: " + item.type);
             		}
             	}
             }

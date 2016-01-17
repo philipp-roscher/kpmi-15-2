@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.managers;
 
 import org.sausagepan.prototyp.KPMIPrototype;
+
 import com.badlogic.ashley.systems.IntervalSystem;
 
 /**

@@ -3,9 +3,7 @@ package org.sausagepan.prototyp.managers;
 import java.util.HashMap;
 
 import org.sausagepan.prototyp.KPMIPrototype;
-import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.CharacterClass;
-import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.enums.MazeObjectType;
 import org.sausagepan.prototyp.model.Maze;
 import org.sausagepan.prototyp.model.components.CharacterSpriteComponent;
@@ -34,8 +32,6 @@ import org.sausagepan.prototyp.network.Network.NewHeroResponse;
 import org.sausagepan.prototyp.view.InMaze;
 import org.sausagepan.prototyp.view.ItemUI;
 
-import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
@@ -44,7 +40,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.Viewport;
+
+import box2dLight.RayHandler;
 
 /**
  * Manages all {@link com.badlogic.ashley.core.Entity}s, {@link com.badlogic.ashley.core.Component}s
@@ -60,7 +57,6 @@ public class EntityComponentSystem {
     private MediaManager mediaManager;
     private ItemFactory itemFactory;
     private OrthographicCamera camera;
-    private Viewport viewport;
     private Maze maze;
     private InMaze inMaze;
     private ItemUI itemUI;
@@ -84,7 +80,7 @@ public class EntityComponentSystem {
 
     /* ........................................................................... CONSTRUCTOR .. */
     public EntityComponentSystem(
-            KPMIPrototype game, World world, Viewport viewport, RayHandler rayHandler, Maze maze,
+            KPMIPrototype game, World world, RayHandler rayHandler, Maze maze,
             OrthographicCamera camera, CharacterClass characterClass, int TeamId,
             InMaze inMaze) {
 
@@ -96,7 +92,6 @@ public class EntityComponentSystem {
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = world;
         this.camera = camera;
-        this.viewport = viewport;
         this.maze = maze;
         this.startPositions = maze.getStartPositions();
         this.shpRend = new ShapeRenderer();
@@ -137,7 +132,7 @@ public class EntityComponentSystem {
         engine.addEntityListener(Family.all(WeaponComponent.class,NetworkTransmissionComponent.class).get(), weaponSystem);
 
         // Input System
-        InputSystem inputSystem = new InputSystem(viewport, mediaManager);
+        InputSystem inputSystem = new InputSystem(mediaManager);
         inputSystem.addedToEngine(engine);
 
         // Character Sprite System

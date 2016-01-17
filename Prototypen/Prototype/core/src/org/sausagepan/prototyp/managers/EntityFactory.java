@@ -32,13 +32,13 @@ import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.ItemFactory;
 import org.sausagepan.prototyp.model.items.MapItem;
 
-import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.World;
+
+import box2dLight.RayHandler;
 
 /**
  * This class creates and returns {@link Entity}s for use in the game world

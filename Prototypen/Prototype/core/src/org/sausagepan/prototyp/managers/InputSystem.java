@@ -32,7 +32,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by georg on 28.10.15.
@@ -63,13 +62,10 @@ public class InputSystem extends EntitySystem implements InputProcessor {
 
     private InputMultiplexer inputMultiplexer;
 
-    private Viewport viewport;
-
     /* ........................................................................... CONSTRUCTOR .. */
-    public InputSystem(Viewport viewport, MediaManager media) {
+    public InputSystem(MediaManager media) {
         this.directionVector = new Vector2();
         this.normDirectionVector = new Vector2();
-        this.viewport = viewport;
 
         // Scene2D
         FitViewport fit = new FitViewport(800,480);

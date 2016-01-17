@@ -1,10 +1,10 @@
 package org.sausagepan.prototyp.model.components;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.Array;
-
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.WeaponItem;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Array;
 
 
 /**

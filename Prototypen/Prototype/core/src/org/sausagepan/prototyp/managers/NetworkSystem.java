@@ -29,7 +29,6 @@ import org.sausagepan.prototyp.network.Network.DeleteBulletResponse;
 import org.sausagepan.prototyp.network.Network.DeleteHeroResponse;
 import org.sausagepan.prototyp.network.Network.FullGameStateRequest;
 import org.sausagepan.prototyp.network.Network.FullGameStateResponse;
-import org.sausagepan.prototyp.network.Network.GameExitResponse;
 import org.sausagepan.prototyp.network.Network.GameStart;
 import org.sausagepan.prototyp.network.Network.GameStateResponse;
 import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
@@ -46,7 +45,6 @@ import org.sausagepan.prototyp.network.Network.UseItemResponse;
 import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
 import org.sausagepan.prototyp.network.Network.WeaponChangeResponse;
 import org.sausagepan.prototyp.network.Network.YouDiedResponse;
-import org.sausagepan.prototyp.view.ItemUI;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;

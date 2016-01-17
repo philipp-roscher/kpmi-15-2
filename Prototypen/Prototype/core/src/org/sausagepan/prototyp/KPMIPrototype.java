@@ -8,7 +8,6 @@ import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 import org.sausagepan.prototyp.view.IntroScreen;
-import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

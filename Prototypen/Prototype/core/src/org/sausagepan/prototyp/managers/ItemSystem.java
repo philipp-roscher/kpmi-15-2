@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.ItemType;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
-import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
@@ -14,8 +13,6 @@ import org.sausagepan.prototyp.model.components.SERVERNetworkTransmissionCompone
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.KeyFragmentItem;
 import org.sausagepan.prototyp.model.items.MapItem;
-import org.sausagepan.prototyp.model.items.PotionHP;
-import org.sausagepan.prototyp.network.Network.HPUpdateResponse;
 import org.sausagepan.prototyp.network.Network.ItemPickUp;
 import org.sausagepan.prototyp.network.Network.NewItem;
 

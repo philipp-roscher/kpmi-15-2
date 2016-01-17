@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp.view;
 
 import org.sausagepan.prototyp.model.GlobalSettings;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
