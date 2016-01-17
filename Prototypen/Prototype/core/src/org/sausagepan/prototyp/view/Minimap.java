@@ -60,11 +60,9 @@ public class Minimap {
 	 */	
 	private void ColliderLayerToArray(MapLayer layer){
 		for (MapObject mo : layer.getObjects()){
-			mapData[(int) ((RectangleMapObject) mo).getRectangle().x / 32][(int) ((RectangleMapObject) mo).getRectangle().y / 32] = true;
-			
 			for (int i = (int) ((RectangleMapObject) mo).getRectangle().width / 32; i > 0; i--){
 				for (int j = (int) ((RectangleMapObject) mo).getRectangle().height / 32; j > 0; j--){
-					mapData[(int) ((RectangleMapObject) mo).getRectangle().x / 32 + i][(int) ((RectangleMapObject) mo).getRectangle().y / 32 + j] = true;
+					mapData[(int) ((RectangleMapObject) mo).getRectangle().x / 32 + i - 1][(int) ((RectangleMapObject) mo).getRectangle().y / 32 + j - 1] = true;
 				}
 			}
 		}
@@ -76,12 +74,15 @@ public class Minimap {
 	private void MapDataToTable(){
 		Array<Image> table = new Array<Image>();
 
+		Texture white = new Texture(Gdx.files.internal("UI/minimap_white.png"));
+		Texture black = new Texture(Gdx.files.internal("UI/minimap_black.png"));
+		
 		for (int i = 0; i < 100; i++){
 			for (int j = 0; j < 100; j++){	
-				Image white = new Image(new Texture(Gdx.files.internal("UI/minimap_white.png")));
-				Image black = new Image(new Texture(Gdx.files.internal("UI/minimap_black.png")));
-				
-				if(mapData[i][j] == true) table.add(black); else table.add(white);
+				if(mapData[i][j])
+					table.add(new Image(black));
+				else
+					table.add(new Image(white));
 			}
 		}
 		
