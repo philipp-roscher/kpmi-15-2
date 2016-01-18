@@ -34,7 +34,6 @@ public class EntityFamilies {
     
     @SuppressWarnings("unchecked")
     public static Family characterFamily = Family.all(
-    		NetworkTransmissionComponent.class,
     		IdComponent.class,
     		TeamComponent.class,
             DynamicBodyComponent.class,
