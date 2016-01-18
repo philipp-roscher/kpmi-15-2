@@ -180,6 +180,7 @@ public class ItemUI {
                     }
                 }
             	closeMinimap.setVisible(true);
+            	closeMinimap.toFront();
             }
         });
         

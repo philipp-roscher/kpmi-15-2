@@ -108,6 +108,13 @@ menuback
   orig: 94, 72
   offset: 0, 0
   index: -1
+minimap
+  rotate: false
+  xy: 537, 151
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 3dmonsterbuttonup
   rotate: false
   xy: 1, 1
