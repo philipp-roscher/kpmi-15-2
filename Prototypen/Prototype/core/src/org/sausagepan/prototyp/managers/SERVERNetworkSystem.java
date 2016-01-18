@@ -269,15 +269,16 @@ public class SERVERNetworkSystem extends EntitySystem {
 	                        	if(health.HP > health.initialHP) health.HP = health.initialHP;
 	    	            		server.sendToAllTCP(new UseItemResponse(result.playerId, result.itemId, result.itemType));
 	                        	ntc.networkMessagesToProcess.add(new HPUpdateResponse(character.getComponent(IdComponent.class).id, true, health.HP));
+	                			CompMappers.inventory.get(character).items.removeIndex(result.itemId);
                         	}
             			}
             			
             			if(result.itemType == ItemType.POTION_MP) {
                         	PotionMP potion = (PotionMP) item;
 	    	            	server.sendToAllTCP(new UseItemResponse(result.playerId, result.itemId, result.itemType));
+	            			CompMappers.inventory.get(character).items.removeIndex(result.itemId);
             			}
             			
-            			CompMappers.inventory.get(character).items.removeIndex(result.itemId);
             			// TODO: add more items?
             		} else {
             			System.err.println("Sync issue: Item on server differs from client item.");

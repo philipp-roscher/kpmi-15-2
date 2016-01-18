@@ -1,6 +1,7 @@
 package org.sausagepan.prototyp;
 
 import org.sausagepan.prototyp.managers.MediaManager;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.GameStart;
@@ -8,6 +9,7 @@ import org.sausagepan.prototyp.network.Network.IDAssignment;
 import org.sausagepan.prototyp.network.Network.MaxClients;
 import org.sausagepan.prototyp.network.Network.TeamAssignment;
 import org.sausagepan.prototyp.view.IntroScreen;
+import org.sausagepan.prototyp.view.MainMenuScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -48,8 +50,10 @@ public class KPMIPrototype extends Game {
 		startClient();
 		
 		// switch to main menu screen
-//		this.setScreen(new MainMenuScreen(this));
-		this.setScreen(new IntroScreen(this));
+		if(GlobalSettings.DEBUGGING_ACTIVE)
+			this.setScreen(new MainMenuScreen(this));
+		else
+			this.setScreen(new IntroScreen(this));
 	}
 
 	public void startClient() {
