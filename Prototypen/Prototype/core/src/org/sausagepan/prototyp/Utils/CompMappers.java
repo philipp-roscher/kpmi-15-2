@@ -12,6 +12,7 @@ import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SensorComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -47,6 +48,8 @@ public abstract class CompMappers {
             = ComponentMapper.getFor(NetworkTransmissionComponent.class);
     public static ComponentMapper<HealthComponent> health
             = ComponentMapper.getFor(HealthComponent.class);
+    public static ComponentMapper<TeamComponent> team
+    = ComponentMapper.getFor(TeamComponent.class);
     /* ........................................................................... CONSTRUCTOR .. */
     
     /* ............................................................................... METHODS .. */

@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.view;
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.model.GlobalSettings;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
@@ -40,7 +41,8 @@ public class ItemUI {
     
     private final ImageButton openMinimap;
     private final ImageButton closeMinimap;
-    private Array<Image> minimapPos = new Array<Image>();
+    private MinimapManager minimapManager;
+    private Array<Image> minimapArray = new Array<Image>();
     private boolean minimapCreated = false;
     
     public final InMaze mazeScreen;
@@ -60,6 +62,8 @@ public class ItemUI {
         this.weapon = CompMappers.weapon.get(localCharacter);
         this.ntc = CompMappers.netTrans.get(localCharacter);
         this.character = localCharacter;
+
+        
 
         // Set up UI
         FitViewport fit = new FitViewport(800,480);
@@ -100,7 +104,7 @@ public class ItemUI {
                 openMinimap.setVisible(false);
                 closeMinimap.setVisible(false);
                 
-                for (Image i : minimapPos){
+                for (Image i : minimapArray){
                 	i.setVisible(false);
                 }
             }
@@ -147,35 +151,15 @@ public class ItemUI {
                 weaponTable.setVisible(false);
                 
                 if(!minimapCreated){
-                	Minimap minimap = mazeScreen.getMaze().getGenerator().getMinimap();
-	            	int ix = 400 - GlobalSettings.MINIMAP_SIZE * minimap.getWidth()/2;
-	            	int iy = 240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2;
-	            	int count = 1;
+                	minimapManager = new MinimapManager(mazeScreen.getMaze().getGenerator().getMinimap());
 	            	
-	            	System.out.println(ix + " " + iy);
-	            	
-	            	System.out.println(minimap.getTableMap().size);
-	            	
-	            	for (Image i : minimap.getTableMap()){
-	            		Image help = i;
-	            		help.setPosition(ix, iy);
-	            		iy += GlobalSettings.MINIMAP_SIZE;
-	        
-	            		if(count == minimap.getWidth()){
-	            			count = 0;
-	            			ix += GlobalSettings.MINIMAP_SIZE;
-	    	            	iy = 240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2;
-	            		}
-	            		
-	            		count++;
-	            		
-	            		minimapPos.add(help);
-	            		stage.addActor(help);
-	            	} 
+                	minimapArray = minimapManager.getImageArray();
+                	for(Image i : minimapArray)
+                		stage.addActor(i);
+                	minimapManager.setPlayerPositions(character);
 	            	minimapCreated = true;
-	            	System.out.println(ix + " " + iy);
                 }else{
-                	for (Image i : minimapPos){
+                	for (Image i : minimapArray){
                     	i.setVisible(true);
                     }
                 }
@@ -192,7 +176,7 @@ public class ItemUI {
                 closeMinimap.setVisible(false);
                 openMinimap.setVisible(true);
                 
-                for (Image i : minimapPos){
+                for (Image i : minimapArray){
                 	i.setVisible(false);
                 }
             }
@@ -205,6 +189,7 @@ public class ItemUI {
     }
     /* ............................................................................... METHODS .. */
     public void draw() {
+    	if(minimapManager != null)minimapManager.setPlayerPositions(character);
         stage.draw();
     }
 
