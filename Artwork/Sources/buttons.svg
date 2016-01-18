@@ -75,16 +75,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="69.474676"
-     inkscape:cy="49.246769"
+     inkscape:zoom="1.979899"
+     inkscape:cx="43.558681"
+     inkscape:cy="92.514161"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="1366"
      inkscape:window-height="744"
      inkscape:window-x="0"
-     inkscape:window-y="131"
+     inkscape:window-y="24"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -121,7 +121,7 @@
        sodipodi:ry="64"
        d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="translate(0,924.36218)"
-       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton.png"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton_grey.png"
        inkscape:export-xdpi="45.274391"
        inkscape:export-ydpi="45.274391" />
     <path
@@ -134,12 +134,12 @@
        sodipodi:ry="60"
        d="M 124,64 C 124,97.137085 97.137085,124 64,124 30.862915,124 4,97.137085 4,64 4,30.862915 30.862915,4 64,4 c 33.137085,0 60,26.862915 60,60 z"
        transform="translate(0,924.36218)"
-       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton.png"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton_grey.png"
        inkscape:export-xdpi="45.274391"
        inkscape:export-ydpi="45.274391" />
     <path
        sodipodi:type="arc"
-       style="color:#000000;fill:#cc0000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="path2991"
        sodipodi:cx="64"
        sodipodi:cy="64"
@@ -147,7 +147,7 @@
        sodipodi:ry="52"
        d="M 116,64 C 116,92.718807 92.718807,116 64,116 35.281193,116 12,92.718807 12,64 12,35.281193 35.281193,12 64,12 c 28.718807,0 52,23.281193 52,52 z"
        transform="matrix(1.077704,0,0,1.077704,-4.9730587,919.38912)"
-       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton.png"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton_grey.png"
        inkscape:export-xdpi="45.274391"
        inkscape:export-ydpi="45.274391" />
     <path
@@ -158,9 +158,9 @@
        sodipodi:cy="64"
        sodipodi:cx="64"
        id="path3781"
-       style="color:#000000;fill:#a40000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#888a85;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        sodipodi:type="arc"
-       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton.png"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton_grey.png"
        inkscape:export-xdpi="45.274391"
        inkscape:export-ydpi="45.274391" />
     <rect
@@ -172,8 +172,8 @@
        y="975.6803" />
     <g
        id="g3056"
-       transform="matrix(1.24,0,0,1.24,-359.52,-448.08693)"
-       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton.png"
+       transform="matrix(1.24,0,0,1.24,-150.52,-342.96694)"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dmonsterbutton_grey.png"
        inkscape:export-xdpi="45.274391"
        inkscape:export-ydpi="45.274391">
       <path
@@ -194,7 +194,7 @@
     </g>
     <g
        id="g3073"
-       transform="matrix(1.10989,0,0,1.10989,-124.34614,-167.49024)">
+       transform="matrix(1.10989,0,0,1.10989,53.58244,-243.18254)">
       <path
          inkscape:connector-curvature="0"
          id="path3071"
@@ -203,12 +203,7 @@
       <image
          width="65"
          height="70"
-         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAYAAAD0f5bSAAAABHNCSVQICAgIfAhkiAAAAMtJREFU
-KJGVzbFKw1AYhuH3ZEpREE4SSAQHr0FEKLR061roUJwq5mq8goCSxYsQhJKhQ6FDFjHXEDFBrOgo
-v4N4BslJk3f+Hj7o2V2aiOoLtKfphDbbtRTPBdrTRFG0H/0Hw4uxcvqAsiwB7E9NYD5bKCtqAwAO
-wGriSVdg0LcjPFydShdg0DR7UwDvyZLA/WwFBv01OK44yW5agUF57IsbvnBYuwCMPh5t+1+Ux77s
-gi+OqgPOb2t1ltYK4PX+Wqwqj315ugztg4Z+ALmXb+fDY6TbAAAAAElFTkSuQmCC
-"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAYAAAD0f5bSAAAABHNCSVQICAgIfAhkiAAAAMtJREFU KJGVzbFKw1AYhuH3ZEpREE4SSAQHr0FEKLR061roUJwq5mq8goCSxYsQhJKhQ6FDFjHXEDFBrOgo v4N4BslJk3f+Hj7o2V2aiOoLtKfphDbbtRTPBdrTRFG0H/0Hw4uxcvqAsiwB7E9NYD5bKCtqAwAO wGriSVdg0LcjPFydShdg0DR7UwDvyZLA/WwFBv01OK44yW5agUF57IsbvnBYuwCMPh5t+1+Ux77s gi+OqgPOb2t1ltYK4PX+Wqwqj315ugztg4Z+ALmXb+fDY6TbAAAAAElFTkSuQmCC "
          id="image3068"
          x="139"
          y="996.36218" />

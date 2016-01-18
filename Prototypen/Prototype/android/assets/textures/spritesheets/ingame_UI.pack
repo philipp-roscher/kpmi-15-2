@@ -101,18 +101,11 @@ menuback
   orig: 48, 192
   offset: 0, 0
   index: -1
-minimap
-  rotate: false
-  xy: 723, 225
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-3dface_archer
+3dface_ninja
   rotate: false
   xy: 1, 69
-  size: 87, 72
-  orig: 87, 72
+  size: 94, 72
+  orig: 94, 72
   offset: 0, 0
   index: -1
 3dmonsterbuttonup
@@ -129,100 +122,121 @@ minimap
   orig: 64, 66
   offset: 0, 0
   index: -1
-3dface_dragon
+3dface_archer
   rotate: false
-  xy: 90, 69
-  size: 72, 72
-  orig: 72, 72
+  xy: 97, 69
+  size: 87, 72
+  orig: 87, 72
   offset: 0, 0
   index: -1
-3dface_fighter
+3dface_dragon
   rotate: false
   xy: 259, 143
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
-3dface_knight
+3dface_fighter
   rotate: false
   xy: 517, 217
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
-3dface_shaman
+3dface_knight
   rotate: false
   xy: 875, 439
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
+3dface_shaman
+  rotate: false
+  xy: 186, 69
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+3dface_witch
+  rotate: false
+  xy: 333, 143
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+3dmonsterbutton_grey
+  rotate: false
+  xy: 133, 2
+  size: 64, 65
+  orig: 64, 65
+  offset: 0, 0
+  index: -1
 key
   rotate: false
-  xy: 164, 106
+  xy: 591, 254
   size: 94, 35
   orig: 94, 35
   offset: 0, 0
   index: 0
 key
   rotate: false
-  xy: 333, 181
+  xy: 260, 107
   size: 94, 34
   orig: 94, 34
   offset: 0, 0
   index: -1
 3ditembg
   rotate: false
-  xy: 591, 225
+  xy: 875, 373
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3ditembgactive
   rotate: false
-  xy: 875, 373
+  xy: 949, 447
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3dmonsterbuttondown
   rotate: false
-  xy: 949, 447
+  xy: 407, 151
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 3dswordbuttondown
   rotate: false
-  xy: 657, 225
+  xy: 473, 151
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 bg_black
   rotate: false
-  xy: 875, 307
+  xy: 199, 3
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 192
 key
   rotate: false
-  xy: 164, 69
+  xy: 591, 217
   size: 32, 35
   orig: 32, 35
   offset: 0, 0
   index: 1
 key
   rotate: false
-  xy: 133, 32
+  xy: 687, 254
   size: 32, 35
   orig: 32, 35
   offset: 0, 0
   index: 2
 key
   rotate: false
-  xy: 260, 106
+  xy: 875, 336
   size: 30, 35
   orig: 30, 35
   offset: 0, 0

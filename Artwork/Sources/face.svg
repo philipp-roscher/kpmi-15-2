@@ -133,6 +133,24 @@
          id="path3147"
          inkscape:connector-curvature="0" />
     </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3075">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3077"
+         d="m 366.53302,1085.2079 c -0.63314,0 -1.15625,0.5231 -1.15625,1.1562 l 0,26.0313 c -9.559,9.3497 -15.5,22.3849 -15.5,36.8125 0,28.4426 23.05734,51.5 51.5,51.5 28.44267,0 51.5,-23.0574 51.5,-51.5 0,-12.2996 -4.30558,-23.5811 -11.5,-32.4375 l 0,-30.4063 c 0,-0.6331 -0.52311,-1.1562 -1.15625,-1.1562 l -73.6875,0 z"
+         style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3099">
+      <path
+         style="opacity:0.77640004;color:#000000;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 383.96875,1022.3309 c -0.29511,0.032 -0.58308,0.1907 -0.78125,0.4375 l -16.28125,20.2813 c -13.30726,1.307 -26.09319,7.7491 -35.125,19 -17.80532,22.18 -14.27382,54.6008 7.90625,72.4062 22.18007,17.8054 54.60093,14.2738 72.40625,-7.9062 5.14223,-6.4057 8.4797,-13.6767 10.125,-21.1875 l 85.78125,0 0,-65 -86,0 0,12.0625 -37.1875,-29.8438 c -0.24689,-0.1982 -0.54864,-0.2822 -0.84375,-0.25 z"
+         id="path3101"
+         inkscape:connector-curvature="0" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -142,15 +160,15 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="3.1621617"
-     inkscape:cy="85.192712"
+     inkscape:cx="277.79285"
+     inkscape:cy="-51.057947"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="1366"
      inkscape:window-height="744"
      inkscape:window-x="0"
-     inkscape:window-y="131"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      showborder="true"
      inkscape:showpageshadow="false">
@@ -236,7 +254,7 @@
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_dragon.png"
        transform="translate(0,1068.3622)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -255,14 +273,14 @@
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.9609375,0,0,0.9609375,2.5,1068.8622)" />
     <path
        inkscape:export-ydpi="50.625"
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_dragon.png"
        transform="matrix(0.86049107,0,0,0.86049107,8.9285714,1075.2908)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -281,7 +299,7 @@
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.8046875,0,0,0.8046875,12.5,1080.8622)" />
     <image
        inkscape:export-ydpi="50.625"
@@ -300,7 +318,7 @@
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_archer.png"
        transform="translate(-166,924.36218)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -319,14 +337,14 @@
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.9609375,0,0,0.9609375,-163.5,924.86218)" />
     <path
        inkscape:export-ydpi="50.625"
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_archer.png"
        transform="matrix(0.86049107,0,0,0.86049107,-157.07143,931.29075)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -345,7 +363,7 @@
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.8046875,0,0,0.8046875,-153.5,936.86218)" />
     <image
        inkscape:export-ydpi="50.625"
@@ -354,31 +372,7 @@
        clip-path="url(#clipPath3028)"
        width="150.5"
        height="112"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAgCAYAAACLmoEDAAAABHNCSVQICAgIfAhkiAAABQVJREFU
-WIXVl19MW1Ucx78X0LUFoV0RShcD5U/NfGHMBzJCk2WPSzZNTERNRXzTuagNzmVZRDBLDCbAEude
-jDExhWQRyXxjm9nDMBp1G2HGEJsSmGTl3oYKvdB7CwyuD/V3OPdP/4B98ZuQcM+f3/mc3/n9zu8U
-+B9JKLbBxGCXZmxzn79WlHWKBpsY7NISYsyyz+3xFgW4KLCRUECLS5Kpvaa2lv1fDOC8kyOhgJZr
-oR9f82sAICuqrr3SYQdQPODEYJdW0EQC3ot++fmnogInBru0smwdRoPZ4tFKbo8X7cc6GHBckhjw
-XuzwPECOMDB607gI9VE7AcUlCYdb21hfdH4BQCYsCHiv3o2EApp/ZEooyTbAPzIlJMQY6M8Iyrfz
-yVVTW4vZmWk2rtnXACAT0wSeEGOWV5yV+HF5d0eDCYxArSBJ1H64tY2Njc4voNJhh6yobAN0OryX
-jZtIiDHEJQmdYxHBMmZNwDlA+aMlw/w8am/2NTDg6PwCmn0NzBYPSDb4jZJywvJG9gIqKypLLKtb
-hAfn7ZF4UPJqXljaKQ/q9nh12e32eFmMEqgn2Atl4ioAYHZmmiWeEdgoPmn5NUgFhQFvjMCi8wto
-P9bBvqkoeIK9qPN6gbOXoKwn4Zz+QXecsqKixgBH4k+HNkheLQiWP2L+mD3BXsz+6z1ZUfHsmT4A
-gKOiKqc9q5gl8d40guaE5W8B/ggJzFFRhTnDNwDY7Zk4VFXVEpzimY9ZUi7QrLDG64oWMILx3wRJ
-stvtUFUVRrHiYBGT5BQrUEtY41OPDNT1nEMdMse89u3nAICOj6/qF/vmMwBATfeHVmvpZJV02SBJ
-pgr225HT8I9MCf6RKdNEAm0ZvoOe+m0A0Hmvp34bLcN3GLRRJ68v6mx2jkUE/s843lggTLDR6J+Y
-vDHKBhmffuS15T+WAQDKepIBU1suz8qKypI1EgpkLbmRUMD0mDLBxm/d1gEbk8Dm8mDj4V08uDhq
-WuDBxVFsPLwLIONxZT1pGnPy+qLQORYRCNoInBjs0rK9GywTLPLd98BLL6DRoi+9IsLm8iC9IgIA
-3E97TP3k6aScgtNqAfAhEWEvvIQYy/kay/rqit+6rbu0k3IKQMZjBLocvs/6l8P3daBLsRirYvnk
-H5kS3OevWeYJr7xFga4ZMTwEBHtRVVnO+qqDRxlwdfAoa1+KxSCGh0wh9F9l2smb7S0aAKQ3tzBw
-/BkA0FUuIFNSqyrLTZe+sp5EUk5BDA+h2degq375rqVCZOnZ9OYWrrzSzh4xPPDNyU1g8lMAQHf4
-Aptz4MlSfPnyJfbdPrD7+BmfMCfafmTa7attDRqBfnBjDl+/EdA918i7v97csTS4uvMYHw0c180Z
-n0jCWVKGfuVR8X+Kn37OqwHAEX8jFpckVM3IOPO2n3l3fCIJX+kB3ZwVbVsHyo91lpTBJZQCAN5L
-/bVv4KwT+17s1FblNaylFNT/rmB15zEDlhXV5FmCmd/eAAC2mYO23SS7l1rF5bRUfFgAePdEq7aW
-UnAimrnh5tR1AJmjdpaUocleoRv/d3q32h202XEvtarr7w5fQGNTE5xtp/YFXNCk9221GgA8X+5k
-QOTBXHr9siuzSPVb7PZweX1Ir4gFAV/5ok9bPvcVi/WCfimwo0tLDBwAnCW708nbAHBq+CkAQI3r
-CcRXtgpZwgQJAGff+UTodxzS+h2HtH7lkfAPCfwVk9cNYNYAAAAASUVORK5CYII=
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAgCAYAAACLmoEDAAAABHNCSVQICAgIfAhkiAAABQVJREFU WIXVl19MW1Ucx78X0LUFoV0RShcD5U/NfGHMBzJCk2WPSzZNTERNRXzTuagNzmVZRDBLDCbAEude jDExhWQRyXxjm9nDMBp1G2HGEJsSmGTl3oYKvdB7CwyuD/V3OPdP/4B98ZuQcM+f3/mc3/n9zu8U +B9JKLbBxGCXZmxzn79WlHWKBpsY7NISYsyyz+3xFgW4KLCRUECLS5Kpvaa2lv1fDOC8kyOhgJZr oR9f82sAICuqrr3SYQdQPODEYJdW0EQC3ot++fmnogInBru0smwdRoPZ4tFKbo8X7cc6GHBckhjw XuzwPECOMDB607gI9VE7AcUlCYdb21hfdH4BQCYsCHiv3o2EApp/ZEooyTbAPzIlJMQY6M8Iyrfz yVVTW4vZmWk2rtnXACAT0wSeEGOWV5yV+HF5d0eDCYxArSBJ1H64tY2Njc4voNJhh6yobAN0OryX jZtIiDHEJQmdYxHBMmZNwDlA+aMlw/w8am/2NTDg6PwCmn0NzBYPSDb4jZJywvJG9gIqKypLLKtb hAfn7ZF4UPJqXljaKQ/q9nh12e32eFmMEqgn2Atl4ioAYHZmmiWeEdgoPmn5NUgFhQFvjMCi8wto P9bBvqkoeIK9qPN6gbOXoKwn4Zz+QXecsqKixgBH4k+HNkheLQiWP2L+mD3BXsz+6z1ZUfHsmT4A gKOiKqc9q5gl8d40guaE5W8B/ggJzFFRhTnDNwDY7Zk4VFXVEpzimY9ZUi7QrLDG64oWMILx3wRJ stvtUFUVRrHiYBGT5BQrUEtY41OPDNT1nEMdMse89u3nAICOj6/qF/vmMwBATfeHVmvpZJV02SBJ pgr225HT8I9MCf6RKdNEAm0ZvoOe+m0A0Hmvp34bLcN3GLRRJ68v6mx2jkUE/s843lggTLDR6J+Y vDHKBhmffuS15T+WAQDKepIBU1suz8qKypI1EgpkLbmRUMD0mDLBxm/d1gEbk8Dm8mDj4V08uDhq WuDBxVFsPLwLIONxZT1pGnPy+qLQORYRCNoInBjs0rK9GywTLPLd98BLL6DRoi+9IsLm8iC9IgIA 3E97TP3k6aScgtNqAfAhEWEvvIQYy/kay/rqit+6rbu0k3IKQMZjBLocvs/6l8P3daBLsRirYvnk H5kS3OevWeYJr7xFga4ZMTwEBHtRVVnO+qqDRxlwdfAoa1+KxSCGh0wh9F9l2smb7S0aAKQ3tzBw /BkA0FUuIFNSqyrLTZe+sp5EUk5BDA+h2degq375rqVCZOnZ9OYWrrzSzh4xPPDNyU1g8lMAQHf4 Aptz4MlSfPnyJfbdPrD7+BmfMCfafmTa7attDRqBfnBjDl+/EdA918i7v97csTS4uvMYHw0c180Z n0jCWVKGfuVR8X+Kn37OqwHAEX8jFpckVM3IOPO2n3l3fCIJX+kB3ZwVbVsHyo91lpTBJZQCAN5L /bVv4KwT+17s1FblNaylFNT/rmB15zEDlhXV5FmCmd/eAAC2mYO23SS7l1rF5bRUfFgAePdEq7aW UnAimrnh5tR1AJmjdpaUocleoRv/d3q32h202XEvtarr7w5fQGNTE5xtp/YFXNCk9221GgA8X+5k QOTBXHr9siuzSPVb7PZweX1Ir4gFAV/5ok9bPvcVi/WCfimwo0tLDBwAnCW708nbAHBq+CkAQI3r CcRXtgpZwgQJAGff+UTodxzS+h2HtH7lkfAPCfwVk9cNYNYAAAAASUVORK5CYII= "
        id="image3040"
        x="4"
        y="928.36218"
@@ -388,7 +382,7 @@ CcRXtgpZwgQJAGff+UTodxzS+h2HtH7lkfAPCfwVk9cNYNYAAAAASUVORK5CYII=
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_fighter.png"
        transform="translate(144,924.36218)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -407,14 +401,14 @@ CcRXtgpZwgQJAGff+UTodxzS+h2HtH7lkfAPCfwVk9cNYNYAAAAASUVORK5CYII=
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.9609375,0,0,0.9609375,146.5,924.86218)" />
     <path
        inkscape:export-ydpi="50.625"
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_fighter.png"
        transform="matrix(0.86049107,0,0,0.86049107,152.92857,931.29075)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -433,7 +427,7 @@ CcRXtgpZwgQJAGff+UTodxzS+h2HtH7lkfAPCfwVk9cNYNYAAAAASUVORK5CYII=
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.8046875,0,0,0.8046875,156.5,936.86218)" />
     <image
        inkscape:export-ydpi="50.625"
@@ -442,20 +436,7 @@ CcRXtgpZwgQJAGff+UTodxzS+h2HtH7lkfAPCfwVk9cNYNYAAAAASUVORK5CYII=
        clip-path="url(#clipPath3059)"
        width="112"
        height="112"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAmtJREFU
-WIXtVjFP20AYfa065hIijBUpKkMgQmLrUnXpRheomLqQf0DnziAyM9N/AFuGiHTrzhCpQkgsJhlA
-qJHj4MQXIXlKh/Q7ne2zc2cRdelbEr+7+97z9913Z+A//jFe5Vw3e6mYeQxkiRvHNjWgK64d38SA
-qbiWxusliy+ETgZeQjxVRzcDS8NSDLSbjTiVmsXcJWg3G7CtElxvgv2j8wi/Wa8DAALfxYev3zO1
-3mgYSODq7BAA5OCCL5Zto1jGJSDx+P/bi2MUyzYYY2CMAYCWGaMSkCAFDnxXPJOoDM45tg9OMrUW
-luD24hjbByfKtD9cnkbmvv38TTlGMVTQKgHt6mLZxsPlKcIwxI41H+Oci3k7FhCGYURc0RHmBmyr
-lOB+evPfwHeFCeIWrTUyEPguXG8inguVGp5vOnjqthJzn7otPN90AMwzQ2tpr6igfRm1m43ZZr0O
-xhgKlRqmg35iDvGUkTvHwf7ReaaG0XUsmwCAH51fkfHdvXdG4sYGAODq7HBGbZjWerriuQwA80zY
-Vilx0FDNdcVzGyATw9E4wq2trhiJLzTgd1sz2myP9z3Bu94Ew9EYa6sros1UHPEy4gZTDcji8mFD
-LeV6E8hloPSTeNo9cOc4+Lj7RXSL0kCaeNyEag/EedqodC5svf8kxBljybtAFpcDEMiQ6g3lbMQv
-KBL/7VwLvlCpmX8P0OKsLFTXN5SmCYVKDZxfAzD4IKH+tq0Squsb4kQEgOmgj8f7XoKnMdofW39f
-YDroi9+IgXj6syCLx43S28kYjsaR9BOMSkDfgEAPVUmQILeqCoHvRgxwzvEHNP5WDMOEm0AAAAAA
-SUVORK5CYII=
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAmtJREFU WIXtVjFP20AYfa065hIijBUpKkMgQmLrUnXpRheomLqQf0DnziAyM9N/AFuGiHTrzhCpQkgsJhlA qJHj4MQXIXlKh/Q7ne2zc2cRdelbEr+7+97z9913Z+A//jFe5Vw3e6mYeQxkiRvHNjWgK64d38SA qbiWxusliy+ETgZeQjxVRzcDS8NSDLSbjTiVmsXcJWg3G7CtElxvgv2j8wi/Wa8DAALfxYev3zO1 3mgYSODq7BAA5OCCL5Zto1jGJSDx+P/bi2MUyzYYY2CMAYCWGaMSkCAFDnxXPJOoDM45tg9OMrUW luD24hjbByfKtD9cnkbmvv38TTlGMVTQKgHt6mLZxsPlKcIwxI41H+Oci3k7FhCGYURc0RHmBmyr lOB+evPfwHeFCeIWrTUyEPguXG8inguVGp5vOnjqthJzn7otPN90AMwzQ2tpr6igfRm1m43ZZr0O xhgKlRqmg35iDvGUkTvHwf7ReaaG0XUsmwCAH51fkfHdvXdG4sYGAODq7HBGbZjWerriuQwA80zY Vilx0FDNdcVzGyATw9E4wq2trhiJLzTgd1sz2myP9z3Bu94Ew9EYa6sros1UHPEy4gZTDcji8mFD LeV6E8hloPSTeNo9cOc4+Lj7RXSL0kCaeNyEag/EedqodC5svf8kxBljybtAFpcDEMiQ6g3lbMQv KBL/7VwLvlCpmX8P0OKsLFTXN5SmCYVKDZxfAzD4IKH+tq0Squsb4kQEgOmgj8f7XoKnMdofW39f YDroi9+IgXj6syCLx43S28kYjsaR9BOMSkDfgEAPVUmQILeqCoHvRgxwzvEHNP5WDMOEm0AAAAAA SUVORK5CYII= "
        id="image3071"
        x="6"
        y="932.36218"
@@ -465,7 +446,7 @@ SUVORK5CYII=
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_knight.png"
        transform="translate(0,792.36218)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -484,14 +465,14 @@ SUVORK5CYII=
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.9609375,0,0,0.9609375,2.5,792.86218)" />
     <path
        inkscape:export-ydpi="50.625"
        inkscape:export-xdpi="50.625"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_knight.png"
        transform="matrix(0.86049107,0,0,0.86049107,8.9285714,799.29075)"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        sodipodi:ry="64"
        sodipodi:rx="64"
        sodipodi:cy="64"
@@ -510,7 +491,7 @@ SUVORK5CYII=
        sodipodi:cy="64"
        sodipodi:rx="64"
        sodipodi:ry="64"
-       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       d="M 128,64 C 128,99.346224 99.346224,128 64,128 28.653776,128 0,99.346224 0,64 0,28.653776 28.653776,0 64,0 c 35.346224,0 64,28.653776 64,64 z"
        transform="matrix(0.8046875,0,0,0.8046875,12.5,804.86218)" />
     <image
        inkscape:export-ydpi="50.625"
@@ -519,25 +500,7 @@ SUVORK5CYII=
        clip-path="url(#clipPath3104)"
        width="112"
        height="112"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAA4tJREFU
-WIXtlsFLFFEcx79TieKSOouiU+NO64brsEIsnZYwQgkiOohknpW6BhFePHXqYkL4N3ipjcVDiCJ2
-qGQjEAladoVWmXFz3JLZdHFJOkyH8b19szM7Myt063fZfW/e+32+v9/7/d4M8N88TMmOGUV11vhX
-/jm/IloCiYYcd4emffl2XFRUZw3WgZIdaygDRKwfEXUX1Eb9+zjtCCHzul5BMNgKXa/gUu8IfSbJ
-KVcRrg/rRd4SSFgE6XoFABAMttKxXxHn3ARIcoprCSTAZoKF63rFBie2t7vmGYinAGIEWAsn4GCw
-lYok82SfV/G6CmDbrx6cfUbmSyXNJuZMAoBqFGwWauF7u2sW+PZiM93PHsWZBLBGYACQz+ct41JJ
-o3A5FkPls4DvS9W99erggh8oTa9ehW0vNoPnq+NKWgAAyDGhkZjqCyDnz54tCzNBGh3znSa4va0N
-AHB4dHQ6p7kKcDwCFk6gLJzA2HF7WxuFs0KAat04HYMtA0V11nC6ZMzzFHD5LmhU7blbQF9175+B
-Lfq/KRe1+JXkFOckwJaB7tA0J8kpTpJTXG0b8Z0CmnJR9EYXEJ+YAmCmmlh8Ygq90QUbnBXhKYA1
-UtmOVlg01xxoVRGnc42YZxvyvLWqL4oDON5IQlkZsq1VVoZwvJEEYGamdKDZruiGBAzf+2JLWbmQ
-s/xe6YtaCq5cyNGM7Bd1AO6vZc97gNh+UQffKZjOT+Gvk58sax6MV2sim8ng+mTQ8zr29dWyuX7H
-IJdPT3fQ1vOsHR4dIZvJoG/0BDwvIH5j+ezfA6y9e3uNtlCtEGKlAw37RR19oyeIRCKeHyMNCWBt
-/OlzQ1UVPGrfpHOB1ia81AYRCklIzs349uu58Mn8Kxp5QclbnqmqguzWNwCAHL2KUEjyBCbnZrjM
-1zdGbPA+5yiABRILi2aqP6x/BACIUoQKUlUFABAKSRClCMKiYFtH9o/0/wAAEDjg0AVkMQD0dHUA
-APZ//sJOQaNOw6KAnYJGASyMzLPZIuCiVsbw7UlL0LZ74PHYTa6nq8MRTmynoCEsCgiLAkQpYou0
-oOSxsmq+qh8On0dRKzvCAZcamE+9NwiMOFVVhaaaWCIu0//pzSyN/NlkP416aXkJL+aSjizXIqwt
-wJXVNUuxESGJuIz0ZpZGzIIVxF27wle7kLZzqngiohYMoG7UDQuoFcNmwm+q69lfBUH0/hNiO94A
-AAAASUVORK5CYII=
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAA4tJREFU WIXtlsFLFFEcx79TieKSOouiU+NO64brsEIsnZYwQgkiOohknpW6BhFePHXqYkL4N3ipjcVDiCJ2 qGQjEAladoVWmXFz3JLZdHFJOkyH8b19szM7Myt063fZfW/e+32+v9/7/d4M8N88TMmOGUV11vhX /jm/IloCiYYcd4emffl2XFRUZw3WgZIdaygDRKwfEXUX1Eb9+zjtCCHzul5BMNgKXa/gUu8IfSbJ KVcRrg/rRd4SSFgE6XoFABAMttKxXxHn3ARIcoprCSTAZoKF63rFBie2t7vmGYinAGIEWAsn4GCw lYok82SfV/G6CmDbrx6cfUbmSyXNJuZMAoBqFGwWauF7u2sW+PZiM93PHsWZBLBGYACQz+ct41JJ o3A5FkPls4DvS9W99erggh8oTa9ehW0vNoPnq+NKWgAAyDGhkZjqCyDnz54tCzNBGh3znSa4va0N AHB4dHQ6p7kKcDwCFk6gLJzA2HF7WxuFs0KAat04HYMtA0V11nC6ZMzzFHD5LmhU7blbQF9175+B Lfq/KRe1+JXkFOckwJaB7tA0J8kpTpJTXG0b8Z0CmnJR9EYXEJ+YAmCmmlh8Ygq90QUbnBXhKYA1 UtmOVlg01xxoVRGnc42YZxvyvLWqL4oDON5IQlkZsq1VVoZwvJEEYGamdKDZruiGBAzf+2JLWbmQ s/xe6YtaCq5cyNGM7Bd1AO6vZc97gNh+UQffKZjOT+Gvk58sax6MV2sim8ng+mTQ8zr29dWyuX7H IJdPT3fQ1vOsHR4dIZvJoG/0BDwvIH5j+ezfA6y9e3uNtlCtEGKlAw37RR19oyeIRCKeHyMNCWBt /OlzQ1UVPGrfpHOB1ia81AYRCklIzs349uu58Mn8Kxp5QclbnqmqguzWNwCAHL2KUEjyBCbnZrjM 1zdGbPA+5yiABRILi2aqP6x/BACIUoQKUlUFABAKSRClCMKiYFtH9o/0/wAAEDjg0AVkMQD0dHUA APZ//sJOQaNOw6KAnYJGASyMzLPZIuCiVsbw7UlL0LZ74PHYTa6nq8MRTmynoCEsCgiLAkQpYou0 oOSxsmq+qh8On0dRKzvCAZcamE+9NwiMOFVVhaaaWCIu0//pzSyN/NlkP416aXkJL+aSjizXIqwt wJXVNUuxESGJuIz0ZpZGzIIVxF27wle7kLZzqngiohYMoG7UDQuoFcNmwm+q69lfBUH0/hNiO94A AAAASUVORK5CYII= "
        id="image3116"
        x="7.9558063"
        y="931.25732"
@@ -546,29 +509,237 @@ AAAASUVORK5CYII=
        y="930.36218"
        x="8.0625"
        id="image3137"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAA2FJREFU
-WIXFlk1oE0EYhp+RElSItTRF02KVoJVGVFQ0oCg0FpFS8OcgiBe9edKrJw8NoogVRO/1rPgHEqSo
-BUExB5WiVl01RKXZliastaAQxPGQzmY3O7vZqOB7mWTmm+99v5+ZHfjPEM0YD/XFZBi702Ol0H5D
-Gw71xeSypVE2rVvNi9cf7Pnpr3N/JSKUUT25H+mfiFgQytM8miEPi4YKVfTgn+4gNMpCS1hHTvJ8
-say1SXS2h3XXnID6yP+EyA+B6dEdO7/oFXTigsqgXQh73puFTojvKWgUaTMI8hXYA/li2U5ps4LC
-7vMVYJiSnrjwzD2elQghkFKSSXeQL5YZefvLntvRKrT7Ep16Hm0JTo+VxN4tMQDM0pwdUb3jfLGM
-YbrbpScuPI24d0vMtxF9u1Me6JTHJkwWRSLEY1GtjRKgxNbDLM3xo1JhJBlH3CpqubQlkPKdhB6M
-VsHGlX4Sw8EwJbydRGJIIdZ6RAQ0oQHAj0oFszSnzUKis923tip6py8dAk/Bk28IkLIn7hVx71nJ
-ZessgyI3TDnvA997RStAiLWiWoYaVCYA4rGotu5qvRa526eWy0+ZE9uXVCNwnoJFkYjHThGrkzEf
-fSCaepIpIfVinKRhiRUafg33XTokAfpTBS7szNMy0FZdGHvvspvuWwPAz6zF5acJeT+3CoA7J6+F
-fw8osnpcPLGY7pkMFzhCV283k28+07q4tj77vTp29XbzKWsxkEpy/fYX2uLtWp9OUfZN6EcOkM1N
-0NKxxzeK6b41VfLhcQASjABgmWUs0/stcHIFvgmVg4FU0p77NDxOV283RqqaciPlJi8MeptT+dGJ
-sQWotOiMs7kJwLCdKzIPeWVmfkft4rGmLI8YZwk8DbL+6GbZtrzNNTdydgWJg6NwcxIOdrHqrvec
-FwYjcHOS0a1RjCtJrt+OusiVz0fnHrg4PSV4efW5qFcNMPrlmz0WKjMUBiOuUa2nszcYSCU9kevI
-tQKUCOf/bG6CdPYGztQ6BWXSHZzpT9nr1ZI1JvcVoDZYUxbWlGU34er9gy6iTLqDXHQhUK31hmOH
-AVxNqwvIiVA31uWn2+TxRIbdF8/bc/25cZfNs/1p+/erhy8A+Hjn/b+9igF2ndotARK3HgK1t58S
-0Ojmq8dv7qqrR5UoUrYAAAAASUVORK5CYII=
-"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAA2FJREFU WIXFlk1oE0EYhp+RElSItTRF02KVoJVGVFQ0oCg0FpFS8OcgiBe9edKrJw8NoogVRO/1rPgHEqSo BUExB5WiVl01RKXZliastaAQxPGQzmY3O7vZqOB7mWTmm+99v5+ZHfjPEM0YD/XFZBi702Ol0H5D Gw71xeSypVE2rVvNi9cf7Pnpr3N/JSKUUT25H+mfiFgQytM8miEPi4YKVfTgn+4gNMpCS1hHTvJ8 say1SXS2h3XXnID6yP+EyA+B6dEdO7/oFXTigsqgXQh73puFTojvKWgUaTMI8hXYA/li2U5ps4LC 7vMVYJiSnrjwzD2elQghkFKSSXeQL5YZefvLntvRKrT7Ep16Hm0JTo+VxN4tMQDM0pwdUb3jfLGM YbrbpScuPI24d0vMtxF9u1Me6JTHJkwWRSLEY1GtjRKgxNbDLM3xo1JhJBlH3CpqubQlkPKdhB6M VsHGlX4Sw8EwJbydRGJIIdZ6RAQ0oQHAj0oFszSnzUKis923tip6py8dAk/Bk28IkLIn7hVx71nJ ZessgyI3TDnvA997RStAiLWiWoYaVCYA4rGotu5qvRa526eWy0+ZE9uXVCNwnoJFkYjHThGrkzEf fSCaepIpIfVinKRhiRUafg33XTokAfpTBS7szNMy0FZdGHvvspvuWwPAz6zF5acJeT+3CoA7J6+F fw8osnpcPLGY7pkMFzhCV283k28+07q4tj77vTp29XbzKWsxkEpy/fYX2uLtWp9OUfZN6EcOkM1N 0NKxxzeK6b41VfLhcQASjABgmWUs0/stcHIFvgmVg4FU0p77NDxOV283RqqaciPlJi8MeptT+dGJ sQWotOiMs7kJwLCdKzIPeWVmfkft4rGmLI8YZwk8DbL+6GbZtrzNNTdydgWJg6NwcxIOdrHqrvec FwYjcHOS0a1RjCtJrt+OusiVz0fnHrg4PSV4efW5qFcNMPrlmz0WKjMUBiOuUa2nszcYSCU9kevI tQKUCOf/bG6CdPYGztQ6BWXSHZzpT9nr1ZI1JvcVoDZYUxbWlGU34er9gy6iTLqDXHQhUK31hmOH AVxNqwvIiVA31uWn2+TxRIbdF8/bc/25cZfNs/1p+/erhy8A+Hjn/b+9igF2ndotARK3HgK1t58S 0Ojmq8dv7qqrR5UoUrYAAAAASUVORK5CYII= "
        height="112"
        width="112"
        clip-path="url(#clipPath3145)"
        inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_shaman.png"
        inkscape:export-xdpi="50.625"
        inkscape:export-ydpi="50.625" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#babdb6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3052"
+       sodipodi:cx="64"
+       sodipodi:cy="64"
+       sodipodi:rx="64"
+       sodipodi:ry="64"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       transform="translate(-166,1068.3622)"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_witch.png"
+       inkscape:export-xdpi="50.625"
+       inkscape:export-ydpi="50.625" />
+    <path
+       transform="matrix(0.9609375,0,0,0.9609375,-163.5,1068.8622)"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       sodipodi:ry="64"
+       sodipodi:rx="64"
+       sodipodi:cy="64"
+       sodipodi:cx="64"
+       id="path3054"
+       style="color:#000000;fill:#eeeeec;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_witch.png"
+       inkscape:export-xdpi="50.625"
+       inkscape:export-ydpi="50.625" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#888a85;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3056"
+       sodipodi:cx="64"
+       sodipodi:cy="64"
+       sodipodi:rx="64"
+       sodipodi:ry="64"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       transform="matrix(0.86049107,0,0,0.86049107,-157.07143,1075.2908)"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_witch.png"
+       inkscape:export-xdpi="50.625"
+       inkscape:export-ydpi="50.625" />
+    <path
+       transform="matrix(0.8046875,0,0,0.8046875,-153.5,1080.8622)"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       sodipodi:ry="64"
+       sodipodi:rx="64"
+       sodipodi:cy="64"
+       sodipodi:cx="64"
+       id="path3058"
+       style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_witch.png"
+       inkscape:export-xdpi="50.625"
+       inkscape:export-ydpi="50.625" />
+    <path
+       inkscape:export-ydpi="50.357143"
+       inkscape:export-xdpi="50.357143"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_ninja.png"
+       transform="translate(148,1068.3622)"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       sodipodi:ry="64"
+       sodipodi:rx="64"
+       sodipodi:cy="64"
+       sodipodi:cx="64"
+       id="path3066"
+       style="color:#000000;fill:#babdb6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc" />
+    <path
+       inkscape:export-ydpi="50.357143"
+       inkscape:export-xdpi="50.357143"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_ninja.png"
+       sodipodi:type="arc"
+       style="color:#000000;fill:#eeeeec;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3068"
+       sodipodi:cx="64"
+       sodipodi:cy="64"
+       sodipodi:rx="64"
+       sodipodi:ry="64"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       transform="matrix(0.9609375,0,0,0.9609375,150.5,1068.8622)" />
+    <path
+       inkscape:export-ydpi="50.357143"
+       inkscape:export-xdpi="50.357143"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_ninja.png"
+       transform="matrix(0.86049107,0,0,0.86049107,156.92857,1075.2908)"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       sodipodi:ry="64"
+       sodipodi:rx="64"
+       sodipodi:cy="64"
+       sodipodi:cx="64"
+       id="path3071"
+       style="color:#000000;fill:#888a85;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc" />
+    <path
+       inkscape:export-ydpi="50.357143"
+       inkscape:export-xdpi="50.357143"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_ninja.png"
+       sodipodi:type="arc"
+       style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3073"
+       sodipodi:cx="64"
+       sodipodi:cy="64"
+       sodipodi:rx="64"
+       sodipodi:ry="64"
+       d="M 128,64 A 64,64 0 1 1 0,64 64,64 0 1 1 128,64 z"
+       transform="matrix(0.8046875,0,0,0.8046875,160.5,1080.8622)" />
+    <image
+       y="1052.3622"
+       x="248"
+       id="image3049"
+       xlink:href="data:image/png;base64,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
+"
+       height="341.5"
+       width="341.5"
+       clip-path="url(#clipPath3075)"
+       transform="translate(-503.37677,-16.8457)"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_witch.png"
+       inkscape:export-xdpi="50.625"
+       inkscape:export-ydpi="50.625" />
+    <image
+       y="1024.8622"
+       x="301.01389"
+       id="image3091"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAkCAYAAAAgh9I0AAAABHNCSVQICAgIfAhkiAAAAylJREFU
+WIXtmD1v01AUht9URGqiWpaVpqliCSGBFApT/0C6AEth61Y6IiH2/ArEyi+ApepGOyBYiqpOFd34
+kDrQwaFxaINxiRsZYYbo3B5/xb622wH1kaIk1zfJ+97zca8DXHHFFf8dpYv+gU675QXHnn/4Wujv
+XpgJEt/tH4euNeu1Qo1ciIlOu+WR+Ga9Jsa5oSKNFG5idWHWA4CeZfvGG6qCZr1WmJHVhVnv9ecf
+JQC4ll3umHK57Mv59QMrct4Sxqa4kW7/GJ12y8sbkVwmyMDc3Fzi3G3TjDSSBYo2kXkFyuWyx8Vr
+mhY7dzAYAABM08RSfSqUWrJpxVMJyGiCG4gTPxqNxOvhcChekxGioSoA0hvptFve/sE3vO+OsptI
+MhAnnsMj0rNsnxHAv4/wTkdzcpkgA2lWf5KJSUaioE63eOsGuv1j9CzbZyJ3dwKiV99xHKnvCLZk
+DomniHADQE4TsuJtO1ooiQxCxU+rH4e0CU3TUomPExyExPGdneDiebrdA7xc6UTtkkMG0grnUE1E
+wWuFz2mois+IdGED483NNE1pwUGo1cYZ4QYaqgK+N3AytVgA+LL1UoxVZ1QAwPDUEu8rlUros47j
+4O7DpwDOo0YdKgoyFizkINLp5LpuiZ+XqjMq1lbWAAAbWxu+uSvLK5HjnO3+X3EcCZIknsjVncjA
+O+MMj+/UAYxXm6LQUBW8+tTHfX06ZERRFBGNtGLjmEqeMhkSR6Efnlqi0GlsUiSKILeJaW0eo8M9
+bO7uhK5t7u5gdLgHYBwhqpmiyW3ibHDke67V531FfTY4EpGxfv0W45RKihJ/3EiLdC7quh668ZeB
+7ylk4OTk5PJuinRd96rVauz1SQc+QP48lRbp7pQkNIqoI0kRaURImTAMo8TTSXZlsxxL0pArF7/v
+rnsAcH1pVepzwShcak0QJD4IF1dk90kid4sFzs9Rtm0L8XQLW6lUIh9FIhXGn/tvPOC8FqI2r9vL
+z0JjSX/pGIZxOccOMkDE7b6u65Zc100t6oXxJ+3UWFLVBDcw6fhw88ETIZ4bcRzH6358K+bR7i5Y
+fJRWbyT/AOyyzD4+6b9sAAAAAElFTkSuQmCC
+"
+       height="131.5"
+       width="178.98611"
+       clip-path="url(#clipPath3099)"
+       transform="translate(-159.99853,38.113145)" />
+    <rect
+       style="opacity:0.77640003999999996;color:#000000;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3103"
+       width="112"
+       height="72"
+       x="204"
+       y="164"
+       transform="translate(0,924.36218)"
+       ry="8"
+       inkscape:export-filename="/home/georg/Entwicklung/Java/libGDX/MAZE-kpmi/Artwork/ingame_overlay/3dface_ninja.png"
+       inkscape:export-xdpi="50.357143"
+       inkscape:export-ydpi="50.357143" />
   </g>
 </svg>
