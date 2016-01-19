@@ -141,7 +141,7 @@ public class InMaze implements Screen {
         // ............................................................................... RENDERING
 
         ECS.update(delta);
-        world.step(1 / 45f, 6, 2);    // time step at which world is updated
+        world.step(4/3f * delta, 6, 2);    // time step at which world is updated
 
         //wenn X is pressed teleport player in treasure room
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
