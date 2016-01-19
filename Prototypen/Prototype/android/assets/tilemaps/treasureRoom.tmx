@@ -10,17 +10,17 @@
  </layer>
  <layer name="walls" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztl9sOgjAMhofvC4leaDjqWwxEfVa3ZI0/dSNjbBegX9KwA127trIpxDbpoF1GWK81UrEntWsljelr2w/QlcaHBnS4VKzPGY307Eltsjsy2+jD3fjRgi5fl4SoLfvjcbmZp82uzQ/UQbgd3R+Mb4PxfxTTfOr+C8YpDhycQx2is9jpZ/ZQWuxI8Yl/nglxVnJRUmTTOe4XrxcfZIBOynWQq+dYKp6eY6FgbgnaX3Fw69EcxgJrxAdbbWuW7M/1rs93MnatIDJAZ01dxahJHcujyutpJu8cej9mTf4qlMN8Qfxzy+8wlDU53FP+l8QyxVkQ4/u3B/QZ4zp/586mmKQ+f/98g3dnfUfg989SuO/wMcC7s+v/B96t/2yDN27xXk0=
+   eJztltsKwyAMhmXv28F21+P2Fm3Xbc+6Cgn8CyraRkbbfSAeY2Jia4zZJh20S4X9WiqVqLldz6WhvtX9BNmebGhARpZK9CUTlUHU3Ga9k9CNNjzIjhZk5b5cmNpxPumXO9UuvS47UAaRemx/JNtGsn8y3/G0/TeMsx8kOIcyTOfQMwTOUDr09Cbsf9cc7xPjO7lfqkzOfZBb5FguXpFjmvD5zif/Gp5b4wvX3baknM+3NuY/qX1XkH6BzBpfatxJ68vLHNdrIO4SXp/7Th4BjmGR4P9C4Ttk1sRwT/FP8WWOt0Dj/7cH7Bvje39Db5Mmv3h/jw7mzr7815fDa4C5sy//xdz6zzb4ABEPV/o=
   </data>
  </layer>
  <layer name="objects" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJztV1FOAjEQ3e29+EAT8AT4pYKLngD1Q1FQTwBhw4pX8CB4KjvZbpiU1zptyiYkvKTZZtKZNzPtTGaz7DjRV3h/aNzlWXaT78uHWnYP5KnxoTmmgOdVyz4j+Zv83bbgf8PRA3c2E/Bfec6ge4nhIIxy7OOzRx/dC9mIyeub1rlMcB+DXB6zjQeHHqo3lCvCJJCbx7w0+5i6KozOgukOBHZQzFRXFwE9hs7OgR1JLpaRd7US+LdI8J4qtePbqPor4ZZiY9lC76rUsq5eHbPOVC2zYb/TX0H8HaOzdZylWM8ZN/fBl4e12tmW8CN8GY4u4CfZ2qO7CuBv4nDVXWnlwJV/QsFsSPgrdobqDvWaH1XnojSL/P129CReh/bbigFxVRF2QmpEkicb/8UWYhOdDe1/HNK3Z+ukgq8ujhGoJ7Y5A5/QPgo2jzYz8KP+Ppn9NZurxweY43kfRTPwC5O9t/AfcUIa/AEVJTmr
+   eJztV11uwjAMbnMvHjok4ATb08Y/J9ie9g+cAERFKVfgIHAqYrUVVvY1c6JQCYlPikCW7c92YsuNottEV+H/18Y0jqJ+/Fc+0LIZkIfGQnN8Ap4vLVt68lf1GzUQf8XRAXf2I+B/tuige/HhIAxjHOO7xR7dC/nwqeu3tnkKcB+PsTxnKVC/oVqFgk9fjT1zfgN21Fc9h/xI9xf4eRXEtPaMeyOIbxXgHWTqwper4lfCLUVu+ELvKtWyRJ9WeR5UITNhvtOTIP9WaXOs0aVc24ybx2Crw1ZdfEv4EXYlRwL4Sba12G4c+Ks86vouNWpQV38C70MJf8Z0qO/QrDmoohZpeSjefc1M4n1ovi0fEFfm4celRyR1MvFfbi4+ka7r/OOQvj3TJhRsfXGLQDOxyR34juYxZvso2oFf2F49ucIez+co2oE/mGzewHfEHWFwBoDfNfs=
   </data>
  </layer>
  <layer name="tops" width="32" height="32">
   <data encoding="base64" compression="zlib">
-   eJzVV8lOAzEMdfmRhgJlm0KFQEJikVjuM+300P7/j5CosRpCnMSuc8DSu0wSPzu2Y88UAKZMjBZncJCZxVqgR8LbRdyhDV1jO+4TvLHMmTpvPG69/aEPY/DN4b2C/y06E+qKeTpCB8Yz9vfF4tHiIXFm6ddeo+9z+JsvNTIrnOknAFuLncUwkev5j/Jc+a1Gri1Oj7BFKsZzp+pqCGKLgv4NJ7ROXAvvgsqRc/hdh86WL0jntpa4GvmGg98x7hpyo8R+h1gk9kvzijp7keGn3tfRxnWTiTtnf+59rnnfjxXu/WsL13+MYc+4/z5Rh1J+bSn155ZvoSlw5+6AU4fU3prZpGUMamejFjEwldylOnQ9huq/ud6Uq/vWd2CY3Jo2SLkRlxZXTFuMP0P1WS7c/PoB+/n2CfYzQjx/LoP1T9D9D5H0BW6+ab8JmvzcXDTK3IjSrGxAL+corBJ2IO8g0PcD9KNIZQ==
+   eJzNV1kOwiAQnXgRsWrd6hKjiYlL4vLvUu9/FiFCigh0hkJ0kvdTljcrM20DQJuIkqMLlWQcj4B7QngLg1vXoUisx9zCa0pOvHMsMZH66zaU2jeBA4J/b5zR7zJ5CscdKp6mvVuOFcfScmYh13bG9xy+8wUjWcCZlPf8k2yQ3zAy4ug00CVUmOTG1pWy79Zy71FrGF/04LMOhS5nsOd2LBE1coHKbhOzhNxKTLt1TC37Q/PKdbbv4XflQcnj+vTEnbLf9z5j8rCpUP0fW6j2qxheCf6/eurw1/6v688p30JWw+3zAaUOXXsxs0nKGGBnoxQxYEjuujoUPcbVf329yVf3qX3AiNwxdQjlVhhwDIm6MHnG1WepEPPrEd7z7Rr8869YP0Hc/5CQvkDNt9hvQkx+ai6yyNwKdbMyg3g558LdoofivQXc9wLO0UO1
   </data>
  </layer>
  <objectgroup name="colliderWalls">
@@ -135,4 +135,10 @@
   <object id="99" name="light" x="640" y="864" width="32" height="32"/>
   <object id="100" name="light" x="352" y="864" width="32" height="32"/>
  </objectgroup>
+ <objectgroup name="mapObjects"/>
+ <layer name="treasureRoomDoors" width="32" height="32" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2DoAX9GBoYIII4E4gBG+tufC7SzDIjLgThvAOynByilgr9KSDQjHBqfsLilFCCnkTAizUOOW0rBcE8jo2AUjIJRMApGwUgCo+3PUTAcAAASUQye
+  </data>
+ </layer>
 </map>

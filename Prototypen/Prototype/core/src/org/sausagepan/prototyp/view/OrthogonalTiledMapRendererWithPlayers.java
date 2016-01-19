@@ -132,7 +132,10 @@ public class OrthogonalTiledMapRendererWithPlayers extends OrthogonalTiledMapRen
 	public void hideEntranceDoors() {
 		map.getLayers().get(4).setVisible(false);		
 	}
-
+	
+	public void lockTreasureRoom(boolean lock) {
+		map.getLayers().get(5).setVisible(lock);
+	}
     
     /* ......................................................................................... GETTERS & SETTERS .. */
 

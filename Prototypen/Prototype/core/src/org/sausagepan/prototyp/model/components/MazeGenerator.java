@@ -38,6 +38,7 @@ public class MazeGenerator {
 	TiledMapTileLayer objects;
 	TiledMapTileLayer tops;
 	TiledMapTileLayer entranceDoors;
+	TiledMapTileLayer treasureRoomDoors;
     MapLayer          colliderWalls;
     MapLayer          lights;
 
@@ -70,6 +71,7 @@ public class MazeGenerator {
         this.objects = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.tops    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.entranceDoors    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
+        this.treasureRoomDoors    = new TiledMapTileLayer(mazeWidth * 32 + 64, mazeHeight * 32 + 32, 32, 32);
         this.colliderWalls = new MapLayer();
         this.lights        = new MapLayer();
 
@@ -119,6 +121,7 @@ public class MazeGenerator {
 		map.getLayers().add(objects);       			// objects layer
 		map.getLayers().add(tops);          			// layer rendered above character
 		map.getLayers().add(entranceDoors);
+		map.getLayers().add(treasureRoomDoors);
 		map.getLayers().add(colliderWalls); 			// layer containing collider rectangles
         map.getLayers().add(lights);
 	}
@@ -278,7 +281,11 @@ public class MazeGenerator {
 								case 1: walls.setCell(k  + 32*x, l + 32*y, cell);break;
 								case 2: objects.setCell(k  + 32*x, l + 32*y, cell);break;
 								case 3: tops.setCell(k  + 32*x, l + 32*y, cell);break;
-								case 7: entranceDoors.setCell(k+32*x, l+32*y, cell);break;
+								case 7: if(tile.equals("tilemaps/spawnRoomDragon.tmx")) 
+											entranceDoors.setCell(k+32*x, l+32*y, cell);
+										else if(tile.equals("tilemaps/treasureRoom.tmx"))
+											treasureRoomDoors.setCell(k+32*x, l+32*y, cell);
+										break;
 							}
 						}
 					}

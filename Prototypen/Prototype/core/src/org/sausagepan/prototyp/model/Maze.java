@@ -166,6 +166,9 @@ public class Maze extends EntitySystem {
 	        	world.destroyBody(b);
             doorLockerBodies.clear();
 	        treasureRoomOpen = true;
+
+	        if(tiledMapRenderer != null)
+	        	tiledMapRenderer.lockTreasureRoom(false);
     	}
     }
 
@@ -198,6 +201,9 @@ public class Maze extends EntitySystem {
             i++;
 
             doorLockerBodies.add(body);
+            
+            if(tiledMapRenderer != null)
+            	tiledMapRenderer.lockTreasureRoom(true);
         }
         treasureRoomOpen = false;
     }
