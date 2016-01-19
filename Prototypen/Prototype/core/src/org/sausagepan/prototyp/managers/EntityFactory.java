@@ -86,7 +86,7 @@ public class EntityFactory {
 
         monster.add(new InputComponent());
         monster.add(new SensorComponent(world, monster));
-        monster.add(new WeaponComponent(itemFactory.createMiniSword())); //TODO: change weapon
+        monster.add(new WeaponComponent(itemFactory.createMiniSword()));
 
         int health;
         TextureAtlas tex;
@@ -275,15 +275,15 @@ public class EntityFactory {
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case SHAMAN_M:
-                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon?
+                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case WITCH_F:
-                characterEntity.add(new WeaponComponent(itemFactory.createFireBreather())); //TODO: weapon
+                characterEntity.add(new WeaponComponent(itemFactory.createIceBall()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case NINJA_F:
-                characterEntity.add(new WeaponComponent(itemFactory.createBow())); //TODO: weapon
+                characterEntity.add(new WeaponComponent(itemFactory.createShuriken()));
                 characterEntity.add(new InjurableAreaComponent(32 * 2.5f, 32 * .6f, .8f, 1f));
                 break;
             case DRAGON:

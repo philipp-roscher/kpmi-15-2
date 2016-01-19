@@ -11,4 +11,6 @@ public class GlobalSettings {
     public final static int MONSTER_SPAWN_COUNT = 3;
     public final static int MONSTER_SPAWN_COOLDOWN = 4;
     public final static int MINIMAP_SIZE = 2; // either 1 or 2
+
+    public final static int MONSTER_SPAWN_MAX = 15;
 }

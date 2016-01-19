@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.managers;
 
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.enums.ItemType;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.IdComponent;
@@ -70,6 +71,7 @@ public class SERVERNetworkSystem extends EntitySystem {
     private GameServer gameServer;
 	private SERVEREntityComponentSystem ECS;
     private SERVERNetworkTransmissionComponent ntc;
+	private int maxMon = 0;
 	
     /* ........................................................................... CONSTRUCTOR .. */
     public SERVERNetworkSystem(SERVEREntityComponentSystem ECS, Server server, GameServer gameServer) {
@@ -220,8 +222,16 @@ public class SERVERNetworkSystem extends EntitySystem {
             if (object instanceof MonsterSpawnComponent) {
                 MonsterSpawnComponent mon = (MonsterSpawnComponent) object;
 
-                if (mon.monsterSpawn) {
+				//max number of Monsters, that can be spawned
+				if (maxMon == 0) {
+					this.maxMon = GlobalSettings.MONSTER_SPAWN_MAX + gameServer.natMon;
+				}
+
+                if (mon.monsterSpawn && maxMon > ECS.getCurrentMonsterCount()) {
                     int count = mon.getSpawnCount();
+					if (GlobalSettings.DEBUGGING_ACTIVE)
+						System.out.println("Max: "+maxMon+" Current: "+ECS.getCurrentMonsterCount());
+
                     //create as many monsters as count implies
                     for (int i=1; i <= count; i++) {
                         int id = ECS.createMonster(mon.getMonster());
@@ -232,6 +242,14 @@ public class SERVERNetworkSystem extends EntitySystem {
                     //so it only spawns monster one time per button press
                     mon.monsterSpawn = false;
                 }
+				//Error Message that player cant spawn more monsters at the moment
+				else if (maxMon<= ECS.getCurrentMonsterCount()) {
+					System.out.println("GM has spawned max amount of Monsters");
+
+
+				}
+
+
             }
             
             if (object instanceof WeaponChangeRequest) {

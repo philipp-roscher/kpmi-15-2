@@ -231,7 +231,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                     weapon.weapon.justUsed = true;
                     break;
                 case Input.Keys.S:
-                    //Spawn Monsters : sent current position of MG and set spawn to true
+                    //Spawn Monsters : sent current position of GM and set spawn to true
                     if (entity.getComponent(TeamComponent.class).TeamId == 0) {
                         MonsterSpawnComponent mon = mm.get(entity);
                         mon.setMasterPosition(new Vector2(

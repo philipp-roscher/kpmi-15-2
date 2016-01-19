@@ -64,6 +64,7 @@ public class SERVEREntityComponentSystem {
     private int maxItemId;
     private int maxMonsterId;
     private int tickId;
+    private int monsterCount = 0;
     
     private EntityFactory entityFactory;
 
@@ -172,6 +173,7 @@ public class SERVEREntityComponentSystem {
         	MonsterEntity monster = entityFactory.createMonster(mapObject, maxMonsterId);
         	monsters.put(maxMonsterId++, monster);
             this.engine.addEntity(monster);
+            this.monsterCount++;
         }
         // TODO
     }
@@ -237,6 +239,7 @@ public class SERVEREntityComponentSystem {
 			world.destroyBody(monster.getComponent(DynamicBodyComponent.class).dynamicBody);
 			engine.removeEntity(monster);
 			this.monsters.remove(id);
+            this.monsterCount--;
 		}
 	}
 
@@ -252,6 +255,7 @@ public class SERVEREntityComponentSystem {
     	MonsterEntity monster = entityFactory.createMonster(mmo, maxMonsterId);
     	monsters.put(maxMonsterId, monster);
         this.engine.addEntity(monster);
+        this.monsterCount++;
         return maxMonsterId++;
     }
     
@@ -337,5 +341,9 @@ public class SERVEREntityComponentSystem {
 
 	public Maze getMaze() {
 		return maze;
-	}	
+	}
+
+    public int getCurrentMonsterCount() {
+        return monsterCount;
+    }
 }

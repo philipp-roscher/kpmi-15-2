@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.sausagepan.prototyp.managers.SERVEREntityComponentSystem;
+import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.ServerSettings;
 import org.sausagepan.prototyp.network.Network.GameClientCount;
 import org.sausagepan.prototyp.network.Network.GameStart;
@@ -33,6 +34,8 @@ public class GameServer implements ApplicationListener {
 
 	// to count active Clients in Session
     public int clientCount;
+	//counts all monsters spawned with game start
+	public int natMon;
 	// maximum Number of Clients per Session
 	public int maxClients = ServerSettings.MANDATORY_CLIENTS;
 	public boolean gameReady;
@@ -85,6 +88,10 @@ public class GameServer implements ApplicationListener {
 		    
 			ECS = new SERVEREntityComponentSystem(map, server, this);
 		    System.out.println("Server up and running");
+			//get how man monsters were spawned in total
+			natMon = ECS.getCurrentMonsterCount();
+			if (GlobalSettings.DEBUGGING_ACTIVE)
+				System.out.println("Monster Spawned: "+natMon);
 		    lastUpdate = System.nanoTime();
 		} catch (Exception e) {
 			e.printStackTrace();
