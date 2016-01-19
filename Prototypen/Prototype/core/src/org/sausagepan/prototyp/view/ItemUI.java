@@ -101,8 +101,11 @@ public class ItemUI {
                 menuBackButton.setVisible(false);
                 table.setVisible(false);
                 weaponTable.setVisible(false);
+                
+                if(closeMinimap.isVisible())minimapManager.saveVisibility(minimapArray);
+                
                 openMinimap.setVisible(false);
-                closeMinimap.setVisible(false);
+                closeMinimap.setVisible(false);   
                 
                 for (Image i : minimapArray){
                 	i.setVisible(false);
@@ -151,7 +154,7 @@ public class ItemUI {
                 weaponTable.setVisible(false);
                 
                 if(!minimapCreated){
-                	minimapManager = new MinimapManager(mazeScreen.getMaze().getGenerator().getMinimap());
+                	minimapManager = new MinimapManager(mazeScreen.getMaze().getGenerator().getMinimap(), character);
 	            	
                 	minimapArray = minimapManager.getImageArray();
                 	for(Image i : minimapArray)
@@ -159,11 +162,10 @@ public class ItemUI {
                 	minimapManager.setPlayerPositions(character);
 	            	minimapCreated = true;
                 }else{
-                	for (Image i : minimapArray){
-                    	i.setVisible(true);
-                    }
+                	minimapManager.setSavedVisibility();
                 }
             	closeMinimap.setVisible(true);
+            	openMinimap.setVisible(false);
             	closeMinimap.toFront();
             }
         });
@@ -175,6 +177,8 @@ public class ItemUI {
                 weaponTable.setVisible(true);
                 closeMinimap.setVisible(false);
                 openMinimap.setVisible(true);
+                
+                minimapManager.saveVisibility(minimapArray);
                 
                 for (Image i : minimapArray){
                 	i.setVisible(false);
@@ -189,7 +193,7 @@ public class ItemUI {
     }
     /* ............................................................................... METHODS .. */
     public void draw() {
-    	if(minimapManager != null)minimapManager.setPlayerPositions(character);
+    	if(minimapManager != null && !openMinimap.isVisible() && menuBackButton.isVisible())minimapManager.setPlayerPositions(character);
         stage.draw();
     }
 
