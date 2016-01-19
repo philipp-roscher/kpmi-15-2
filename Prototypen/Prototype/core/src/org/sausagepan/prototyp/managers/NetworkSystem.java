@@ -16,6 +16,7 @@ import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.entities.ItemEntity;
 import org.sausagepan.prototyp.model.entities.MapCharacterObject;
 import org.sausagepan.prototyp.model.entities.MonsterEntity;
@@ -50,6 +51,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
@@ -313,19 +315,32 @@ public class NetworkSystem extends EntitySystem {
             	CharacterEntity character;
             	
 				if((item = ECS.getItem(result.itemId)) != null && (character = ECS.getCharacter(result.playerId)) != null) {
-					if(item.getComponent(ItemComponent.class).item.type == ItemType.KEY) {
-	                	// add key to character inventory
-	                	KeyFragmentItem keyFragment = (KeyFragmentItem) item.getComponent(ItemComponent.class).item;
-	                	CompMappers.inventory.get(character).ownKeys[keyFragment.keyFragmentNr - 1] = true;
-					} else {
-						if(result.playerId == network.id) {
-							CompMappers.inventory.get(character).pickUpItem(item.getComponent(ItemComponent.class).item);    
-	            			ECS.getItemUI().initializeItemMenu();
-						}
+					ImmutableArray<Entity> itemsInEngine = getEngine().getEntitiesFor(EntityFamilies.itemFamily);
+					boolean itemAddedToEngine = false;
+					
+					// check if item has already been added to the engine or only to the ECS
+					for(Entity e : itemsInEngine) {
+						if(CompMappers.id.get(e).id == result.itemId)
+							itemAddedToEngine = true;
 					}
-
-	                ECS.deleteItem(result.itemId);
-					networkMessages.removeValue(object, true);
+					
+					// only proceed if item is registered in the engine
+					if(itemAddedToEngine) {
+						if(item.getComponent(ItemComponent.class).item.type == ItemType.KEY) {
+		                	// add key to character inventory
+		                	KeyFragmentItem keyFragment = (KeyFragmentItem) item.getComponent(ItemComponent.class).item;
+		                	CompMappers.inventory.get(character).ownKeys[keyFragment.keyFragmentNr - 1] = true;
+		                	System.out.println("player "+ result.playerId + " | key: "+ keyFragment.keyFragmentNr);
+						} else {
+							if(result.playerId == network.id) {
+								CompMappers.inventory.get(character).pickUpItem(item.getComponent(ItemComponent.class).item);    
+		            			ECS.getItemUI().initializeItemMenu();
+							}
+						}
+	
+		                ECS.deleteItem(result.itemId);
+						networkMessages.removeValue(object, true);
+					}
 				}
             }
 

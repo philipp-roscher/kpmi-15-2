@@ -328,15 +328,14 @@ public class EntityComponentSystem {
 	
     public void createItem(int id, MapItem mapItem) {
     	ItemEntity item = entityFactory.createItem(mapItem, id);
-    	items.put(id, item);
         this.engine.addEntity(item);
+    	items.put(id, item);
     }
 
     public void createMonster (int id, MapMonsterObject mmo) {
         MonsterEntity monster = entityFactory.createMonster(mmo, id);
-        monsters.put(id, monster);
         this.engine.addEntity(monster);
-
+        monsters.put(id, monster);
     }
     
 	public CharacterEntity getCharacter(int playerId) {
