@@ -39,6 +39,10 @@ public class ItemFactory {
 	 			weapon = createBareHand();
 	 		else if (weaponName.equals("BigSword"))
 	 			weapon = createBigSword();
+            else if (weaponName.equals("Iceball"))
+                weapon = createIceBall();
+            else if (weaponName.equals("Shuriken"))
+                weapon = createShuriken();
     	
     	return weapon;
     }
@@ -63,6 +67,24 @@ public class ItemFactory {
                 5, Damagetype.MAGICAL,
                 mediaManager.getTextureAtlasType("weapons").findRegion("fireball"),
                 "FireBreather"
+        );
+    }
+
+    public Bow createIceBall() {
+        return new Bow(
+                mediaManager.getTextureAtlasType("weapons").findRegion("iceball"),
+                5, Damagetype.MAGICAL,
+                mediaManager.getTextureAtlasType("weapons").findRegion("iceball"),
+                "Iceball"
+        );
+    }
+
+    public Bow createShuriken() {
+        return new Bow(
+                mediaManager.getTextureAtlasType("weapons").findRegion("arrow"),
+                5, Damagetype.PHYSICAL,
+                mediaManager.getTextureAtlasType("weapons").findRegion("arrow"),
+                "Shuriken"
         );
     }
 

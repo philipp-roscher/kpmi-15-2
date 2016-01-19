@@ -101,6 +101,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
         spawnButtonStyle.up = skin.getDrawable("3dmonsterbuttonup");
         spawnButtonStyle.down = skin.getDrawable("3dmonsterbuttondown");
         spawnButtonStyle.over = skin.getDrawable("3dmonsterbuttonup");
+        spawnButtonStyle.disabled = skin.getDrawable("3dmonsterbutton_grey");
         spawnButtonStyle.pressedOffsetY = -1;
         spawnButton = new ImageButton(spawnButtonStyle);
         spawnButton.setWidth(64f);
@@ -112,7 +113,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 InputSystem.this.keyDown(Input.Keys.S);
                 //cooldown for monster spawn
+                spawnButton.setDisabled(true);
                 spawnButton.addAction(Actions.sequence(Actions.visible(false), Actions.delay(GlobalSettings.MONSTER_SPAWN_COOLDOWN), Actions.visible(true)));
+                spawnButton.setDisabled(false);
                 return true;
             }
 

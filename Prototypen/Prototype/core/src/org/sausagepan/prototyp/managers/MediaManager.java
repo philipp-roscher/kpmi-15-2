@@ -28,6 +28,7 @@ public class MediaManager {
     private String SelectionDragonRedBig        = "textures/characterSelection/Dragon_red_big.png";
     private String SelectionNinjaFBig           = "textures/characterSelection/Ninja_f_big.png";
     private String SelectionWitchFBig           = "textures/characterSelection/Witch_f_big.png";
+    private String tableBackgroundImage         = "textures/backgrounds/table_bg.png";
 
     private String IngameUISheetFile         = "textures/spritesheets/ingame_UI.pack";
     private String itemsSheetFile            = "textures/spritesheets/items.pack";
@@ -69,6 +70,7 @@ public class MediaManager {
         assets.load(this.SelectionShamanMBig, Texture.class);
         assets.load(this.SelectionNinjaFBig, Texture.class);
         assets.load(this.SelectionWitchFBig, Texture.class);
+        assets.load(this.tableBackgroundImage, Texture.class);
         //load sprites
         assets.load(this.knightMSpriteSheetFile, TextureAtlas.class);
         assets.load(this.archerFSpriteSheetFile, TextureAtlas.class);
@@ -145,6 +147,10 @@ public class MediaManager {
 
     public Texture getSelectionWitchFBig() {
         return assets.get(this.SelectionWitchFBig, Texture.class);
+    }
+
+    public Texture getTableBG() {
+        return assets.get(this.tableBackgroundImage, Texture.class);
     }
 
     public TextureAtlas getTextureAtlas(String name) {

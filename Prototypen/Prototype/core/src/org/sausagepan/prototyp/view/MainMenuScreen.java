@@ -1,5 +1,6 @@
 package org.sausagepan.prototyp.view;
 
+import java.awt.TextField;
 import java.util.Random;
 
 import org.sausagepan.prototyp.KPMIPrototype;
@@ -64,6 +65,7 @@ public class MainMenuScreen implements Screen {
 	private Texture SelDragonRed;
 	private Texture SelNinjaF;
 	private Texture SelWitchF;
+	private Texture tableBg;
 
     // UI
     private Stage stage;
@@ -92,6 +94,7 @@ public class MainMenuScreen implements Screen {
 		this.SelShamanM = game.mediaManager.getSelectionShamanMBig();
 		this.SelNinjaF = game.mediaManager.getSelectionNinjaFBig();
 		this.SelWitchF = game.mediaManager.getSelectionWitchFBig();
+		this.tableBg = game.mediaManager.getTableBG();
 
 		game.client.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
@@ -272,7 +275,7 @@ public class MainMenuScreen implements Screen {
 		table.setFillParent(true);
 		stage.addActor(table);
 
-		table.setDebug(false);		//TODO: auf false setzten wenn fertig
+		table.setDebug(false);
 		//GameMaster
 		if (game.TeamId == 0) {
 			clientClass = CharacterClass.DRAGON;
@@ -289,8 +292,9 @@ public class MainMenuScreen implements Screen {
 			mainMenuSkins.add("dragon_red", SelDragonRed);
 			mainMenuSkins.add("witch_f", SelWitchF);
 			mainMenuSkins.add("ninja_f", SelNinjaF);
+			mainMenuSkins.add("tableBg", tableBg);
 
-			//make it a Drawable and then a ButtonStyle TODO different images for up,down.checked! (via .pack)
+			//make it a Drawable and then a ButtonStyle
 			Drawable drawKnightM = mainMenuSkins.getDrawable("knight_m");
 			drawKnightM.setMinWidth(200f);
 			drawKnightM.setMinHeight(200f);
@@ -309,6 +313,8 @@ public class MainMenuScreen implements Screen {
 			Drawable drawWitchF = mainMenuSkins.getDrawable("witch_f");
 			drawWitchF.setMinWidth(200f);
 			drawWitchF.setMinHeight(200f);
+
+			Drawable tableBG = mainMenuSkins.getDrawable("tableBg");
 			
 			Button.ButtonStyle knightmStyle = new Button.ButtonStyle(drawKnightM, drawKnightM, drawKnightM);
 			Button.ButtonStyle archerfStyle = new Button.ButtonStyle(drawArcherF, drawArcherF, drawArcherF);
@@ -341,13 +347,33 @@ public class MainMenuScreen implements Screen {
 			shamanMButton.setStyle(shamanmStyle);
 			shamanMButton.addListener(new CharacterButtonListener(CharacterClass.SHAMAN_M));
 
+			//Texts English
+			Label headerE = new Label("Choose a Character Class:", skin);
+			Label knightE = new Label("Knight", skin);
+			Label archerE = new Label("Archer", skin);
+			Label fighterE = new Label("Fighter", skin);
+			Label ninjaE = new Label("Ninja", skin);
+			Label shamanE = new Label("Shaman", skin);
+			Label witchE = new Label("Witch", skin);
+
+			table.background(tableBG);
+			table.add(headerE).colspan(3);
+			table.row();
 			table.add(knightMButton);
 			table.add(archerFButton);
 			table.add(fighterMButton);
-			table.row();					//new row
+			table.row();
+			table.add(knightE);
+			table.add(archerE);
+			table.add(fighterE);
+			table.row();
 			table.add(ninjaFButton);
 			table.add(shamanMButton);
 			table.add(witchFButton);
+			table.row();
+			table.add(ninjaE);
+			table.add(shamanE);
+			table.add(witchE);
 
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act(Gdx.graphics.getDeltaTime());
