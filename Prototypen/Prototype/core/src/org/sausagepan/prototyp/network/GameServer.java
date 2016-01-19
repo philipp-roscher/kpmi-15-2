@@ -57,7 +57,6 @@ public class GameServer implements ApplicationListener {
 		        	System.out.println("Connection incoming from " + connection.getRemoteAddressTCP());
 		        	IDAssignment idAssignment = new IDAssignment();
 		        	idAssignment.id = connection.getID();
-		        	System.out.println("Assigned ID "+ idAssignment.id + " to Client.");
 		        	connection.sendTCP(idAssignment);
 		        	
 					//send maxClients to Client(s)
@@ -68,11 +67,10 @@ public class GameServer implements ApplicationListener {
 					//MUSS HIER PASSIEREN!!! nicht in NewHeroRequest verschieben!!!
 					//increase ClientCount and send to all clients via TCP
 					clientCount++;
-					System.out.println("clientCount at: "+clientCount);
+					System.out.println("Clients connected: "+clientCount);
 					GameClientCount gameClientCount = new GameClientCount();
 					gameClientCount.count = clientCount;
 					gameClientCount.gameReady = gameReady;
-                    System.out.println(gameReady);
 					server.sendToAllTCP(gameClientCount);
 
 					if(clientCount == maxClients && !gameReady) {
@@ -180,7 +178,7 @@ public class GameServer implements ApplicationListener {
 				if (teamAssignment.getValue() == 2)
 					Team2++;
 		}
-		System.out.println("Team0: "+Team0+" - Team1: "+Team1+" - Team2: "+Team2);
+		//System.out.println("Team0: "+Team0+" - Team1: "+Team1+" - Team2: "+Team2);
 
 		TeamAssignment TeamAssignment = new TeamAssignment();
 		//check for free space in Teams
@@ -200,7 +198,6 @@ public class GameServer implements ApplicationListener {
 		}
 
 		server.sendToTCP(ClientId, TeamAssignment);
-		System.out.println("Team Id "+TeamAssignment.id+" assigned to ClientId "+ClientId);
 	}
 	
 	public MapInformation getMap() {
@@ -216,7 +213,7 @@ public class GameServer implements ApplicationListener {
 
         //decrease clientCount and send to all clients via TCP
         clientCount--;
-        System.out.println("clientCount at: " + clientCount);
+		System.out.println("Clients connected: "+clientCount);
         GameClientCount gameClientCount = new GameClientCount();
         gameClientCount.count = clientCount;
         server.sendToAllTCP(gameClientCount);

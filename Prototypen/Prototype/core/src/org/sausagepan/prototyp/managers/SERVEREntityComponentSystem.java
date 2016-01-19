@@ -202,8 +202,7 @@ public class SERVEREntityComponentSystem {
      * @param clientClass
      * @return
      */
-	public ServerCharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, CharacterClass clientClass) {		
-		System.out.println(newCharacterId + ", " + newCharacterTeamId + ", " + clientClass);
+	public ServerCharacterEntity addNewCharacter(int newCharacterId, int newCharacterTeamId, CharacterClass clientClass) {
 		// Create Entity
         ServerCharacterEntity newCharacter = entityFactory.createServerCharacter(clientClass);
 

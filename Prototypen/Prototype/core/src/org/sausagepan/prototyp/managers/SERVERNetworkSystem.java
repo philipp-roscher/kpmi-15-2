@@ -175,7 +175,6 @@ public class SERVERNetworkSystem extends EntitySystem {
         	}
 
 		    if (object instanceof FullGameStateRequest) {
-			   System.out.println("FullGameStateRequest eingegangen");
 			   FullGameStateResponse response = ECS.generateFullGameStateResponse();
         	   connection.sendTCP(response);
 	       }
@@ -272,8 +271,6 @@ public class SERVERNetworkSystem extends EntitySystem {
             	UseItemRequest result = (UseItemRequest) object;
             	ServerCharacterEntity character;
             	Item item;
-
-            	System.out.println(result.playerId + " - " + result.itemId + " - "+ result.itemType);
             	
             	if((character = ECS.getCharacter(result.playerId)) != null && (item = CompMappers.inventory.get(character).items.get(result.itemId)) != null) {
             		if(item.type.equals(result.itemType)) {
@@ -292,7 +289,7 @@ public class SERVERNetworkSystem extends EntitySystem {
             			}
             			
             			if(result.itemType == ItemType.POTION_MP) {
-                        	PotionMP potion = (PotionMP) item;
+                        	//PotionMP potion = (PotionMP) item;
 	    	            	server.sendToAllTCP(new UseItemResponse(result.playerId, result.itemId, result.itemType));
 	            			CompMappers.inventory.get(character).items.removeIndex(result.itemId);
             			}

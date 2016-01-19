@@ -330,7 +330,6 @@ public class NetworkSystem extends EntitySystem {
 		                	// add key to character inventory
 		                	KeyFragmentItem keyFragment = (KeyFragmentItem) item.getComponent(ItemComponent.class).item;
 		                	CompMappers.inventory.get(character).ownKeys[keyFragment.keyFragmentNr - 1] = true;
-		                	System.out.println("player "+ result.playerId + " | key: "+ keyFragment.keyFragmentNr);
 						} else {
 							if(result.playerId == network.id) {
 								CompMappers.inventory.get(character).pickUpItem(item.getComponent(ItemComponent.class).item);    
