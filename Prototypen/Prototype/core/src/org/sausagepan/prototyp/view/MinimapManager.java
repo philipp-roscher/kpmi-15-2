@@ -12,20 +12,22 @@ import com.badlogic.gdx.utils.Array;
 
 public class MinimapManager {
 	private Array<Image> mapImages = new Array<Image>();
+	private boolean[] statusBoolean;
+	
 	private Minimap minimap;
 	
 	private Image charaPos = new Image(new Texture(Gdx.files.internal("UI/minimap_red.png")));
 	private Image partnerPos = new Image(new Texture(Gdx.files.internal("UI/minimap_red.png")));
 	
-	public MinimapManager(Minimap minimap){
+	public MinimapManager(Minimap minimap, CharacterEntity chara){
 		this.minimap = minimap;
-		setUpArray();
+		setUpArray(chara);
 		mapImages.add(charaPos);
 		partnerPos.setVisible(false);
 		mapImages.add(partnerPos);
 	}
 	
-	private void setUpArray(){
+	private void setUpArray(CharacterEntity chara){
 		int ix = 400 - GlobalSettings.MINIMAP_SIZE * minimap.getWidth()/2;
     	int iy = 240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2;
     	int count = 1;
@@ -47,6 +49,11 @@ public class MinimapManager {
     		
     		count++;
     		
+    		if(CompMappers.team.get(chara).TeamId != 0){
+    			help.setVisible(false);
+    		}else {
+    			help.setVisible(true);
+    		}
     		mapImages.add(help);
     	} 
 	}
@@ -62,10 +69,21 @@ public class MinimapManager {
 					240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2 + (positionPartner.y - 5/2) * GlobalSettings.MINIMAP_SIZE);
 			partnerPos.setVisible(true);
 		}
+		
+		if(CompMappers.team.get(chara).TeamId != 0){
+			openNewArea(positionChara);
+		}
 	}
 	
 	public void openNewArea(Vector2 position){
+		int whichX = (int) Math.floor(position.x / 32);
+		int whichY = (int) Math.floor(position.y / 32);
 		
+		for(int i = whichX * 32; i < (whichX+1) * 32; i++){
+			for(int j = whichY * 32; j < (whichY+1) * 32; j++){
+				mapImages.get(j + minimap.getHeight() * 32 * i / 32).setVisible(true);
+			}
+		}
 	}
 	
 	public Image getCharaPos(){
@@ -79,6 +97,20 @@ public class MinimapManager {
 	private Vector2 getPartnerPos(CharacterEntity chara){
 		//TODO: calculate position of team partner
 		return null;
+	}
+	
+	public void saveVisibility(Array<Image> status){
+		statusBoolean = new boolean[status.size];
+		
+		for(Image i : status){
+			statusBoolean[status.indexOf(i, true)] = i.isVisible();
+		}
+	}
+	
+	public void setSavedVisibility(){
+		for(Image i : mapImages){
+			i.setVisible(statusBoolean[mapImages.indexOf(i, true)]);
+		}
 	}
 	
 }
