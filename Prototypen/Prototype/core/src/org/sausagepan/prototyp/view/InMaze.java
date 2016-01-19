@@ -154,6 +154,18 @@ public class InMaze implements Screen {
             ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 95f, 1);
 
         }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(ECS.getMaze().getStartPositions()[0][0] / 32f, ECS.getMaze().getStartPositions()[0][1] / 32f, 1);
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(ECS.getMaze().getStartPositions()[1][0] / 32f, ECS.getMaze().getStartPositions()[1][1] / 32f, 1);
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(ECS.getMaze().getStartPositions()[2][0] / 32f, ECS.getMaze().getStartPositions()[2][1] / 32f, 1);
+        }
 
         // Exit Game
         if(gameOver && TimeUtils.timeSinceMillis(quittingTime)>3000) backToMainMenu();
