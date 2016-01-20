@@ -56,6 +56,7 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     private Vector2 directionVector;
     private Vector2 normDirectionVector;
 
+    private EntityComponentSystem ECS;
     private Stage stage;
     private final ImageButton fightButton;
     private final ImageButton spawnButton;
@@ -63,7 +64,9 @@ public class InputSystem extends EntitySystem implements InputProcessor {
     private InputMultiplexer inputMultiplexer;
 
     /* ........................................................................... CONSTRUCTOR .. */
-    public InputSystem(MediaManager media) {
+    public InputSystem(EntityComponentSystem ECS, MediaManager media) {
+    	this.ECS = ECS;
+    	
         this.directionVector = new Vector2();
         this.normDirectionVector = new Vector2();
 
@@ -242,9 +245,16 @@ public class InputSystem extends EntitySystem implements InputProcessor {
                         ntc.networkMessagesToProcess.add(mon);
                     }
                     break;
-
+                case Input.Keys.X: body.dynamicBody.setTransform(115f, 115f, 0f); break;
+                case Input.Keys.C: body.dynamicBody.setTransform(112f, 95f, 0f); break;
+                case Input.Keys.NUM_1: body.dynamicBody.setTransform(ECS.getMaze().getStartPositions()[0][0] / 32f, ECS.getMaze().getStartPositions()[0][1] / 32f, 0f); break;
+                case Input.Keys.NUM_2: body.dynamicBody.setTransform(ECS.getMaze().getStartPositions()[1][0] / 32f, ECS.getMaze().getStartPositions()[1][1] / 32f, 0f); break;
+                case Input.Keys.NUM_3: body.dynamicBody.setTransform(ECS.getMaze().getStartPositions()[2][0] / 32f, ECS.getMaze().getStartPositions()[2][1] / 32f, 0f); break;
+                
+                	
                 default:break;
             }
+            // TODO: Sinn?
             if(keycode != Input.Keys.A && keycode != Input.Keys.S) input.moving = true;
         }
         return true;

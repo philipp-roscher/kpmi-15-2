@@ -143,30 +143,6 @@ public class InMaze implements Screen {
         ECS.draw();
         world.step(4/3f * delta, 6, 2);    // time step at which world is updated
 
-        //wenn X is pressed teleport player in treasure room
-        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 115f, 1);
-
-        }
-
-        //wenn C is pressed teleport player in random room/out of spawn
-        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(115f, 95f, 1);
-
-        }
-        
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(ECS.getMaze().getStartPositions()[0][0] / 32f, ECS.getMaze().getStartPositions()[0][1] / 32f, 1);
-        }
-        
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(ECS.getMaze().getStartPositions()[1][0] / 32f, ECS.getMaze().getStartPositions()[1][1] / 32f, 1);
-        }
-        
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
-            ECS.getLocalCharacterEntity().getComponent(DynamicBodyComponent.class).dynamicBody.setTransform(ECS.getMaze().getStartPositions()[2][0] / 32f, ECS.getMaze().getStartPositions()[2][1] / 32f, 1);
-        }
-
         // Exit Game
         if(gameOver && TimeUtils.timeSinceMillis(quittingTime)>3000) backToMainMenu();
 	}

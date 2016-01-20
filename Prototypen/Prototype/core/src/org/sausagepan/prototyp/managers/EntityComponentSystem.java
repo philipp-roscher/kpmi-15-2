@@ -132,7 +132,7 @@ public class EntityComponentSystem {
         engine.addEntityListener(Family.all(WeaponComponent.class,NetworkTransmissionComponent.class).get(), weaponSystem);
 
         // Input System
-        InputSystem inputSystem = new InputSystem(mediaManager);
+        InputSystem inputSystem = new InputSystem(this, mediaManager);
         inputSystem.addedToEngine(engine);
 
         // Character Sprite System
