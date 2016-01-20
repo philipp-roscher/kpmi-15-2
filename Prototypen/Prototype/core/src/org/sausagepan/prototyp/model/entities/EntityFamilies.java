@@ -13,6 +13,7 @@ import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.ItemComponent;
 import org.sausagepan.prototyp.model.components.LightComponent;
 import org.sausagepan.prototyp.model.components.MonsterSpawnComponent;
+import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
 import org.sausagepan.prototyp.model.components.SpriteComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
@@ -123,6 +124,12 @@ public class EntityFamilies {
             WeaponComponent.class,
             InputComponent.class,
             InjurableAreaComponent.class
+    ).get();
+    
+    @SuppressWarnings("unchecked")
+    public static Family ownCharacterFamily = Family.all(
+    		NetworkComponent.class,
+    		NetworkTransmissionComponent.class
     ).get();
 
     /* ........................................................................... CONSTRUCTOR .. */

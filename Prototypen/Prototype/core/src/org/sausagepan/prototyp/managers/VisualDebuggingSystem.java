@@ -6,7 +6,9 @@ import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.HealthComponent;
 import org.sausagepan.prototyp.model.components.InjurableAreaComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.components.WeaponComponent;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 import org.sausagepan.prototyp.model.items.Bow;
 import org.sausagepan.prototyp.model.items.Sword;
 
@@ -31,6 +33,7 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
     private ImmutableArray<Entity> entities;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
+    private int teamId;
     private boolean debug = true;
     private boolean damageFeedback=false;
     private long damFeedbStartTime=0;
@@ -44,6 +47,7 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
         this.shapeRenderer = shapeRenderer;
         this.camera = camera;
         this.rayHandler = rayHandler;
+        this.teamId = -1;
     }
     /* ............................................................................... METHODS .. */
     @SuppressWarnings("unchecked")
@@ -53,6 +57,11 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
                 DynamicBodyComponent.class,
                 InjurableAreaComponent.class
         ).get());
+        
+        if(teamId == -1) {
+        	teamId = engine.getEntitiesFor(EntityFamilies.ownCharacterFamily).get(0)
+    			.getComponent(TeamComponent.class).TeamId;
+        }
     }
 
     public void update(float deltaTime) {
@@ -105,15 +114,21 @@ public class VisualDebuggingSystem extends EntitySystem implements EntityListene
 
     public void drawBattleDebugger() {
         for (Entity entity : entities) {
-            if(entity.getComponent(HealthComponent.class) != null) {
+            if(entity.getComponent(HealthComponent.class) != null && entity.getComponent(TeamComponent.class) != null) {
                 HealthComponent health = CompMappers.health.get(entity);
                 DynamicBodyComponent body = CompMappers.dynBody.get(entity);
+                if (entity.getComponent(TeamComponent.class).TeamId != teamId)
+                	shapeRenderer.setColor(Color.RED);
+                
                 shapeRenderer.rect(
                         body.dynamicBody.getPosition().x - .5f,
                         body.dynamicBody.getPosition().y + .7f,
                         ((float)health.HP)/health.initialHP,
                         .05f
                 );
+                if (entity.getComponent(TeamComponent.class).TeamId != teamId)
+                	shapeRenderer.setColor(Color.GREEN);
+                
                 if(health.justHurt) {
                     health.justHurt = false;
                     this.damageFeedback = true;
