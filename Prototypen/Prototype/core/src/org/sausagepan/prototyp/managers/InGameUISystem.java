@@ -83,6 +83,9 @@ public class InGameUISystem extends EntitySystem {
             case DRAGON:this.characterImg = atlas.findRegion("3dface_dragon");break;
             case SHAMAN_M:this.characterImg = atlas.findRegion("3dface_shaman");break;
             case SHAMAN_F:this.characterImg = atlas.findRegion("3dface_shaman");break;
+            case FIGHTER_M: this.characterImg = atlas.findRegion("3dface_fighter");break;
+            case NINJA_F: this.characterImg = atlas.findRegion("3dface_ninja");break;
+            case WITCH_F: this.characterImg = atlas.findRegion("3dface_witch");break;
             default:this.characterImg = atlas.findRegion("3dface_knight");break;
         }
 
