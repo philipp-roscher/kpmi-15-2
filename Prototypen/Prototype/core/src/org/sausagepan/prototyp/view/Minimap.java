@@ -3,6 +3,7 @@ package org.sausagepan.prototyp.view;
 import org.sausagepan.prototyp.model.GlobalSettings;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -18,7 +19,7 @@ public class Minimap {
 	private int width;
 	
 	private TiledMap map;
-	private Array<Image> tableMap;
+	private Color[][] tableMap;
 	
 	/*
 	 * Generates MapData Array from given Maze
@@ -57,21 +58,16 @@ public class Minimap {
 	* Visualize MapData array as an Array of Images.
 	*/	
 	private void MapDataToTable(){
-		Array<Image> table = new Array<Image>();
-
-		Texture white = new Texture(Gdx.files.internal("UI/minimap_white"+ GlobalSettings.MINIMAP_SIZE +".png"));
-		Texture black = new Texture(Gdx.files.internal("UI/minimap_black"+ GlobalSettings.MINIMAP_SIZE +".png"));
+		tableMap = new Color[width][height];
 		
 		for (int i = 0; i < width; i++){
 			for (int j = 0; j < height; j++){	
 				if(mapData[i][j])
-					table.add(new Image(black));
+					tableMap[i][j] = Color.BLACK;
 				else
-					table.add(new Image(white));
+					tableMap[i][j] = Color.WHITE;
 			}
 		}
-		
-		tableMap = table;
 	}
 	
 	public boolean[][] getMapData(){
@@ -82,7 +78,7 @@ public class Minimap {
 		return map;
 	}
 	
-	public Array<Image> getTableMap(){
+	public Color[][] getTableMap(){
 		return tableMap;
 	}
 	

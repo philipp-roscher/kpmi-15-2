@@ -5,82 +5,47 @@ import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
+import org.sausagepan.prototyp.model.components.TeamComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
 import org.sausagepan.prototyp.model.entities.EntityFamilies;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 
 public class MinimapManager {
-	private Array<Image> mapImages = new Array<Image>();
-	private boolean[] statusBoolean;
+	private Color[][] tableMap;
+	private boolean[][] statusBoolean;
 	private EntityComponentSystem ECS;
+	private Entity chara;
+	private int ix,iy,width,height,minimapSize;
 	
-	private Minimap minimap;
-	
-	private Image charaPos = new Image(new Texture(Gdx.files.internal("UI/minimap_red.png")));
-	private Image partnerPos = new Image(new Texture(Gdx.files.internal("UI/minimap_red.png")));
-	
-	public MinimapManager(EntityComponentSystem ECS, Minimap minimap, CharacterEntity chara){
+	public MinimapManager(EntityComponentSystem ECS, Minimap minimap){
 		this.ECS = ECS;
-		this.minimap = minimap;
-		setUpArray(chara);
-		mapImages.add(charaPos);
-		partnerPos.setVisible(false);
-		mapImages.add(partnerPos);
-	}
-	
-	private void setUpArray(CharacterEntity chara){
-		int ix = 400 - GlobalSettings.MINIMAP_SIZE * minimap.getWidth()/2;
-    	int iy = 240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2;
-    	int count = 1;
-    	
-    	System.out.println(ix + " " + iy);
-    	
-    	System.out.println(minimap.getTableMap().size);
-    	
-    	for (Image i : minimap.getTableMap()){
-    		Image help = i;
-    		help.setPosition(ix, iy);
-    		iy += GlobalSettings.MINIMAP_SIZE;
+		this.tableMap = minimap.getTableMap();
+		this.chara = ECS.getLocalCharacterEntity();
+		this.minimapSize = GlobalSettings.MINIMAP_SIZE;
+		width = minimap.getWidth();
+		height = minimap.getHeight();
+		statusBoolean = new boolean[width][height];
 
-    		if(count == minimap.getWidth()){
-    			count = 0;
-    			ix += GlobalSettings.MINIMAP_SIZE;
-            	iy = 240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2;
-    		}
-    		
-    		count++;
-    		
-    		if(CompMappers.team.get(chara).TeamId != 0){
-    			help.setVisible(false);
-    		}else {
-    			help.setVisible(true);
-    		}
-    		mapImages.add(help);
-    	} 
-	}
-	
-	public void setPlayerPositions(CharacterEntity chara){
-		Vector2 positionChara = CompMappers.dynBody.get(chara).dynamicBody.getPosition();
-		Vector2 positionPartner = getPartnerPos(chara);
-		
-		charaPos.setPosition(400 - GlobalSettings.MINIMAP_SIZE * minimap.getWidth()/2 + (positionChara.x - 5/2) * GlobalSettings.MINIMAP_SIZE, 
-								240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2 + (positionChara.y - 5/2) * GlobalSettings.MINIMAP_SIZE);
-		if(positionPartner != null){
-			partnerPos.setPosition(400 - GlobalSettings.MINIMAP_SIZE * minimap.getWidth()/2 + (positionPartner.x - 5/2) * GlobalSettings.MINIMAP_SIZE, 
-					240 - GlobalSettings.MINIMAP_SIZE * minimap.getHeight()/2 + (positionPartner.y - 5/2) * GlobalSettings.MINIMAP_SIZE);
-			partnerPos.setVisible(true);
-		}
-		
-		if(CompMappers.team.get(chara).TeamId != 0){
-			openNewArea(positionChara);
-		}
+		for(int i = 0; i < width; i++)
+			for(int j = 0; j < height; j++)
+				if(chara.getComponent(TeamComponent.class).TeamId == 0)
+					statusBoolean[i][j] = true;
+				else
+					statusBoolean[i][j] = false;
+
+		ix = 400 - minimapSize * width/2;
+    	iy = 240 - minimapSize * height/2;
 	}
 	
 	public void openNewArea(Vector2 position){
@@ -89,23 +54,15 @@ public class MinimapManager {
 		
 		for(int i = whichX * 32; i < (whichX+1) * 32; i++){
 			for(int j = whichY * 32; j < (whichY+1) * 32; j++){
-				mapImages.get(j + minimap.getHeight() * 32 * i / 32).setVisible(true);
+				statusBoolean[i][j] = true;
 			}
 		}
 	}
 	
-	public Image getCharaPos(){
-		return charaPos;
-	}
-	
-	public Array<Image> getImageArray(){
-		return mapImages;
-	}
-	
-	private Vector2 getPartnerPos(CharacterEntity chara){
+	private Vector2 getPartnerPos(){
 		ImmutableArray<Entity> entities = ECS.getEngine().getEntitiesFor(EntityFamilies.characterFamily);
-		int teamId = CompMappers.team.get(ECS.getLocalCharacterEntity()).TeamId;
-		int playerId = CompMappers.id.get(ECS.getLocalCharacterEntity()).id;
+		int teamId = CompMappers.team.get(chara).TeamId;
+		int playerId = CompMappers.id.get(chara).id;
 		
 		for(Entity character : entities) {
     		if (CompMappers.team.get(character).TeamId == teamId &&
@@ -118,18 +75,32 @@ public class MinimapManager {
 		return null;
 	}
 	
-	public void saveVisibility(Array<Image> status){
-		statusBoolean = new boolean[status.size];
+	public void draw(ShapeRenderer shapeRenderer) {
+		shapeRenderer.begin(ShapeType.Filled);
+		for(int i = 0; i < width; i++)
+			for(int j = 0; j < height; j++)
+				if(statusBoolean[i][j]) {
+					shapeRenderer.setColor(tableMap[i][j]);
+					shapeRenderer.rect(ix + i*minimapSize, iy + j*minimapSize, minimapSize, minimapSize);
+				}
 		
-		for(Image i : status){
-			statusBoolean[status.indexOf(i, true)] = i.isVisible();
+		Vector2 positionChara = CompMappers.dynBody.get(chara).dynamicBody.getPosition();
+		Vector2 positionPartner = getPartnerPos();
+		
+		shapeRenderer.setColor(Color.RED);
+		shapeRenderer.rect(ix + (positionChara.x - 5/2) * minimapSize, 
+				iy + (positionChara.y - 5/2) * minimapSize,
+				minimapSize*5, minimapSize*5);
+		
+		if(positionPartner != null)
+			shapeRenderer.rect(ix + (positionPartner.x - 5/2) * minimapSize, 
+					iy + (positionPartner.y - 5/2) * minimapSize,
+					minimapSize*5, minimapSize*5);
+		
+		if(CompMappers.team.get(chara).TeamId != 0){
+			openNewArea(positionChara);
 		}
-	}
 	
-	public void setSavedVisibility(){
-		for(Image i : mapImages){
-			i.setVisible(statusBoolean[mapImages.indexOf(i, true)]);
-		}
+		shapeRenderer.end();
 	}
-	
 }
