@@ -1,9 +1,15 @@
 package org.sausagepan.prototyp.view;
 
 import org.sausagepan.prototyp.Utils.CompMappers;
+import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
+import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
+import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.entities.CharacterEntity;
+import org.sausagepan.prototyp.model.entities.EntityFamilies;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -13,13 +19,15 @@ import com.badlogic.gdx.utils.Array;
 public class MinimapManager {
 	private Array<Image> mapImages = new Array<Image>();
 	private boolean[] statusBoolean;
+	private EntityComponentSystem ECS;
 	
 	private Minimap minimap;
 	
 	private Image charaPos = new Image(new Texture(Gdx.files.internal("UI/minimap_red.png")));
 	private Image partnerPos = new Image(new Texture(Gdx.files.internal("UI/minimap_red.png")));
 	
-	public MinimapManager(Minimap minimap, CharacterEntity chara){
+	public MinimapManager(EntityComponentSystem ECS, Minimap minimap, CharacterEntity chara){
+		this.ECS = ECS;
 		this.minimap = minimap;
 		setUpArray(chara);
 		mapImages.add(charaPos);
@@ -95,7 +103,18 @@ public class MinimapManager {
 	}
 	
 	private Vector2 getPartnerPos(CharacterEntity chara){
-		//TODO: calculate position of team partner
+		ImmutableArray<Entity> entities = ECS.getEngine().getEntitiesFor(EntityFamilies.characterFamily);
+		int teamId = CompMappers.team.get(ECS.getLocalCharacterEntity()).TeamId;
+		int playerId = CompMappers.id.get(ECS.getLocalCharacterEntity()).id;
+		
+		for(Entity character : entities) {
+    		if (CompMappers.team.get(character).TeamId == teamId &&
+    			CompMappers.id.get(character).id != playerId) {
+    			DynamicBodyComponent body = CompMappers.dynBody.get(character);
+    			return body.dynamicBody.getPosition();
+    		}
+    	}
+		
 		return null;
 	}
 	

@@ -154,7 +154,7 @@ public class ItemUI {
                 weaponTable.setVisible(false);
                 
                 if(!minimapCreated){
-                	minimapManager = new MinimapManager(mazeScreen.getMaze().getGenerator().getMinimap(), character);
+                	minimapManager = new MinimapManager(mazeScreen.getECS(), mazeScreen.getMaze().getGenerator().getMinimap(), character);
 	            	
                 	minimapArray = minimapManager.getImageArray();
                 	for(Image i : minimapArray)

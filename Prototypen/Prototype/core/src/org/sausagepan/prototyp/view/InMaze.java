@@ -278,4 +278,8 @@ public class InMaze implements Screen {
     public Maze getMaze(){
     	return maze;
     }
+    
+    public EntityComponentSystem getECS() {
+    	return ECS;
+    }
 }
