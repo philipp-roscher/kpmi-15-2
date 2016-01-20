@@ -137,10 +137,10 @@ public class InMaze implements Screen {
         rayHandler.updateAndRender();
 
         // Stuff which should not be effected by RayHandler must be drawn after rayHandler.upd...
-        ECS.draw();
         // ............................................................................... RENDERING
 
         ECS.update(delta);
+        ECS.draw();
         world.step(4/3f * delta, 6, 2);    // time step at which world is updated
 
         //wenn X is pressed teleport player in treasure room
