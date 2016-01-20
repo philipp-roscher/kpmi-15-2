@@ -281,7 +281,9 @@ public class MazeGenerator {
 								case 1: walls.setCell(k  + 32*x, l + 32*y, cell);break;
 								case 2: objects.setCell(k  + 32*x, l + 32*y, cell);break;
 								case 3: tops.setCell(k  + 32*x, l + 32*y, cell);break;
-								case 7: if(tile.equals("tilemaps/spawnRoomDragon.tmx")) 
+								case 7: if (tile.equals("tilemaps/spawnRoomDragon.tmx") ||
+											tile.equals("tilemaps/spawnRoomTeamRed.tmx") ||
+											tile.equals("tilemaps/spawnRoomTeamBlue.tmx")) 
 											entranceDoors.setCell(k+32*x, l+32*y, cell);
 										else if(tile.equals("tilemaps/treasureRoom.tmx"))
 											treasureRoomDoors.setCell(k+32*x, l+32*y, cell);
