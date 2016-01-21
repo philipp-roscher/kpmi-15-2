@@ -25,8 +25,8 @@ public class Minimap {
 	 * Generates MapData Array from given Maze
 	 */
 	public Minimap (int height, int width, MapLayer colliderWalls){
-		this.height = (height + 2)*32 + 1;
-		this.width = (width + 2)*32 + 1;
+		this.height = (height + 1)*32+9;
+		this.width = (width + 2)*32;
 		
 		this.mapData = new boolean[this.width][this.height];
 		
