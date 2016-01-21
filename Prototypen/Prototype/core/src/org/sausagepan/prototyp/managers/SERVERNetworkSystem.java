@@ -15,7 +15,6 @@ import org.sausagepan.prototyp.model.components.WeaponComponent;
 import org.sausagepan.prototyp.model.entities.ServerCharacterEntity;
 import org.sausagepan.prototyp.model.items.Item;
 import org.sausagepan.prototyp.model.items.PotionHP;
-import org.sausagepan.prototyp.model.items.PotionMP;
 import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network.AcknowledgeDeath;
 import org.sausagepan.prototyp.network.Network.AttackRequest;

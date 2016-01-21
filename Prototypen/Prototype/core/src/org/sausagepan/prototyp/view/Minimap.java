@@ -1,24 +1,13 @@
 package org.sausagepan.prototyp.view;
 
-import org.sausagepan.prototyp.model.GlobalSettings;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 
 public class Minimap {
-	private boolean[][] mapData;
-	
 	private int height;
 	private int width;
-	
-	private TiledMap map;
 	private Color[][] tableMap;
 	
 	/*
@@ -27,24 +16,15 @@ public class Minimap {
 	public Minimap (int height, int width, MapLayer colliderWalls){
 		this.height = (height + 1)*32+9;
 		this.width = (width + 2)*32;
-		
-		this.mapData = new boolean[this.width][this.height];
-		
-		//set whole mapData to false
-		for (int i = this.width - 1; i >= 0; i--){
-			for (int j = this.height - 1; j >= 0; j--){
-				mapData[i][j] = false;
-			}
-		}
-
-		ColliderLayerToArray(colliderWalls);
-		MapDataToTable();
+		MapDataToTable(ColliderLayerToArray(colliderWalls));
 	}
 	
 	/*
 	 * Takes the ColliderLayer and sets mapData true whereever there is a collider.
 	 */	
-	private void ColliderLayerToArray(MapLayer layer){
+	private boolean[][] ColliderLayerToArray(MapLayer layer){
+		boolean[][] mapData = new boolean[this.width][this.height];
+		
 		for (MapObject mo : layer.getObjects()){
 			for (int i = (int) ((RectangleMapObject) mo).getRectangle().width / 32; i > 0; i--){
 				for (int j = (int) ((RectangleMapObject) mo).getRectangle().height / 32; j > 0; j--){
@@ -52,12 +32,14 @@ public class Minimap {
 				}
 			}
 		}
+		
+		return mapData;
 	}
 	
 	/*
 	* Visualize MapData array as an Array of Images.
 	*/	
-	private void MapDataToTable(){
+	private void MapDataToTable(boolean[][] mapData){
 		tableMap = new Color[width][height];
 		
 		for (int i = 0; i < width; i++){
@@ -68,14 +50,6 @@ public class Minimap {
 					tableMap[i][j] = Color.WHITE;
 			}
 		}
-	}
-	
-	public boolean[][] getMapData(){
-		return mapData;
-	}
-	
-	public TiledMap getMap(){
-		return map;
 	}
 	
 	public Color[][] getTableMap(){

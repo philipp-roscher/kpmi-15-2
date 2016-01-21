@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import java.awt.TextField;
 import java.util.Random;
 
 import org.sausagepan.prototyp.KPMIPrototype;

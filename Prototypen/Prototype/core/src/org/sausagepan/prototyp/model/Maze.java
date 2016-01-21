@@ -53,12 +53,12 @@ public class Maze extends EntitySystem {
     /* ........................................................................... CONSTRUCTOR .. */
 
     public Maze(Network.MapInformation mapInformation, World world, MediaManager mediaManager, boolean gameReady) {
-        this(mapInformation, world, gameReady);
+        this(mapInformation, world, gameReady, true);
         
         // set up map renderer and scale
         tiledMapRenderer = new OrthogonalTiledMapRendererWithPlayers(tiledMap, 32, mediaManager);
     }
-    public Maze(Network.MapInformation mapInformation, World world, boolean gameReady) {
+    public Maze(Network.MapInformation mapInformation, World world, boolean gameReady, boolean isClient) {
         this.mapInformation = mapInformation;
         this.entranceDoorBodies = new Array<Body>();        // Array with treasure room locking bodies
         this.exitWayRect = new Array<Rectangle>();          // Array with exit way rectangles
@@ -68,7 +68,7 @@ public class Maze extends EntitySystem {
         this.doorLockerRectangles = new Array<Rectangle>();
         this.invalidKeyPositions = new Array<Rectangle>();
         this.secretWalls = new Array<Body>();
-        generator = new MazeGenerator(mapInformation.width, mapInformation.height);
+        generator = new MazeGenerator(mapInformation.width, mapInformation.height, isClient);
         setUpTiledMap(world);
         this.world = world;
 

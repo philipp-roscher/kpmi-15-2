@@ -28,6 +28,7 @@ public class MazeGenerator {
     /* ................................................................................................ ATTRIBUTES .. */
 	int mazeHeight; // grid height for generated tiled map
 	int mazeWidth; // grid width for generated tiled map
+	boolean isClient;
 	
 	TiledMap    tiledMap;   // containing one of the tiled maps
 	TiledMap    map;        // taking the new map merged from several other tiled maps
@@ -60,9 +61,10 @@ public class MazeGenerator {
      * Factory for generating tiled maps from multiple given tiled maps by merging them into one according to a
      * randomly created grid
      */
-	public MazeGenerator(int width, int height){
+	public MazeGenerator(int width, int height, boolean isClient){
 		this.mazeWidth = width;
 		this.mazeHeight = height;
+		this.isClient = isClient;
 
         this.map = new TiledMap();
 
@@ -113,7 +115,8 @@ public class MazeGenerator {
 		addSafeZone();  // safe spawning zone	
 		addWall(); //wall around the whole maze
 
-        minimap = new Minimap(mazeHeight, mazeWidth, colliderWalls);
+		if(isClient)
+			minimap = new Minimap(mazeHeight, mazeWidth, colliderWalls);
 		
         // combine layers to a new tiled map
 		map.getLayers().add(ground);        			// ground layer

@@ -74,7 +74,7 @@ public class SERVEREntityComponentSystem {
         MediaManager mediaManager = new MediaManager();
         this.itemFactory = new ItemFactory(mediaManager);
         this.world = new World(new Vector2(0,0), true);
-        this.maze = new Maze(mapInformation, world, gameServer.gameReady);
+        this.maze = new Maze(mapInformation, world, gameServer.gameReady, false);
         this.startPositions = maze.getStartPositions();
         this.maze.openSecretPassages();
         this.maxItemId = 1;
