@@ -108,7 +108,7 @@ public class EntityComponentSystem {
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
         
         setUpLocalCharacterEntity();
-        this.itemUI = new ItemUI(inMaze, game, localCharacter);
+        this.itemUI = new ItemUI(inMaze, game, localCharacter, this);
         this.inputMultiplexer.addProcessor(itemUI.getStage());
         setUpMazeLights();
 

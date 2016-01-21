@@ -19,12 +19,13 @@ public class MinimapManager {
 	private boolean[][] statusBoolean;
 	private EntityComponentSystem ECS;
 	private Entity chara;
-	private int ix,iy,width,height,minimapSize;
+	private int ix,iy,width,height,minimapSize,teamId;
 	
 	public MinimapManager(EntityComponentSystem ECS, Minimap minimap){
 		this.ECS = ECS;
 		this.tableMap = minimap.getTableMap();
 		this.chara = ECS.getLocalCharacterEntity();
+		this.teamId = CompMappers.team.get(chara).TeamId;
 		this.minimapSize = GlobalSettings.MINIMAP_SIZE;
 		width = minimap.getWidth();
 		height = minimap.getHeight();
@@ -41,15 +42,18 @@ public class MinimapManager {
     	iy = 240 - minimapSize * height/2;
 	}
 	
-	public void openNewArea(Vector2 position){
-		int whichX = (int) Math.floor(position.x / 32);
-		int whichY = (int) Math.floor(position.y / 32);
-		
-		for(int i = whichX * 32; i < (whichX+1) * 32; i++){
-			for(int j = whichY * 32; j < (whichY+1) * 32; j++){
-				statusBoolean[i][j] = true;
+	public void openNewArea(){
+		if(teamId != 0){
+			Vector2 position = CompMappers.dynBody.get(chara).dynamicBody.getPosition();
+			int whichX = (int) Math.floor(position.x / 32);
+			int whichY = (int) Math.floor(position.y / 32);
+			
+			for(int i = whichX * 32; i < (whichX+1) * 32; i++){
+				for(int j = whichY * 32; j < (whichY+1) * 32; j++){
+					statusBoolean[i][j] = true;
+				}
 			}
-		}
+		}		
 	}
 	
 	private Vector2 getPartnerPos(){
@@ -89,10 +93,6 @@ public class MinimapManager {
 			shapeRenderer.rect(ix + (positionPartner.x - 5/2) * minimapSize, 
 					iy + (positionPartner.y - 5/2) * minimapSize,
 					minimapSize*5, minimapSize*5);
-		
-		if(CompMappers.team.get(chara).TeamId != 0){
-			openNewArea(positionChara);
-		}
 	
 		shapeRenderer.end();
 	}

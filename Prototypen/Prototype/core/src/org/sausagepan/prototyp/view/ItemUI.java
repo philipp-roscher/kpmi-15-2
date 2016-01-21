@@ -2,6 +2,7 @@ package org.sausagepan.prototyp.view;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.CompMappers;
+import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
 import org.sausagepan.prototyp.model.components.InventoryComponent;
 import org.sausagepan.prototyp.model.components.NetworkTransmissionComponent;
@@ -12,6 +13,7 @@ import org.sausagepan.prototyp.model.items.WeaponItem;
 import org.sausagepan.prototyp.network.Network.UseItemRequest;
 import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -42,7 +44,6 @@ public class ItemUI {
     private final ImageButton openMinimap;
     private final ImageButton closeMinimap;
     private MinimapManager minimapManager;
-    private boolean minimapCreated = false;
     
     public final InMaze mazeScreen;
     public final KPMIPrototype game;
@@ -52,7 +53,7 @@ public class ItemUI {
     private NetworkTransmissionComponent ntc;
     /* ........................................................................... CONSTRUCTOR .. */
     public ItemUI(final InMaze mazeScreen, final KPMIPrototype game, final CharacterEntity
-            localCharacter) {
+            localCharacter, EntityComponentSystem ECS) {
         this.mazeScreen = mazeScreen;
         this.game = game;
         this.bagPackItemButtons = new Array<ImageButton>();
@@ -67,6 +68,8 @@ public class ItemUI {
 
         this.stage = new Stage(fit);
         this.shapeRenderer = new ShapeRenderer();
+
+    	minimapManager = new MinimapManager(ECS, mazeScreen.getMaze().getGenerator().getMinimap());
 
         // Buttons .................................................................................
         this.skin = new Skin(game.mediaManager.getTextureAtlasType("IngameUI"));
@@ -144,11 +147,6 @@ public class ItemUI {
             public void clicked(InputEvent event, float x, float y) {
                 table.setVisible(false);
                 weaponTable.setVisible(false);
-                
-                if(!minimapCreated){
-                	minimapManager = new MinimapManager(mazeScreen.getECS(), mazeScreen.getMaze().getGenerator().getMinimap());
-	            	minimapCreated = true;
-                }
             	closeMinimap.setVisible(true);
             	openMinimap.setVisible(false);
             	closeMinimap.toFront();
@@ -172,6 +170,7 @@ public class ItemUI {
     }
     /* ............................................................................... METHODS .. */
     public void draw() {
+    	minimapManager.openNewArea();    	
     	if(minimapManager != null && !openMinimap.isVisible() && menuBackButton.isVisible())
     		minimapManager.draw(shapeRenderer);
     	
@@ -180,6 +179,8 @@ public class ItemUI {
 
     public void resize(int width, int height) {
         this.stage.getViewport().update(width, height);
+    	this.stage.getViewport().apply();
+    	shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
     }
 
     /**
