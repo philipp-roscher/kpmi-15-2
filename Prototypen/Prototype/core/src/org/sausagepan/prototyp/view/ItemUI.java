@@ -1,6 +1,5 @@
 package org.sausagepan.prototyp.view;
 
-import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.Utils.CompMappers;
 import org.sausagepan.prototyp.managers.EntityComponentSystem;
 import org.sausagepan.prototyp.model.GlobalSettings;
@@ -13,7 +12,6 @@ import org.sausagepan.prototyp.model.items.WeaponItem;
 import org.sausagepan.prototyp.network.Network.UseItemRequest;
 import org.sausagepan.prototyp.network.Network.WeaponChangeRequest;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -40,22 +38,17 @@ public class ItemUI {
     private final Table table, weaponTable;
     private final ImageButton menuButton, menuBackButton;
     private final Array<ImageButton> bagPackItemButtons, weaponItemButtons;
-    
     private final ImageButton openMinimap;
     private final ImageButton closeMinimap;
     private MinimapManager minimapManager;
     
-    public final InMaze mazeScreen;
-    public final KPMIPrototype game;
     private CharacterEntity character;
     private InventoryComponent inventory;
     private WeaponComponent weapon;
     private NetworkTransmissionComponent ntc;
     /* ........................................................................... CONSTRUCTOR .. */
-    public ItemUI(final InMaze mazeScreen, final KPMIPrototype game, final CharacterEntity
+    public ItemUI(final InMaze mazeScreen, final Skin skin, final CharacterEntity
             localCharacter, EntityComponentSystem ECS) {
-        this.mazeScreen = mazeScreen;
-        this.game = game;
         this.bagPackItemButtons = new Array<ImageButton>();
         this.weaponItemButtons = new Array<ImageButton>();
         this.inventory = CompMappers.inventory.get(localCharacter);
@@ -72,7 +65,7 @@ public class ItemUI {
     	minimapManager = new MinimapManager(ECS, mazeScreen.getMaze().getGenerator().getMinimap());
 
         // Buttons .................................................................................
-        this.skin = new Skin(game.mediaManager.getTextureAtlasType("IngameUI"));
+        this.skin = skin;
 
         // For opening item menu
         this.menuButton = new ImageButton(skin.getDrawable("menu"));

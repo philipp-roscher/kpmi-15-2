@@ -40,6 +40,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import box2dLight.RayHandler;
 
@@ -108,7 +109,7 @@ public class EntityComponentSystem {
         this.entityFactory = new EntityFactory(mediaManager, world, rayHandler);
         
         setUpLocalCharacterEntity();
-        this.itemUI = new ItemUI(inMaze, game, localCharacter, this);
+        this.itemUI = new ItemUI(inMaze, new Skin(game.mediaManager.getTextureAtlasType("IngameUI")), localCharacter, this);
         this.inputMultiplexer.addProcessor(itemUI.getStage());
         setUpMazeLights();
 
@@ -231,10 +232,6 @@ public class EntityComponentSystem {
         this.engine.getSystem(InGameUISystem.class).draw();
         this.engine.getSystem(InputSystem.class).draw();
         this.itemUI.draw();
-    }
-
-    public void resize(int width, int height) {
-        this.itemUI.resize(width, height);
     }
 
 	public CharacterEntity addNewCharacter(NewHeroResponse request) {
