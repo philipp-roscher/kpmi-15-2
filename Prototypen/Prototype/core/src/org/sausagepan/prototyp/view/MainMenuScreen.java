@@ -497,7 +497,7 @@ public class MainMenuScreen implements Screen {
 		
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
-			System.out.print("selecting "+ characterClass);
+			System.out.println("selecting "+ characterClass);
 			clientClass = characterClass;
 			clientSel = true;
 		}

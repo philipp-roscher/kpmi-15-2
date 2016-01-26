@@ -174,7 +174,6 @@ public class NetworkSystem extends EntitySystem {
 
             /* ........................................................................ GAME EXIT */
             if(object instanceof Network.GameExitResponse) {
-                System.out.print("Quit Game Message received ...");
                 ECS.quitGame((Network.GameExitResponse)object);
 				networkMessages.removeValue(object, true);
             }

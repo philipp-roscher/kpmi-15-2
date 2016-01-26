@@ -71,6 +71,7 @@ public class SERVERNetworkSystem extends EntitySystem {
 	private SERVEREntityComponentSystem ECS;
     private SERVERNetworkTransmissionComponent ntc;
 	private int maxMon = 0;
+	private long gameFinishTime = 0L;
 	
     /* ........................................................................... CONSTRUCTOR .. */
     public SERVERNetworkSystem(SERVEREntityComponentSystem ECS, Server server, GameServer gameServer) {
@@ -95,6 +96,12 @@ public class SERVERNetworkSystem extends EntitySystem {
     public void addedToEngine(Engine engine) { }
 
     public void update(float deltaTime) {
+    	if(gameFinishTime != 0L && System.currentTimeMillis() > gameFinishTime) {
+    		System.out.println("Server is shutting down.");
+    		gameServer.stop();
+    		System.exit(0);
+    	}
+    	
         for(Object object : ntc.networkMessagesToProcess) {
             if ((object instanceof HPUpdateResponse) ||
                 (object instanceof DeleteBulletResponse) ||
@@ -108,6 +115,12 @@ public class SERVERNetworkSystem extends EntitySystem {
             
             if (object instanceof ShootResponse)
             	server.sendToAllUDP(object);
+            
+            // Stop server after game is finished
+            if (object instanceof GameExitResponse && gameFinishTime == 0L) {
+            	gameFinishTime = System.currentTimeMillis()+3000L;
+            	System.out.println("Server will be shutting down in 3 seconds");
+            }
         }
         ntc.networkMessagesToProcess.clear();
 

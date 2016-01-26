@@ -68,7 +68,6 @@ public class MazeContactListener implements ContactListener {
         if(FixtureA.getBody().getUserData() != null
                 && FixtureA.getBody().getUserData() instanceof String
                 && ((String)FixtureA.getBody().getUserData()).equals("ExitSensor")) {
-            System.out.println("Sending Exit Request ...");
             this.sntc.networkMessagesToProcess.add(new Network.GameExitResponse(
             		((ServerCharacterEntity)FixtureB.getBody().getUserData()).getComponent(TeamComponent.class).TeamId
             	));
