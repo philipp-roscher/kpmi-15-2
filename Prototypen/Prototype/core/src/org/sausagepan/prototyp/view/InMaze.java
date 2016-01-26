@@ -12,6 +12,7 @@ import org.sausagepan.prototyp.model.components.DynamicBodyComponent;
 import org.sausagepan.prototyp.model.components.IsDeadComponent;
 import org.sausagepan.prototyp.model.components.NetworkComponent;
 import org.sausagepan.prototyp.model.components.TeamComponent;
+import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 
@@ -50,6 +51,7 @@ public class InMaze implements Screen {
 	private SpriteBatch        batch;
 	private ShapeRenderer      shpRend;
 	private BitmapFont         font;
+	private GameServer		   gameServer;
 
     // Managers
 	public EntityComponentSystem ECS;		// entity component system
@@ -74,14 +76,15 @@ public class InMaze implements Screen {
      * @param game the game main class itself
      */
 	public InMaze(KPMIPrototype game, World world, RayHandler rayHandler,
-                  MapInformation mapInformation, CharacterClass clientClass, int TeamId) {
+                  MapInformation mapInformation, CharacterClass clientClass, int TeamId,
+                  GameServer gameServer) {
 
         Box2D.init(); // initialize Box2D
 		this.game = game;
         this.world = world;
         setUpRendering();
         setUpBox2D(rayHandler);
-
+        this.gameServer = gameServer;
 
         // Media
 		this.bgMusic = game.mediaManager.getMazeBackgroundMusic();
@@ -115,6 +118,9 @@ public class InMaze implements Screen {
         // Check Server Connection ......................................................... NETWORK
         checkServerConnection();
         // ................................................................................. NETWORK
+        
+		if(gameServer != null)
+			gameServer.updateGameState(delta);
 
         // Clear screen
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
@@ -178,6 +184,8 @@ public class InMaze implements Screen {
 		this.batch.dispose();
 		this.font.dispose();
 		this.bgMusic.dispose();
+		if (gameServer != null)
+			gameServer.dispose();
 	}
 	
 	

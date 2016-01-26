@@ -105,7 +105,7 @@ public class GameServer implements ApplicationListener {
 		long currentTime = System.nanoTime();
 		delta = (currentTime - lastUpdate)/ 1e9f;
 		lastUpdate = currentTime;
-		updateGameState();
+		updateGameState(delta);
 	}
 
 	public void pause () {
@@ -125,7 +125,7 @@ public class GameServer implements ApplicationListener {
 	}
 	
 	//  updates ECS and sends current positions of all characters to all clients, is executed a defined amount of times per second
-	public void updateGameState() {
+	public void updateGameState(float delta) {
 		ECS.update(delta);
 		if(clientCount > 0) {
 			// System.out.println(new java.util.Date() + " - "+ ++i +" - GameState an Clients geschickt ");

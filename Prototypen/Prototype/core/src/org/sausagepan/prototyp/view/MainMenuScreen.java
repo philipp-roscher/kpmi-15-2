@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.sausagepan.prototyp.KPMIPrototype;
 import org.sausagepan.prototyp.enums.CharacterClass;
+import org.sausagepan.prototyp.network.GameServer;
 import org.sausagepan.prototyp.network.Network;
 import org.sausagepan.prototyp.network.Network.MapInformation;
 import org.sausagepan.prototyp.network.Network.NewHeroRequest;
@@ -50,6 +51,7 @@ public class MainMenuScreen implements Screen {
     private RayHandler rayHandler;
     private MapInformation mapInformation;
 	String serverIp;
+	private GameServer gameServer = null;
 
 	private boolean heroRequestSent = false;
 	private boolean mapInformationReceived = false;
@@ -70,7 +72,7 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private Table table;
     private Skin skin;
-    private final TextButton startButton, creditsButton, backButton;
+    private final TextButton startButton, creditsButton, backButton, serverButton;
     private final Image mazeLogo, blackBars;
     private final Group creditsGroup;
 	
@@ -168,6 +170,19 @@ public class MainMenuScreen implements Screen {
         });
         this.stage.addActor(backButton);
         setUpCredits(creditsGroup);
+        
+        serverButton = new TextButton("Host server", skin, "default");
+        serverButton.setWidth(128);
+        serverButton.setHeight(48);
+        serverButton.setPosition(400 - 64, 116);
+        serverButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                serverButton.setVisible(false);
+                startServer();
+            }
+        });
+        this.stage.addActor(serverButton);
         // Scene2d UI ........................................................................ UI */
 	}
 
@@ -175,7 +190,12 @@ public class MainMenuScreen implements Screen {
 	/* ................................................................................................... METHODS .. */
 
 	public void setUpGame() {
-		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, clientClass, game.TeamId));
+		game.setScreen(new InMaze(game, world, rayHandler, mapInformation, clientClass, game.TeamId, gameServer));
+	}
+	
+	public void startServer() {
+		gameServer = new GameServer();
+		gameServer.create();
 	}
 
     public void startConnection() {
@@ -389,6 +409,9 @@ public class MainMenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.batch.setProjectionMatrix(camera.combined);
+		
+		if(gameServer != null)
+			gameServer.updateGameState(delta);
 		
 		// Start collecting textures for OpenGL
 		game.batch.begin();
