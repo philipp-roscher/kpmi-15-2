@@ -411,7 +411,12 @@ public class MainMenuScreen implements Screen {
 		game.batch.setProjectionMatrix(camera.combined);
 		
 		if(gameServer != null)
-			gameServer.updateGameState(delta);
+			try {
+				gameServer.updateGameState(delta);
+			} catch(Exception e) {
+				gameServer = null;
+				serverButton.setVisible(true);
+			}
 		
 		// Start collecting textures for OpenGL
 		game.batch.begin();
