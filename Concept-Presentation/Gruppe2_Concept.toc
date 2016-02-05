@@ -1,39 +1,35 @@
-\contentsline {chapter}{\numberline {1}Einf\IeC {\"u}hrung}{4}
-\contentsline {section}{\numberline {1.1}Aufgabe}{4}
-\contentsline {chapter}{\numberline {2}Spielentwurf}{5}
-\contentsline {section}{\numberline {2.1}Story}{5}
-\contentsline {section}{\numberline {2.2}Setting}{5}
-\contentsline {section}{\numberline {2.3}Rollenverteilung und Charaktere}{5}
-\contentsline {subsection}{\numberline {2.3.1}Der Drache}{5}
+\contentsline {chapter}{\numberline {1}Einleitung}{3}
+\contentsline {chapter}{\numberline {2}Konzept}{4}
+\contentsline {section}{\numberline {2.1}Story}{4}
+\contentsline {section}{\numberline {2.2}Setting}{4}
+\contentsline {section}{\numberline {2.3}Rollenverteilung und Charaktere}{4}
+\contentsline {subsection}{\numberline {2.3.1}Der Drache}{4}
 \contentsline {subsection}{\numberline {2.3.2}Fernkampf}{5}
-\contentsline {subsubsection}{Schamane}{5}
-\contentsline {subsubsection}{Bogensch\IeC {\"u}tze}{5}
-\contentsline {subsection}{\numberline {2.3.3}Mittelfernkampf}{6}
-\contentsline {subsubsection}{Ninja}{6}
-\contentsline {subsubsection}{Hexe}{6}
-\contentsline {subsection}{\numberline {2.3.4}Nahkampf}{6}
-\contentsline {subsubsection}{Schwertk\IeC {\"a}mpfer}{6}
-\contentsline {subsubsection}{K\IeC {\"a}mpfer}{6}
-\contentsline {section}{\numberline {2.4}Ziel}{6}
-\contentsline {chapter}{\numberline {3}Design}{7}
-\contentsline {section}{\numberline {3.1}Welt}{7}
-\contentsline {section}{\numberline {3.2}Spielfiguren}{8}
-\contentsline {chapter}{\numberline {4}Technologie und Steuerung}{10}
-\contentsline {chapter}{\numberline {5}Planung}{11}
-\contentsline {section}{\numberline {5.1}Aufgabenverteilung}{11}
-\contentsline {subsection}{\numberline {5.1.1}Prototyp}{11}
-\contentsline {subsubsection}{Charakterbewegung}{11}
-\contentsline {subsubsection}{Welt}{11}
-\contentsline {subsubsection}{Spielcharaktere (Game Master, Klassen)}{11}
-\contentsline {subsection}{\numberline {5.1.2}Gestaltung}{11}
-\contentsline {subsection}{\numberline {5.1.3}Programmierung}{11}
-\contentsline {subsubsection}{Levelgenerierung + Karte}{11}
-\contentsline {subsubsection}{Bewegung}{12}
-\contentsline {subsubsection}{Kampf}{12}
-\contentsline {subsection}{\numberline {5.1.4}Netzwerkkommunikation (Schnittstelle)}{12}
-\contentsline {subsection}{\numberline {5.1.5}Charakterlogik}{12}
-\contentsline {subsection}{\numberline {5.1.6}Gegenst\IeC {\"a}nde}{12}
-\contentsline {subsection}{\numberline {5.1.7}Men\IeC {\"u}}{12}
-\contentsline {subsection}{\numberline {5.1.8}Ton}{12}
-\contentsline {section}{\numberline {5.2}Arbeitsplan}{12}
-\contentsline {chapter}{\numberline {6}Erg\IeC {\"a}nzungen}{13}
+\contentsline {subsubsection}{\nonumberline Schamane}{5}
+\contentsline {subsubsection}{\nonumberline Bogensch\IeC {\"u}tze}{5}
+\contentsline {subsection}{\numberline {2.3.3}Mittelfernkampf}{5}
+\contentsline {subsubsection}{\nonumberline Ninja}{5}
+\contentsline {subsubsection}{\nonumberline Hexe}{5}
+\contentsline {subsection}{\numberline {2.3.4}Nahkampf}{5}
+\contentsline {subsubsection}{\nonumberline Schwertk\IeC {\"a}mpfer}{5}
+\contentsline {subsubsection}{\nonumberline K\IeC {\"a}mpfer}{5}
+\contentsline {section}{\numberline {2.4}Spielende}{5}
+\contentsline {chapter}{\numberline {3}Design}{6}
+\contentsline {section}{\numberline {3.1}Welt}{6}
+\contentsline {section}{\numberline {3.2}Spielfiguren}{7}
+\contentsline {chapter}{\numberline {4}Technologie und Steuerung}{9}
+\contentsline {chapter}{\numberline {5}Planung und Entwicklung}{10}
+\contentsline {section}{\numberline {5.1}Prototypen}{10}
+\contentsline {section}{\numberline {5.2}Alpha}{10}
+\contentsline {section}{\numberline {5.3}Beta}{10}
+\contentsline {section}{\numberline {5.4}Endprodukt}{10}
+\contentsline {chapter}{\numberline {6}Entwurfsentscheidungen}{11}
+\contentsline {subsubsection}{\nonumberline Das Labyrinth und die Minimap}{11}
+\contentsline {subsubsection}{\nonumberline Charakter}{11}
+\contentsline {subsubsection}{\nonumberline Kampfsystem}{11}
+\contentsline {subsubsection}{\nonumberline Netzwerkkommunikation}{11}
+\contentsline {subsubsection}{\nonumberline Itemsystem}{11}
+\contentsline {subsubsection}{\nonumberline Interface}{11}
+\contentsline {chapter}{\numberline {7}Offene Punkte}{12}
+\contentsline {subsubsection}{\nonumberline Scissor Stack}{12}
+\contentsline {subsubsection}{\nonumberline Ausbau des Itemsystems}{12}
