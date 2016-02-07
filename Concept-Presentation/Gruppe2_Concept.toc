@@ -27,11 +27,10 @@
 \contentsline {section}{\numberline {3.2}Entwurfsentscheidungen}{10}
 \contentsline {subsubsection}{\nonumberline Das Labyrinth und die Minimap}{10}
 \contentsline {subsubsection}{\nonumberline Charakter}{10}
-\contentsline {subsubsection}{\nonumberline Kampfsystem}{10}
+\contentsline {subsubsection}{\nonumberline Kampfsystem}{11}
 \contentsline {subsubsection}{\nonumberline Netzwerkkommunikation}{11}
 \contentsline {subsubsection}{\nonumberline Itemsystem}{11}
 \contentsline {subsubsection}{\nonumberline Interface}{11}
-\contentsline {subsubsection}{\nonumberline Entity Component System}{11}
 \contentsline {section}{\numberline {3.3}Offene Punkte}{11}
 \contentsline {subsubsection}{\nonumberline Scissor Stack}{11}
 \contentsline {subsubsection}{\nonumberline Ausbau des Itemsystems}{11}

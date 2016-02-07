@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.28)  7 FEB 2016 11:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.28)  7 FEB 2016 20:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -987,21 +987,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 131--138
 [9
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 143--147
+Underfull \hbox (badness 10000) in paragraph at lines 141--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 151--153
+Underfull \hbox (badness 10000) in paragraph at lines 150--152
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 155--157
+Underfull \hbox (badness 10000) in paragraph at lines 155--158
 
  []
 
-[10] [11] (./Gruppe2_Concept.aux) ) 
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 167--170
+
+ []
+
+[11] (./Gruppe2_Concept.aux) ) 
 Here is how much of TeX's memory you used:
  6616 strings out of 493109
  93841 string characters out of 6138586
@@ -1010,12 +1015,12 @@ Here is how much of TeX's memory you used:
  9025 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  47i,9n,51p,825b,256s stack positions out of 5000i,500n,10000p,200000b,80000s
-<c:/texlive/2014/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmbx12.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr10.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-2.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb><c:
-/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb>
-Output written on Gruppe2_Concept.pdf (11 pages, 536629 bytes).
+<c:/texlive/2014/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbx12.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr10.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb><c:/texl
+ive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb>
+Output written on Gruppe2_Concept.pdf (11 pages, 537782 bytes).
 PDF statistics:
  79 PDF objects out of 1000 (max. 8388607)
  42 compressed objects within 1 object stream

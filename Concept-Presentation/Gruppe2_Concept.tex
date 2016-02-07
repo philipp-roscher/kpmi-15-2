@@ -136,8 +136,6 @@
 			Das Labyrinth hat nun genug Teile, aus denen es sich aufbaut, um Duplikate zu vermeiden.\\
 			Die Schatzkammer öffnet sich nun für beide Teammitglieder, dank eines gemeinsamen Schlüssel-Inventars.\\
 			
-			%erwähnen wir, dass hier zum Ende hin Natalie aufgehört hat??? :B
-			
 			\subsection{Endprodukt}
 			
 			Das abschließende Endprodukt enthält größtenteils Änderungen die das Spielerlebnis verbessern. So gibt es nun eine Minimap, die sich nach und nach mit dem Erkunden des Labyrinths aufdeckt, und einem die Position des Teammitglieds zeigt.\\
@@ -148,12 +146,15 @@
 	\section{Entwurfsentscheidungen}
 
 		\subsubsection{Das Labyrinth und die Minimap}
+		
 		Das Labyrinth wird mit Start des Servers generiert und an die Clients übergeben. Grundlage bilden vorgefertigte TiledMaps im Format 32 * 32 Kacheln mit 32 * 32 Pixeln pro Kachel. In der Generierung werden die vorgefertigten Teile zufällig aneinander gesetzt, die Spawnräume und Schatzkammer platziert und anschließend als eine Map gespeichert. Das Labyrinth ist dabei duplikatsfrei.\\
 		An das Labyrinth geknüpft ist die Minimap, sie wird direkt danach erzeugt und als eine Anordnung von Images in Box2D dargestellt. Die Verwaltung von Standorten und aufgedeckten Teilen des Labyrinths übernimmt jeder Client separat.\\
 		
 		\subsubsection{Charakter}
+		
 		Die Charaktere sind grundlegend in Game Master und Teams gegliedert. Der Game Master hat dabei nur den Drachen zur Auswahl, wohingegen die Spieler zwischen den 6 Klassen, die im Konzept erklärt wurden, wählen können. Es ist dabei möglich Klassen mehrfach zu belegen.\\
 		Die Charakterwahl findet zwar Client-seitig statt, wird aber kontinuierlich mit dem Server synchronisiert, da dort alle Berechnungen (Position, HP, etc.) stattfinden. dadurch sollen eventuelle Manipulationen durch den Client vermieden werden.\\
+		Die Charaktererstellung ist auf einem Entity Component System aufgebaut. So entspricht jeder individuelle Character einer Entität mit verschiedenen Komponenten, wie Waffe, Sensorbody, Position, TeamID und Inventar.\\
 		
 		\subsubsection{Kampfsystem} 
 		TODO
@@ -162,12 +163,13 @@
 		TODO
 		
 		\subsubsection{Itemsystem}
-		TODO
+		
+		Das Itemsystem baut ebenfalls auf dem Entity Component System auf. Bei den Items wird hier grundlegend zwischen Waffen, Tränken und Schlüsselteilen unterschieden. Dabei sind die Schlüsselteile zusätzlich an die TeamID gebunden, damit beide Teammitglieder im Interface sehen, wie viele Schlüssel sie besitzen, aber auch damit sie gemeinsam die Schatzkammer betreten können.\\
+		Jeder Spieler hat zum Spielbeginn eine festgelegt Auswahl an Tränken und Waffen. (Jeweils einen Klassen-spezifischen Angriff und eine einfache Faust für den Nahkampf). Im Laufe des Spiels können weitere Tränke aufgenommen werden.\\
+		Es sollte auch bessere Waffen zu finden geben, zur Implementierung davon ist es aus Zeitgründen jedoch nicht gekommen.\\
 		
 		\subsubsection{Interface}
-		TODO
 		
-		\subsubsection{Entity Component System}
 		TODO
 
 	\section{Offene Punkte}
