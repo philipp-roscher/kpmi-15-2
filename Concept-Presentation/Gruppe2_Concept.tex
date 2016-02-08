@@ -157,7 +157,7 @@
 		Die Charaktererstellung ist auf einem Entity Component System aufgebaut. So entspricht jeder individuelle Character einer Entität mit verschiedenen Komponenten, wie Waffe, Sensorbody, Position, TeamID und Inventar.\\
 		
 		\subsubsection{Kampfsystem} 
-		TODO
+		Das Kampfsystem verwendet einen relativ simplen Überdeckungsalgorihtmus. Die Spieler-Entität (Character Entity) enthält eine Waffen-Komponente (WeaponComponent). Das darin enthaltene Waffenobjekt wird bei der Schadensberechnung verwendet. Ob ein Spieler einem anderen Spieler Schaden zufügt, wird vom Server entschieden. Der Client meldet dem Server die Betätigung der Waffe und die Statuswerte der Waffe, dieser erzeugt dann gepoolte Bullets oder einen Schlag und prüft die Überdeckung des Schadensbereichs, implementiert als einfaches Rechteck, des Spielers, mit dem des Geschosses oder Schwertes. Bei Überdeckung mit Spieler-Schadensbereichen oder Collider-repräsentierenden Rechtecken, werden Geschosse zurückgesetzt und dem Pool wieder zugeführt.
 		
 		\subsubsection{Netzwerkkommunikation}
 		
