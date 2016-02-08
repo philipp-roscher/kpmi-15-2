@@ -149,7 +149,7 @@
 		
 		Das Labyrinth wird mit Start des Servers generiert und an die Clients übergeben. Grundlage bilden vorgefertigte TiledMaps im Format 32 * 32 Kacheln mit 32 * 32 Pixeln pro Kachel. In der Generierung werden die vorgefertigten Teile zufällig aneinander gesetzt, die Spawnräume und Schatzkammer platziert und anschließend als eine Map gespeichert. Das Labyrinth ist dabei duplikatsfrei.\\
 		An das Labyrinth geknüpft ist die Minimap, sie wird direkt danach erzeugt und als eine Anordnung von Images in Box2D dargestellt. Die Verwaltung von Standorten und aufgedeckten Teilen des Labyrinths übernimmt jeder Client separat.\\
-		Physik und Collision wird von Box2d berechnet. Collider werden bei Erzeugen der Karte aus Rechtecken der Objektlayer der TMX-Karte erzeugt.
+		Physik und Collision wird von libGDX' Anbindung an die externe Physikengine Box2d berechnet. Collider werden bei Erzeugen der Karte aus Rechtecken der Objektlayer der TMX-Karte erzeugt.
 		
 		\subsubsection{Charakter}
 		
