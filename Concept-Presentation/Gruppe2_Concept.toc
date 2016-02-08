@@ -33,4 +33,4 @@
 \contentsline {subsubsection}{\nonumberline Interface}{11}
 \contentsline {section}{\numberline {3.3}Offene Punkte}{11}
 \contentsline {subsubsection}{\nonumberline Scissor Stack}{11}
-\contentsline {subsubsection}{\nonumberline Ausbau des Itemsystems}{11}
+\contentsline {subsubsection}{\nonumberline Ausbau des Itemsystems}{12}
