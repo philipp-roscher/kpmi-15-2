@@ -149,6 +149,7 @@
 		
 		Das Labyrinth wird mit Start des Servers generiert und an die Clients übergeben. Grundlage bilden vorgefertigte TiledMaps im Format 32 * 32 Kacheln mit 32 * 32 Pixeln pro Kachel. In der Generierung werden die vorgefertigten Teile zufällig aneinander gesetzt, die Spawnräume und Schatzkammer platziert und anschließend als eine Map gespeichert. Das Labyrinth ist dabei duplikatsfrei.\\
 		An das Labyrinth geknüpft ist die Minimap, sie wird direkt danach erzeugt und als eine Anordnung von Images in Box2D dargestellt. Die Verwaltung von Standorten und aufgedeckten Teilen des Labyrinths übernimmt jeder Client separat.\\
+		Physik und Collision wird von Box2d berechnet. Collider werden bei Erzeugen der Karte aus Rechtecken der Objektlayer der TMX-Karte erzeugt.
 		
 		\subsubsection{Charakter}
 		
@@ -157,7 +158,9 @@
 		Die Charaktererstellung ist auf einem Entity Component System aufgebaut. So entspricht jeder individuelle Character einer Entität mit verschiedenen Komponenten, wie Waffe, Sensorbody, Position, TeamID und Inventar.\\
 		
 		\subsubsection{Kampfsystem} 
-		Das Kampfsystem verwendet einen relativ simplen Überdeckungsalgorihtmus. Die Spieler-Entität (Character Entity) enthält eine Waffen-Komponente (WeaponComponent). Das darin enthaltene Waffenobjekt wird bei der Schadensberechnung verwendet. Ob ein Spieler einem anderen Spieler Schaden zufügt, wird vom Server entschieden. Der Client meldet dem Server die Betätigung der Waffe und die Statuswerte der Waffe, dieser erzeugt dann gepoolte Bullets oder einen Schlag und prüft die Überdeckung des Schadensbereichs, implementiert als einfaches Rechteck, des Spielers, mit dem des Geschosses oder Schwertes. Bei Überdeckung mit Spieler-Schadensbereichen oder Collider-repräsentierenden Rechtecken, werden Geschosse zurückgesetzt und dem Pool wieder zugeführt.
+		Das Kampfsystem verwendet einen relativ simplen Überdeckungsalgorihtmus. Die Spieler-Entität (Character Entity) enthält eine Waffen-Komponente (WeaponComponent). Das darin enthaltene Waffenobjekt wird bei der Schadensberechnung verwendet. Ob ein Spieler einem anderen Spieler Schaden zufügt, wird vom Server entschieden. Der Client meldet dem Server die Betätigung der Waffe und die Statuswerte der Waffe, dieser erzeugt dann gepoolte Bullets oder einen Schlag und prüft die Überdeckung des Schadensbereichs, implementiert als einfaches Rechteck, des Spielers, mit dem des Geschosses oder Schwertes. Bei Überdeckung mit Spieler-Schadensbereichen oder Collider-repräsentierenden Rechtecken, werden Geschosse zurückgesetzt und dem Pool wieder zugeführt. \\
+		Über das implementierte Inventar kann der Spieler grafisch die verwendete Waffe wechseln. Dabei wird lediglich die in der WeaponComponent enthaltene Waffe gewechselt. Im Inventar selbst ändert sich nichts.
+		
 		
 		\subsubsection{Netzwerkkommunikation}
 		
