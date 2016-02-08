@@ -160,7 +160,9 @@
 		TODO
 		
 		\subsubsection{Netzwerkkommunikation}
-		TODO
+		
+		Das Spiel basiert auf einem Server-Client-System, wobei ein Server sowohl als Standalone-Version als auch aus dem Spiel heraus gestartet werden kann. Das Verbinden ist derzeit nur per IP möglich, eine zentrale Serverliste oder ein automatisches Matchmaking gibt es nicht.\\
+		Fast die komplette Spiellogik läuft auf dem Server, wodurch eine spielerseitige Manipulation von Daten, z.B. in Form von Cheats, ausgeschlossen wird. Der Server überträgt relevante Daten per TCP und UDP an den Client. Allerdings gibt es noch kein System zur Lagkompensation und aus Gründen der Flüssigkeit läuft die Bewegung der Spieler noch komplett auf den Clients. An einigen Stellen kommt es hierdurch vor allem bei schlechteren Netzwerkbedingungen zu entsprechenden Problemen, die mit komplexeren Systemen wie bspw. Movement Prediction sicherlich noch gelöst werden können.\\
 		
 		\subsubsection{Itemsystem}
 		
