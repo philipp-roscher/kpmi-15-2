@@ -30,7 +30,7 @@
 \contentsline {subsubsection}{\nonumberline Kampfsystem}{11}
 \contentsline {subsubsection}{\nonumberline Netzwerkkommunikation}{11}
 \contentsline {subsubsection}{\nonumberline Itemsystem}{11}
-\contentsline {subsubsection}{\nonumberline Interface}{11}
+\contentsline {subsubsection}{\nonumberline Interface}{12}
 \contentsline {section}{\numberline {3.3}Offene Punkte}{12}
 \contentsline {subsubsection}{\nonumberline Scissor Stack}{12}
 \contentsline {subsubsection}{\nonumberline Ausbau des Itemsystems}{12}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.28)  8 FEB 2016 15:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/W32TeX) (preloaded format=pdflatex 2014.11.28)  9 FEB 2016 11:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -992,27 +992,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 141--145
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 150--152
+Underfull \hbox (badness 10000) in paragraph at lines 156--159
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 155--158
+Underfull \hbox (badness 10000) in paragraph at lines 161--163
 
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 164--166
+Underfull \hbox (badness 10000) in paragraph at lines 167--169
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 169--172
+Underfull \hbox (badness 10000) in paragraph at lines 172--175
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 175--179
+Underfull \hbox (badness 10000) in paragraph at lines 178--182
 
  []
 
@@ -1020,7 +1020,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 175--179
 Here is how much of TeX's memory you used:
  6616 strings out of 493109
  93841 string characters out of 6138586
- 221778 words of memory out of 5000000
+ 223778 words of memory out of 5000000
  9962 multiletter control sequences out of 15000+600000
  9025 words of font info for 35 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1030,7 +1030,7 @@ ic/amsfonts/cm/cmbx12.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfon
 ts/cm/cmr10.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
 2.pfb><c:/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb><c:
 /texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb>
-Output written on Gruppe2_Concept.pdf (12 pages, 539106 bytes).
+Output written on Gruppe2_Concept.pdf (12 pages, 539650 bytes).
 PDF statistics:
  82 PDF objects out of 1000 (max. 8388607)
  44 compressed objects within 1 object stream

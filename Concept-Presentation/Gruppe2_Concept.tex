@@ -122,23 +122,23 @@
 			
 			\subsection{Alpha}
 			
-			Mit der Alpha wurde unser Spiel grundsätzlich durchspielbar. Das Labyrinth wurde erweitert und generierte sich zufällig aus einer Auswahl von 10 Labyrinth-teilen, den Spawnräumen und einer Schatzkammer. Auch ein simples Inventar ist nun vorhanden um Schlüsselteile sammeln zu können. Entsprechend können Spieler jetzt sobald sie alle 3 Schlüsselteile haben die Schatzkammer betreten und das Spiel gewinnen.\\
-			Der Game Master konnte nun durch für ihn reservierte Pfade im Labyrinth gehen, als erste asymmetrische Implementierung im gemeinsamen Projekt.\\
-			Außerdem wurde ein Spielerstatus ergänzt, durch den Spieler und Game Master nun sterben und respawnen kann.\\
+			Mit der Alpha wurde unser Spiel grundsätzlich durchspielbar. Das Labyrinth wurde erweitert und generierte sich zufällig aus einer Auswahl von zehn Labyrinth-Teilen, den Spawn-Räumen und einer Schatzkammer. Auch ein simples Inventar ist nun vorhanden um Schlüsselteile sammeln zu können. Entsprechend können Spieler jetzt, sobald sie alle drei Schlüsselteile haben, die Schatzkammer betreten und das Spiel gewinnen.\\
+			Der Game Master ist nun dazu in der Lage durch für ihn reservierte Pfade im Labyrinth gehen, als erste asymmetrische Implementierung im gemeinsamen Projekt.\\
+			Außerdem wurde ein Spielerstatus ergänzt, durch den Spieler und Game Master nun sterben und respawnen können.\\
 			
 			\subsection{Beta}
 			
 			Die größte Veränderung in der Entwicklung der Beta war, dass wir viel vom Client auf den Server ausgelagert haben. So läuft nun die komplette Physik, Monster und Items auf dem Server.\\
-			Der Spielbeginn wurde verbessert, so dass die Spieler nun auswählen können welche Klasse sie Spielen möchten. Außerdem stehen nun erstmals alle 6 Klassen zur Auswahl. Im Anschluss muss auch nicht mehr auf dem Titelbildschirm gewartet werden bis genug Spieler beigetreten sind. Stattdessen ist man nun im jeweiligem Spawnraum eingeschlossen und kann sich schonmal mit der Steuerung vertraut machen.\\
+			Der Spielbeginn wurde verbessert, so dass die Spieler nun auswählen können welche Klasse sie spielen möchten. Außerdem stehen nun erstmals alle 6 Klassen zur Auswahl. Im Anschluss muss auch nicht mehr auf dem Titelbildschirm gewartet werden bis genug Spieler beigetreten sind. Stattdessen ist man im jeweiligem Spawnraum eingeschlossen und kann sich schonmal mit der Steuerung vertraut machen.\\
 			Der Game Master kann nun kleine Gruppen von Monstern spawnen.\\
-			Monster haben nun eine rudimentäre KI, durch die sie Spielern folgen, sobald sie in einem bestimmten Radius zum Spieler sind.\\
+			Monster haben eine rudimentäre KI, durch die sie Spielern folgen, sobald sie in einem bestimmten Radius zum Spieler sind.\\
 			Ein optisches Feedback wenn man Schaden nimmt wurde ebenfalls ergänzt.\\
 			Das Labyrinth hat nun genug Teile, aus denen es sich aufbaut, um Duplikate zu vermeiden.\\
-			Die Schatzkammer öffnet sich nun für beide Teammitglieder, dank eines gemeinsamen Schlüssel-Inventars.\\
+			Die Schatzkammer öffnet sich jetzt auch für beide Teammitglieder, dank eines gemeinsamen Schlüssel-Inventars.\\
 			
 			\subsection{Endprodukt}
 			
-			Das abschließende Endprodukt enthält größtenteils Änderungen die das Spielerlebnis verbessern. So gibt es nun eine Minimap, die sich nach und nach mit dem Erkunden des Labyrinths aufdeckt, und einem die Position des Teammitglieds zeigt.\\
+			Das abschließende Endprodukt enthält größtenteils Änderungen die das Spielerlebnis verbessern. So gibt es nun eine Minimap, die sich nach und nach mit dem Erkunden des Labyrinths aufdeckt und einem die Position des Teammitglieds zeigt.\\
 			Das Inventarsystem wurde um Heiltränke erweitert, die nun sowohl im Labyrinth zufällig gefunden werden, als auch von besiegten Monstern fallengelassen werden können. Außerdem kann man im Inventar nun auch zwischen Nah- und Fernkampfwaffen wechseln.\\
 			Die Monster-KI wurde verbessert und sie können nun Spieler verfolgen und angreifen.\\
 			Die Balance zwischen Spielern und Monstern wurde verbessert, als auch zwischen Game Master und Spielern.\\
@@ -158,8 +158,8 @@
 		Die Charaktererstellung ist auf einem Entity Component System aufgebaut. So entspricht jeder individuelle Character einer Entität mit verschiedenen Komponenten, wie Waffe, Sensorbody, Position, TeamID und Inventar.\\
 		
 		\subsubsection{Kampfsystem} 
-		Das Kampfsystem verwendet einen relativ simplen Überdeckungsalgorihtmus. Die Spieler-Entität (Character Entity) enthält eine Waffen-Komponente (WeaponComponent). Das darin enthaltene Waffenobjekt wird bei der Schadensberechnung verwendet. Ob ein Spieler einem anderen Spieler Schaden zufügt, wird vom Server entschieden. Der Client meldet dem Server die Betätigung der Waffe und die Statuswerte der Waffe, dieser erzeugt dann gepoolte Bullets oder einen Schlag und prüft die Überdeckung des Schadensbereichs, implementiert als einfaches Rechteck, des Spielers, mit dem des Geschosses oder Schwertes. Bei Überdeckung mit Spieler-Schadensbereichen oder Collider-repräsentierenden Rechtecken, werden Geschosse zurückgesetzt und dem Pool wieder zugeführt. \\
-		Über das implementierte Inventar kann der Spieler grafisch die verwendete Waffe wechseln. Dabei wird lediglich die in der WeaponComponent enthaltene Waffe gewechselt. Im Inventar selbst ändert sich nichts.
+		Das Kampfsystem verwendet einen relativ simplen Überdeckungsalgorihtmus. Die Spieler-Entität (Character Entity) enthält eine Waffen-Komponente (WeaponComponent). Das darin enthaltene Waffenobjekt wird bei der Schadensberechnung verwendet. Ob ein Spieler einem anderen Spieler Schaden zufügt, wird vom Server entschieden. Der Client meldet dem Server die Betätigung der Waffe und die Statuswerte der Waffe, dieser erzeugt dann gepoolte Bullets oder einen Schlag und prüft die Überdeckung des Schadensbereichs, implementiert als einfaches Rechteck, des Spielers, mit dem des Geschosses oder Schwertes. Bei Überdeckung mit Spieler-Schadensbereichen oder Collider-repräsentierenden Rechtecken, werden Geschosse zurückgesetzt und dem Pool wieder zugeführt.\\
+		Über das implementierte Inventar kann der Spieler grafisch die verwendete Waffe wechseln. Dabei wird lediglich die in der WeaponComponent enthaltene Waffe gewechselt. Im Inventar selbst ändert sich nichts.\\
 		
 		
 		\subsubsection{Netzwerkkommunikation}
@@ -175,7 +175,7 @@
 		
 		\subsubsection{Interface}
 		
-		Das Interface wurde mit Hilfe von Box2D umgesetzt. Wir nutzen dabei die enthaltenen Button- und Tabellen-Funktionen. Das Startmenü als auch die Charakterauswahl wurden dabei möglichst simpel gehalten.\\
+		Das Interface wurde mit Hilfe von Scene2D umgesetzt. Wir nutzen dabei die enthaltenen Button- und Tabellen-Funktionen. Das Startmenü als auch die Charakterauswahl wurden dabei möglichst simpel gehalten.\\
 		Während des Spiels ist das Interface ein Overlay über dem eigentlichen Spielgeschehen. Angriffs-Buttons, eine Toolbar um das Menü zu öffnen und Informations-Overlays zu HP und Schlüsselanzahl sind an den Rändern des Bildschirms platziert. So hat dier Spieler alle wichtigen Informationen auf einen Blick ohne dabei zu sehr von eigentlichem Spielgeschehen abgelenkt zu werden.\\
 		Das geöffnete Inventar befindet sich mittig und verdeckt den Großteil des Bildes, es ist jedoch auch so möglich sich weiter zu bewegen und alle anderen Buttons zu erreichen. Das Inventar selbst besteht aus weiteren Buttons. Im oberen Bereich kann man zwischen zwei Waffen (der Faust und der Klassen-spezifischen Waffe) wählen. Im Zentrum befinden sich Heiltränke, die durch einfaches anklicken eingesetzt werden können. unten rechts ist ein Button über den die Mini-Map geöffnet werden kann.\\
 		Außerdem bleibt am rechten Rand des Bildschirms die Toolbar erhalten um das Inventar wieder einzuklappen.\\
